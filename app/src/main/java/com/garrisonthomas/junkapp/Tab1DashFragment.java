@@ -22,7 +22,7 @@ import java.io.File;
 /**
  * Created by Android on 5/28/2015.
  */
-public class Tab1Fragment extends Fragment {
+public class Tab1DashFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

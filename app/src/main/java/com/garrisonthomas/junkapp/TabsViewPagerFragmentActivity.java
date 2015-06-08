@@ -96,9 +96,9 @@ public class TabsViewPagerFragmentActivity extends FragmentActivity implements T
     private void intialiseViewPager() {
 
         List<Fragment> fragments = new Vector<Fragment>();
-        fragments.add(Fragment.instantiate(this, Tab1Fragment.class.getName()));
-        fragments.add(Fragment.instantiate(this, Tab2Fragment.class.getName()));
-        fragments.add(Fragment.instantiate(this, Tab3Fragment.class.getName()));
+        fragments.add(Fragment.instantiate(this, Tab1DashFragment.class.getName()));
+        fragments.add(Fragment.instantiate(this, Tab2CalcFragment.class.getName()));
+        fragments.add(Fragment.instantiate(this, Tab3DumpFragment.class.getName()));
         this.mPagerAdapter  = new PagerAdapter(super.getSupportFragmentManager(), fragments);
         //
         this.mViewPager = (ViewPager)super.findViewById(R.id.viewpager);
@@ -113,11 +113,11 @@ public class TabsViewPagerFragmentActivity extends FragmentActivity implements T
         mTabHost = (TabHost)findViewById(android.R.id.tabhost);
         mTabHost.setup();
         TabInfo tabInfo = null;
-        TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab1").setIndicator("Dashboard"), ( tabInfo = new TabInfo("Tab1", Tab1Fragment.class, args)));
+        TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab1").setIndicator("Dashboard"), ( tabInfo = new TabInfo("Tab1", Tab1DashFragment.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
-        TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab2").setIndicator("Calculator"), ( tabInfo = new TabInfo("Tab2", Tab2Fragment.class, args)));
+        TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab2").setIndicator("Calculator"), ( tabInfo = new TabInfo("Tab2", Tab2CalcFragment.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
-        TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab3").setIndicator("Dumps"), ( tabInfo = new TabInfo("Tab3", Tab3Fragment.class, args)));
+        TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab3").setIndicator("Dumps"), ( tabInfo = new TabInfo("Tab3", Tab3DumpFragment.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
         // Default to first tab
         //this.onTabChanged("Tab1");

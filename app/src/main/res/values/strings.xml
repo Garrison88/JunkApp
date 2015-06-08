@@ -3,4 +3,14 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string-array name="dumps">
+        <item>535 Harmony Rd</item>
+        <item>M6R1M8</item>
+        <item>700 Bay Street</item>
+        <item>Full</item>
+        <item>535 Harmony Rd</item>
+        <item>M6R1M8</item>
+        <item>700 Bay Street</item>
+        <item>Full</item>
+    </string-array>
 </resources>

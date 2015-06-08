@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Created by Android on 5/28/2015.
  */
-public class Tab3Fragment extends Fragment {
+public class Tab3DumpFragment extends Fragment {
 
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
@@ -61,31 +61,19 @@ public class Tab3Fragment extends Fragment {
         listDataChild = new HashMap<String, List<String>>();
 
         // Adding child data
-        listDataHeader.add("North");
-        listDataHeader.add("East");
-        listDataHeader.add("South");
-        listDataHeader.add("West");
+        listDataHeader.add("Dumps");
 
         // Adding child data
-        List<String> north = new ArrayList<String>();
-        north.add("Miller");
-        north.add("Fenmar");
+        List<String> dumps = new ArrayList<String>();
+        dumps.add("Miller");
+        dumps.add("Fenmar");
+        dumps.add("Killbride");
+        dumps.add("Scarborough");
+        dumps.add("Cherry");
+        dumps.add("Laird");
+        dumps.add("Torcan");
+        dumps.add("Shorncliffe");
 
-        List<String> east = new ArrayList<String>();
-        east.add("Killbride");
-        east.add("Scarborough");
-
-        List<String> south = new ArrayList<String>();
-        south.add("Cherry");
-        south.add("Laird");
-
-        List<String> west = new ArrayList<String>();
-        west.add("Torcan");
-        west.add("Shorncliffe");
-
-        listDataChild.put(listDataHeader.get(0), north); // Header, Child data
-        listDataChild.put(listDataHeader.get(1), east);
-        listDataChild.put(listDataHeader.get(2), south);
-        listDataChild.put(listDataHeader.get(3), west);
+        listDataChild.put(listDataHeader.get(0), dumps); // Header, Child data
     }
 }
