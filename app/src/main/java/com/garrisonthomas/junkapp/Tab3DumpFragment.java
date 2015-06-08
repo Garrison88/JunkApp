@@ -8,10 +8,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -22,13 +25,6 @@ import java.util.List;
  * Created by Android on 5/28/2015.
  */
 public class Tab3DumpFragment extends Fragment {
-
-    ExpandableListAdapter listAdapter;
-    ExpandableListView expListView;
-    List<String> listDataHeader;
-    HashMap<String, List<String>> listDataChild;
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,39 +37,37 @@ public class Tab3DumpFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.tab3_dumps_layout, container, false);
-        // get the listview
-        expListView = (ExpandableListView) v.findViewById(R.id.lvExp);
 
-        // preparing list data
-        prepareListData();
+        ImageButton btnPhone = (ImageButton) v.findViewById(R.id.btn_phone);
+        btnPhone.setOnClickListener(new View.OnClickListener() {
 
-        listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_CALL);
+                i.setData(Uri.parse("tel: 18007436348"));
+                startActivity(i);
+            }
+        });
 
-        // setting list adapter
-        expListView.setAdapter(listAdapter);
+        Spinner dumpsSpinner;
+        dumpsSpinner = (Spinner) v.findViewById(R.id.spinner_dumps);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.dumps, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dumpsSpinner.setAdapter(adapter);
+        dumpsSpinner.setSelection(0);
+        dumpsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         return v;
 
     }
 
-    private void prepareListData() {
-        listDataHeader = new ArrayList<String>();
-        listDataChild = new HashMap<String, List<String>>();
-
-        // Adding child data
-        listDataHeader.add("Dumps");
-
-        // Adding child data
-        List<String> dumps = new ArrayList<String>();
-        dumps.add("Miller");
-        dumps.add("Fenmar");
-        dumps.add("Killbride");
-        dumps.add("Scarborough");
-        dumps.add("Cherry");
-        dumps.add("Laird");
-        dumps.add("Torcan");
-        dumps.add("Shorncliffe");
-
-        listDataChild.put(listDataHeader.get(0), dumps); // Header, Child data
-    }
 }

@@ -14,7 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -35,10 +37,8 @@ public class Tab1DashFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.tab1_dash_layout, container, false);
 
-
-        
-        Button call = (Button) v.findViewById(R.id.office_phone);
-        call.setOnClickListener(new View.OnClickListener() {
+        ImageButton btnPhone = (ImageButton) v.findViewById(R.id.btn_phone);
+        btnPhone.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
                 Intent i = new Intent(Intent.ACTION_CALL);
