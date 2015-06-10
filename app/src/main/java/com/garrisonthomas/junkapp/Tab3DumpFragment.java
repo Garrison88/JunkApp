@@ -61,15 +61,15 @@ public class Tab3DumpFragment extends Fragment {
         dumpsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
 
                 Button infoBtn = (Button) getActivity().findViewById(R.id.btn_dump_info);
                 Button dirBtn = (Button) getActivity().findViewById(R.id.btn_dump_directions);
                 Button calcBtn = (Button) getActivity().findViewById(R.id.btn_calculate_dump);
 
-                EditText weight = (EditText) getActivity().findViewById(R.id.et_enter_weight);
-                final String weightString = weight.getText().toString();
-                final int weightNumber =Integer.parseInt(weightString);
+
+                final EditText weight = (EditText) getActivity().findViewById(R.id.et_enter_weight);
+
 
                 String[] directions = getActivity().getResources().getStringArray(R.array.dumps_address);
                 String[] information = getActivity().getResources().getStringArray(R.array.dumps_info);
@@ -77,7 +77,7 @@ public class Tab3DumpFragment extends Fragment {
 
                 final String dir = directions[position];
                 final String info = information[position];
-                final int rates = rate[position];
+                final int rateNumber = rate[position];
 
                 dirBtn.setOnClickListener(new View.OnClickListener() {
 
@@ -104,19 +104,29 @@ public class Tab3DumpFragment extends Fragment {
                     }
                 });
 
+                if (weight.length() != 0) {
+                    weight.setClickable(true);
+                } else {
+                    weight.setClickable(false);
+                }
+
                 calcBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        int result = weightNumber*rates;
-                        double taxResult = result*(1.13);
+                        final String weightString = weight.getText().toString();
+                        final double weightNumber = Double.parseDouble(weightString);
+
+                        double result = weightNumber * rateNumber;
+                        double withTax = Math.round((result * 1.13) * 100.0) / 100.0;
+                        double taxResult = Math.round(withTax * 100.0) / 100.0;
 
                         new AlertDialog.Builder(getActivity())
-                                .setTitle("Dump Info")
-                                .setMessage("Cost before HST: " + result+"\n"+"Cost including tax: " + taxResult)
+                                .setTitle("Cost of dump:")
+                                .setMessage("Net cost: $" + result + "\n" + "Gross cost: $" + taxResult)
                                 .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
-                                        // continue with delete
+                                        weight.setText("");
                                     }
                                 })
                                 .setIcon(android.R.drawable.ic_dialog_alert)
