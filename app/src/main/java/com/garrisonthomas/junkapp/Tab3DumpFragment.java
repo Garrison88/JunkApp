@@ -7,12 +7,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -63,9 +65,19 @@ public class Tab3DumpFragment extends Fragment {
 
                 Button infoBtn = (Button) getActivity().findViewById(R.id.btn_dump_info);
                 Button dirBtn = (Button) getActivity().findViewById(R.id.btn_dump_directions);
+                Button calcBtn = (Button) getActivity().findViewById(R.id.btn_calculate_dump);
+
+                EditText weight = (EditText) getActivity().findViewById(R.id.et_enter_weight);
+                final String weightString = weight.getText().toString();
+                final int weightNumber =Integer.parseInt(weightString);
 
                 String[] directions = getActivity().getResources().getStringArray(R.array.dumps_address);
+                String[] information = getActivity().getResources().getStringArray(R.array.dumps_info);
+                int[] rate = getActivity().getResources().getIntArray(R.array.dumps_rate);
+
                 final String dir = directions[position];
+                final String info = information[position];
+                final int rates = rate[position];
 
                 dirBtn.setOnClickListener(new View.OnClickListener() {
 
@@ -75,9 +87,6 @@ public class Tab3DumpFragment extends Fragment {
                         startActivity(intent);
                     }
                 });
-
-                String[] information = getActivity().getResources().getStringArray(R.array.dumps_info);
-                final String info = information[position];
 
                 infoBtn.setOnClickListener(new View.OnClickListener() {
 
@@ -92,6 +101,28 @@ public class Tab3DumpFragment extends Fragment {
                                 })
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .show();
+                    }
+                });
+
+                calcBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        int result = weightNumber*rates;
+                        double taxResult = result*(1.13);
+
+                        new AlertDialog.Builder(getActivity())
+                                .setTitle("Dump Info")
+                                .setMessage("Cost before HST: " + result+"\n"+"Cost including tax: " + taxResult)
+                                .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // continue with delete
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+
+
                     }
                 });
 

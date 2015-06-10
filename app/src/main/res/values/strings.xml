@@ -25,11 +25,11 @@
         <item>Shorncliffe: Open Monday to Friday 7–6 and Saturday 7–5</item>
     </string-array>
 
-    <string-array name="dumps_rate">
+    <integer-array name="dumps_rate">
         <item>80</item>
         <item>85</item>
         <item>88</item>
         <item>65</item>
-    </string-array>
+    </integer-array>
 
 </resources>
