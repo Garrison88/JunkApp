@@ -1,16 +1,35 @@
 <resources>
-    <string name="app_name">Junk App</string>
 
+    <string name="app_name">Junk App</string>
     <string name="action_settings">Settings</string>
     <string name="tv_company_name">1–800-RID-OF-IT</string>
+
     <string-array name="dumps">
-        <item>535 Harmony Ave</item>
-        <item>M6R1M8</item>
-        <item>700 Bay Street</item>
-        <item>Full</item>
-        <item>535 Harmony Rd</item>
-        <item>M6R1M8</item>
-        <item>700 Bay Street</item>
-        <item>Full</item>
+        <item>Laird/Esander</item>
+        <item>Cherry</item>
+        <item>Miller</item>
+        <item>Shorncliffe</item>
     </string-array>
+
+    <string-array name="dumps_address">
+        <item>https://www.google.ca/maps/place/20+Esandar+Dr,+Toronto,+ON+M4G+1Y2/@43.7058561,-79.3591228,16z/data=!4m5!1m2!2m1!1smaps!3m1!1s0x89d4ccdd7f577725:0x5bea991514ff0f10</item>
+        <item>https://www.google.ca/maps/place/242+Cherry+St,+Toronto,+ON+M5A+3L2/@43.6443606,-79.3557584,17z/data=!3m1!4b1!4m2!3m1!1s0x89d4cb185810edaf:0x3503ee91ce3ba927</item>
+        <item>https://www.google.ca/maps/place/300+Rodick+Rd,+Markham,+ON+L6G+1B2/@43.8415689,-79.3510508,14z/data=!4m7!1m4!3m3!1s0x89d4d4ed662077ef:0xf3d7ee76dc9743ed!2s700+Rodick+Rd,+Markham,+ON+L6G+1A6!3b1!3m1!1s0x89d4d48fce85cead:0x421c57cfaba48332</item>
+        <item>https://www.google.ca/maps/place/Shorncliffe+Disposal+Service+Inc+(SDS)/@43.6212734,-79.5278621,14z/data=!4m2!3m1!1s0x0000000000000000:0x57576cf8d4df866a</item>
+    </string-array>
+
+    <string-array name="dumps_info">
+        <item>Laird/Esander: Open Monday–Friday 8–5</item>
+        <item>Cherry: Open every day 6–6</item>
+        <item>Miller: Open Monday to Friday 8–5</item>
+        <item>Shorncliffe: Open Monday to Friday 7–6 and Saturday 7–5</item>
+    </string-array>
+
+    <string-array name="dumps_rate">
+        <item>80</item>
+        <item>85</item>
+        <item>88</item>
+        <item>65</item>
+    </string-array>
+
 </resources>
