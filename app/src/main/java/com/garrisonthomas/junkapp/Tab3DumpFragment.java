@@ -2,6 +2,7 @@ package com.garrisonthomas.junkapp;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -52,12 +53,11 @@ public class Tab3DumpFragment extends Fragment {
             }
         });
 
-        final Spinner dumpsSpinner;
-        dumpsSpinner = (Spinner) v.findViewById(R.id.spinner_dumps);
+        final Spinner dumpsSpinner = (Spinner) v.findViewById(R.id.spinner_dumps);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.dumps, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        dumpsSpinner.setAdapter(adapter);
         dumpsSpinner.setSelection(0);
+        dumpsSpinner.setAdapter(adapter);
         dumpsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
@@ -65,10 +65,12 @@ public class Tab3DumpFragment extends Fragment {
 
                 Button infoBtn = (Button) getActivity().findViewById(R.id.btn_dump_info);
                 Button dirBtn = (Button) getActivity().findViewById(R.id.btn_dump_directions);
-                Button calcBtn = (Button) getActivity().findViewById(R.id.btn_calculate_dump);
+                final Button calcBtn = (Button) getActivity().findViewById(R.id.btn_calculate_dump);
 
 
                 final EditText weight = (EditText) getActivity().findViewById(R.id.et_enter_weight);
+                String myText = weight.getText().toString().trim();
+                final int myTextLength = myText.length();
 
 
                 String[] directions = getActivity().getResources().getStringArray(R.array.dumps_address);
@@ -104,36 +106,34 @@ public class Tab3DumpFragment extends Fragment {
                     }
                 });
 
-                if (weight.length() != 0) {
-                    weight.setClickable(true);
-                } else {
-                    weight.setClickable(false);
-                }
-
                 calcBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        final String weightString = weight.getText().toString();
-                        final double weightNumber = Double.parseDouble(weightString);
+                            final String weightString = weight.getText().toString();
+                            final double weightNumber = Double.parseDouble(weightString);
 
-                        double result = weightNumber * rateNumber;
-                        double withTax = Math.round((result * 1.13) * 100.0) / 100.0;
-                        double taxResult = Math.round(withTax * 100.0) / 100.0;
+                            double result = weightNumber * rateNumber;
+                            double withTax = Math.round((result * 1.13) * 100.0) / 100.0;
+                            double taxResult = Math.round(withTax * 100.0) / 100.0;
 
-                        new AlertDialog.Builder(getActivity())
-                                .setTitle("Cost of dump:")
-                                .setMessage("Net cost: $" + result + "\n" + "Gross cost: $" + taxResult)
-                                .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        weight.setText("");
-                                    }
-                                })
-                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                .show();
+                            new AlertDialog.Builder(getActivity())
+                                    .setTitle("Cost of dump:")
+                                    .setMessage("Net cost: $" + result + "\n\n" + "Gross cost: $" + taxResult)
+                                    .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            weight.setText(0);
+                                        }
+                                    })
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
 
 
-                    }
+
+                        }
+
+
+
                 });
 
             }
@@ -147,5 +147,7 @@ public class Tab3DumpFragment extends Fragment {
         return v;
 
     }
+
+
 
 }

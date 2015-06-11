@@ -31,6 +31,20 @@
 
     </RelativeLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="Select a Dump:"
+        android:textSize="20sp"
+        android:gravity="center_horizontal|center_vertical" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinner_dumps"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:gravity="center_horizontal"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -51,7 +65,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Information"
+            android:text="Hours &amp; Rate"
             android:id="@+id/btn_dump_info" />
 
         </LinearLayout>
@@ -80,12 +94,5 @@
         </LinearLayout>
 
     </LinearLayout>
-
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinner_dumps"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal"/>
 
 </LinearLayout>

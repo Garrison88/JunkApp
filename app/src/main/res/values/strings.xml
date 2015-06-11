@@ -19,7 +19,7 @@
     </string-array>
 
     <string-array name="dumps_info">
-        <item>Laird/Esander: Open Monday–Friday 8–5</item>
+        <item>Laird/Esander: Open Monday–Friday 8–5\nRate per ton: $80\n<u>Remember to wear safety gear!</u></item>
         <item>Cherry: Open every day 6–6</item>
         <item>Miller: Open Monday to Friday 8–5</item>
         <item>Shorncliffe: Open Monday to Friday 7–6 and Saturday 7–5</item>
@@ -30,6 +30,27 @@
         <item>85</item>
         <item>88</item>
         <item>65</item>
+    </integer-array>
+
+    <string-array name="string_load_name">
+        <item>1/8</item>
+        <item>1/4</item>
+        <item>1/2</item>
+        <item>Full</item>
+    </string-array>
+
+    <integer-array name="string_volume_price">
+        <item>159</item>
+        <item>229</item>
+        <item>289</item>
+        <item>459</item>
+    </integer-array>
+
+    <integer-array name="string_bedload_price">
+        <item>99</item>
+        <item>189</item>
+        <item>309</item>
+        <item>479</item>
     </integer-array>
 
 </resources>
