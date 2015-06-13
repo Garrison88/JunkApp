@@ -40,17 +40,17 @@
     </string-array>
 
     <integer-array name="string_volume_price">
-        <item>159</item>
-        <item>229</item>
-        <item>289</item>
-        <item>459</item>
-    </integer-array>
-
-    <integer-array name="string_bedload_price">
         <item>99</item>
         <item>189</item>
         <item>309</item>
         <item>479</item>
+    </integer-array>
+
+    <integer-array name="string_bedload_price">
+        <item>159</item>
+        <item>229</item>
+        <item>289</item>
+        <item>459</item>
     </integer-array>
 
 </resources>

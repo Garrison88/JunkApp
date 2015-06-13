@@ -86,6 +86,7 @@ public class TabsViewPagerFragmentActivity extends FragmentActivity implements T
      * @see android.support.v4.app.FragmentActivity#onSaveInstanceState(android.os.Bundle)
      */
     protected void onSaveInstanceState(Bundle outState) {
+
         outState.putString("tab", mTabHost.getCurrentTabTag()); //save the tab selected
         super.onSaveInstanceState(outState);
     }
@@ -97,7 +98,7 @@ public class TabsViewPagerFragmentActivity extends FragmentActivity implements T
 
         List<Fragment> fragments = new Vector<Fragment>();
         fragments.add(Fragment.instantiate(this, Tab1DashFragment.class.getName()));
-        fragments.add(Fragment.instantiate(this, Tab2CalcFragment2.class.getName()));
+        fragments.add(Fragment.instantiate(this, Tab2CalcFragment.class.getName()));
         fragments.add(Fragment.instantiate(this, Tab3DumpFragment.class.getName()));
         this.mPagerAdapter  = new PagerAdapter(super.getSupportFragmentManager(), fragments);
         //
@@ -115,7 +116,7 @@ public class TabsViewPagerFragmentActivity extends FragmentActivity implements T
         TabInfo tabInfo = null;
         TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab1").setIndicator("Dashboard"), ( tabInfo = new TabInfo("Tab1", Tab1DashFragment.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
-        TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab2").setIndicator("Calculator"), ( tabInfo = new TabInfo("Tab2", Tab2CalcFragment2.class, args)));
+        TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab2").setIndicator("Calculator"), ( tabInfo = new TabInfo("Tab2", Tab2CalcFragment.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
         TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab3").setIndicator("Dumps"), ( tabInfo = new TabInfo("Tab3", Tab3DumpFragment.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
@@ -142,8 +143,8 @@ public class TabsViewPagerFragmentActivity extends FragmentActivity implements T
      */
     public void onTabChanged(String tag) {
         //TabInfo newTab = this.mapTabInfo.get(tag);
-        int pos = this.mTabHost.getCurrentTab();
-        this.mViewPager.setCurrentItem(pos);
+//        int pos = this.mTabHost.getCurrentTab();
+//        this.mViewPager.setCurrentItem(pos);
     }
 
     /* (non-Javadoc)

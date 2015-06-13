@@ -3,6 +3,7 @@ package com.garrisonthomas.junkapp;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -12,6 +13,7 @@ import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -34,6 +36,14 @@ public class Tab3DumpFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+
+        outState.putString("tab", "Tab3DumpFragment"); //save the tab selected
+        super.onSaveInstanceState(outState);
 
     }
 
@@ -67,11 +77,7 @@ public class Tab3DumpFragment extends Fragment {
                 Button dirBtn = (Button) getActivity().findViewById(R.id.btn_dump_directions);
                 final Button calcBtn = (Button) getActivity().findViewById(R.id.btn_calculate_dump);
 
-
                 final EditText weight = (EditText) getActivity().findViewById(R.id.et_enter_weight);
-                String myText = weight.getText().toString().trim();
-                final int myTextLength = myText.length();
-
 
                 String[] directions = getActivity().getResources().getStringArray(R.array.dumps_address);
                 String[] information = getActivity().getResources().getStringArray(R.array.dumps_info);
@@ -113,22 +119,20 @@ public class Tab3DumpFragment extends Fragment {
                             final String weightString = weight.getText().toString();
                             final double weightNumber = Double.parseDouble(weightString);
 
-                            double result = weightNumber * rateNumber;
-                            double withTax = Math.round((result * 1.13) * 100.0) / 100.0;
-                            double taxResult = Math.round(withTax * 100.0) / 100.0;
+                            double result = Math.round(weightNumber * rateNumber);
+                            double withTax = Math.round((result * 1.13) * 100.00) / 100.00;
 
                             new AlertDialog.Builder(getActivity())
                                     .setTitle("Cost of dump:")
-                                    .setMessage("Net cost: $" + result + "\n\n" + "Gross cost: $" + taxResult)
+                                    .setMessage("Net cost: $" + result + "\n\n" + "Gross cost: $" + withTax)
                                     .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
-                                            weight.setText(0);
+
                                         }
                                     })
                                     .setIcon(android.R.drawable.ic_dialog_alert)
                                     .show();
-
-
+                                    weight.setText("");
 
                         }
 

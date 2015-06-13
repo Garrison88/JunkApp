@@ -33,6 +33,14 @@ public class Tab1DashFragment extends Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+
+        outState.putString("tab", "Tab1DashFragment"); //save the tab selected
+        super.onSaveInstanceState(outState);
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.tab1_dash_layout, container, false);
