@@ -104,7 +104,7 @@ public class TabsViewPagerFragmentActivity extends FragmentActivity implements T
         //
         this.mViewPager = (ViewPager)super.findViewById(R.id.viewpager);
         this.mViewPager.setAdapter(this.mPagerAdapter);
-        this.mViewPager.setOnPageChangeListener(this);
+        this.mViewPager.addOnPageChangeListener(this);
     }
 
     /**
@@ -142,9 +142,10 @@ public class TabsViewPagerFragmentActivity extends FragmentActivity implements T
      * @see android.widget.TabHost.OnTabChangeListener#onTabChanged(java.lang.String)
      */
     public void onTabChanged(String tag) {
-        //TabInfo newTab = this.mapTabInfo.get(tag);
-//        int pos = this.mTabHost.getCurrentTab();
-//        this.mViewPager.setCurrentItem(pos);
+        mTabHost = (TabHost)findViewById(android.R.id.tabhost);
+        TabInfo newTab = this.mapTabInfo.get(tag);
+        int pos = this.mTabHost.getCurrentTab();
+        this.mViewPager.setCurrentItem(pos, true);
     }
 
     /* (non-Javadoc)

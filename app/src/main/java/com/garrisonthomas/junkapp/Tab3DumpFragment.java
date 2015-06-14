@@ -119,12 +119,12 @@ public class Tab3DumpFragment extends Fragment {
                             final String weightString = weight.getText().toString();
                             final double weightNumber = Double.parseDouble(weightString);
 
-                            double result = Math.round(weightNumber * rateNumber);
+                            double result = Math.round((weightNumber * rateNumber) * 100.00) / 100.00;
                             double withTax = Math.round((result * 1.13) * 100.00) / 100.00;
 
                             new AlertDialog.Builder(getActivity())
                                     .setTitle("Cost of dump:")
-                                    .setMessage("Net cost: $" + result + "\n\n" + "Gross cost: $" + withTax)
+                                    .setMessage("Gross cost: $" + result + "\n\n" + "Net cost: $" + withTax)
                                     .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
 
@@ -133,6 +133,9 @@ public class Tab3DumpFragment extends Fragment {
                                     .setIcon(android.R.drawable.ic_dialog_alert)
                                     .show();
                                     weight.setText("");
+
+                                    final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
 
                         }
 

@@ -45,17 +45,13 @@ public class Tab2CalcFragment extends Fragment implements View.OnClickListener {
                    Button addVolume = (Button) getActivity().findViewById(R.id.btn_add_volume);
                    Button deleteVolume = (Button) getActivity().findViewById(R.id.btn_delete_volume);
 
-                   final TextView vSize, jCost;
-                   vSize = (TextView) getActivity().findViewById(R.id.tv_display_volume);
-                   jCost = (TextView) getActivity().findViewById(R.id.tv_display_price);
+                   final TextView vSize = (TextView) getActivity().findViewById(R.id.tv_display_volume);
 
                    final int[] volumePrice = getActivity().getResources().getIntArray(R.array.string_volume_price);
 
                    final String[] loadSize = getActivity().getResources().getStringArray(R.array.string_load_name);
 
                    final int vPrice = volumePrice[position];
-
-                   final String vPriceString = String.valueOf(vPrice);
 
                    addVolume.setOnClickListener(new View.OnClickListener() {
 
@@ -65,16 +61,9 @@ public class Tab2CalcFragment extends Fragment implements View.OnClickListener {
                                vSize.append(" + ");
                            }
 
-                           vSize.append(loadSize[position]);
+                           vSize.append(loadSize[position] +" ($"+volumePrice[position]+")");
 
                            priceArray.add(vPrice);
-
-                           if (jCost.length() > 0) {
-                               jCost.append(" + ");
-                           }
-
-                           jCost.append("$" + vPriceString);
-
                        }
                    });
 
@@ -85,6 +74,7 @@ public class Tab2CalcFragment extends Fragment implements View.OnClickListener {
                            if (vSize.length() > 0) {
 
                                priceArray.remove(priceArray.size() - 1);
+
                            }
                        }
                    });
@@ -111,9 +101,7 @@ public class Tab2CalcFragment extends Fragment implements View.OnClickListener {
 
                                Button addBedload = (Button) getActivity().findViewById(R.id.btn_add_bedload);
 
-                               final TextView bSize, jCost;
-                               bSize = (TextView) getActivity().findViewById(R.id.tv_display_bedload);
-                               jCost = (TextView) getActivity().findViewById(R.id.tv_display_price);
+                               final TextView bSize = (TextView) getActivity().findViewById(R.id.tv_display_bedload);
 
                                final int[] bedloadPrice = getActivity().getResources().getIntArray(R.array.string_bedload_price);
 
@@ -131,15 +119,9 @@ public class Tab2CalcFragment extends Fragment implements View.OnClickListener {
                                            bSize.append(" + ");
                                        }
 
-                                       bSize.append(loadSize[position]);
+                                       bSize.append(loadSize[position] +" ($"+bedloadPrice[position]+")");
 
                                        priceArray.add(bPrice);
-
-                                       if (jCost.length() > 0) {
-                                           jCost.append(" + ");
-                                       }
-
-                                       jCost.append("$" + bPriceString);
 
                                    }
                                });
@@ -169,7 +151,7 @@ public class Tab2CalcFragment extends Fragment implements View.OnClickListener {
                 }
 
                 String sumString = String.valueOf(sum);
-                tvTotal.setText(sumString);
+                tvTotal.setText("$"+sumString);
 
             }
 
@@ -182,13 +164,11 @@ public class Tab2CalcFragment extends Fragment implements View.OnClickListener {
 
                 TextView vSize = (TextView) getActivity().findViewById(R.id.tv_display_volume);
                 TextView bSize = (TextView) getActivity().findViewById(R.id.tv_display_bedload);
-                TextView jCost = (TextView) getActivity().findViewById(R.id.tv_display_price);
                 TextView tvTotal = (TextView) getActivity().findViewById(R.id.load_total);
 
                 priceArray.clear();
                 vSize.setText("");
                 bSize.setText("");
-                jCost.setText("");
                 tvTotal.setText("");
 
 
