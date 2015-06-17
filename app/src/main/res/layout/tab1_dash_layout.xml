@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             android:id="@+id/company_name"
             android:gravity="center_vertical"
-            android:textColor="#f7eac8"
+            android:textColor="#ffffffff"
             android:textSize="35sp"
             android:text="@string/tv_company_name"
             android:layout_gravity="center_horizontal"/>
@@ -30,7 +30,7 @@
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             android:id="@+id/btn_phone"
-            android:src="@drawable/red_phone"
+            android:src="@drawable/old_phone"
             android:layout_toRightOf="@+id/company_name"
             android:layout_toEndOf="@+id/company_name" />
 
@@ -87,9 +87,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
+                    android:textColor="#000000"
                     android:gravity="center_horizontal|center_vertical"
                     android:layout_gravity="center_horizontal|center_vertical"
-                    android:text="% of Goal"
                     android:id="@+id/tv_percent_of_goal"
                     android:layout_weight="1"/>
 
@@ -125,26 +125,30 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
+                    android:textColor="#000000"
                     android:gravity="center_horizontal|center_vertical"
                     android:layout_gravity="center_horizontal|center_vertical"
-                    android:text="% of Total"
                     android:id="@+id/tv_percent_of_total"
                     android:layout_weight="1"/>
 
             </LinearLayout>
 
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clear"
+                android:id="@+id/btn_dash_clear"
+                android:layout_gravity="center_horizontal" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/office_email"
+                android:text="Email Office"
+                android:layout_gravity="center_horizontal" />
+
         </LinearLayout>
 
     </ScrollView>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/office_email"
-        android:text="Email Office"
-        android:layout_gravity="center_horizontal"
-        android:layout_below="@+id/scrollView"
-        android:layout_centerHorizontal="true" />
-
 
 </RelativeLayout>

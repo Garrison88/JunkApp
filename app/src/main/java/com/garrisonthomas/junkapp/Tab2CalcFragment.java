@@ -1,5 +1,7 @@
 package com.garrisonthomas.junkapp;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -25,6 +28,16 @@ public class Tab2CalcFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.tab2_calc_layout, container, false);
+
+        ImageButton btnPhone = (ImageButton) v.findViewById(R.id.btn_phone);
+        btnPhone.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_CALL);
+                i.setData(Uri.parse("tel: 18007436348"));
+                startActivity(i);
+            }
+        });
 
         final ArrayList<Integer> priceArray = new ArrayList<>();
 

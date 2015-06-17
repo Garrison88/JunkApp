@@ -1,5 +1,6 @@
 package com.garrisonthomas.junkapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -79,6 +81,9 @@ public class Tab1DashFragment extends Fragment {
                 String percentOf = String.valueOf(Math.round((totalEarnings / 1400) * 100));
                 percentOfGoal.setText (percentOf+"%");
 
+                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+
             }
         });
 
@@ -95,6 +100,20 @@ public class Tab1DashFragment extends Fragment {
                 String percentOfT = String.valueOf(Math.round((totalDump / totalEarnings) * 100.0));
                 percentOfTotal.setText(percentOfT+"%");
 
+                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+
+            }
+        });
+
+        Button clear = (Button) v.findViewById(R.id.btn_dash_clear);
+        clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                enterTotal.setText("");
+                enterDump.setText("");
+                percentOfGoal.setText("");
+                percentOfTotal.setText("");
             }
         });
 

@@ -16,7 +16,7 @@
             android:layout_height="match_parent"
             android:id="@+id/company_name"
             android:gravity="center_vertical"
-            android:textColor="#f7eac8"
+            android:textColor="#ffffffff"
             android:textSize="35sp"
             android:text="@string/tv_company_name"
             android:layout_gravity="center_horizontal"/>
@@ -27,7 +27,7 @@
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             android:id="@+id/btn_phone"
-            android:src="@drawable/red_phone"
+            android:src="@drawable/old_phone"
             android:layout_toRightOf="@+id/company_name"
             android:layout_toEndOf="@+id/company_name" />
 
@@ -38,7 +38,7 @@
         android:layout_height="48dp"
         android:text="Select a Dump:"
         android:textColor="#000000"
-        android:textSize="20sp"
+        android:textSize="30sp"
         android:gravity="center_horizontal|center_vertical" />
 
     <Spinner

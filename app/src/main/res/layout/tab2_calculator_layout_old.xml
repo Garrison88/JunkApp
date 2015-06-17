@@ -25,7 +25,7 @@
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             android:id="@+id/btn_phone"
-            android:src="@drawable/red_phone"
+            android:src="@drawable/old_phone"
             android:layout_toRightOf="@+id/company_name"
             android:layout_toEndOf="@+id/company_name" />
 
