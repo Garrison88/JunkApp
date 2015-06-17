@@ -2,7 +2,6 @@ package com.garrisonthomas.junkapp;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -138,6 +134,7 @@ public class Tab2CalcFragment extends Fragment implements View.OnClickListener {
 
         Button calcCost = (Button) v.findViewById(R.id.btn_calc_cost);
         Button clearCost = (Button) v.findViewById(R.id.btn_clear_cost);
+        Button addHST = (Button) v.findViewById(R.id.btn_add_hst);
 
         calcCost.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,6 +168,20 @@ public class Tab2CalcFragment extends Fragment implements View.OnClickListener {
                 bSize.setText("");
                 tvTotal.setText("");
 
+
+            }
+        });
+
+        addHST.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                TextView tvTotal = (TextView) getActivity().findViewById(R.id.load_total);
+                String doubleValue = tvTotal.getText().toString();
+                double beforeTax = Double.parseDouble(doubleValue.substring(1));
+
+                String totalText = Double.toString(Math.round((beforeTax * 1.13) * 100.00) / 100.00);
+                tvTotal.setText("$"+totalText);
 
             }
         });
