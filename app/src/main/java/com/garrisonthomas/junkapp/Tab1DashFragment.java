@@ -78,7 +78,6 @@ public class Tab1DashFragment extends Fragment {
                 double totalEarnings = Integer.parseInt(enterTotal.getText().toString());
                 String percentOf = String.valueOf(Math.round((totalEarnings / 1400) * 100));
                 percentOfGoal.setText (percentOf+"%");
-                enterTotal.setText("");
 
             }
         });
@@ -91,8 +90,10 @@ public class Tab1DashFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                double total = Integer.parseInt(enterDump.getText().toString());
-                String percentOfT = String.valueOf(Math.round((total / 1400) * 100));
+                double totalEarnings = Integer.parseInt(enterTotal.getText().toString());
+                double totalDump = Integer.parseInt(enterDump.getText().toString());
+                String percentOfT = String.valueOf(Math.round((totalDump / totalEarnings) * 100.0));
+                percentOfTotal.setText(percentOfT+"%");
 
             }
         });
