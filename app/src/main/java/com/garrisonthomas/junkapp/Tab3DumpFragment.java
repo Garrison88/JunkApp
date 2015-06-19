@@ -19,9 +19,6 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-/**
- * Created by Android on 5/28/2015.
- */
 public class Tab3DumpFragment extends Fragment {
 
     @Override
@@ -30,13 +27,16 @@ public class Tab3DumpFragment extends Fragment {
 
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-
-        outState.putString("tab", "Tab3DumpFragment"); //save the tab selected
-        super.onSaveInstanceState(outState);
-
-    }
+    ImageButton btnPhone;
+    Spinner dumpsSpinner;
+    Button infoBtn, dirBtn, calcBtn, dumpsClearBtn;
+    EditText weight;
+    String[] directions, information;
+    int[] rate;
+    int rateNumber;
+    TextView grossCostNumber, netCostNumber, grossCost, netCost;
+    String dir, info, weightString, resultString, withTaxString;
+    double weightNumber, result, withTax;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,7 +44,7 @@ public class Tab3DumpFragment extends Fragment {
 
         final View v = inflater.inflate(R.layout.tab3_dumps_layout, container, false);
 
-        ImageButton btnPhone = (ImageButton) v.findViewById(R.id.btn_phone);
+        btnPhone = (ImageButton) v.findViewById(R.id.btn_phone);
         btnPhone.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -54,7 +54,7 @@ public class Tab3DumpFragment extends Fragment {
             }
         });
 
-        final Spinner dumpsSpinner = (Spinner) v.findViewById(R.id.spinner_dumps);
+        dumpsSpinner = (Spinner) v.findViewById(R.id.spinner_dumps);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.dumps, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dumpsSpinner.setSelection(0);
@@ -64,29 +64,29 @@ public class Tab3DumpFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
 
-                Button infoBtn = (Button) getActivity().findViewById(R.id.btn_dump_info);
-                Button dirBtn = (Button) getActivity().findViewById(R.id.btn_dump_directions);
-                final Button calcBtn = (Button) getActivity().findViewById(R.id.btn_calculate_dump);
-                final Button dumpsClear = (Button) getActivity().findViewById(R.id.dumps_clear);
-                dumpsClear.setVisibility(View.INVISIBLE);
+                infoBtn = (Button) getActivity().findViewById(R.id.btn_dump_info);
+                dirBtn = (Button) getActivity().findViewById(R.id.btn_dump_directions);
+                calcBtn = (Button) getActivity().findViewById(R.id.btn_calculate_dump);
+                dumpsClearBtn = (Button) getActivity().findViewById(R.id.dumps_clear);
+                dumpsClearBtn.setVisibility(View.INVISIBLE);
 
-                final EditText weight = (EditText) getActivity().findViewById(R.id.et_enter_weight);
+                weight = (EditText) getActivity().findViewById(R.id.et_enter_weight);
 
-                String[] directions = getActivity().getResources().getStringArray(R.array.dumps_address);
-                String[] information = getActivity().getResources().getStringArray(R.array.dumps_info);
-                int[] rate = getActivity().getResources().getIntArray(R.array.dumps_rate);
+                directions = getActivity().getResources().getStringArray(R.array.dumps_address);
+                information = getActivity().getResources().getStringArray(R.array.dumps_info);
+                rate = getActivity().getResources().getIntArray(R.array.dumps_rate);
 
-                final TextView grossCostNumber = (TextView) getActivity().findViewById(R.id.tv_gross_cost_number);
-                final TextView netCostNumber = (TextView) getActivity().findViewById(R.id.tv_net_cost_number);
-                final TextView grossCost = (TextView) getActivity().findViewById(R.id.tv_dump_gross_cost);
-                final TextView netCost = (TextView) getActivity().findViewById(R.id.tv_dump_net_cost);
+                grossCostNumber = (TextView) getActivity().findViewById(R.id.tv_gross_cost_number);
+                netCostNumber = (TextView) getActivity().findViewById(R.id.tv_net_cost_number);
+                grossCost = (TextView) getActivity().findViewById(R.id.tv_dump_gross_cost);
+                netCost = (TextView) getActivity().findViewById(R.id.tv_dump_net_cost);
 
                 grossCost.setVisibility(View.INVISIBLE);
                 netCost.setVisibility(View.INVISIBLE);
 
-                final String dir = directions[position];
-                final String info = information[position];
-                final int rateNumber = rate[position];
+                dir = directions[position];
+                info = information[position];
+                rateNumber = rate[position];
 
                 dirBtn.setOnClickListener(new View.OnClickListener() {
 
@@ -117,25 +117,25 @@ public class Tab3DumpFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                        final String weightString = weight.getText().toString();
-                        final double weightNumber = Double.parseDouble(weightString);
+                        weightString = weight.getText().toString();
+                        weightNumber = Double.parseDouble(weightString);
 
-                        double result = Math.round((weightNumber * rateNumber) * 100.00) / 100.00;
-                        double withTax = Math.round((result * 1.13) * 100.00) / 100.00;
+                        result = Math.round((weightNumber * rateNumber) * 100.00) / 100.00;
+                        withTax = Math.round((result * 1.13) * 100.00) / 100.00;
 
                         grossCost.setVisibility(View.VISIBLE);
                         netCost.setVisibility(View.VISIBLE);
-                        dumpsClear.setVisibility(View.VISIBLE);
+                        dumpsClearBtn.setVisibility(View.VISIBLE);
 
-                        String resultString = String.valueOf(result);
-                        String withTaxString = String.valueOf(withTax);
+                        resultString = String.valueOf(result);
+                        withTaxString = String.valueOf(withTax);
 
                         grossCostNumber.setText("$"+resultString);
                         netCostNumber.setText("$"+withTaxString);
 
                         weight.setText("");
 
-                        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
 
                         }
@@ -144,7 +144,7 @@ public class Tab3DumpFragment extends Fragment {
 
                 });
 
-                dumpsClear.setOnClickListener(new View.OnClickListener() {
+                dumpsClearBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
@@ -168,6 +168,12 @@ public class Tab3DumpFragment extends Fragment {
 
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
 
+        outState.putString("tab", "Tab3DumpFragment"); //save the tab selected
+        super.onSaveInstanceState(outState);
+
+    }
 
 }

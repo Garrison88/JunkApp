@@ -15,9 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-/**
- * Created by Android on 5/28/2015.
- */
 public class Tab1DashFragment extends Fragment {
 
     @Override
@@ -26,17 +23,12 @@ public class Tab1DashFragment extends Fragment {
 
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-
-        outState.putString("tab", "Tab1DashFragment"); //save the tab selected
-        super.onSaveInstanceState(outState);
-
-    }
     ImageButton btnPhone, officeDirections;
     Button btnEmail, calcDumps, calcTotal, btnClear;
     EditText enterTotal, enterDump;
     TextView percentOfGoal, percentOfTotal;
+    String percentOf, percentOfTotalString;
+    double totalEarnings, totalDump;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -83,9 +75,9 @@ public class Tab1DashFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                double totalEarnings = Integer.parseInt(enterTotal.getText().toString());
-                String percentOf = String.valueOf(Math.round((totalEarnings / 1400) * 100));
-                percentOfGoal.setText (percentOf+"%");
+                totalEarnings = Integer.parseInt(enterTotal.getText().toString());
+                percentOf = String.valueOf(Math.round((totalEarnings / 1400) * 100));
+                percentOfGoal.setText(percentOf + "%");
 
                 final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
@@ -102,10 +94,10 @@ public class Tab1DashFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                double totalEarnings = Integer.parseInt(enterTotal.getText().toString());
-                double totalDump = Integer.parseInt(enterDump.getText().toString());
-                String percentOfTotalString = String.valueOf(Math.round((totalDump / totalEarnings) * 100.0));
-                percentOfTotal.setText(percentOfTotalString+"%");
+                totalEarnings = Integer.parseInt(enterTotal.getText().toString());
+                totalDump = Integer.parseInt(enterDump.getText().toString());
+                percentOfTotalString = String.valueOf(Math.round((totalDump / totalEarnings) * 100.0));
+                percentOfTotal.setText(percentOfTotalString + "%");
 
                 final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
@@ -129,4 +121,11 @@ public class Tab1DashFragment extends Fragment {
 
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+
+        outState.putString("tab", "Tab1DashFragment"); //save the tab selected
+        super.onSaveInstanceState(outState);
+
+    }
 }
