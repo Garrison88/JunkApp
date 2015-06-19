@@ -51,7 +51,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:baselineAligned="false">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -70,6 +71,23 @@
             android:layout_height="wrap_content"
             android:text="Hours &amp; Rate"
             android:id="@+id/btn_dump_info" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_dump_gross_cost"
+                android:gravity="center_horizontal"
+                android:textColor="#000000"
+                android:text="Gross Cost:"
+                android:textSize="30sp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="35sp"
+                android:gravity="center_horizontal"
+                android:id="@+id/tv_gross_cost_number"/>
 
         </LinearLayout>
 
@@ -94,8 +112,32 @@
             android:text="Calculate Cost"
             android:id="@+id/btn_calculate_dump"/>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:id="@+id/tv_dump_net_cost"
+                android:gravity="center_horizontal"
+                android:text="Net Cost:"
+                android:textSize="30sp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="35sp"
+                android:textColor="#000000"
+                android:gravity="center_horizontal"
+                android:id="@+id/tv_net_cost_number"/>
+
         </LinearLayout>
 
     </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/dumps_clear"
+        android:text="Clear"/>
 
 </LinearLayout>

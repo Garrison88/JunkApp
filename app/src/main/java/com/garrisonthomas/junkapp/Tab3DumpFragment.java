@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 /**
  * Created by Android on 5/28/2015.
@@ -66,12 +67,22 @@ public class Tab3DumpFragment extends Fragment {
                 Button infoBtn = (Button) getActivity().findViewById(R.id.btn_dump_info);
                 Button dirBtn = (Button) getActivity().findViewById(R.id.btn_dump_directions);
                 final Button calcBtn = (Button) getActivity().findViewById(R.id.btn_calculate_dump);
+                final Button dumpsClear = (Button) getActivity().findViewById(R.id.dumps_clear);
+                dumpsClear.setVisibility(View.INVISIBLE);
 
                 final EditText weight = (EditText) getActivity().findViewById(R.id.et_enter_weight);
 
                 String[] directions = getActivity().getResources().getStringArray(R.array.dumps_address);
                 String[] information = getActivity().getResources().getStringArray(R.array.dumps_info);
                 int[] rate = getActivity().getResources().getIntArray(R.array.dumps_rate);
+
+                final TextView grossCostNumber = (TextView) getActivity().findViewById(R.id.tv_gross_cost_number);
+                final TextView netCostNumber = (TextView) getActivity().findViewById(R.id.tv_net_cost_number);
+                final TextView grossCost = (TextView) getActivity().findViewById(R.id.tv_dump_gross_cost);
+                final TextView netCost = (TextView) getActivity().findViewById(R.id.tv_dump_net_cost);
+
+                grossCost.setVisibility(View.INVISIBLE);
+                netCost.setVisibility(View.INVISIBLE);
 
                 final String dir = directions[position];
                 final String info = information[position];
@@ -106,31 +117,43 @@ public class Tab3DumpFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                            final String weightString = weight.getText().toString();
-                            final double weightNumber = Double.parseDouble(weightString);
+                        final String weightString = weight.getText().toString();
+                        final double weightNumber = Double.parseDouble(weightString);
 
-                            double result = Math.round((weightNumber * rateNumber) * 100.00) / 100.00;
-                            double withTax = Math.round((result * 1.13) * 100.00) / 100.00;
+                        double result = Math.round((weightNumber * rateNumber) * 100.00) / 100.00;
+                        double withTax = Math.round((result * 1.13) * 100.00) / 100.00;
 
-                            new AlertDialog.Builder(getActivity())
-                                    .setTitle("Cost of dump:")
-                                    .setMessage("Gross cost: $" + result + "\n\n" + "Net cost: $" + withTax)
-                                    .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
+                        grossCost.setVisibility(View.VISIBLE);
+                        netCost.setVisibility(View.VISIBLE);
+                        dumpsClear.setVisibility(View.VISIBLE);
 
-                                        }
-                                    })
-                                    .setIcon(R.drawable.dump_truck)
-                                    .show();
-                                    weight.setText("");
+                        String resultString = String.valueOf(result);
+                        String withTaxString = String.valueOf(withTax);
 
-                                    final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                                    imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+                        grossCostNumber.setText("$"+resultString);
+                        netCostNumber.setText("$"+withTaxString);
+
+                        weight.setText("");
+
+                        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
 
                         }
 
 
 
+                });
+
+                dumpsClear.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        grossCostNumber.setText("");
+                        netCostNumber.setText("");
+                        grossCost.setVisibility(View.INVISIBLE);
+                        netCost.setVisibility(View.INVISIBLE);
+
+                    }
                 });
 
             }

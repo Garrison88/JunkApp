@@ -118,8 +118,6 @@ public class Tab2CalcFragment extends Fragment implements View.OnClickListener {
 
                                final int bPrice = bedloadPrice[position];
 
-                               final String bPriceString = String.valueOf(bPrice);
-
                                addBedload.setOnClickListener(new View.OnClickListener() {
 
                                    public void onClick(View v) {
@@ -147,7 +145,8 @@ public class Tab2CalcFragment extends Fragment implements View.OnClickListener {
 
         Button calcCost = (Button) v.findViewById(R.id.btn_calc_cost);
         Button clearCost = (Button) v.findViewById(R.id.btn_clear_cost);
-        Button addHST = (Button) v.findViewById(R.id.btn_add_hst);
+        final Button addHST = (Button) v.findViewById(R.id.btn_add_hst);
+        addHST.setVisibility(View.INVISIBLE);
 
         calcCost.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,6 +161,8 @@ public class Tab2CalcFragment extends Fragment implements View.OnClickListener {
 
                 String sumString = String.valueOf(sum);
                 tvTotal.setText("$"+sumString);
+
+                addHST.setVisibility(View.VISIBLE);
 
             }
 
@@ -180,6 +181,7 @@ public class Tab2CalcFragment extends Fragment implements View.OnClickListener {
                 vSize.setText("");
                 bSize.setText("");
                 tvTotal.setText("");
+                addHST.setVisibility(View.INVISIBLE);
 
 
             }

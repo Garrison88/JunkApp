@@ -32,7 +32,8 @@
             android:id="@+id/btn_phone"
             android:src="@drawable/old_phone"
             android:layout_toRightOf="@+id/company_name"
-            android:layout_toEndOf="@+id/company_name" />
+            android:layout_toEndOf="@+id/company_name"
+            android:contentDescription="officeMap" />
 
     </RelativeLayout>
 
@@ -146,6 +147,13 @@
                 android:id="@+id/office_email"
                 android:text="Email Office"
                 android:layout_gravity="center_horizontal" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Settings"
+                android:id="@+id/btn_settings"
+                android:layout_gravity="center_horizontal"/>
 
         </LinearLayout>
 
