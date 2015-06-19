@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class Tab2CalcFragment extends Fragment implements View.OnClickListener {
+public class Tab2CalcFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,6 +42,22 @@ public class Tab2CalcFragment extends Fragment implements View.OnClickListener {
         final View v = inflater.inflate(R.layout.tab2_calc_layout, container, false);
 
         btnPhone = (ImageButton) v.findViewById(R.id.btn_phone);
+        clearCost = (Button) v.findViewById(R.id.btn_clear_cost);
+        addHST = (Button) v.findViewById(R.id.btn_add_hst);
+        addVolume = (Button) v.findViewById(R.id.btn_add_volume);
+        deleteVolume = (Button) v.findViewById(R.id.btn_delete_volume);
+        calcCost = (Button) v.findViewById(R.id.btn_calc_cost);
+
+        vSpinner = (Spinner) v.findViewById(R.id.spinner_volume);
+        bSpinner = (Spinner) v.findViewById(R.id.spinner_bedload);
+
+        vSize = (TextView) v.findViewById(R.id.tv_display_volume);
+
+        volumePrice = v.getResources().getIntArray(R.array.string_volume_price);
+        loadSize = v.getResources().getStringArray(R.array.string_load_name);
+
+        addHST.setEnabled(false);
+
         btnPhone.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -51,59 +67,52 @@ public class Tab2CalcFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        vSpinner = (Spinner) v.findViewById(R.id.spinner_volume);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.string_load_name, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         vSpinner.setAdapter(adapter);
         vSpinner.setSelection(0);
         vSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-               @Override
-               public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
 
-                   addVolume = (Button) getActivity().findViewById(R.id.btn_add_volume);
-                   deleteVolume = (Button) getActivity().findViewById(R.id.btn_delete_volume);
-                   vSize = (TextView) getActivity().findViewById(R.id.tv_display_volume);
-                   volumePrice = getActivity().getResources().getIntArray(R.array.string_volume_price);
-                   loadSize = getActivity().getResources().getStringArray(R.array.string_load_name);
-                   vPrice = volumePrice[position];
+                vPrice = volumePrice[position];
 
-                   addVolume.setOnClickListener(new View.OnClickListener() {
+                addVolume.setOnClickListener(new View.OnClickListener() {
 
-                       public void onClick(View v) {
+                    public void onClick(View v) {
 
-                           if (vSize.length() > 0) {
-                               vSize.append(" + ");
-                           }
+                        if (vSize.length() > 0) {
+                            vSize.append(" + ");
+                        }
 
-                           vSize.append(loadSize[position] +" ($"+volumePrice[position]+")");
+                        vSize.append(loadSize[position] + " ($" + volumePrice[position] + ")");
 
-                           priceArray.add(vPrice);
-                       }
-                   });
+                        priceArray.add(vPrice);
+                    }
+                });
 
-                   deleteVolume.setOnClickListener(new View.OnClickListener() {
-                       @Override
-                       public void onClick(View v) {
+                deleteVolume.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                           if (vSize.length() > 0) {
+                        if (vSize.length() > 0) {
 
-                               priceArray.remove(priceArray.size() - 1);
+                            priceArray.remove(priceArray.size() - 1);
 
-                           }
-                       }
-                   });
+                        }
+                    }
+                });
 
-               }
+            }
 
-               @Override
-               public void onNothingSelected(AdapterView<?> parent) {
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
-               }
+            }
 
-           });
+        });
 
-        bSpinner = (Spinner) v.findViewById(R.id.spinner_bedload);
         ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(getActivity(), R.array.string_load_name, android.R.layout.simple_spinner_item);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         bSpinner.setAdapter(adapter2);
@@ -144,11 +153,6 @@ public class Tab2CalcFragment extends Fragment implements View.OnClickListener {
 
             );
 
-        calcCost = (Button) v.findViewById(R.id.btn_calc_cost);
-        clearCost = (Button) v.findViewById(R.id.btn_clear_cost);
-        addHST = (Button) v.findViewById(R.id.btn_add_hst);
-        addHST.setVisibility(View.INVISIBLE);
-
         calcCost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,7 +167,7 @@ public class Tab2CalcFragment extends Fragment implements View.OnClickListener {
                 sumString = String.valueOf(sum);
                 tvTotal.setText("$"+sumString);
 
-                addHST.setVisibility(View.VISIBLE);
+                addHST.setEnabled(true);
 
             }
 
@@ -178,7 +182,7 @@ public class Tab2CalcFragment extends Fragment implements View.OnClickListener {
                 vSize.setText("");
                 bSize.setText("");
                 tvTotal.setText("");
-                addHST.setVisibility(View.INVISIBLE);
+                addHST.setEnabled(false);
 
             }
         });
@@ -194,16 +198,13 @@ public class Tab2CalcFragment extends Fragment implements View.OnClickListener {
                 totalText = Double.toString(Math.round((beforeTax * 1.13) * 100.00) / 100.00);
                 tvTotal.setText("$"+totalText);
 
+                addHST.setEnabled(false);
+
             }
         });
 
             return v;
         }
-
-        @Override
-    public void onClick(View v) {
-
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

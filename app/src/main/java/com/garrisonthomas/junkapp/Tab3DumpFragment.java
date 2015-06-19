@@ -39,12 +39,32 @@ public class Tab3DumpFragment extends Fragment {
     double weightNumber, result, withTax;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         final View v = inflater.inflate(R.layout.tab3_dumps_layout, container, false);
 
         btnPhone = (ImageButton) v.findViewById(R.id.btn_phone);
+        infoBtn = (Button) v.findViewById(R.id.btn_dump_info);
+        dirBtn = (Button) v.findViewById(R.id.btn_dump_directions);
+        calcBtn = (Button) v.findViewById(R.id.btn_calculate_dump);
+        dumpsClearBtn = (Button) v.findViewById(R.id.dumps_clear);
+
+        dumpsSpinner = (Spinner) v.findViewById(R.id.spinner_dumps);
+
+        weight = (EditText) v.findViewById(R.id.et_enter_weight);
+
+        grossCostNumber = (TextView) v.findViewById(R.id.tv_gross_cost_number);
+        netCostNumber = (TextView) v.findViewById(R.id.tv_net_cost_number);
+        grossCost = (TextView) v.findViewById(R.id.tv_dump_gross_cost);
+        netCost = (TextView) v.findViewById(R.id.tv_dump_net_cost);
+
+        directions = v.getResources().getStringArray(R.array.dumps_address);
+        information = v.getResources().getStringArray(R.array.dumps_info);
+        rate = v.getResources().getIntArray(R.array.dumps_rate);
+
+        dumpsClearBtn.setEnabled(false);
+
         btnPhone.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -54,7 +74,6 @@ public class Tab3DumpFragment extends Fragment {
             }
         });
 
-        dumpsSpinner = (Spinner) v.findViewById(R.id.spinner_dumps);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.dumps, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dumpsSpinner.setSelection(0);
@@ -63,23 +82,6 @@ public class Tab3DumpFragment extends Fragment {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
-
-                infoBtn = (Button) getActivity().findViewById(R.id.btn_dump_info);
-                dirBtn = (Button) getActivity().findViewById(R.id.btn_dump_directions);
-                calcBtn = (Button) getActivity().findViewById(R.id.btn_calculate_dump);
-                dumpsClearBtn = (Button) getActivity().findViewById(R.id.dumps_clear);
-                dumpsClearBtn.setVisibility(View.INVISIBLE);
-
-                weight = (EditText) getActivity().findViewById(R.id.et_enter_weight);
-
-                directions = getActivity().getResources().getStringArray(R.array.dumps_address);
-                information = getActivity().getResources().getStringArray(R.array.dumps_info);
-                rate = getActivity().getResources().getIntArray(R.array.dumps_rate);
-
-                grossCostNumber = (TextView) getActivity().findViewById(R.id.tv_gross_cost_number);
-                netCostNumber = (TextView) getActivity().findViewById(R.id.tv_net_cost_number);
-                grossCost = (TextView) getActivity().findViewById(R.id.tv_dump_gross_cost);
-                netCost = (TextView) getActivity().findViewById(R.id.tv_dump_net_cost);
 
                 grossCost.setVisibility(View.INVISIBLE);
                 netCost.setVisibility(View.INVISIBLE);
@@ -125,7 +127,7 @@ public class Tab3DumpFragment extends Fragment {
 
                         grossCost.setVisibility(View.VISIBLE);
                         netCost.setVisibility(View.VISIBLE);
-                        dumpsClearBtn.setVisibility(View.VISIBLE);
+                        dumpsClearBtn.setEnabled(true);
 
                         resultString = String.valueOf(result);
                         withTaxString = String.valueOf(withTax);
@@ -152,6 +154,7 @@ public class Tab3DumpFragment extends Fragment {
                         netCostNumber.setText("");
                         grossCost.setVisibility(View.INVISIBLE);
                         netCost.setVisibility(View.INVISIBLE);
+                        dumpsClearBtn.setEnabled(false);
 
                     }
                 });

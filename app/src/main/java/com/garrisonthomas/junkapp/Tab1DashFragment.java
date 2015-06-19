@@ -35,7 +35,25 @@ public class Tab1DashFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.tab1_dash_layout, container, false);
 
+        calcTotal = (Button) v.findViewById(R.id.calculate_percentage);
+        calcDumps = (Button) v.findViewById(R.id.calculate_dump_percentage);
+        btnEmail = (Button) v.findViewById(R.id.office_email);
+        btnClear = (Button) v.findViewById(R.id.btn_dash_clear);
+
+        enterDump = (EditText) v.findViewById(R.id.et_enter_dump_cost);
+        enterTotal = (EditText) v.findViewById(R.id.et_enter_total);
+
+        percentOfTotal = (TextView) v.findViewById(R.id.tv_percent_of_total);
+
+        calcDumps.setEnabled(false);
+
+
+        percentOfGoal = (TextView) v.findViewById(R.id.tv_percent_of_goal);
         btnPhone = (ImageButton) v.findViewById(R.id.btn_phone);
+
+        officeDirections = (ImageButton) v.findViewById(R.id.office_map_directions);
+
+
         btnPhone.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -45,7 +63,6 @@ public class Tab1DashFragment extends Fragment {
             }
         });
 
-        btnEmail = (Button) v.findViewById(R.id.office_email);
         btnEmail.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -54,7 +71,6 @@ public class Tab1DashFragment extends Fragment {
             }
         });
 
-        officeDirections = (ImageButton) v.findViewById(R.id.office_map_directions);
         officeDirections.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,11 +82,6 @@ public class Tab1DashFragment extends Fragment {
             }
         });
 
-        calcDumps = (Button) v.findViewById(R.id.calculate_dump_percentage);
-        calcDumps.setEnabled(false);
-        calcTotal = (Button) v.findViewById(R.id.calculate_percentage);
-        enterTotal = (EditText) v.findViewById(R.id.et_enter_total);
-        percentOfGoal = (TextView) v.findViewById(R.id.tv_percent_of_goal);
         calcTotal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,10 +96,6 @@ public class Tab1DashFragment extends Fragment {
 
             }
         });
-
-
-        enterDump = (EditText) v.findViewById(R.id.et_enter_dump_cost);
-        percentOfTotal = (TextView) v.findViewById(R.id.tv_percent_of_total);
 
         calcDumps.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,7 +112,6 @@ public class Tab1DashFragment extends Fragment {
             }
         });
 
-        btnClear = (Button) v.findViewById(R.id.btn_dash_clear);
         btnClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
