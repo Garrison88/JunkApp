@@ -119,28 +119,31 @@ public class Tab3DumpFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                        weightString = weight.getText().toString();
-                        weightNumber = Double.parseDouble(weightString);
+                        if (weight.length() != 0) {
 
-                        result = Math.round((weightNumber * rateNumber) * 100.00) / 100.00;
-                        withTax = Math.round((result * 1.13) * 100.00) / 100.00;
+                            weightString = weight.getText().toString();
+                            weightNumber = Double.parseDouble(weightString);
 
-                        grossCost.setVisibility(View.VISIBLE);
-                        netCost.setVisibility(View.VISIBLE);
-                        dumpsClearBtn.setEnabled(true);
+                            result = Math.round((weightNumber * rateNumber) * 100.00) / 100.00;
+                            withTax = Math.round((result * 1.13) * 100.00) / 100.00;
 
-                        resultString = String.valueOf(result);
-                        withTaxString = String.valueOf(withTax);
+                            grossCost.setVisibility(View.VISIBLE);
+                            netCost.setVisibility(View.VISIBLE);
+                            dumpsClearBtn.setEnabled(true);
 
-                        grossCostNumber.setText("$"+resultString);
-                        netCostNumber.setText("$"+withTaxString);
+                            resultString = String.valueOf(result);
+                            withTaxString = String.valueOf(withTax);
 
-                        weight.setText("");
+                            grossCostNumber.setText("$" + resultString);
+                            netCostNumber.setText("$" + withTaxString);
 
-                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+                            weight.setText("");
+
+                            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
 
                         }
+                    }
 
 
 

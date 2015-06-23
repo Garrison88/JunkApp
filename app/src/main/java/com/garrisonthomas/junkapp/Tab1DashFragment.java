@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Tab1DashFragment extends Fragment {
 
@@ -35,6 +36,8 @@ public class Tab1DashFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.tab1_dash_layout, container, false);
 
+        btnPhone = (ImageButton) v.findViewById(R.id.btn_phone);
+        officeDirections = (ImageButton) v.findViewById(R.id.office_map_directions);
         calcTotal = (Button) v.findViewById(R.id.calculate_percentage);
         calcDumps = (Button) v.findViewById(R.id.calculate_dump_percentage);
         btnEmail = (Button) v.findViewById(R.id.office_email);
@@ -44,15 +47,7 @@ public class Tab1DashFragment extends Fragment {
         enterTotal = (EditText) v.findViewById(R.id.et_enter_total);
 
         percentOfTotal = (TextView) v.findViewById(R.id.tv_percent_of_total);
-
-        calcDumps.setEnabled(false);
-
-
         percentOfGoal = (TextView) v.findViewById(R.id.tv_percent_of_goal);
-        btnPhone = (ImageButton) v.findViewById(R.id.btn_phone);
-
-        officeDirections = (ImageButton) v.findViewById(R.id.office_map_directions);
-
 
         btnPhone.setOnClickListener(new View.OnClickListener() {
 
@@ -86,14 +81,16 @@ public class Tab1DashFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                totalEarnings = Integer.parseInt(enterTotal.getText().toString());
-                percentOf = String.valueOf(Math.round((totalEarnings / 1400) * 100));
-                percentOfGoal.setText(percentOf + "%");
+                if (enterTotal.length() != 0) {
 
-                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-                calcDumps.setEnabled(true);
+                    totalEarnings = Integer.parseInt(enterTotal.getText().toString());
+                    percentOf = String.valueOf(Math.round((totalEarnings / 1400) * 100));
+                    percentOfGoal.setText(percentOf + "%");
 
+                    final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+
+                }
             }
         });
 
@@ -101,14 +98,21 @@ public class Tab1DashFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                totalEarnings = Integer.parseInt(enterTotal.getText().toString());
-                totalDump = Integer.parseInt(enterDump.getText().toString());
-                percentOfTotalString = String.valueOf(Math.round((totalDump / totalEarnings) * 100.0));
-                percentOfTotal.setText(percentOfTotalString + "%");
+                if (enterDump.length() != 0) {
 
-                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+                    totalEarnings = Integer.parseInt(enterTotal.getText().toString());
+                    totalDump = Integer.parseInt(enterDump.getText().toString());
+                    percentOfTotalString = String.valueOf(Math.round((totalDump / totalEarnings) * 100.0));
+                    percentOfTotal.setText(percentOfTotalString + "%");
 
+                    final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+
+                } else {
+
+                    Toast.makeText(getActivity(), "Please calculate total first", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
 
@@ -119,7 +123,6 @@ public class Tab1DashFragment extends Fragment {
                 enterDump.setText("");
                 percentOfGoal.setText("");
                 percentOfTotal.setText("");
-                calcDumps.setEnabled(false);
             }
         });
 

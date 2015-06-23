@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#28abe3">
+    android:background="#28abe3"
+    style="?android:buttonBarStyle">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -29,7 +30,8 @@
             android:id="@+id/btn_phone"
             android:src="@drawable/old_phone"
             android:layout_toRightOf="@+id/company_name"
-            android:layout_toEndOf="@+id/company_name" />
+            android:layout_toEndOf="@+id/company_name"
+            style="?android:buttonBarButtonStyle"/>
 
     </RelativeLayout>
 
@@ -58,19 +60,26 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            style="?android:buttonBarStyle">
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Directions"
-            android:id="@+id/btn_dump_directions" />
+            android:background="#1fda9a"
+            android:textColor="#000000"
+            android:id="@+id/btn_dump_directions"
+            style="?android:buttonBarButtonStyle"/>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Hours &amp; Rate"
-            android:id="@+id/btn_dump_info" />
+            android:background="#1fda9a"
+            android:textColor="#000000"
+            android:id="@+id/btn_dump_info"
+            style="?android:buttonBarButtonStyle"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -95,7 +104,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            style="?android:buttonBarStyle">
 
         <EditText
             android:layout_width="match_parent"
@@ -110,7 +120,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Calculate Cost"
-            android:id="@+id/btn_calculate_dump"/>
+            android:background="#1fda9a"
+            android:textColor="#000000"
+            android:id="@+id/btn_calculate_dump"
+            style="?android:buttonBarButtonStyle"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -138,6 +151,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:id="@+id/dumps_clear"
-        android:text="Clear"/>
+        android:text="Clear"
+        android:background="#1fda9a"
+        android:textColor="#000000"
+        style="?android:buttonBarButtonStyle"/>
 
 </LinearLayout>

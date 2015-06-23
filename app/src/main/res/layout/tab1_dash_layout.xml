@@ -5,7 +5,8 @@
     android:orientation="vertical"
     android:background="#f7eac8"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    style="?android:buttonBarStyle">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -33,7 +34,7 @@
             android:src="@drawable/old_phone"
             android:layout_toRightOf="@+id/company_name"
             android:layout_toEndOf="@+id/company_name"
-            android:contentDescription="officeMap" />
+            style="?android:buttonBarButtonStyle"/>
 
     </RelativeLayout>
 

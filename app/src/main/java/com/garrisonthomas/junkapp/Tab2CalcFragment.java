@@ -26,11 +26,11 @@ public class Tab2CalcFragment extends Fragment {
 
     ImageButton btnPhone;
     Spinner vSpinner, bSpinner;
-    Button addVolume, deleteVolume, addBedload, calcCost, clearCost, addHST;
+    Button addVolume, addBedload, deleteVolume, deleteBedload, calcCost, clearCost, addHST;
     TextView vSize, bSize, tvTotal;
     int[] volumePrice, bedloadPrice;
     String[] loadSize;
-    int vPrice, bPrice;
+    int vPrice, bPrice, vCount = 0, bCount = 0;
     double beforeTax, sum;
     String doubleValue, totalText, sumString;
 
@@ -45,18 +45,21 @@ public class Tab2CalcFragment extends Fragment {
         clearCost = (Button) v.findViewById(R.id.btn_clear_cost);
         addHST = (Button) v.findViewById(R.id.btn_add_hst);
         addVolume = (Button) v.findViewById(R.id.btn_add_volume);
+        addBedload = (Button) v.findViewById(R.id.btn_add_bedload);
         deleteVolume = (Button) v.findViewById(R.id.btn_delete_volume);
+        deleteBedload = (Button) v.findViewById(R.id.btn_delete_bedload);
         calcCost = (Button) v.findViewById(R.id.btn_calc_cost);
 
         vSpinner = (Spinner) v.findViewById(R.id.spinner_volume);
         bSpinner = (Spinner) v.findViewById(R.id.spinner_bedload);
 
         vSize = (TextView) v.findViewById(R.id.tv_display_volume);
+        bSize = (TextView) v.findViewById(R.id.tv_display_bedload);
+        tvTotal = (TextView) v.findViewById(R.id.load_total);
 
         volumePrice = v.getResources().getIntArray(R.array.string_volume_price);
+        bedloadPrice = v.getResources().getIntArray(R.array.string_bedload_price);
         loadSize = v.getResources().getStringArray(R.array.string_load_name);
-
-        addHST.setEnabled(false);
 
         btnPhone.setOnClickListener(new View.OnClickListener() {
 
@@ -92,18 +95,6 @@ public class Tab2CalcFragment extends Fragment {
                     }
                 });
 
-                deleteVolume.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        if (vSize.length() > 0) {
-
-                            priceArray.remove(priceArray.size() - 1);
-
-                        }
-                    }
-                });
-
             }
 
             @Override
@@ -123,10 +114,6 @@ public class Tab2CalcFragment extends Fragment {
                public void onItemSelected(AdapterView<?> parent, View view, final int position,
                                           long id) {
 
-                   addBedload = (Button) getActivity().findViewById(R.id.btn_add_bedload);
-                   bSize = (TextView) getActivity().findViewById(R.id.tv_display_bedload);
-                   bedloadPrice = getActivity().getResources().getIntArray(R.array.string_bedload_price);
-                   loadSize = getActivity().getResources().getStringArray(R.array.string_load_name);
                    bPrice = bedloadPrice[position];
 
                    addBedload.setOnClickListener(new View.OnClickListener() {
@@ -157,18 +144,17 @@ public class Tab2CalcFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                tvTotal = (TextView) getActivity().findViewById(R.id.load_total);
+                if (vSize.length() != 0 || bSize.length() != 0) {
 
-                sum = 0;
-                for (int i : priceArray) {
-                    sum += i;
+                    sum = 0;
+                    for (int i : priceArray) {
+                        sum += i;
+                    }
+
+                    sumString = String.valueOf(sum);
+                    tvTotal.setText("$" + sumString);
+
                 }
-
-                sumString = String.valueOf(sum);
-                tvTotal.setText("$"+sumString);
-
-                addHST.setEnabled(true);
-
             }
 
 
@@ -182,7 +168,6 @@ public class Tab2CalcFragment extends Fragment {
                 vSize.setText("");
                 bSize.setText("");
                 tvTotal.setText("");
-                addHST.setEnabled(false);
 
             }
         });
@@ -191,15 +176,15 @@ public class Tab2CalcFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                tvTotal = (TextView) getActivity().findViewById(R.id.load_total);
-                doubleValue = tvTotal.getText().toString();
-                beforeTax = Double.parseDouble(doubleValue.substring(1));
+                if (tvTotal.length() != 0) {
 
-                totalText = Double.toString(Math.round((beforeTax * 1.13) * 100.00) / 100.00);
-                tvTotal.setText("$"+totalText);
+                    doubleValue = tvTotal.getText().toString();
+                    beforeTax = Double.parseDouble(doubleValue.substring(1));
 
-                addHST.setEnabled(false);
+                    totalText = Double.toString(Math.round((beforeTax * 1.13) * 100.00) / 100.00);
+                    tvTotal.setText("$" + totalText);
 
+                }
             }
         });
 
