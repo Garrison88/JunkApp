@@ -46,6 +46,7 @@
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="15dp"
         android:id="@+id/spinner_dumps"
         android:layout_gravity="center_horizontal|center_vertical"
         android:gravity="center_horizontal"/>

@@ -25,7 +25,7 @@ public class Tab1DashFragment extends Fragment {
     }
 
     ImageButton btnPhone, officeDirections;
-    Button btnEmail, calcDumps, calcTotal, btnClear;
+    Button btnEmail, calcDumps, calcTotal, btnClear, btnSettings;
     EditText enterTotal, enterDump;
     TextView percentOfGoal, percentOfTotal;
     String percentOf, percentOfTotalString;
@@ -42,6 +42,7 @@ public class Tab1DashFragment extends Fragment {
         calcDumps = (Button) v.findViewById(R.id.calculate_dump_percentage);
         btnEmail = (Button) v.findViewById(R.id.office_email);
         btnClear = (Button) v.findViewById(R.id.btn_dash_clear);
+        btnSettings = (Button) v.findViewById(R.id.btn_settings);
 
         enterDump = (EditText) v.findViewById(R.id.et_enter_dump_cost);
         enterTotal = (EditText) v.findViewById(R.id.et_enter_total);
@@ -123,6 +124,14 @@ public class Tab1DashFragment extends Fragment {
                 enterDump.setText("");
                 percentOfGoal.setText("");
                 percentOfTotal.setText("");
+            }
+        });
+
+        btnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                startActivity(intent);
             }
         });
 
