@@ -24,7 +24,7 @@ public class Tab1DashFragment extends Fragment {
 
     }
 
-    ImageButton btnPhone, officeDirections;
+    ImageButton officeDirections;
     Button btnEmail, calcDumps, calcTotal, btnClear, btnSettings;
     EditText enterTotal, enterDump;
     TextView percentOfGoal, percentOfTotal;
@@ -36,7 +36,6 @@ public class Tab1DashFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.tab1_dash_layout, container, false);
 
-        btnPhone = (ImageButton) v.findViewById(R.id.btn_phone);
         officeDirections = (ImageButton) v.findViewById(R.id.office_map_directions);
         calcTotal = (Button) v.findViewById(R.id.calculate_percentage);
         calcDumps = (Button) v.findViewById(R.id.calculate_dump_percentage);
@@ -49,15 +48,6 @@ public class Tab1DashFragment extends Fragment {
 
         percentOfTotal = (TextView) v.findViewById(R.id.tv_percent_of_total);
         percentOfGoal = (TextView) v.findViewById(R.id.tv_percent_of_goal);
-
-        btnPhone.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_CALL);
-                i.setData(Uri.parse("tel: 18007436348"));
-                startActivity(i);
-            }
-        });
 
         btnEmail.setOnClickListener(new View.OnClickListener() {
 

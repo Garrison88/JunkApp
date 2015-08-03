@@ -44,7 +44,6 @@ public class Tab3DumpFragment extends Fragment {
 
         final View v = inflater.inflate(R.layout.tab3_dumps_layout, container, false);
 
-        btnPhone = (ImageButton) v.findViewById(R.id.btn_phone);
         infoBtn = (Button) v.findViewById(R.id.btn_dump_info);
         dirBtn = (Button) v.findViewById(R.id.btn_dump_directions);
         calcBtn = (Button) v.findViewById(R.id.btn_calculate_dump);
@@ -64,15 +63,6 @@ public class Tab3DumpFragment extends Fragment {
         rate = v.getResources().getIntArray(R.array.dumps_rate);
 
         dumpsClearBtn.setEnabled(false);
-
-        btnPhone.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_CALL);
-                i.setData(Uri.parse("tel: 18007436348"));
-                startActivity(i);
-            }
-        });
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.dumps, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

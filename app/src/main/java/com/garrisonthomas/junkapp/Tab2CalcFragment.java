@@ -41,7 +41,6 @@ public class Tab2CalcFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.tab2_calc_layout, container, false);
 
-        btnPhone = (ImageButton) v.findViewById(R.id.btn_phone);
         clearCost = (Button) v.findViewById(R.id.btn_clear_cost);
         addHST = (Button) v.findViewById(R.id.btn_add_hst);
         addVolume = (Button) v.findViewById(R.id.btn_add_volume);
@@ -60,15 +59,6 @@ public class Tab2CalcFragment extends Fragment {
         volumePrice = v.getResources().getIntArray(R.array.string_volume_price);
         bedloadPrice = v.getResources().getIntArray(R.array.string_bedload_price);
         loadSize = v.getResources().getStringArray(R.array.string_load_name);
-
-        btnPhone.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_CALL);
-                i.setData(Uri.parse("tel: 18007436348"));
-                startActivity(i);
-            }
-        });
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.string_load_name, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

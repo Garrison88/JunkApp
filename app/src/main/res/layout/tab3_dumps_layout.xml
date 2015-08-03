@@ -5,36 +5,6 @@
     android:background="#28abe3"
     style="?android:buttonBarStyle">
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/dash_layout"
-        android:background="#db3340">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/company_name"
-            android:gravity="center_vertical"
-            android:textColor="#ffffffff"
-            android:textSize="35sp"
-            android:text="@string/tv_company_name"
-            android:layout_gravity="center_horizontal"/>
-
-        <ImageButton
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            android:id="@+id/btn_phone"
-            android:src="@drawable/old_phone"
-            android:layout_toRightOf="@+id/company_name"
-            android:layout_toEndOf="@+id/company_name"
-            style="?android:buttonBarButtonStyle"/>
-
-    </RelativeLayout>
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="48dp"

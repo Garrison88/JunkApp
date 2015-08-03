@@ -1,38 +1,45 @@
 package com.garrisonthomas.junkapp;
 
- import java.util.HashMap;
- import java.util.List;
- import java.util.Vector;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Vector;
 
- import android.content.Context;
- import android.os.Bundle;
- import android.support.v4.app.Fragment;
- import android.support.v4.app.FragmentActivity;
- import android.support.v4.view.ViewPager;
- import android.view.View;
- import android.widget.TabHost;
- import android.widget.TabHost.TabContentFactory;
+import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TabHost;
+import android.widget.TabHost.TabContentFactory;
+import android.support.v7.widget.Toolbar;
 
- /**
+/**
  * The <code>TabsViewPagerFragmentActivity</code> class implements the Fragment activity that maintains a TabHost using a ViewPager.
+ *
  * @author mwho
  */
-public class TabsViewPagerFragmentActivity extends FragmentActivity implements TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener {
+public class TabsViewPagerFragmentActivity extends AppCompatActivity implements TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener {
 
     private TabHost mTabHost;
+    private Toolbar mToolbar;
     private ViewPager mViewPager;
     private HashMap<String, TabInfo> mapTabInfo = new HashMap<String, TabsViewPagerFragmentActivity.TabInfo>();
     private PagerAdapter mPagerAdapter;
+
     /**
-     *
      * @author mwho
-     * Maintains extrinsic info of a tab's construct
+     *         Maintains extrinsic info of a tab's construct
      */
     private class TabInfo {
         private String tag;
         private Class<?> clss;
         private Bundle args;
         private Fragment fragment;
+
         TabInfo(String tag, Class<?> clazz, Bundle args) {
             this.tag = tag;
             this.clss = clazz;
@@ -40,8 +47,10 @@ public class TabsViewPagerFragmentActivity extends FragmentActivity implements T
         }
 
     }
+
     /**
      * A simple factory that returns dummy views to the Tabhost
+     *
      * @author mwho
      */
     class TabFactory implements TabContentFactory {
@@ -55,7 +64,9 @@ public class TabsViewPagerFragmentActivity extends FragmentActivity implements T
             mContext = context;
         }
 
-        /** (non-Javadoc)
+        /**
+         * (non-Javadoc)
+         *
          * @see android.widget.TabHost.TabContentFactory#createTabContent(java.lang.String)
          */
         public View createTabContent(String tag) {
@@ -66,7 +77,10 @@ public class TabsViewPagerFragmentActivity extends FragmentActivity implements T
         }
 
     }
-    /** (non-Javadoc)
+
+    /**
+     * (non-Javadoc)
+     *
      * @see android.support.v4.app.FragmentActivity#onCreate(android.os.Bundle)
      */
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,9 +94,44 @@ public class TabsViewPagerFragmentActivity extends FragmentActivity implements T
         }
         // Intialise ViewPager
         this.intialiseViewPager();
+
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+
     }
 
-    /** (non-Javadoc)
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.menu_logout_button) {
+
+        } else if (id == R.id.menu_about_developer) {
+
+//            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.developer_website)));
+//            startActivity(browserIntent);
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * (non-Javadoc)
+     *
      * @see android.support.v4.app.FragmentActivity#onSaveInstanceState(android.os.Bundle)
      */
     protected void onSaveInstanceState(Bundle outState) {
@@ -100,9 +149,9 @@ public class TabsViewPagerFragmentActivity extends FragmentActivity implements T
         fragments.add(Fragment.instantiate(this, Tab1DashFragment.class.getName()));
         fragments.add(Fragment.instantiate(this, Tab2CalcFragment.class.getName()));
         fragments.add(Fragment.instantiate(this, Tab3DumpFragment.class.getName()));
-        this.mPagerAdapter  = new PagerAdapter(super.getSupportFragmentManager(), fragments);
+        this.mPagerAdapter = new PagerAdapter(super.getSupportFragmentManager(), fragments);
         //
-        this.mViewPager = (ViewPager)super.findViewById(R.id.viewpager);
+        this.mViewPager = (ViewPager) super.findViewById(R.id.viewpager);
         this.mViewPager.setAdapter(this.mPagerAdapter);
         this.mViewPager.addOnPageChangeListener(this);
     }
@@ -111,14 +160,14 @@ public class TabsViewPagerFragmentActivity extends FragmentActivity implements T
      * Initialise the Tab Host
      */
     private void initialiseTabHost(Bundle args) {
-        mTabHost = (TabHost)findViewById(android.R.id.tabhost);
+        mTabHost = (TabHost) findViewById(android.R.id.tabhost);
         mTabHost.setup();
         TabInfo tabInfo = null;
-        TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab1").setIndicator("Dashboard"), ( tabInfo = new TabInfo("Tab1", Tab1DashFragment.class, args)));
+        TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab1").setIndicator("Dashboard"), (tabInfo = new TabInfo("Tab1", Tab1DashFragment.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
-        TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab2").setIndicator("Calculator"), ( tabInfo = new TabInfo("Tab2", Tab2CalcFragment.class, args)));
+        TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab2").setIndicator("Calculator"), (tabInfo = new TabInfo("Tab2", Tab2CalcFragment.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
-        TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab3").setIndicator("Dumps"), ( tabInfo = new TabInfo("Tab3", Tab3DumpFragment.class, args)));
+        TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab3").setIndicator("Dumps"), (tabInfo = new TabInfo("Tab3", Tab3DumpFragment.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
         // Default to first tab
         //this.onTabChanged("Tab1");
@@ -128,6 +177,7 @@ public class TabsViewPagerFragmentActivity extends FragmentActivity implements T
 
     /**
      * Add Tab content to the Tabhost
+     *
      * @param activity
      * @param tabHost
      * @param tabSpec
@@ -138,11 +188,13 @@ public class TabsViewPagerFragmentActivity extends FragmentActivity implements T
         tabHost.addTab(tabSpec);
     }
 
-    /** (non-Javadoc)
+    /**
+     * (non-Javadoc)
+     *
      * @see android.widget.TabHost.OnTabChangeListener#onTabChanged(java.lang.String)
      */
     public void onTabChanged(String tag) {
-        mTabHost = (TabHost)findViewById(android.R.id.tabhost);
+        mTabHost = (TabHost) findViewById(android.R.id.tabhost);
         TabInfo newTab = this.mapTabInfo.get(tag);
         int pos = this.mTabHost.getCurrentTab();
         this.mViewPager.setCurrentItem(pos, true);
