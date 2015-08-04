@@ -1,111 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#1fda9a"
-    style="?android:buttonBarStyle">
+    xmlns:volume_card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:bedload_card_view="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <LinearLayout
+        android:weightSum="2"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/calc_overall_container"
         android:baselineAligned="false">
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="1"
-        android:id="@+id/calc_spinner_container">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Select Volume:"
-        android:textSize="25sp"
-        android:textColor="#000000"/>
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Select Volume:"-->
+        <!--android:textSize="25sp"/>-->
 
     <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinner_volume"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Select Bedload:"
-        android:textSize="25sp"
-        android:textColor="#000000"/>
-
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinner_bedload"/>
-
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="vertical"
-        android:id="@+id/calc_btn_container"
-        style="?android:buttonBarStyle">
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinner_volume"
+        android:textAlignment="center"/>
 
-        <Button
-            android:layout_width="fill_parent"
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Select Bedload:"-->
+            <!--android:textSize="25sp"/>-->
+
+        <Spinner
+            android:spinnerMode="dialog"
+            android:prompt="@string/bedload_prompt"
+            android:layout_weight="1"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="+"
-            android:textColor="#000000"
-            android:textSize="30sp"
-            android:id="@+id/btn_add_volume"
-            android:background="#28abe3"
-            android:layout_alignParentTop="true"
-            style="?android:buttonBarButtonStyle"
-            android:layout_alignRight="@+id/btn_add_bedload"
-            android:layout_alignEnd="@+id/btn_add_bedload" />
+            android:id="@+id/spinner_bedload"/>
 
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="-"
-            android:textColor="#000000"
-            android:textSize="30sp"
-            android:id="@+id/btn_delete_volume"
-            android:background="#28abe3"
-            style="?android:buttonBarButtonStyle"
-            android:layout_alignParentTop="true"
-            android:layout_alignLeft="@+id/btn_delete_bedload"
-            android:layout_alignStart="@+id/btn_delete_bedload" />
+        <!--<Button-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="+"-->
+            <!--android:textSize="30sp"-->
+            <!--android:id="@+id/btn_add_volume"-->
+            <!--android:layout_alignParentTop="true"-->
+            <!--android:layout_alignRight="@+id/btn_add_bedload"-->
+            <!--android:layout_alignEnd="@+id/btn_add_bedload" />-->
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+"
-            android:textColor="#000000"
-            android:textSize="30sp"
-            android:id="@+id/btn_add_bedload"
-            android:background="#28abe3"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            style="?android:buttonBarButtonStyle"/>
+        <!--<Button-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="-"-->
+            <!--android:textSize="30sp"-->
+            <!--android:id="@+id/btn_delete_volume"-->
+            <!--android:layout_alignParentTop="true"-->
+            <!--android:layout_alignLeft="@+id/btn_delete_bedload"-->
+            <!--android:layout_alignStart="@+id/btn_delete_bedload" />-->
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="-"
-            android:textColor="#000000"
-            android:textSize="30sp"
-            android:id="@+id/btn_delete_bedload"
-            android:background="#28abe3"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            style="?android:buttonBarButtonStyle"/>
+        <!--<Button-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="+"-->
+            <!--android:textSize="30sp"-->
+            <!--android:id="@+id/btn_add_bedload"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_alignParentLeft="true"-->
+            <!--android:layout_alignParentStart="true"/>-->
 
-    </RelativeLayout>
+        <!--<Button-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="-"-->
+            <!--android:textSize="30sp"-->
+            <!--android:id="@+id/btn_delete_bedload"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_alignParentEnd="true"/>-->
 
     </LinearLayout>
 
@@ -114,6 +90,7 @@
         android:layout_height="wrap_content">
 
     <LinearLayout
+        android:paddingTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -125,14 +102,23 @@
             android:textSize="20sp"
             android:text="Current Volume:"/>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <android.support.v7.widget.CardView
+            android:id="@+id/volume_card_view"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:id="@+id/tv_display_volume"
-            android:padding="8dp"
-            android:textSize="20sp"
-            android:textColor="#000000"/>
+            volume_card_view:cardUseCompatPadding="true"
+            volume_card_view:contentPadding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/tv_display_volume"
+                android:textColor="#000000"
+                android:padding="8dp"
+                android:textSize="20sp"/>
+
+        </android.support.v7.widget.CardView>
 
         <TextView
             android:layout_width="wrap_content"
@@ -141,51 +127,58 @@
             android:textSize="20sp"
             android:text="Current Bedload:"/>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <android.support.v7.widget.CardView
+            android:id="@+id/bedload_card_view"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:id="@+id/tv_display_bedload"
-            android:padding="8dp"
-            android:textSize="20sp"
-            android:textColor="#000000"/>
+            bedload_card_view:cardUseCompatPadding="true"
+            bedload_card_view:contentPadding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/tv_display_bedload"
+                android:textColor="#000000"
+                android:padding="8dp"
+                android:textSize="20sp"/>
+
+        </android.support.v7.widget.CardView>
 
         <LinearLayout
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            style="?android:buttonBarStyle">
+            android:weightSum="3">
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/btn_calc_cost"
-            android:background="#28abe3"
             android:text="Calculate"
-            android:textColor="#000000"
-            style="?android:buttonBarButtonStyle" />
+            android:layout_weight="1"/>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_clear_cost"
-            android:background="#28abe3"
-            android:text="Clear"
-            android:textColor="#000000"
-            style="?android:buttonBarButtonStyle"/>
-
-        <Button
-            android:layout_width="wrap_content"
+            <Button
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/btn_add_hst"
-            android:background="#28abe3"
             android:text="Add HST"
-            android:textColor="#000000"
-            style="?android:buttonBarButtonStyle"/>
+                android:layout_weight="1"/>
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_clear_cost"
+                android:text="Clear"
+                android:layout_weight="1"/>
 
         </LinearLayout>
 
         <TextView
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/load_total"

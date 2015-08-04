@@ -5,5 +5,7 @@
     <string name="tv_company_name">1–800-RID-OF-IT</string>
     <string name="title_activity_display_message">My Message</string>
     <string name="menu_text_developer_website">Developer Website</string>
+    <string name="developer_website">http://garrisonthomas.com/</string>
+    <string name="bedload_prompt">Select Bedload</string>
 
 </resources>

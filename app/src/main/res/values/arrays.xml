@@ -29,24 +29,53 @@
         <item>65</item>
     </integer-array>
 
-    <string-array name="string_load_name">
+    <string-array name="string_volume_name">
+        <item>Select Volume</item>
         <item>1/8</item>
+        <item>1/6</item>
         <item>1/4</item>
+        <item>1/3</item>
+        <item>3/8</item>
         <item>1/2</item>
+        <item>5/8</item>
+        <item>2/3</item>
+        <item>3/4</item>
+        <item>7/8</item>
         <item>Full</item>
     </string-array>
 
     <integer-array name="string_volume_price">
+        <item>0</item>
         <item>99</item>
+        <item>149</item>
         <item>189</item>
+        <item>239</item>
+        <item>279</item>
         <item>309</item>
+        <item>349</item>
+        <item>399</item>
+        <item>429</item>
+        <item>449</item>
         <item>479</item>
     </integer-array>
 
+    <string-array name="string_bedload_name">
+        <item>Minimum</item>
+        <item>1/8</item>
+        <item>1/4</item>
+        <item>1/2</item>
+        <item>2/3</item>
+        <item>3/4</item>
+        <item>Full</item>
+    </string-array>
+
     <integer-array name="string_bedload_price">
+        <item>99</item>
         <item>159</item>
         <item>229</item>
         <item>289</item>
+        <item>329</item>
+        <item>359</item>
         <item>459</item>
     </integer-array>
 

@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#28abe3"
-    style="?android:buttonBarStyle">
+    android:layout_height="match_parent">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:text="Select a Dump:"
-        android:textColor="#000000"
         android:textSize="30sp"
         android:gravity="center_horizontal|center_vertical" />
 
@@ -31,40 +28,31 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            style="?android:buttonBarStyle">
+            android:orientation="vertical">
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Directions"
-            android:background="#1fda9a"
-            android:textColor="#000000"
-            android:id="@+id/btn_dump_directions"
-            style="?android:buttonBarButtonStyle"/>
+            android:id="@+id/btn_dump_directions"/>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Hours &amp; Rate"
-            android:background="#1fda9a"
-            android:textColor="#000000"
-            android:id="@+id/btn_dump_info"
-            style="?android:buttonBarButtonStyle"/>
+            android:id="@+id/btn_dump_info"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_dump_gross_cost"
                 android:gravity="center_horizontal"
-                android:textColor="#000000"
                 android:text="Gross Cost:"
                 android:textSize="30sp"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#000000"
                 android:textSize="35sp"
                 android:gravity="center_horizontal"
                 android:id="@+id/tv_gross_cost_number"/>
@@ -91,15 +79,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Calculate Cost"
-            android:background="#1fda9a"
-            android:textColor="#000000"
-            android:id="@+id/btn_calculate_dump"
-            style="?android:buttonBarButtonStyle"/>
+            android:id="@+id/btn_calculate_dump"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#000000"
                 android:id="@+id/tv_dump_net_cost"
                 android:gravity="center_horizontal"
                 android:text="Net Cost:"
@@ -109,7 +93,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="35sp"
-                android:textColor="#000000"
                 android:gravity="center_horizontal"
                 android:id="@+id/tv_net_cost_number"/>
 
@@ -122,9 +105,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:id="@+id/dumps_clear"
-        android:text="Clear"
-        android:background="#1fda9a"
-        android:textColor="#000000"
-        style="?android:buttonBarButtonStyle"/>
+        android:text="Clear"/>
 
 </LinearLayout>

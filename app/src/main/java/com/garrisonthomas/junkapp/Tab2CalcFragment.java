@@ -1,7 +1,6 @@
 package com.garrisonthomas.junkapp;
 
-import android.content.Intent;
-import android.net.Uri;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -24,12 +23,11 @@ public class Tab2CalcFragment extends Fragment {
 
     }
 
-    ImageButton btnPhone;
     Spinner vSpinner, bSpinner;
-    Button addVolume, addBedload, deleteVolume, deleteBedload, calcCost, clearCost, addHST;
+    Button calcCost, clearCost, addHST;
     TextView vSize, bSize, tvTotal;
     int[] volumePrice, bedloadPrice;
-    String[] loadSize;
+    String[] volumeSize, bedloadSize;
     int vPrice, bPrice, vCount = 0, bCount = 0;
     double beforeTax, sum;
     String doubleValue, totalText, sumString;
@@ -39,14 +37,11 @@ public class Tab2CalcFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.tab2_calc_layout, container, false);
+        View v = inflater.inflate(R.layout.tab2_calc_layout, container, false);
 
         clearCost = (Button) v.findViewById(R.id.btn_clear_cost);
+
         addHST = (Button) v.findViewById(R.id.btn_add_hst);
-        addVolume = (Button) v.findViewById(R.id.btn_add_volume);
-        addBedload = (Button) v.findViewById(R.id.btn_add_bedload);
-        deleteVolume = (Button) v.findViewById(R.id.btn_delete_volume);
-        deleteBedload = (Button) v.findViewById(R.id.btn_delete_bedload);
         calcCost = (Button) v.findViewById(R.id.btn_calc_cost);
 
         vSpinner = (Spinner) v.findViewById(R.id.spinner_volume);
@@ -58,11 +53,13 @@ public class Tab2CalcFragment extends Fragment {
 
         volumePrice = v.getResources().getIntArray(R.array.string_volume_price);
         bedloadPrice = v.getResources().getIntArray(R.array.string_bedload_price);
-        loadSize = v.getResources().getStringArray(R.array.string_load_name);
+        volumeSize = v.getResources().getStringArray(R.array.string_volume_name);
+        bedloadSize = v.getResources().getStringArray(R.array.string_bedload_name);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.string_load_name, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        vSpinner.setAdapter(adapter);
+//        ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(getActivity(), , R.layout.custom_volume_spinner);
+//        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        vSpinner.setAdapter(new VolumeAdapter(getActivity(), R.layout.custom_volume_spinner, volumeSize));
+//        vSpinner.setAdapter(adapter1);
         vSpinner.setSelection(0);
         vSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -71,19 +68,13 @@ public class Tab2CalcFragment extends Fragment {
 
                 vPrice = volumePrice[position];
 
-                addVolume.setOnClickListener(new View.OnClickListener() {
+                if (vSize.length() > 0) {
+                    vSize.append(" + ");
+                }
 
-                    public void onClick(View v) {
+                vSize.append(volumeSize[position] + " ($" + volumePrice[position] + ")");
 
-                        if (vSize.length() > 0) {
-                            vSize.append(" + ");
-                        }
-
-                        vSize.append(loadSize[position] + " ($" + volumePrice[position] + ")");
-
-                        priceArray.add(vPrice);
-                    }
-                });
+                priceArray.add(vPrice);
 
             }
 
@@ -94,41 +85,33 @@ public class Tab2CalcFragment extends Fragment {
 
         });
 
-        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(getActivity(), R.array.string_load_name, android.R.layout.simple_spinner_item);
-        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        bSpinner.setAdapter(adapter2);
+//        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(getActivity(), R.array.string_bedload_name, R.layout.custom_volume_spinner);
+//        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        bSpinner.setAdapter(new BedloadAdapter(getActivity(), R.layout.custom_bedload_spinner, bedloadSize));
+//        bSpinner.setAdapter(adapter2);
         bSpinner.setSelection(0);
         bSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-               @Override
-               public void onItemSelected(AdapterView<?> parent, View view, final int position,
-                                          long id) {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, final int position,
+                                       long id) {
 
-                   bPrice = bedloadPrice[position];
+                bPrice = bedloadPrice[position];
 
-                   addBedload.setOnClickListener(new View.OnClickListener() {
+                if (bSize.length() > 0) {
+                    bSize.append(" + ");
+                }
 
-                       public void onClick(View v) {
+                bSize.append(bedloadSize[position] + " ($" + bedloadPrice[position] + ")");
+                priceArray.add(bPrice);
 
-                           if (bSize.length() > 0) {
-                               bSize.append(" + ");
-                           }
+            }
 
-                           bSize.append(loadSize[position] +" ($"+bedloadPrice[position]+")");
-                           priceArray.add(bPrice);
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
-                       }
-                   });
-
-               }
-
-               @Override
-               public void onNothingSelected(AdapterView<?> parent) {
-
-               }
-           }
-
-            );
+            }
+        });
 
         calcCost.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,8 +161,77 @@ public class Tab2CalcFragment extends Fragment {
             }
         });
 
-            return v;
+        return v;
+    }
+
+    public class VolumeAdapter extends ArrayAdapter<String> {
+
+        public VolumeAdapter(Context ctx, int txtViewResourceId, String[] objects) {
+            super(ctx, txtViewResourceId, objects);
         }
+
+        @Override
+        public View getDropDownView(int position, View cnvtView, ViewGroup prnt) {
+            return getCustomView(position, cnvtView, prnt);
+        }
+
+        @Override
+        public View getView(int pos, View cnvtView, ViewGroup prnt) {
+            return getCustomView(pos, cnvtView, prnt);
+        }
+
+        public View getCustomView(int position, View convertView,
+                                  ViewGroup parent) {
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            View mySpinner = inflater.inflate(R.layout.custom_volume_spinner, parent,
+                    false);
+            TextView main_text = (TextView) mySpinner.findViewById(R.id.spinner_text_volume_name);
+            main_text.setText(volumeSize[position]);
+
+            TextView subSpinner = (TextView) mySpinner.findViewById(R.id.spinner_text_volume_price);
+            subSpinner.setText("$"+volumePrice[position]);
+
+//            ImageView left_icon = (ImageView) mySpinner.findViewById(R.id.left_pic);
+//            left_icon.setImageResource(R.drawable.dump_truck);
+
+            return mySpinner;
+        }
+    }
+
+    public class BedloadAdapter extends ArrayAdapter<String> {
+
+        public BedloadAdapter(Context ctx, int txtViewResourceId, String[] objects) {
+            super(ctx, txtViewResourceId, objects);
+        }
+
+        @Override
+        public View getDropDownView(int position, View cnvtView, ViewGroup prnt) {
+            return getCustomView(position, cnvtView, prnt);
+        }
+
+        @Override
+        public View getView(int pos, View cnvtView, ViewGroup prnt) {
+            return getCustomView(pos, cnvtView, prnt);
+        }
+
+        public View getCustomView(int position, View convertView,
+                                  ViewGroup parent) {
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            View mySpinner = inflater.inflate(R.layout.custom_bedload_spinner, parent,
+                    false);
+            TextView main_text = (TextView) mySpinner.findViewById(R.id.spinner_text_bedload_name);
+            main_text.setText(bedloadSize[position]);
+
+            TextView subSpinner = (TextView) mySpinner.findViewById(R.id.spinner_text_bedload_price);
+            subSpinner.setText("$"+bedloadPrice[position]);
+
+//            ImageView left_icon = (ImageView) mySpinner.findViewById(R.id.left_pic);
+//            left_icon.setImageResource(R.drawable.dump_truck);
+
+            return mySpinner;
+        }
+    }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

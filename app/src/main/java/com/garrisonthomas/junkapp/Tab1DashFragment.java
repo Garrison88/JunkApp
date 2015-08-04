@@ -25,7 +25,7 @@ public class Tab1DashFragment extends Fragment {
     }
 
     ImageButton officeDirections;
-    Button btnEmail, calcDumps, calcTotal, btnClear, btnSettings;
+    Button calcDumps, calcTotal, btnClear;
     EditText enterTotal, enterDump;
     TextView percentOfGoal, percentOfTotal;
     String percentOf, percentOfTotalString;
@@ -39,23 +39,13 @@ public class Tab1DashFragment extends Fragment {
         officeDirections = (ImageButton) v.findViewById(R.id.office_map_directions);
         calcTotal = (Button) v.findViewById(R.id.calculate_percentage);
         calcDumps = (Button) v.findViewById(R.id.calculate_dump_percentage);
-        btnEmail = (Button) v.findViewById(R.id.office_email);
         btnClear = (Button) v.findViewById(R.id.btn_dash_clear);
-        btnSettings = (Button) v.findViewById(R.id.btn_settings);
 
         enterDump = (EditText) v.findViewById(R.id.et_enter_dump_cost);
         enterTotal = (EditText) v.findViewById(R.id.et_enter_total);
 
         percentOfTotal = (TextView) v.findViewById(R.id.tv_percent_of_total);
         percentOfGoal = (TextView) v.findViewById(R.id.tv_percent_of_goal);
-
-        btnEmail.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "rcrawford@ridofittoronto.com", null));
-                startActivity(Intent.createChooser(i, "Choose an Email client :"));
-            }
-        });
 
         officeDirections.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,8 +68,7 @@ public class Tab1DashFragment extends Fragment {
                     percentOf = String.valueOf(Math.round((totalEarnings / 1400) * 100));
                     percentOfGoal.setText(percentOf + "%");
 
-                    final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+
 
                 }
             }
@@ -117,14 +106,6 @@ public class Tab1DashFragment extends Fragment {
             }
         });
 
-        btnSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), SettingsActivity.class);
-                startActivity(intent);
-            }
-        });
-
         return v;
 
     }
@@ -135,5 +116,12 @@ public class Tab1DashFragment extends Fragment {
         outState.putString("tab", "Tab1DashFragment"); //save the tab selected
         super.onSaveInstanceState(outState);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
     }
 }

@@ -12,11 +12,18 @@
         android:title="@string/menu_text_developer_website"/>
 
     <item
-        android:id="@+id/action_search"
+        android:id="@+id/action_call_office"
         android:title="Search"
         android:orderInCategory="100"
-        android:icon="@android:drawable/stat_sys_phone_call"
-        app:showAsAction="always" />
+        android:icon="@drawable/ic_phone_white_24dp"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_email_office"
+        android:title="Email Office"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_email_white_24dp"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_settings"

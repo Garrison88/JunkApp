@@ -5,17 +5,25 @@ import java.util.List;
 import java.util.Vector;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
 import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 
 /**
  * The <code>TabsViewPagerFragmentActivity</code> class implements the Fragment activity that maintains a TabHost using a ViewPager.
@@ -25,7 +33,6 @@ import android.support.v7.widget.Toolbar;
 public class TabsViewPagerFragmentActivity extends AppCompatActivity implements TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener {
 
     private TabHost mTabHost;
-    private Toolbar mToolbar;
     private ViewPager mViewPager;
     private HashMap<String, TabInfo> mapTabInfo = new HashMap<String, TabsViewPagerFragmentActivity.TabInfo>();
     private PagerAdapter mPagerAdapter;
@@ -95,7 +102,7 @@ public class TabsViewPagerFragmentActivity extends AppCompatActivity implements 
         // Intialise ViewPager
         this.intialiseViewPager();
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
     }
@@ -117,12 +124,26 @@ public class TabsViewPagerFragmentActivity extends AppCompatActivity implements 
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.menu_logout_button) {
+        if (id == R.id.action_call_office) {
+
+            Uri number = Uri.parse("tel:18007436348");
+            Intent callIntent = new Intent(Intent.ACTION_DIAL, number);
+            startActivity(callIntent);
 
         } else if (id == R.id.menu_about_developer) {
 
-//            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.developer_website)));
-//            startActivity(browserIntent);
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.developer_website)));
+            startActivity(browserIntent);
+
+        } else if (id == R.id.action_settings) {
+
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+
+        } else if (id == R.id.action_email_office) {
+
+            Intent i = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "rcrawford@ridofittoronto.com", null));
+            startActivity(Intent.createChooser(i, "Choose an Email client :"));
 
         }
 
@@ -227,4 +248,11 @@ public class TabsViewPagerFragmentActivity extends AppCompatActivity implements 
         // TODO Auto-generated method stub
 
     }
+
+    public void hideKeyboard(View v) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
+
 }
