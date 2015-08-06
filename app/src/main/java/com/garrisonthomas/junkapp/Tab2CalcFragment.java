@@ -3,13 +3,13 @@ package com.garrisonthomas.junkapp;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -24,11 +24,11 @@ public class Tab2CalcFragment extends Fragment {
     }
 
     Spinner vSpinner, bSpinner;
-    Button calcCost, clearCost, addHST;
-    TextView vSize, bSize, tvTotal;
+    Button clearCost, addHST;
+    TextView tvVolumeSize, tvBedloadSize, tvTotal;
     int[] volumePrice, bedloadPrice;
     String[] volumeSize, bedloadSize;
-    int vPrice, bPrice, vCount = 0, bCount = 0;
+    int vPrice, bPrice;
     double beforeTax, sum;
     String doubleValue, totalText, sumString;
 
@@ -39,16 +39,14 @@ public class Tab2CalcFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab2_calc_layout, container, false);
 
-        clearCost = (Button) v.findViewById(R.id.btn_clear_cost);
-
         addHST = (Button) v.findViewById(R.id.btn_add_hst);
-        calcCost = (Button) v.findViewById(R.id.btn_calc_cost);
+        clearCost = (Button) v.findViewById(R.id.btn_clear_cost);
 
         vSpinner = (Spinner) v.findViewById(R.id.spinner_volume);
         bSpinner = (Spinner) v.findViewById(R.id.spinner_bedload);
 
-        vSize = (TextView) v.findViewById(R.id.tv_display_volume);
-        bSize = (TextView) v.findViewById(R.id.tv_display_bedload);
+        tvVolumeSize = (TextView) v.findViewById(R.id.tv_display_volume);
+        tvBedloadSize = (TextView) v.findViewById(R.id.tv_display_bedload);
         tvTotal = (TextView) v.findViewById(R.id.load_total);
 
         volumePrice = v.getResources().getIntArray(R.array.string_volume_price);
@@ -56,26 +54,24 @@ public class Tab2CalcFragment extends Fragment {
         volumeSize = v.getResources().getStringArray(R.array.string_volume_name);
         bedloadSize = v.getResources().getStringArray(R.array.string_bedload_name);
 
-//        ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(getActivity(), , R.layout.custom_volume_spinner);
-//        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         vSpinner.setAdapter(new VolumeAdapter(getActivity(), R.layout.custom_volume_spinner, volumeSize));
-//        vSpinner.setAdapter(adapter1);
-        vSpinner.setSelection(0);
         vSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
 
                 vPrice = volumePrice[position];
+                if (position != 0 && position != 12) {
+                    if (!TextUtils.isEmpty(tvVolumeSize.getText())) {
+                        tvVolumeSize.append(" + ");
+                    }
 
-                if (vSize.length() > 0) {
-                    vSize.append(" + ");
+                    tvVolumeSize.append(volumeSize[position] + " ($" + volumePrice[position] + ")");
+                    priceArray.add(vPrice);
+
+                    calcCost();
+                    vSpinner.setSelection(0);
                 }
-
-                vSize.append(volumeSize[position] + " ($" + volumePrice[position] + ")");
-
-                priceArray.add(vPrice);
-
             }
 
             @Override
@@ -85,11 +81,7 @@ public class Tab2CalcFragment extends Fragment {
 
         });
 
-//        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(getActivity(), R.array.string_bedload_name, R.layout.custom_volume_spinner);
-//        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         bSpinner.setAdapter(new BedloadAdapter(getActivity(), R.layout.custom_bedload_spinner, bedloadSize));
-//        bSpinner.setAdapter(adapter2);
-        bSpinner.setSelection(0);
         bSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
@@ -97,14 +89,17 @@ public class Tab2CalcFragment extends Fragment {
                                        long id) {
 
                 bPrice = bedloadPrice[position];
+                if (position != 0) {
+                    if (!TextUtils.isEmpty(tvBedloadSize.getText())) {
+                        tvBedloadSize.append(" + ");
+                    }
 
-                if (bSize.length() > 0) {
-                    bSize.append(" + ");
+                    tvBedloadSize.append(bedloadSize[position] + " ($" + bedloadPrice[position] + ")");
+                    priceArray.add(bPrice);
+
+                    calcCost();
+                    bSpinner.setSelection(0);
                 }
-
-                bSize.append(bedloadSize[position] + " ($" + bedloadPrice[position] + ")");
-                priceArray.add(bPrice);
-
             }
 
             @Override
@@ -113,34 +108,15 @@ public class Tab2CalcFragment extends Fragment {
             }
         });
 
-        calcCost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (vSize.length() != 0 || bSize.length() != 0) {
-
-                    sum = 0;
-                    for (int i : priceArray) {
-                        sum += i;
-                    }
-
-                    sumString = String.valueOf(sum);
-                    tvTotal.setText("$" + sumString);
-
-                }
-            }
-
-
-        });
-
         clearCost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 priceArray.clear();
-                vSize.setText("");
-                bSize.setText("");
+                tvVolumeSize.setText("");
+                tvBedloadSize.setText("");
                 tvTotal.setText("");
+                addHST.setClickable(true);
 
             }
         });
@@ -149,7 +125,7 @@ public class Tab2CalcFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if (tvTotal.length() != 0) {
+                if (!TextUtils.isEmpty(tvTotal.getText())) {
 
                     doubleValue = tvTotal.getText().toString();
                     beforeTax = Double.parseDouble(doubleValue.substring(1));
@@ -157,11 +133,26 @@ public class Tab2CalcFragment extends Fragment {
                     totalText = Double.toString(Math.round((beforeTax * 1.13) * 100.00) / 100.00);
                     tvTotal.setText("$" + totalText);
 
+                    addHST.setClickable(false);
+
                 }
             }
         });
 
         return v;
+    }
+
+    public void calcCost() {
+
+        if (!TextUtils.isEmpty(tvVolumeSize.getText()) || !TextUtils.isEmpty(tvBedloadSize.getText())) {
+            sum = 0;
+            for (int i : priceArray) {
+                sum += i;
+            }
+            sumString = String.valueOf(sum);
+            tvTotal.setText("$" + sumString);
+
+        }
     }
 
     public class VolumeAdapter extends ArrayAdapter<String> {
@@ -185,17 +176,24 @@ public class Tab2CalcFragment extends Fragment {
             LayoutInflater inflater = getActivity().getLayoutInflater();
             View mySpinner = inflater.inflate(R.layout.custom_volume_spinner, parent,
                     false);
+
             TextView main_text = (TextView) mySpinner.findViewById(R.id.spinner_text_volume_name);
             main_text.setText(volumeSize[position]);
 
             TextView subSpinner = (TextView) mySpinner.findViewById(R.id.spinner_text_volume_price);
-            subSpinner.setText("$"+volumePrice[position]);
+
+            if (position == 0 || position == 12) {
+                subSpinner.setVisibility(View.GONE);
+            } else {
+                subSpinner.setText("@ $" + volumePrice[position]);
+            }
 
 //            ImageView left_icon = (ImageView) mySpinner.findViewById(R.id.left_pic);
 //            left_icon.setImageResource(R.drawable.dump_truck);
 
             return mySpinner;
         }
+
     }
 
     public class BedloadAdapter extends ArrayAdapter<String> {
@@ -219,11 +217,17 @@ public class Tab2CalcFragment extends Fragment {
             LayoutInflater inflater = getActivity().getLayoutInflater();
             View mySpinner = inflater.inflate(R.layout.custom_bedload_spinner, parent,
                     false);
+
             TextView main_text = (TextView) mySpinner.findViewById(R.id.spinner_text_bedload_name);
             main_text.setText(bedloadSize[position]);
 
             TextView subSpinner = (TextView) mySpinner.findViewById(R.id.spinner_text_bedload_price);
-            subSpinner.setText("$"+bedloadPrice[position]);
+
+            if (position == 0) {
+                subSpinner.setText("");
+            } else {
+                subSpinner.setText("@ $" + bedloadPrice[position]);
+            }
 
 //            ImageView left_icon = (ImageView) mySpinner.findViewById(R.id.left_pic);
 //            left_icon.setImageResource(R.drawable.dump_truck);

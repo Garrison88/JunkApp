@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -27,15 +27,14 @@ public class Tab3DumpFragment extends Fragment {
 
     }
 
-    ImageButton btnPhone;
     Spinner dumpsSpinner;
-    Button infoBtn, dirBtn, calcBtn, dumpsClearBtn;
+    Button infoBtn, dirBtn, calcBtn, dumpsClearBtn, addHSTButton;
     EditText weight;
-    String[] directions, information;
+    String[] dumpName, dumpsRateName, directions, information;
     int[] rate;
     int rateNumber;
-    TextView grossCostNumber, netCostNumber, grossCost, netCost;
-    String dir, info, weightString, resultString, withTaxString;
+    TextView tvDumpCost;
+    String dir, info, resultString, withTaxString;
     double weightNumber, result, withTax;
 
     @Override
@@ -47,34 +46,26 @@ public class Tab3DumpFragment extends Fragment {
         infoBtn = (Button) v.findViewById(R.id.btn_dump_info);
         dirBtn = (Button) v.findViewById(R.id.btn_dump_directions);
         calcBtn = (Button) v.findViewById(R.id.btn_calculate_dump);
+        addHSTButton = (Button) v.findViewById(R.id.btn_dumps_add_hst);
         dumpsClearBtn = (Button) v.findViewById(R.id.dumps_clear);
 
         dumpsSpinner = (Spinner) v.findViewById(R.id.spinner_dumps);
 
         weight = (EditText) v.findViewById(R.id.et_enter_weight);
 
-        grossCostNumber = (TextView) v.findViewById(R.id.tv_gross_cost_number);
-        netCostNumber = (TextView) v.findViewById(R.id.tv_net_cost_number);
-        grossCost = (TextView) v.findViewById(R.id.tv_dump_gross_cost);
-        netCost = (TextView) v.findViewById(R.id.tv_dump_net_cost);
+        tvDumpCost = (TextView) v.findViewById(R.id.tv_dump_cost);
 
+        dumpName = v.getResources().getStringArray(R.array.dumps_name);
+//        dumpsRateName = v.getResources().getStringArray(R.array.dumps_rate_name);
         directions = v.getResources().getStringArray(R.array.dumps_address);
         information = v.getResources().getStringArray(R.array.dumps_info);
         rate = v.getResources().getIntArray(R.array.dumps_rate);
 
-        dumpsClearBtn.setEnabled(false);
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.dumps, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        dumpsSpinner.setSelection(0);
-        dumpsSpinner.setAdapter(adapter);
+        dumpsSpinner.setAdapter(new DumpsAdapter(getActivity(), R.layout.custom_bedload_spinner, dumpName));
         dumpsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
-
-                grossCost.setVisibility(View.INVISIBLE);
-                netCost.setVisibility(View.INVISIBLE);
 
                 dir = directions[position];
                 info = information[position];
@@ -83,25 +74,29 @@ public class Tab3DumpFragment extends Fragment {
                 dirBtn.setOnClickListener(new View.OnClickListener() {
 
                     public void onClick(View v) {
-                        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                                Uri.parse(dir));
-                        startActivity(intent);
+                        if (position != 0) {
+                            Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                                    Uri.parse(dir));
+                            startActivity(intent);
+                        }
                     }
                 });
 
                 infoBtn.setOnClickListener(new View.OnClickListener() {
 
                     public void onClick(View v) {
-                        new AlertDialog.Builder(getActivity())
-                                .setTitle("Dump Info")
-                                .setMessage(info)
-                                .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        // continue with delete
-                                    }
-                                })
-                                .setIcon(R.drawable.info)
-                                .show();
+                        if (position != 0) {
+                            new AlertDialog.Builder(getActivity())
+                                    .setTitle("Dump Info")
+                                    .setMessage(info)
+                                    .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // continue with delete
+                                        }
+                                    })
+                                    .setIcon(R.drawable.info)
+                                    .show();
+                        }
                     }
                 });
 
@@ -109,23 +104,18 @@ public class Tab3DumpFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                        if (weight.length() != 0) {
+                        if (!TextUtils.isEmpty(weight.getText())) {
 
-                            weightString = weight.getText().toString();
-                            weightNumber = Double.parseDouble(weightString);
+                            weightNumber = Double.parseDouble(weight.getText().toString());
+                            weightNumber = weightNumber / 1000;
 
                             result = Math.round((weightNumber * rateNumber) * 100.00) / 100.00;
                             withTax = Math.round((result * 1.13) * 100.00) / 100.00;
 
-                            grossCost.setVisibility(View.VISIBLE);
-                            netCost.setVisibility(View.VISIBLE);
-                            dumpsClearBtn.setEnabled(true);
-
                             resultString = String.valueOf(result);
                             withTaxString = String.valueOf(withTax);
 
-                            grossCostNumber.setText("$" + resultString);
-                            netCostNumber.setText("$" + withTaxString);
+                            tvDumpCost.setText("$" + resultString);
 
                             weight.setText("");
 
@@ -136,19 +126,28 @@ public class Tab3DumpFragment extends Fragment {
                     }
 
 
+                });
 
+                addHSTButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (!TextUtils.isEmpty(tvDumpCost.getText())) {
+                            tvDumpCost.setText("$" + withTaxString);
+                        }
+                    }
                 });
 
                 dumpsClearBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        grossCostNumber.setText("");
-                        netCostNumber.setText("");
-                        grossCost.setVisibility(View.INVISIBLE);
-                        netCost.setVisibility(View.INVISIBLE);
-                        dumpsClearBtn.setEnabled(false);
+                        if (!TextUtils.isEmpty(tvDumpCost.getText())) {
 
+                            tvDumpCost.setText("$0.0");
+                            withTaxString = "";
+
+                        }
                     }
                 });
 
@@ -161,6 +160,45 @@ public class Tab3DumpFragment extends Fragment {
         });
 
         return v;
+
+    }
+
+    public class DumpsAdapter extends ArrayAdapter<String> {
+
+        public DumpsAdapter(Context ctx, int txtViewResourceId, String[] objects) {
+            super(ctx, txtViewResourceId, objects);
+        }
+
+        @Override
+        public View getDropDownView(int position, View cnvtView, ViewGroup prnt) {
+            return getCustomView(position, cnvtView, prnt);
+        }
+
+        @Override
+        public View getView(int pos, View cnvtView, ViewGroup prnt) {
+            return getCustomView(pos, cnvtView, prnt);
+        }
+
+        public View getCustomView(int position, View convertView,
+                                  ViewGroup parent) {
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            View mySpinner = inflater.inflate(R.layout.custom_dumps_spinner, parent,
+                    false);
+
+            TextView main_text = (TextView) mySpinner.findViewById(R.id.spinner_text_dump_name);
+            main_text.setText(dumpName[position]);
+
+            TextView subSpinner = (TextView) mySpinner.findViewById(R.id.spinner_text_dump_rate);
+            if (position == 0) {
+                subSpinner.setVisibility(View.GONE);
+            }
+            subSpinner.setText("$" + rate[position] + "/ton");
+
+//            ImageView left_icon = (ImageView) mySpinner.findViewById(R.id.left_pic);
+//            left_icon.setImageResource(R.drawable.dump_truck);
+
+            return mySpinner;
+        }
 
     }
 

@@ -8,13 +8,12 @@
     android:padding="3dp" >
 
     <!--<ImageView-->
-        <!--android:id="@+id/left_pic"-->
-        <!--android:layout_width="100px"-->
-        <!--android:layout_height="80px"-->
-        <!--android:background="@drawable/ic_email_white_24dp" />-->
+    <!--android:id="@+id/left_pic"-->
+    <!--android:layout_width="100px"-->
+    <!--android:layout_height="80px"/>-->
 
     <TextView
-        android:id="@+id/spinner_text_volume_name"
+        android:id="@+id/spinner_text_dump_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
@@ -22,10 +21,10 @@
         android:padding="5dp"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:text="VolumeName"/>
+        android:text="DumpName"/>
 
     <TextView
-        android:id="@+id/spinner_text_volume_price"
+        android:id="@+id/spinner_text_dump_rate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
@@ -34,6 +33,6 @@
         android:padding="5dp"
         android:textColor="@color/darkAccent"
         android:textStyle="italic"
-        android:text="Volume$"/>
+        android:text="Ton$" />
 
 </LinearLayout>

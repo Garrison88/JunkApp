@@ -4,31 +4,36 @@
     tools:context=".MainActivity">
 
     <item
-        android:id="@+id/menu_logout_button"
-        android:title="logout" />
-
-    <item
-        android:id="@+id/menu_about_developer"
-        android:title="@string/menu_text_developer_website"/>
-
-    <item
         android:id="@+id/action_call_office"
-        android:title="Search"
-        android:orderInCategory="100"
+        android:title="Call Office"
+        android:orderInCategory="1"
         android:icon="@drawable/ic_phone_white_24dp"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_email_office"
         android:title="Email Office"
-        android:orderInCategory="100"
+        android:orderInCategory="2"
         android:icon="@drawable/ic_email_white_24dp"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_take_photo"
+        android:title="Take Photo"
+        android:orderInCategory="3"
+        android:icon="@drawable/ic_photo_camera_white_24dp"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_settings"
         android:title="@string/action_settings"
-        android:orderInCategory="100"
+        android:orderInCategory="4"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_about_developer"
+        android:title="@string/menu_text_developer_website"
+        android:orderInCategory="5"
+        app:showAsAction="never"/>
 
 </menu>

@@ -1,5 +1,7 @@
 package com.garrisonthomas.junkapp;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
@@ -8,10 +10,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
@@ -36,6 +42,9 @@ public class TabsViewPagerFragmentActivity extends AppCompatActivity implements 
     private ViewPager mViewPager;
     private HashMap<String, TabInfo> mapTabInfo = new HashMap<String, TabsViewPagerFragmentActivity.TabInfo>();
     private PagerAdapter mPagerAdapter;
+
+    int TAKE_PHOTO_CODE = 0;
+    public static int count=0;
 
     /**
      * @author mwho
@@ -145,7 +154,30 @@ public class TabsViewPagerFragmentActivity extends AppCompatActivity implements 
             Intent i = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "rcrawford@ridofittoronto.com", null));
             startActivity(Intent.createChooser(i, "Choose an Email client :"));
 
-        }
+        } else if (id == R.id.action_take_photo) {
+
+            //here,we are making a folder named picFolder to store pics taken by the camera using this application
+            final String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/JunkPics/";
+            File newdir = new File(dir);
+            newdir.mkdirs();
+
+                    // here,counter will be incremented each time,and the picture taken by camera will be stored as 1.jpg,2.jpg and likewise.
+                    count++;
+                    String file = dir+count+".jpg";
+                    File newfile = new File(file);
+                    try {
+                        newfile.createNewFile();
+                    } catch (IOException e) {}
+
+                    Uri outputFileUri = Uri.fromFile(newfile);
+
+                    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+
+                    startActivityForResult(cameraIntent, TAKE_PHOTO_CODE);
+                }
+
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -248,6 +280,21 @@ public class TabsViewPagerFragmentActivity extends AppCompatActivity implements 
         // TODO Auto-generated method stub
 
     }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == TAKE_PHOTO_CODE && resultCode == RESULT_OK) {
+            Log.d("CameraDemo", "Pic saved");
+
+
+        }
+    }
+
+
 
     public void hideKeyboard(View v) {
         InputMethodManager imm = (InputMethodManager) getSystemService(

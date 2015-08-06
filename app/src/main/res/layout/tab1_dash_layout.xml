@@ -20,22 +20,22 @@
             android:orientation="vertical"
             android:weightSum="1">
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/map_card_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                map_card_view:cardUseCompatPadding="true"
-                map_card_view:contentPadding="5dp">
+            <!--<android.support.v7.widget.CardView-->
+                <!--android:id="@+id/map_card_view"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--map_card_view:cardUseCompatPadding="true"-->
+                <!--map_card_view:contentPadding="5dp">-->
 
-                <ImageButton
-                    android:id="@+id/office_map_directions"
-                    android:layout_width="match_parent"
-                    android:layout_height="211dp"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@drawable/map"
-                    android:padding="5dp" />
+                <!--<ImageButton-->
+                    <!--android:id="@+id/office_map_directions"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="211dp"-->
+                    <!--android:layout_gravity="center_horizontal"-->
+                    <!--android:background="@drawable/map"-->
+                    <!--android:padding="5dp" />-->
 
-            </android.support.v7.widget.CardView>
+            <!--</android.support.v7.widget.CardView>-->
 
 
 

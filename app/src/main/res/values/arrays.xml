@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="dumps">
-        <item>Laird/Esander</item>
+    <string-array name="dumps_name">
+        <item>Select a Dump</item>
+        <item>Laird</item>
         <item>Cherry</item>
         <item>Miller</item>
         <item>Shorncliffe</item>
     </string-array>
 
+    <!--<string-array name="dumps_rate_name">-->
+        <!--<item>$82/ton</item>-->
+        <!--<item>$85/ton</item>-->
+        <!--<item>$88/ton</item>-->
+        <!--<item>$65/ton</item>-->
+    <!--</string-array>-->
+
     <string-array name="dumps_address">
+        <item>Placeholder</item>
         <item>https://www.google.ca/maps/place/20+Esandar+Dr,+Toronto,+ON+M4G+1Y2/@43.7058561,-79.3591228,16z/data=!4m5!1m2!2m1!1smaps!3m1!1s0x89d4ccdd7f577725:0x5bea991514ff0f10</item>
         <item>https://www.google.ca/maps/place/242+Cherry+St,+Toronto,+ON+M5A+3L2/@43.6443606,-79.3557584,17z/data=!3m1!4b1!4m2!3m1!1s0x89d4cb185810edaf:0x3503ee91ce3ba927</item>
         <item>https://www.google.ca/maps/place/300+Rodick+Rd,+Markham,+ON+L6G+1B2/@43.8415689,-79.3510508,14z/data=!4m7!1m4!3m3!1s0x89d4d4ed662077ef:0xf3d7ee76dc9743ed!2s700+Rodick+Rd,+Markham,+ON+L6G+1A6!3b1!3m1!1s0x89d4d48fce85cead:0x421c57cfaba48332</item>
@@ -16,6 +25,7 @@
     </string-array>
 
     <string-array name="dumps_info">
+        <item>Placeholder</item>
         <item>Laird/Esander: Open Monday–Friday 8–5\nRate per ton: $80\n<u>Remember to wear safety gear!</u></item>
         <item>Cherry: Open every day 6–6</item>
         <item>Miller: Open Monday to Friday 8–5</item>
@@ -23,7 +33,8 @@
     </string-array>
 
     <integer-array name="dumps_rate">
-        <item>80</item>
+        <item>0</item>
+        <item>82</item>
         <item>85</item>
         <item>88</item>
         <item>65</item>
@@ -42,6 +53,9 @@
         <item>3/4</item>
         <item>7/8</item>
         <item>Full</item>
+        <item>Extras</item>
+        <item>Labour</item>
+        <item>1 Tire</item>
     </string-array>
 
     <integer-array name="string_volume_price">
@@ -57,10 +71,14 @@
         <item>429</item>
         <item>449</item>
         <item>479</item>
+        <item>0</item>
+        <item>99</item>
+        <item>15</item>
     </integer-array>
 
     <string-array name="string_bedload_name">
-        <item>Minimum</item>
+        <item>Select Bedload</item>
+        <item>1/16</item>
         <item>1/8</item>
         <item>1/4</item>
         <item>1/2</item>
@@ -70,6 +88,7 @@
     </string-array>
 
     <integer-array name="string_bedload_price">
+        <item>0</item>
         <item>99</item>
         <item>159</item>
         <item>229</item>

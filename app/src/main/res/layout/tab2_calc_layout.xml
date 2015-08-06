@@ -1,87 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:volume_card_view="http://schemas.android.com/apk/res-auto"
     xmlns:bedload_card_view="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:calc_card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:volume_card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:weightSum="2"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
+        android:id="@+id/calc_overall_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:baselineAligned="false"
         android:orientation="horizontal"
-        android:id="@+id/calc_overall_container"
-        android:baselineAligned="false">
-
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Select Volume:"-->
-        <!--android:textSize="25sp"/>-->
-
-    <Spinner
-        android:layout_weight="1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinner_volume"
-        android:textAlignment="center"/>
-
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Select Bedload:"-->
-            <!--android:textSize="25sp"/>-->
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        android:weightSum="2">
 
         <Spinner
-            android:spinnerMode="dialog"
-            android:prompt="@string/bedload_prompt"
-            android:layout_weight="1"
+            android:id="@+id/spinner_volume"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/spinner_bedload"/>
+            android:layout_weight="1"
+            android:prompt="@string/volume_prompt"
+            android:spinnerMode="dropdown" />
 
-        <!--<Button-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="+"-->
-            <!--android:textSize="30sp"-->
-            <!--android:id="@+id/btn_add_volume"-->
-            <!--android:layout_alignParentTop="true"-->
-            <!--android:layout_alignRight="@+id/btn_add_bedload"-->
-            <!--android:layout_alignEnd="@+id/btn_add_bedload" />-->
-
-        <!--<Button-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="-"-->
-            <!--android:textSize="30sp"-->
-            <!--android:id="@+id/btn_delete_volume"-->
-            <!--android:layout_alignParentTop="true"-->
-            <!--android:layout_alignLeft="@+id/btn_delete_bedload"-->
-            <!--android:layout_alignStart="@+id/btn_delete_bedload" />-->
-
-        <!--<Button-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="+"-->
-            <!--android:textSize="30sp"-->
-            <!--android:id="@+id/btn_add_bedload"-->
-            <!--android:layout_alignParentBottom="true"-->
-            <!--android:layout_alignParentLeft="true"-->
-            <!--android:layout_alignParentStart="true"/>-->
-
-        <!--<Button-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="-"-->
-            <!--android:textSize="30sp"-->
-            <!--android:id="@+id/btn_delete_bedload"-->
-            <!--android:layout_alignParentBottom="true"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_alignParentEnd="true"/>-->
+        <Spinner
+            android:id="@+id/spinner_bedload"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:prompt="@string/bedload_prompt" />
 
     </LinearLayout>
 
@@ -89,105 +38,112 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:paddingTop="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:textSize="20sp"
-            android:text="Current Volume:"/>
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/volume_card_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            volume_card_view:cardUseCompatPadding="true"
-            volume_card_view:contentPadding="5dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:id="@+id/tv_display_volume"
-                android:textColor="#000000"
-                android:padding="8dp"
-                android:textSize="20sp"/>
-
-        </android.support.v7.widget.CardView>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:textSize="20sp"
-            android:text="Current Bedload:"/>
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/bedload_card_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            bedload_card_view:cardUseCompatPadding="true"
-            bedload_card_view:contentPadding="5dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:id="@+id/tv_display_bedload"
-                android:textColor="#000000"
-                android:padding="8dp"
-                android:textSize="20sp"/>
-
-        </android.support.v7.widget.CardView>
-
         <LinearLayout
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:weightSum="3">
+            android:orientation="vertical"
+            android:paddingTop="8dp">
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_calc_cost"
-            android:text="Calculate"
-            android:layout_weight="1"/>
-
-            <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_add_hst"
-            android:text="Add HST"
-                android:layout_weight="1"/>
-
-            <Button
-                android:layout_width="0dp"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btn_clear_cost"
-                android:text="Clear"
-                android:layout_weight="1"/>
+                android:layout_gravity="center_horizontal"
+                android:text="Current Volume"
+                android:textSize="20sp" />
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/volume_card_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                volume_card_view:cardUseCompatPadding="true"
+                volume_card_view:contentPadding="5dp">
+
+                <TextView
+                    android:id="@+id/tv_display_volume"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:padding="8dp"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+
+            </android.support.v7.widget.CardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Current Bedload"
+                android:textSize="20sp" />
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/bedload_card_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                bedload_card_view:cardUseCompatPadding="true"
+                bedload_card_view:contentPadding="5dp">
+
+                <TextView
+                    android:id="@+id/tv_display_bedload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:padding="8dp"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/calc_card_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                calc_card_view:cardUseCompatPadding="true"
+                calc_card_view:contentPadding="5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/load_total"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"
+                        android:hint="$0.0"
+                        android:paddingBottom="8dp"
+                        android:paddingTop="8dp"
+                        android:textSize="75sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:weightSum="2">
+
+                        <Button
+                            android:id="@+id/btn_add_hst"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Add HST" />
+
+                        <Button
+                            android:id="@+id/btn_clear_cost"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Clear" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
 
         </LinearLayout>
-
-        <TextView
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/load_total"
-            android:hint="$0.0"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
-            android:textSize="50sp" />
-
-    </LinearLayout>
 
     </ScrollView>
 

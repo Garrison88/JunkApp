@@ -1,110 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:text="Select a Dump:"
-        android:textSize="30sp"
-        android:gravity="center_horizontal|center_vertical" />
+    xmlns:dumps_card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
 
     <Spinner
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        android:id="@+id/spinner_dumps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="15dp"
-        android:id="@+id/spinner_dumps"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/btn_dump_directions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/btn_dump_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dump Info"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:baselineAligned="false">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Directions"
-            android:id="@+id/btn_dump_directions"/>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Hours &amp; Rate"
-            android:id="@+id/btn_dump_info"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_dump_gross_cost"
-                android:gravity="center_horizontal"
-                android:text="Gross Cost:"
-                android:textSize="30sp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="35sp"
-                android:gravity="center_horizontal"
-                android:id="@+id/tv_gross_cost_number"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            style="?android:buttonBarStyle">
+        android:weightSum="1">
 
         <EditText
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:inputType="numberDecimal"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal|center_vertical"
-            android:hint="Enter Weight in Tons"
-            android:id="@+id/et_enter_weight"/>
+            android:id="@+id/et_enter_weight"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Enter Weight (kg)"
+            android:inputType="numberDecimal" />
 
         <Button
-            android:layout_width="match_parent"
+            android:id="@+id/btn_calculate_dump"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Calculate Cost"
-            android:id="@+id/btn_calculate_dump"/>
+            android:text="Calculate Cost" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_dump_net_cost"
-                android:gravity="center_horizontal"
-                android:text="Net Cost:"
-                android:textSize="30sp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="35sp"
-                android:gravity="center_horizontal"
-                android:id="@+id/tv_net_cost_number"/>
-
-        </LinearLayout>
 
     </LinearLayout>
 
-    <Button
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.CardView
+        android:id="@+id/dumps_card_view"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/dumps_clear"
-        android:text="Clear"/>
+        dumps_card_view:cardUseCompatPadding="true"
+        dumps_card_view:contentPadding="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_dump_cost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:hint="$0.0"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:textSize="75sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="2">
+
+                <Button
+                    android:id="@+id/btn_dumps_add_hst"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Add HST" />
+
+                <Button
+                    android:id="@+id/dumps_clear"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:text="Clear" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+    </android.support.v7.widget.CardView>
 
 </LinearLayout>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:id="@+id/spinner_layout"
     android:padding="3dp" >
 
@@ -16,21 +16,23 @@
         android:id="@+id/spinner_text_bedload_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5px"
-        android:layout_marginTop="2px"
-        android:padding="3px"
-        android:text="JMD Group"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:padding="5dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="BedloadName"/>
 
     <TextView
         android:id="@+id/spinner_text_bedload_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/spinner_text_bedload_name"
-        android:layout_marginLeft="5dip"
-        android:padding="2px"
-        android:text="beyond the expectations..."
-        android:textColor="#777777" />
+        android:textSize="20sp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:padding="5dp"
+        android:textColor="@color/darkAccent"
+        android:textStyle="italic"
+        android:text="Bedload$" />
 
-</RelativeLayout>
+</LinearLayout>
