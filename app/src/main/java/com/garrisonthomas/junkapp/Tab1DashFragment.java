@@ -25,8 +25,7 @@ public class Tab1DashFragment extends Fragment {
 
     }
 
-    ImageButton officeDirections;
-    Button calcDumps, calcTotal, btnClear;
+    Button calcDumps, calcTotal, btnClear, newJournal;
     EditText enterTotal, enterDump;
     TextView percentOfGoal, percentOfTotal;
     String percentOf, percentOfTotalString;
@@ -37,27 +36,16 @@ public class Tab1DashFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.tab1_dash_layout, container, false);
 
-//        officeDirections = (ImageButton) v.findViewById(R.id.office_map_directions);
         calcTotal = (Button) v.findViewById(R.id.calculate_percentage);
         calcDumps = (Button) v.findViewById(R.id.calculate_dump_percentage);
         btnClear = (Button) v.findViewById(R.id.btn_dash_clear);
+        newJournal = (Button) v.findViewById(R.id.new_journal);
 
         enterDump = (EditText) v.findViewById(R.id.et_enter_dump_cost);
         enterTotal = (EditText) v.findViewById(R.id.et_enter_total);
 
         percentOfTotal = (TextView) v.findViewById(R.id.tv_percent_of_total);
         percentOfGoal = (TextView) v.findViewById(R.id.tv_percent_of_goal);
-
-//        officeDirections.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-//                        Uri.parse("https://www.google.ca/search?q=2333+dundas+street+west&oq=2333+dundas&aqs=chrome.0.0j69i57j0l4.2407j0j7&sourceid=chrome&es_sm=122&ie=UTF-8"));
-//                startActivity(intent);
-//
-//            }
-//        });
 
         calcTotal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,8 +56,6 @@ public class Tab1DashFragment extends Fragment {
                     totalEarnings = Integer.parseInt(enterTotal.getText().toString());
                     percentOf = String.valueOf(Math.round((totalEarnings / 1400) * 100));
                     percentOfGoal.setText(percentOf + "%");
-
-
 
                 }
             }
@@ -104,6 +90,15 @@ public class Tab1DashFragment extends Fragment {
                 enterDump.setText("");
                 percentOfGoal.setText("");
                 percentOfTotal.setText("");
+            }
+        });
+
+        newJournal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getActivity(), DailyJournal.class);
+                startActivity(intent);
             }
         });
 

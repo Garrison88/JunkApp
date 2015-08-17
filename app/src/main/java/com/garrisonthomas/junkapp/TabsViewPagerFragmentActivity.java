@@ -8,6 +8,7 @@ import java.util.Vector;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -41,7 +42,6 @@ public class TabsViewPagerFragmentActivity extends AppCompatActivity implements 
     private TabHost mTabHost;
     private ViewPager mViewPager;
     private HashMap<String, TabInfo> mapTabInfo = new HashMap<String, TabsViewPagerFragmentActivity.TabInfo>();
-    private PagerAdapter mPagerAdapter;
 
     int TAKE_PHOTO_CODE = 0;
     public static int count=0;
@@ -100,6 +100,7 @@ public class TabsViewPagerFragmentActivity extends AppCompatActivity implements 
      * @see android.support.v4.app.FragmentActivity#onCreate(android.os.Bundle)
      */
     protected void onCreate(Bundle savedInstanceState) {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         // Inflate the layout
         setContentView(R.layout.tabs_viewpager_layout);
@@ -202,10 +203,10 @@ public class TabsViewPagerFragmentActivity extends AppCompatActivity implements 
         fragments.add(Fragment.instantiate(this, Tab1DashFragment.class.getName()));
         fragments.add(Fragment.instantiate(this, Tab2CalcFragment.class.getName()));
         fragments.add(Fragment.instantiate(this, Tab3DumpFragment.class.getName()));
-        this.mPagerAdapter = new PagerAdapter(super.getSupportFragmentManager(), fragments);
+        PagerAdapter mPagerAdapter = new PagerAdapter(super.getSupportFragmentManager(), fragments);
         //
         this.mViewPager = (ViewPager) super.findViewById(R.id.viewpager);
-        this.mViewPager.setAdapter(this.mPagerAdapter);
+        this.mViewPager.setAdapter(mPagerAdapter);
         this.mViewPager.addOnPageChangeListener(this);
     }
 
@@ -216,6 +217,7 @@ public class TabsViewPagerFragmentActivity extends AppCompatActivity implements 
         mTabHost = (TabHost) findViewById(android.R.id.tabhost);
         mTabHost.setup();
         TabInfo tabInfo = null;
+        mTabHost.getTabWidget().setDividerDrawable(null);
         TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab1").setIndicator("Dashboard"), (tabInfo = new TabInfo("Tab1", Tab1DashFragment.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
         TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab2").setIndicator("Calculator"), (tabInfo = new TabInfo("Tab2", Tab2CalcFragment.class, args)));
@@ -281,8 +283,6 @@ public class TabsViewPagerFragmentActivity extends AppCompatActivity implements 
 
     }
 
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -292,14 +292,6 @@ public class TabsViewPagerFragmentActivity extends AppCompatActivity implements 
 
 
         }
-    }
-
-
-
-    public void hideKeyboard(View v) {
-        InputMethodManager imm = (InputMethodManager) getSystemService(
-                Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
 }

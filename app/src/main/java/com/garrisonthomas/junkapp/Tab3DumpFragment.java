@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.Toolbar;
 
 public class Tab3DumpFragment extends Fragment {
 
@@ -30,7 +33,7 @@ public class Tab3DumpFragment extends Fragment {
     Spinner dumpsSpinner;
     Button infoBtn, dirBtn, calcBtn, dumpsClearBtn, addHSTButton;
     EditText weight;
-    String[] dumpName, dumpsRateName, directions, information;
+    String[] dumpName, directions, information;
     int[] rate;
     int rateNumber;
     TextView tvDumpCost;
@@ -56,7 +59,6 @@ public class Tab3DumpFragment extends Fragment {
         tvDumpCost = (TextView) v.findViewById(R.id.tv_dump_cost);
 
         dumpName = v.getResources().getStringArray(R.array.dumps_name);
-//        dumpsRateName = v.getResources().getStringArray(R.array.dumps_rate_name);
         directions = v.getResources().getStringArray(R.array.dumps_address);
         information = v.getResources().getStringArray(R.array.dumps_info);
         rate = v.getResources().getIntArray(R.array.dumps_rate);
@@ -78,6 +80,8 @@ public class Tab3DumpFragment extends Fragment {
                             Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
                                     Uri.parse(dir));
                             startActivity(intent);
+                        } else {
+                            Toast.makeText(getActivity(), "Select a dump", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -94,8 +98,10 @@ public class Tab3DumpFragment extends Fragment {
                                             // continue with delete
                                         }
                                     })
-                                    .setIcon(R.drawable.info)
+                                    .setIcon(R.drawable.ic_dashboard_white_24dp)
                                     .show();
+                        } else {
+                            Toast.makeText(getActivity(), "Select a dump", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -186,13 +192,14 @@ public class Tab3DumpFragment extends Fragment {
                     false);
 
             TextView main_text = (TextView) mySpinner.findViewById(R.id.spinner_text_dump_name);
+
             main_text.setText(dumpName[position]);
 
             TextView subSpinner = (TextView) mySpinner.findViewById(R.id.spinner_text_dump_rate);
             if (position == 0) {
                 subSpinner.setVisibility(View.GONE);
             }
-            subSpinner.setText("$" + rate[position] + "/ton");
+            subSpinner.setText("$" + rate[position] + "/tonne");
 
 //            ImageView left_icon = (ImageView) mySpinner.findViewById(R.id.left_pic);
 //            left_icon.setImageResource(R.drawable.dump_truck);

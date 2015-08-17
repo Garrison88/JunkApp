@@ -60,17 +60,18 @@ public class Tab2CalcFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
 
+                vSpinner.setSelection(0);
                 vPrice = volumePrice[position];
                 if (position != 0 && position != 12) {
                     if (!TextUtils.isEmpty(tvVolumeSize.getText())) {
-                        tvVolumeSize.append(" + ");
+                        tvVolumeSize.append("\n" + "+" + "\n");
                     }
 
                     tvVolumeSize.append(volumeSize[position] + " ($" + volumePrice[position] + ")");
                     priceArray.add(vPrice);
 
                     calcCost();
-                    vSpinner.setSelection(0);
+
                 }
             }
 
@@ -85,13 +86,12 @@ public class Tab2CalcFragment extends Fragment {
         bSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, final int position,
-                                       long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
 
                 bPrice = bedloadPrice[position];
                 if (position != 0) {
                     if (!TextUtils.isEmpty(tvBedloadSize.getText())) {
-                        tvBedloadSize.append(" + ");
+                        tvBedloadSize.append("\n" + "+" + "\n");
                     }
 
                     tvBedloadSize.append(bedloadSize[position] + " ($" + bedloadPrice[position] + ")");
@@ -117,6 +117,7 @@ public class Tab2CalcFragment extends Fragment {
                 tvBedloadSize.setText("");
                 tvTotal.setText("");
                 addHST.setClickable(true);
+                addHST.setText("Add HST");
 
             }
         });
@@ -125,6 +126,7 @@ public class Tab2CalcFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                if (addHST.getText().equals("Add HST")) {
                 if (!TextUtils.isEmpty(tvTotal.getText())) {
 
                     doubleValue = tvTotal.getText().toString();
@@ -133,8 +135,11 @@ public class Tab2CalcFragment extends Fragment {
                     totalText = Double.toString(Math.round((beforeTax * 1.13) * 100.00) / 100.00);
                     tvTotal.setText("$" + totalText);
 
+                    addHST.setText("Display Tax");
+                }
+                } else {
+                    showHST();
                     addHST.setClickable(false);
-
                 }
             }
         });
@@ -153,6 +158,14 @@ public class Tab2CalcFragment extends Fragment {
             tvTotal.setText("$" + sumString);
 
         }
+    }
+
+    public void showHST() {
+
+        double tax = Double.parseDouble(totalText)-sum;
+
+        tvTotal.setText("$"+(Math.round((tax) * 100.00) / 100.00));
+
     }
 
     public class VolumeAdapter extends ArrayAdapter<String> {
@@ -185,7 +198,7 @@ public class Tab2CalcFragment extends Fragment {
             if (position == 0 || position == 12) {
                 subSpinner.setVisibility(View.GONE);
             } else {
-                subSpinner.setText("@ $" + volumePrice[position]);
+                subSpinner.setText("$" + volumePrice[position]);
             }
 
 //            ImageView left_icon = (ImageView) mySpinner.findViewById(R.id.left_pic);
@@ -224,9 +237,9 @@ public class Tab2CalcFragment extends Fragment {
             TextView subSpinner = (TextView) mySpinner.findViewById(R.id.spinner_text_bedload_price);
 
             if (position == 0) {
-                subSpinner.setText("");
+                subSpinner.setVisibility(View.GONE);
             } else {
-                subSpinner.setText("@ $" + bedloadPrice[position]);
+                subSpinner.setText("$" + bedloadPrice[position]);
             }
 
 //            ImageView left_icon = (ImageView) mySpinner.findViewById(R.id.left_pic);

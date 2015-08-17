@@ -6,7 +6,5 @@
     <string name="title_activity_display_message">My Message</string>
     <string name="menu_text_developer_website">Developer Website</string>
     <string name="developer_website">http://garrisonthomas.com/</string>
-    <string name="bedload_prompt">Select Bedload</string>
-    <string name="volume_prompt">Select Volume</string>
 
 </resources>

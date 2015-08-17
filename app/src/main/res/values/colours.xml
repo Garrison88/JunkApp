@@ -4,11 +4,12 @@
 
     <color name="colorButtonNormal">#607D8B</color>
     <color name="colorPrimary">#F44336</color>
-    <color name="colorPrimaryDark">#D32F2F</color>
+    <color name="colorPrimaryDark">#F44336</color>
+    <!--<color name="colorPrimaryDark">#D32F2F</color>-->
     <color name="textColorPrimary">#EEEEEE</color>
-    <color name="windowBackground">#EEEEEE</color>
+    <color name="windowBackground">#ACC3A6</color>
     <color name="navigationBarColor">#000000</color>
-    <color name="colorAccent">#607D8B</color>
+    <color name="colorAccent">#EEEEEE</color>
     <color name="darkAccent">#607D8B</color>
 
 </resources>

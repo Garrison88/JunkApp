@@ -3,18 +3,11 @@
 
     <string-array name="dumps_name">
         <item>Select a Dump</item>
-        <item>Laird</item>
-        <item>Cherry</item>
+        <item>Laird (Esander)</item>
+        <item>Cherry (Turtle)</item>
         <item>Miller</item>
         <item>Shorncliffe</item>
     </string-array>
-
-    <!--<string-array name="dumps_rate_name">-->
-        <!--<item>$82/ton</item>-->
-        <!--<item>$85/ton</item>-->
-        <!--<item>$88/ton</item>-->
-        <!--<item>$65/ton</item>-->
-    <!--</string-array>-->
 
     <string-array name="dumps_address">
         <item>Placeholder</item>
@@ -41,7 +34,7 @@
     </integer-array>
 
     <string-array name="string_volume_name">
-        <item>Select Volume</item>
+        <item>Add Volume</item>
         <item>1/8</item>
         <item>1/6</item>
         <item>1/4</item>
@@ -77,7 +70,7 @@
     </integer-array>
 
     <string-array name="string_bedload_name">
-        <item>Select Bedload</item>
+        <item>Add Bedload</item>
         <item>1/16</item>
         <item>1/8</item>
         <item>1/4</item>
@@ -114,6 +107,22 @@
         <item>22</item>
         <item>24</item>
         <item>26</item>
+    </string-array>
+
+    <string-array name="truck_number">
+        <item>Truck 1</item>
+        <item>Truck 2</item>
+        <item>Truck 3</item>
+        <item>Truck 4</item>
+        <item>Truck 5</item>
+    </string-array>
+
+    <string-array name="job_pay_type">
+        <item>Cash</item>
+        <item>Cheque</item>
+        <item>MasterCard</item>
+        <item>Visa</item>
+        <item>Other</item>
     </string-array>
 
 </resources>
