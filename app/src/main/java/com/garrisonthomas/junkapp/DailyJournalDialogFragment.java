@@ -3,47 +3,56 @@ package com.garrisonthomas.junkapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.app.DialogFragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.parse.ParseObject;
 
 /**
  * Created by Garrison Thomas on 2015-08-17.
  */
-public class DailyJournal extends MainActivity {
+public class DailyJournalDialogFragment extends DialogFragment {
 
     Spinner truckSpinner;
     String[] truckNumber;
     TextView todaysDate;
-    Button addJob;
+    Button cancel, createJournal;
+    EditText crew;
+    String truckSelected;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.daily_journal_layout);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
+        final View v = inflater.inflate(R.layout.daily_journal_dialog_layout, container, false);
 
-        truckSpinner = (Spinner) findViewById(R.id.truck_spinner);
+        truckSpinner = (Spinner) v.findViewById(R.id.truck_spinner);
         truckNumber = getResources().getStringArray(R.array.truck_number);
-        todaysDate = (TextView) findViewById(R.id.tv_todays_date);
-        addJob = (Button) findViewById(R.id.btn_add_job);
+        todaysDate = (TextView) v.findViewById(R.id.tv_todays_date);
+        createJournal = (Button) v.findViewById(R.id.btn_create_journal);
+        cancel = (Button) v.findViewById(R.id.cancel_fragment);
+
+        crew = (EditText) v.findViewById(R.id.et_crew);
 
         todaysDate.setText(DateHelper.getCurrentDate());
 
-        truckSpinner.setAdapter(new TruckAdapter(this, R.layout.custom_truck_spinner, truckNumber));
+        truckSpinner.setAdapter(new TruckAdapter(this.getActivity(), R.layout.custom_truck_spinner, truckNumber));
         truckSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
 
+                truckSelected = truckNumber[position];
 
             }
 
@@ -53,15 +62,42 @@ public class DailyJournal extends MainActivity {
             }
         });
 
-        addJob.setOnClickListener(new View.OnClickListener() {
+        createJournal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(v.getContext(), AddJobFragment.class);
-                startActivity(intent);
+                if (!TextUtils.isEmpty(crew.getText())) {
 
+                    ParseObject newJournal = new NewJournal();
+                    newJournal.put("date", todaysDate.getText());
+                    newJournal.put("crew", crew.getText().toString());
+                    newJournal.put("truckNumber", truckSelected);
+                    newJournal.saveEventually();
+                    dismiss();
+
+                } else {
+                    Toast.makeText(getActivity(), "Enter crew", Toast.LENGTH_SHORT).show();
+                }
             }
         });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+
+        setCancelable(false);
+        return v;
+
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+
 
     }
 
@@ -83,7 +119,7 @@ public class DailyJournal extends MainActivity {
 
         public View getCustomView(int position, View convertView,
                                   ViewGroup parent) {
-            LayoutInflater inflater = DailyJournal.this.getLayoutInflater();
+            LayoutInflater inflater = getActivity().getLayoutInflater();
             View mySpinner = inflater.inflate(R.layout.custom_truck_spinner, parent,
                     false);
 

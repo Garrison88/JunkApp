@@ -2,7 +2,7 @@
 
 <resources>
 
-    <style name="MyMaterialTheme.NoActionBar" parent="Theme.AppCompat.Light">
+    <style name="MyMaterialTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:dropDownListViewStyle">@style/TestSpinnerStyle</item>
         <item name="android:editTextStyle">@style/App_EditTextStyle</item>
         <item name="colorButtonNormal">@color/colorButtonNormal</item>

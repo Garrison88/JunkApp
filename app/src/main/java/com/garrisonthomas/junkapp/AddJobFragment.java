@@ -1,40 +1,75 @@
 package com.garrisonthomas.junkapp;
 
-import android.content.Context;
+import android.app.DialogFragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseObject;
 
-import org.w3c.dom.Text;
-
-public class AddJobFragment extends FragmentActivity {
+public class AddJobFragment extends DialogFragment {
 
     EditText etSSID, etGrossSale, etNetSale, etReceiptNumber;
     Button saveJob;
-    Spinner payType;
+    Spinner payTypeSpinner;
+    String[] payTypeArray;
+    String payTypeString;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.job_form_layout);
 
-        etSSID = (EditText) findViewById(R.id.et_ssid);
-        etGrossSale = (EditText) findViewById(R.id.et_gross_sale);
-        etNetSale = (EditText) findViewById(R.id.et_net_sale);
-        etReceiptNumber = (EditText) findViewById(R.id.et_receipt_number);
+    }
 
-        payType = (Spinner) findViewById(R.id.spinner_pay_type);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-        saveJob = (Button) findViewById(R.id.btn_save_job);
+        final View v = inflater.inflate(R.layout.add_job_layout, container, false);
+
+        etSSID = (EditText) v.findViewById(R.id.et_ssid);
+        etGrossSale = (EditText) v.findViewById(R.id.et_gross_sale);
+        etNetSale = (EditText) v.findViewById(R.id.et_net_sale);
+        etReceiptNumber = (EditText) v.findViewById(R.id.et_receipt_number);
+
+        payTypeArray = getResources().getStringArray(R.array.job_pay_type);
+
+        payTypeSpinner = (Spinner) v.findViewById(R.id.spinner_pay_type);
+
+        saveJob = (Button) v.findViewById(R.id.btn_save_job);
+
+        ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(), R.array.job_pay_type, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        payTypeSpinner.setAdapter(adapter);
+        payTypeSpinner.setSelection(0);
+
+        payTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
+
+                payTypeString = payTypeArray[position];
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
+        });
 
         saveJob.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,24 +89,22 @@ public class AddJobFragment extends FragmentActivity {
                     newJob.put("grossSale", grossSale);
                     newJob.put("netSale", netSale);
                     newJob.put("receiptNumber", receiptNumber);
-                    newJob.saveInBackground();
+                    newJob.put("payType", payTypeString);
+                    newJob.saveEventually();
 
-                    Toast.makeText(getApplicationContext(), "Job number " + ssid + " saved", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Job number " + ssid + " saved", Toast.LENGTH_LONG).show();
 
-                    InputMethodManager imm = (InputMethodManager) getSystemService(
-                            Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-
-                    Intent intent = new Intent(getApplicationContext(), DailyJournal.class);
-                    startActivity(intent);
+                    dismiss();
 
                 } else {
 
-                    Toast.makeText(getApplicationContext(), "Please fill all fields", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Please fill all fields", Toast.LENGTH_LONG).show();
 
                 }
             }
         });
+
+        return v;
 
     }
 
@@ -86,4 +119,5 @@ public class AddJobFragment extends FragmentActivity {
     public void onResume() {
         super.onResume();
     }
+
 }

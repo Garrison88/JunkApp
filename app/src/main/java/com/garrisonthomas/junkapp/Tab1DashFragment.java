@@ -1,21 +1,28 @@
 package com.garrisonthomas.junkapp;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.support.v4.app.FragmentManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
+
+import com.parse.FindCallback;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+import java.text.ParseException;
+import java.util.List;
 
 public class Tab1DashFragment extends Fragment {
 
@@ -25,7 +32,7 @@ public class Tab1DashFragment extends Fragment {
 
     }
 
-    Button calcDumps, calcTotal, btnClear, newJournal;
+    Button calcDumps, calcTotal, btnClear, newJournal, viewJournal;
     EditText enterTotal, enterDump;
     TextView percentOfGoal, percentOfTotal;
     String percentOf, percentOfTotalString;
@@ -39,7 +46,8 @@ public class Tab1DashFragment extends Fragment {
         calcTotal = (Button) v.findViewById(R.id.calculate_percentage);
         calcDumps = (Button) v.findViewById(R.id.calculate_dump_percentage);
         btnClear = (Button) v.findViewById(R.id.btn_dash_clear);
-        newJournal = (Button) v.findViewById(R.id.new_journal);
+        newJournal = (Button) v.findViewById(R.id.btn_new_journal);
+        viewJournal = (Button) v.findViewById(R.id.btn_view_journal);
 
         enterDump = (EditText) v.findViewById(R.id.et_enter_dump_cost);
         enterTotal = (EditText) v.findViewById(R.id.et_enter_total);
@@ -97,8 +105,37 @@ public class Tab1DashFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(getActivity(), DailyJournal.class);
-                startActivity(intent);
+                FragmentManager manager = getFragmentManager();
+                DailyJournalDialogFragment djFragment = new DailyJournalDialogFragment();
+                djFragment.show(manager, "Dialog");
+
+            }
+        });
+
+        viewJournal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("NewJournal");
+                query.whereEqualTo("date", DateHelper.getCurrentDate());
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    @Override
+                    public void done(List<ParseObject> list, com.parse.ParseException e) {
+
+                        if (e == null) {
+
+                            Intent intent = new Intent(getActivity(), CurrentJournal.class);
+                            startActivity(intent);
+
+                        } else {
+                            Toast.makeText(getActivity(), "No journal available",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+
+
             }
         });
 

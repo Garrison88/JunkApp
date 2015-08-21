@@ -1,8 +1,9 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <TableLayout
+        android:id="@+id/add_job_table_layout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
@@ -107,5 +108,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="Save"
-        android:id="@+id/btn_save_job"/>
-</LinearLayout>
+        android:id="@+id/btn_save_job"
+        android:layout_below="@+id/add_job_table_layout"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>

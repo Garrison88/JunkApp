@@ -96,11 +96,18 @@
                 android:text="Clear" />
 
             <Button
-                android:id="@+id/new_journal"
+                android:id="@+id/btn_new_journal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:text="New Daily Journal" />
+
+            <Button
+                android:id="@+id/btn_view_journal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="View Today's Journal" />
 
         </LinearLayout>
 

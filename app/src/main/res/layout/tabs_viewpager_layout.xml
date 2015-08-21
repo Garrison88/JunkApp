@@ -6,8 +6,8 @@
     android:orientation="vertical">
 
     <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar" />
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar" />
 
     <TabHost
         android:id="@android:id/tabhost"

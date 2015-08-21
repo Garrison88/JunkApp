@@ -15,6 +15,7 @@ public class App extends Application {
         super.onCreate();
 
         ParseObject.registerSubclass(NewJob.class);
+        ParseObject.registerSubclass(NewJournal.class);
 
         Parse.enableLocalDatastore(this);
 
