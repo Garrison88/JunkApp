@@ -1,9 +1,6 @@
 package com.garrisonthomas.junkapp;
 
 import android.app.Application;
-import android.content.Context;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 
 import com.parse.Parse;
 import com.parse.ParseObject;
@@ -15,7 +12,7 @@ public class App extends Application {
         super.onCreate();
 
         ParseObject.registerSubclass(NewJob.class);
-        ParseObject.registerSubclass(NewJournal.class);
+        ParseObject.registerSubclass(DailyJournal.class);
 
         Parse.enableLocalDatastore(this);
 

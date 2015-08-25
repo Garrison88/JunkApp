@@ -44,8 +44,6 @@ public class DailyJournalDialogFragment extends DialogFragment {
 
         crew = (EditText) v.findViewById(R.id.et_crew);
 
-        todaysDate.setText(DateHelper.getCurrentDate());
-
         truckSpinner.setAdapter(new TruckAdapter(this.getActivity(), R.layout.custom_truck_spinner, truckNumber));
         truckSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -68,15 +66,21 @@ public class DailyJournalDialogFragment extends DialogFragment {
 
                 if (!TextUtils.isEmpty(crew.getText())) {
 
-                    ParseObject newJournal = new NewJournal();
-                    newJournal.put("date", todaysDate.getText());
+                    ParseObject newJournal = new DailyJournal();
+                    newJournal.put("date", DateHelper.getCurrentDate());
                     newJournal.put("crew", crew.getText().toString());
                     newJournal.put("truckNumber", truckSelected);
+                    newJournal.unpinInBackground();
+                    newJournal.pinInBackground();
                     newJournal.saveEventually();
                     dismiss();
+                    Intent intent = new Intent(getActivity(), CurrentJournal.class);
+                    intent.putExtra("EXTRA_CREW", crew.getText().toString());
+                    intent.putExtra("EXTRA_TRUCK_NUMBER", truckSelected);
+                    startActivity(intent);
 
                 } else {
-                    Toast.makeText(getActivity(), "Enter crew", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Must enter crew", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -96,8 +100,6 @@ public class DailyJournalDialogFragment extends DialogFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-
 
     }
 
@@ -126,9 +128,6 @@ public class DailyJournalDialogFragment extends DialogFragment {
             TextView main_text = (TextView) mySpinner.findViewById(R.id.spinner_text_truck_number);
 
             main_text.setText(truckNumber[position]);
-
-//            ImageView left_icon = (ImageView) mySpinner.findViewById(R.id.left_pic);
-//            left_icon.setImageResource(R.drawable.dump_truck);
 
             return mySpinner;
         }

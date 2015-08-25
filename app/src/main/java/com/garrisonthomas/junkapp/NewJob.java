@@ -3,6 +3,8 @@ package com.garrisonthomas.junkapp;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 
+import java.util.ArrayList;
+
 @ParseClassName("NewJob")
 public class NewJob extends ParseObject {
 
@@ -17,6 +19,8 @@ public class NewJob extends ParseObject {
         return getDouble("grossSale");
 
     }
+
+
 
     public double getNetSale() {
 
@@ -54,8 +58,9 @@ public class NewJob extends ParseObject {
 
     }
 
-    @Override
-    public String toString() {
-        return getString("word");
-    }
+//    @Override
+//    public String toString() {
+//
+//        return getString("objectId");
+//    }
 }

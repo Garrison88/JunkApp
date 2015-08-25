@@ -22,6 +22,7 @@ import android.support.v7.widget.Toolbar;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -99,8 +100,6 @@ public class BaseActivity extends AppCompatActivity {
             startActivityForResult(cameraIntent, TAKE_PHOTO_CODE);
         }
 
-
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -115,21 +114,11 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public Boolean isInternetAvailable() {
-        try {
-            ConnectivityManager connectivityManager = (ConnectivityManager) this
-                    .getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo activeNetworkInfo = connectivityManager
-                    .getActiveNetworkInfo();
-            if (activeNetworkInfo != null
-                    && activeNetworkInfo.isConnectedOrConnecting()) {
-                return true;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return false;
+    public Boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) BaseActivity.this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 
     public void setupUI(View view) {

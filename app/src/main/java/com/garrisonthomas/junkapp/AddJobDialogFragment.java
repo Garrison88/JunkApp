@@ -2,10 +2,14 @@ package com.garrisonthomas.junkapp;
 
 import android.app.DialogFragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +21,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
-public class AddJobFragment extends DialogFragment {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+public class AddJobDialogFragment extends DialogFragment {
 
     EditText etSSID, etGrossSale, etNetSale, etReceiptNumber;
     Button saveJob;
@@ -80,19 +93,42 @@ public class AddJobFragment extends DialogFragment {
                         && (!TextUtils.isEmpty(etNetSale.getText())
                         && (!TextUtils.isEmpty(etReceiptNumber.getText())))) {
 
-                    ParseObject newJob = new NewJob();
-                    int ssid = Integer.valueOf(etSSID.getText().toString());
-                    double grossSale = Double.valueOf(etGrossSale.getText().toString());
-                    double netSale = Double.valueOf(etNetSale.getText().toString());
-                    int receiptNumber = Integer.valueOf(etReceiptNumber.getText().toString());
-                    newJob.put("ssid", ssid);
-                    newJob.put("grossSale", grossSale);
-                    newJob.put("netSale", netSale);
-                    newJob.put("receiptNumber", receiptNumber);
-                    newJob.put("payType", payTypeString);
-                    newJob.saveEventually();
+                    ParseQuery<DailyJournal> query = ParseQuery.getQuery("DailyJournal");
+                    query.whereEqualTo("date", DateHelper.getCurrentDate());
+                    query.findInBackground(new FindCallback<DailyJournal>() {
+                        public void done(List<DailyJournal> list, ParseException e) {
+                            if (e == null) {
 
-                    Toast.makeText(getActivity(), "Job number " + ssid + " saved", Toast.LENGTH_LONG).show();
+                                for (DailyJournal newJournal : list) {
+
+                                    final ParseObject newJob = new NewJob();
+                                    int ssid = Integer.valueOf(etSSID.getText().toString());
+                                    double grossSale = Double.valueOf(etGrossSale.getText().toString());
+                                    double netSale = Double.valueOf(etNetSale.getText().toString());
+                                    int receiptNumber = Integer.valueOf(etReceiptNumber.getText().toString());
+                                    newJob.put("ssid", ssid);
+                                    newJob.put("grossSale", grossSale);
+                                    newJob.put("netSale", netSale);
+                                    newJob.put("receiptNumber", receiptNumber);
+                                    newJob.put("payType", payTypeString);
+
+                                    newJournal.add("jobs", newJob);
+
+                                    newJob.saveEventually();
+                                    newJob.unpinInBackground();
+                                    newJob.pinInBackground();
+                                    newJournal.saveEventually();
+
+                                }
+
+                            } else {
+                                Log.d("score", "Error: " + e.getMessage());
+                            }
+                        }
+                    });
+
+                    Toast.makeText(getActivity(), "Job number " + etSSID.getText().toString() +
+                            " saved", Toast.LENGTH_SHORT).show();
 
                     dismiss();
 
@@ -101,6 +137,7 @@ public class AddJobFragment extends DialogFragment {
                     Toast.makeText(getActivity(), "Please fill all fields", Toast.LENGTH_LONG).show();
 
                 }
+
             }
         });
 
@@ -118,6 +155,13 @@ public class AddJobFragment extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    private Boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 
 }

@@ -79,7 +79,7 @@ public class Tab3DumpFragment extends Fragment {
                                     Uri.parse(dir));
                             startActivity(intent);
                         } else {
-                            Toast.makeText(getActivity(), "Select a dump", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), R.string.toast_no_dump_selected, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -99,7 +99,7 @@ public class Tab3DumpFragment extends Fragment {
                                     .setIcon(R.drawable.ic_dashboard_white_24dp)
                                     .show();
                         } else {
-                            Toast.makeText(getActivity(), "Select a dump", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), R.string.toast_no_dump_selected, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -109,6 +109,8 @@ public class Tab3DumpFragment extends Fragment {
                     public void onClick(View v) {
 
                         if (!TextUtils.isEmpty(weight.getText())) {
+
+                            if (position != 0) {
 
                             weightNumber = Double.parseDouble(weight.getText().toString());
                             weightNumber = weightNumber / 1000;
@@ -125,6 +127,16 @@ public class Tab3DumpFragment extends Fragment {
 
                             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                             imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+
+                        } else {
+
+                                Toast.makeText(getActivity(), R.string.toast_no_dump_selected, Toast.LENGTH_SHORT).show();
+
+                            }
+
+                        } else {
+
+                            Toast.makeText(getActivity(), "Enter weight", Toast.LENGTH_SHORT).show();
 
                         }
                     }

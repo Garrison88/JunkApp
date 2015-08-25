@@ -1,12 +1,13 @@
 package com.garrisonthomas.junkapp;
 
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +16,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class Tab1DashFragment extends Fragment {
@@ -116,31 +118,83 @@ public class Tab1DashFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                ParseQuery<ParseObject> query = ParseQuery.getQuery("NewJournal");
-                query.whereEqualTo("date", DateHelper.getCurrentDate());
-                query.findInBackground(new FindCallback<ParseObject>() {
-                    @Override
-                    public void done(List<ParseObject> list, com.parse.ParseException e) {
+                if (isNetworkAvailable()) {
 
-                        if (e == null) {
+                    ParseQuery<DailyJournal> query = ParseQuery.getQuery("DailyJournal");
+                    query.whereEqualTo("date", DateHelper.getCurrentDate());
+                    query.findInBackground(new FindCallback<DailyJournal>() {
+                        @Override
+                        public void done(List<DailyJournal> list, com.parse.ParseException e) {
 
-                            Intent intent = new Intent(getActivity(), CurrentJournal.class);
-                            startActivity(intent);
+                            if (e == null) {
 
-                        } else {
-                            Toast.makeText(getActivity(), "No journal available",
-                                    Toast.LENGTH_SHORT).show();
+                                for (DailyJournal newJournal : list) {
+
+                                    newJournal.unpinInBackground();
+
+//                                    newJournal.setCrew(newJournal.getCrew());
+//                                    newJournal.setTruckNumber(newJournal.getTruckNumber());
+                                    Intent intent = new Intent(getActivity(), CurrentJournal.class);
+                                    intent.putExtra("EXTRA_CREW", newJournal.getCrew());
+                                    intent.putExtra("EXTRA_TRUCK_NUMBER", newJournal.getTruckNumber());
+                                    startActivity(intent);
+                                }
+
+                            } else {
+                                Toast.makeText(getActivity(), "No journal available",
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+
+                } else {
+
+                    ParseQuery<DailyJournal> query = ParseQuery.getQuery("DailyJournal");
+                    query.fromLocalDatastore();
+                    query.whereEqualTo("date", DateHelper.getCurrentDate());
+                    query.findInBackground(new FindCallback<DailyJournal>() {
+                        @Override
+                        public void done(List<DailyJournal> list, com.parse.ParseException e) {
+                            if (e == null) {
+
+                                for (DailyJournal newJournal : list) {
+
+//                                    newJournal.setCrew(newJournal.getCrew());
+//                                    newJournal.setTruckNumber(newJournal.getTruckNumber());
+                                    Intent intent = new Intent(getActivity(), CurrentJournal.class);
+                                    intent.putExtra("EXTRA_CREW", newJournal.getCrew());
+                                    intent.putExtra("EXTRA_TRUCK_NUMBER", newJournal.getTruckNumber());
+                                    startActivity(intent);
+                            }
 
 
+
+
+                            } else {
+                                Toast.makeText(getActivity(), "No journal has been created",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                    });
+
+                    Toast.makeText(getActivity(), "No internet available",
+                            Toast.LENGTH_SHORT).show();
+
+                }
 
             }
         });
 
         return v;
 
+    }
+
+    private Boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 
     @Override

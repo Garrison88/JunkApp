@@ -61,19 +61,25 @@
         android:orientation="horizontal"
         android:weightSum="1">
 
-        <EditText
-            android:id="@+id/et_enter_weight"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="0dp"
-            android:layout_gravity="center_vertical"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="Enter Weight (kg)"
-            android:inputType="numberDecimal" />
+            android:layout_weight="1">
+
+            <EditText
+                android:id="@+id/et_enter_weight"
+                android:layout_width="fill_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_height="wrap_content"
+                android:hint="Enter Weight (kg)"
+                android:inputType="numberDecimal" />
+
+        </android.support.design.widget.TextInputLayout>
 
         <Button
             android:id="@+id/btn_calculate_dump"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="Calculate Cost" />
 
 
