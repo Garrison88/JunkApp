@@ -1,23 +1,34 @@
 package com.garrisonthomas.junkapp;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 
+import com.garrisonthomas.junkapp.DialogFragments.AddJobDialogFragment;
 import com.parse.FindCallback;
-import com.parse.ParseException;
 import com.parse.ParseQuery;
 
+import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class CurrentJournal extends BaseActivity {
 
     Button addJob, addDump, addFuel;
-    TextView todaysCrew, todaysTruck, hereJob;
+    TextView todaysCrew, todaysTruck;
     Toolbar mToolbar;
     String todaysDate;
+    Spinner jobsSpinner;
+    String currentJournalId;
+    ArrayList<String> jobsArray;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -25,10 +36,22 @@ public class CurrentJournal extends BaseActivity {
 
         setContentView(R.layout.current_journal_layout);
 
-        todaysDate = DateHelper.getCurrentDate();
+        jobsSpinner = (Spinner) findViewById(R.id.jobs_spinner);
+
+        Date date = new Date();
+        SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy");
+
+        todaysDate = df2.format(date);
 
         mToolbar = (Toolbar) findViewById(R.id.app_bar);
         mToolbar.setTitle(todaysDate);
+        mToolbar.setNavigationIcon(ContextCompat.getDrawable(CurrentJournal.this, R.drawable.abc_ic_ab_back_mtrl_am_alpha));
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CurrentJournal.this.finish();
+            }
+        });
 
         addJob = (Button) findViewById(R.id.journal_add_job);
         addDump = (Button) findViewById(R.id.journal_add_dump);
@@ -36,8 +59,56 @@ public class CurrentJournal extends BaseActivity {
 
         todaysCrew = (TextView) findViewById(R.id.tv_todays_crew);
         todaysTruck = (TextView) findViewById(R.id.tv_todays_truck);
-        hereJob = (TextView) findViewById(R.id.tv_heres_a_job);
+        jobsSpinner = (Spinner) findViewById(R.id.jobs_spinner);
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String extraCrew = extras.getString("EXTRA_CREW");
+            todaysCrew.setText(extraCrew);
+            String extraTruckNumber = extras.getString("EXTRA_TRUCK_NUMBER");
+            todaysTruck.setText(extraTruckNumber);
+            currentJournalId = extras.getString("EXTRA_DJ_ID");
+        }
+
+        ParseQuery<NewJob> query = ParseQuery.getQuery(NewJob.class);
+        query.whereEqualTo("relatedJournal", currentJournalId);
+        query.findInBackground(new FindCallback<NewJob>() {
+            @Override
+            public void done(List<NewJob> list, com.parse.ParseException e) {
+
+                if (e == null) {
+
+                    for (NewJob job : list) {
+
+                        addDump.setText(String.valueOf(job.getSSID()));
+
+                    }
+
+
+                }
+
+            }
+
+        });
+
+
+
+
+        jobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
+
+//                payTypeString = payTypeArray[position];
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
+        });
 
         addJob.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,69 +120,6 @@ public class CurrentJournal extends BaseActivity {
 
             }
         });
-
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            String extraCrew = extras.getString("EXTRA_CREW");
-            todaysCrew.setText(extraCrew);
-            String extraTruckNumber = extras.getString("EXTRA_TRUCK_NUMBER");
-            todaysTruck.setText(extraTruckNumber);
-        }
-
-        if (isNetworkAvailable()) {
-
-            ParseQuery<DailyJournal> query = ParseQuery.getQuery("DailyJournal");
-            query.whereEqualTo("date", DateHelper.getCurrentDate());
-            query.whereExists("jobs");
-            query.findInBackground(new FindCallback<DailyJournal>() {
-                @Override
-                public void done(List<DailyJournal> list, ParseException e) {
-
-                    for (DailyJournal newJournal : list) {
-
-//                        newJournal.setCrew(newJournal.getCrew());
-//                        newJournal.setTruckNumber(newJournal.getTruckNumber());
-
-                        todaysCrew.setText(newJournal.getCrew());
-                        todaysTruck.setText(newJournal.getTruckNumber());
-                        hereJob.setText(newJournal.getJobs().toString());
-
-                        newJournal.unpinInBackground();
-
-                        newJournal.pinInBackground();
-
-                    }
-                }
-            });
-
-        } else {
-
-            ParseQuery<DailyJournal> query = ParseQuery.getQuery("DailyJournal");
-            query.fromLocalDatastore();
-            query.whereEqualTo("date", DateHelper.getCurrentDate());
-            query.whereExists("jobs");
-            query.findInBackground(new FindCallback<DailyJournal>() {
-                @Override
-                public void done(List<DailyJournal> list, ParseException e) {
-
-                    for (DailyJournal newJournal : list) {
-
-//                        newJournal.setCrew(newJournal.getCrew());
-//                        newJournal.setTruckNumber(newJournal.getTruckNumber());
-
-                        todaysCrew.setText(newJournal.getCrew());
-                        todaysTruck.setText(newJournal.getTruckNumber());
-                        hereJob.setText(newJournal.getJobs().toString());
-
-                        newJournal.unpinInBackground();
-
-                        newJournal.pinInBackground();
-
-                    }
-                }
-            });
-
-        }
 
     }
 

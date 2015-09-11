@@ -1,4 +1,4 @@
-package com.garrisonthomas.junkapp;
+package com.garrisonthomas.junkapp.DialogFragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +16,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.garrisonthomas.junkapp.CurrentJournal;
+import com.garrisonthomas.junkapp.DailyJournal;
+import com.garrisonthomas.junkapp.DateHelper;
+import com.garrisonthomas.junkapp.R;
 import com.parse.ParseObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Garrison Thomas on 2015-08-17.
@@ -25,10 +32,10 @@ public class DailyJournalDialogFragment extends DialogFragment {
 
     Spinner truckSpinner;
     String[] truckNumber;
-    TextView todaysDate;
+    TextView tvTodaysDate;
     Button cancel, createJournal;
     EditText crew;
-    String truckSelected;
+    String truckSelected, todaysDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,9 +43,14 @@ public class DailyJournalDialogFragment extends DialogFragment {
 
         final View v = inflater.inflate(R.layout.daily_journal_dialog_layout, container, false);
 
+        Date date = new Date();
+        SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy");
+
+        todaysDate = df2.format(date);
         truckSpinner = (Spinner) v.findViewById(R.id.truck_spinner);
         truckNumber = getResources().getStringArray(R.array.truck_number);
-        todaysDate = (TextView) v.findViewById(R.id.tv_todays_date);
+        tvTodaysDate = (TextView) v.findViewById(R.id.tv_todays_date);
+        tvTodaysDate.setText(todaysDate);
         createJournal = (Button) v.findViewById(R.id.btn_create_journal);
         cancel = (Button) v.findViewById(R.id.cancel_fragment);
 
@@ -66,17 +78,16 @@ public class DailyJournalDialogFragment extends DialogFragment {
 
                 if (!TextUtils.isEmpty(crew.getText())) {
 
-                    ParseObject newJournal = new DailyJournal();
-                    newJournal.put("date", DateHelper.getCurrentDate());
-                    newJournal.put("crew", crew.getText().toString());
-                    newJournal.put("truckNumber", truckSelected);
-                    newJournal.unpinInBackground();
-                    newJournal.pinInBackground();
-                    newJournal.saveEventually();
-                    dismiss();
+                    DailyJournal newJournal = new DailyJournal();
+                    newJournal.setDate(todaysDate);
+                    newJournal.setCrew(crew.getText().toString());
+                    newJournal.setTruckNumber(truckSelected);
                     Intent intent = new Intent(getActivity(), CurrentJournal.class);
                     intent.putExtra("EXTRA_CREW", crew.getText().toString());
                     intent.putExtra("EXTRA_TRUCK_NUMBER", truckSelected);
+                    newJournal.saveInBackground();
+                    intent.putExtra("EXTRA_DJ_ID", newJournal.getObjectId());
+                    dismiss();
                     startActivity(intent);
 
                 } else {

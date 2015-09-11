@@ -114,13 +114,6 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public Boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) BaseActivity.this.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
-    }
-
     public void setupUI(View view) {
 
         //Set up touch listener for non-text box views to hide keyboard.

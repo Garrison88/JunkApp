@@ -122,7 +122,7 @@
         <item>Cheque</item>
         <item>MasterCard</item>
         <item>Visa</item>
-        <item>Other</item>
+        <item>Invoice</item>
     </string-array>
 
 </resources>

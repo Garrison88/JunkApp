@@ -3,11 +3,8 @@ package com.garrisonthomas.junkapp;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
-
 @ParseClassName("DailyJournal")
+
 public class DailyJournal extends ParseObject {
 
     public String getCrew() {
@@ -22,9 +19,9 @@ public class DailyJournal extends ParseObject {
 
     }
 
-    public List<String> getJobs() {
+    public void setDate(String date) {
 
-        return getList("jobs");
+        put("date", date);
 
     }
 
@@ -33,14 +30,6 @@ public class DailyJournal extends ParseObject {
         put("crew", crew);
 
     }
-
-    public void setJobs(List<String> jobs) {
-
-        put("jobs", jobs);
-
-    }
-
-
 
     public void setTruckNumber(String truckNumber) {
 

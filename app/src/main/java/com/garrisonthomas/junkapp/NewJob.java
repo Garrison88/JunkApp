@@ -6,6 +6,7 @@ import com.parse.ParseObject;
 import java.util.ArrayList;
 
 @ParseClassName("NewJob")
+
 public class NewJob extends ParseObject {
 
     public int getSSID() {
@@ -20,8 +21,6 @@ public class NewJob extends ParseObject {
 
     }
 
-
-
     public double getNetSale() {
 
         return getDouble("netSale");
@@ -31,6 +30,18 @@ public class NewJob extends ParseObject {
     public int getReceiptNumber() {
 
         return getInt("receiptNumber");
+
+    }
+
+    public String getPayType() {
+
+        return getString("payType");
+
+    }
+
+    public String getRelatedJournal() {
+
+        return getString("relatedJournal");
 
     }
 
@@ -58,9 +69,15 @@ public class NewJob extends ParseObject {
 
     }
 
-//    @Override
-//    public String toString() {
-//
-//        return getString("objectId");
-//    }
+    public void setPayType(String payType) {
+
+        put("payType", payType);
+
+    }
+
+    public void setRelatedJournal(String relatedJournal) {
+
+        put("relatedJournal", relatedJournal);
+
+    }
 }

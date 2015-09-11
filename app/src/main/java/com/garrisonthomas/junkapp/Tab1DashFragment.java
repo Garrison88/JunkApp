@@ -1,8 +1,10 @@
 package com.garrisonthomas.junkapp;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
@@ -14,16 +16,16 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.garrisonthomas.junkapp.DialogFragments.DailyJournalDialogFragment;
 import com.parse.FindCallback;
-import com.parse.GetCallback;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class Tab1DashFragment extends Fragment {
@@ -37,13 +39,22 @@ public class Tab1DashFragment extends Fragment {
     Button calcDumps, calcTotal, btnClear, newJournal, viewJournal;
     EditText enterTotal, enterDump;
     TextView percentOfGoal, percentOfTotal;
-    String percentOf, percentOfTotalString;
+    String percentOf, percentOfTotalString, todaysDate;
+    ProgressBar dashProgressBar;
     double totalEarnings, totalDump;
+
+    FragmentManager manager;
+    DailyJournalDialogFragment djFragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.tab1_dash_layout, container, false);
+
+        Date date = new Date();
+        SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy");
+
+        todaysDate = df2.format(date);
 
         calcTotal = (Button) v.findViewById(R.id.calculate_percentage);
         calcDumps = (Button) v.findViewById(R.id.calculate_dump_percentage);
@@ -56,6 +67,14 @@ public class Tab1DashFragment extends Fragment {
 
         percentOfTotal = (TextView) v.findViewById(R.id.tv_percent_of_total);
         percentOfGoal = (TextView) v.findViewById(R.id.tv_percent_of_goal);
+
+        dashProgressBar = (ProgressBar) v.findViewById(R.id.dashboard_progress_bar);
+        dashProgressBar.setVisibility(View.GONE);
+
+        manager = getFragmentManager();
+        djFragment = new DailyJournalDialogFragment();
+
+        final View coordinatorLayoutView = v.findViewById(R.id.snackbar_create_journal);
 
         calcTotal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +102,7 @@ public class Tab1DashFragment extends Fragment {
                     percentOfTotal.setText(percentOfTotalString + "%");
 
                     final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
                 } else {
 
@@ -107,81 +126,60 @@ public class Tab1DashFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                FragmentManager manager = getFragmentManager();
-                DailyJournalDialogFragment djFragment = new DailyJournalDialogFragment();
                 djFragment.show(manager, "Dialog");
 
             }
         });
 
+        final View.OnClickListener clickListener = new View.OnClickListener() {
+            public void onClick(View v) {
+
+                djFragment.show(manager, "Dialog");
+
+            }
+        };
+
         viewJournal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (isNetworkAvailable()) {
+                dashProgressBar.setVisibility(View.VISIBLE);
 
-                    ParseQuery<DailyJournal> query = ParseQuery.getQuery("DailyJournal");
-                    query.whereEqualTo("date", DateHelper.getCurrentDate());
-                    query.findInBackground(new FindCallback<DailyJournal>() {
-                        @Override
-                        public void done(List<DailyJournal> list, com.parse.ParseException e) {
+                ParseQuery<DailyJournal> query = ParseQuery.getQuery("DailyJournal");
+                query.whereEqualTo("date", todaysDate);
+                query.orderByAscending("createdAt");
+                query.setLimit(1);
+                query.findInBackground(new FindCallback<DailyJournal>() {
+                    @Override
+                    public void done(List<DailyJournal> list, com.parse.ParseException e) {
 
-                            if (e == null) {
+                        if (e == null) {
 
-                                for (DailyJournal newJournal : list) {
+                            for (DailyJournal newJournal : list) {
 
-                                    newJournal.unpinInBackground();
+                                Intent intent = new Intent(getActivity(), CurrentJournal.class);
+                                intent.putExtra("EXTRA_DATE", todaysDate);
+                                intent.putExtra("EXTRA_CREW", newJournal.getCrew());
+                                intent.putExtra("EXTRA_TRUCK_NUMBER", newJournal.getTruckNumber());
+                                intent.putExtra("EXTRA_DJ_ID", newJournal.getObjectId());
+                                startActivity(intent);
 
-//                                    newJournal.setCrew(newJournal.getCrew());
-//                                    newJournal.setTruckNumber(newJournal.getTruckNumber());
-                                    Intent intent = new Intent(getActivity(), CurrentJournal.class);
-                                    intent.putExtra("EXTRA_CREW", newJournal.getCrew());
-                                    intent.putExtra("EXTRA_TRUCK_NUMBER", newJournal.getTruckNumber());
-                                    startActivity(intent);
-                                }
-
-                            } else {
-                                Toast.makeText(getActivity(), "No journal available",
-                                        Toast.LENGTH_SHORT).show();
                             }
+
+                            dashProgressBar.setVisibility(View.GONE);
+
+                            if (list.size() == 0) {
+
+                                Snackbar
+                                        .make(coordinatorLayoutView, "No journal available", Snackbar.LENGTH_LONG)
+                                        .setActionTextColor(Color.YELLOW).setAction("CREATE", clickListener)
+                                        .show();
+
+                            }
+
                         }
-                    });
-
-                } else {
-
-                    ParseQuery<DailyJournal> query = ParseQuery.getQuery("DailyJournal");
-                    query.fromLocalDatastore();
-                    query.whereEqualTo("date", DateHelper.getCurrentDate());
-                    query.findInBackground(new FindCallback<DailyJournal>() {
-                        @Override
-                        public void done(List<DailyJournal> list, com.parse.ParseException e) {
-                            if (e == null) {
-
-                                for (DailyJournal newJournal : list) {
-
-//                                    newJournal.setCrew(newJournal.getCrew());
-//                                    newJournal.setTruckNumber(newJournal.getTruckNumber());
-                                    Intent intent = new Intent(getActivity(), CurrentJournal.class);
-                                    intent.putExtra("EXTRA_CREW", newJournal.getCrew());
-                                    intent.putExtra("EXTRA_TRUCK_NUMBER", newJournal.getTruckNumber());
-                                    startActivity(intent);
-                            }
-
-
-
-
-                            } else {
-                                Toast.makeText(getActivity(), "No journal has been created",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                    });
-
-                    Toast.makeText(getActivity(), "No internet available",
-                            Toast.LENGTH_SHORT).show();
-
-                }
+                    }
+                });
 
             }
         });

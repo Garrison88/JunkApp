@@ -1,13 +1,10 @@
-package com.garrisonthomas.junkapp;
+package com.garrisonthomas.junkapp.DialogFragments;
 
 import android.app.DialogFragment;
-import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,27 +15,30 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.garrisonthomas.junkapp.CurrentJournal;
+import com.garrisonthomas.junkapp.DailyJournal;
+import com.garrisonthomas.junkapp.DateHelper;
+import com.garrisonthomas.junkapp.NewJob;
+import com.garrisonthomas.junkapp.R;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
-public class AddJobDialogFragment extends DialogFragment {
+public class AddDumpDialogFragment extends DialogFragment {
 
     EditText etSSID, etGrossSale, etNetSale, etReceiptNumber;
-    Button saveJob;
-    Spinner payTypeSpinner;
-    String[] payTypeArray;
-    String payTypeString;
+    Button saveDump;
+    Spinner dumpNameSpinner;
+    String[] dumpNameArray;
+    String dumpNameString, todaysDate;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,23 +57,28 @@ public class AddJobDialogFragment extends DialogFragment {
         etNetSale = (EditText) v.findViewById(R.id.et_net_sale);
         etReceiptNumber = (EditText) v.findViewById(R.id.et_receipt_number);
 
-        payTypeArray = getResources().getStringArray(R.array.job_pay_type);
+        Date date = new Date();
+        SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy");
 
-        payTypeSpinner = (Spinner) v.findViewById(R.id.spinner_pay_type);
+        todaysDate = df2.format(date);
 
-        saveJob = (Button) v.findViewById(R.id.btn_save_job);
+        dumpNameArray = getResources().getStringArray(R.array.dumps_name);
 
-        ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(), R.array.job_pay_type, android.R.layout.simple_spinner_item);
+        dumpNameSpinner = (Spinner) v.findViewById(R.id.spinner_pay_type);
+
+        saveDump = (Button) v.findViewById(R.id.btn_save_job);
+
+        ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(), R.array.dumps_name, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        payTypeSpinner.setAdapter(adapter);
-        payTypeSpinner.setSelection(0);
+        dumpNameSpinner.setAdapter(adapter);
+        dumpNameSpinner.setSelection(0);
 
-        payTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        dumpNameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
 
-                payTypeString = payTypeArray[position];
+                dumpNameString = dumpNameArray[position];
 
             }
 
@@ -84,7 +89,7 @@ public class AddJobDialogFragment extends DialogFragment {
 
         });
 
-        saveJob.setOnClickListener(new View.OnClickListener() {
+        saveDump.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -94,30 +99,25 @@ public class AddJobDialogFragment extends DialogFragment {
                         && (!TextUtils.isEmpty(etReceiptNumber.getText())))) {
 
                     ParseQuery<DailyJournal> query = ParseQuery.getQuery("DailyJournal");
-                    query.whereEqualTo("date", DateHelper.getCurrentDate());
+                    query.whereEqualTo("date", todaysDate);
+                    query.setLimit(1);
                     query.findInBackground(new FindCallback<DailyJournal>() {
                         public void done(List<DailyJournal> list, ParseException e) {
                             if (e == null) {
 
                                 for (DailyJournal newJournal : list) {
 
-                                    final ParseObject newJob = new NewJob();
-                                    int ssid = Integer.valueOf(etSSID.getText().toString());
-                                    double grossSale = Double.valueOf(etGrossSale.getText().toString());
-                                    double netSale = Double.valueOf(etNetSale.getText().toString());
-                                    int receiptNumber = Integer.valueOf(etReceiptNumber.getText().toString());
-                                    newJob.put("ssid", ssid);
-                                    newJob.put("grossSale", grossSale);
-                                    newJob.put("netSale", netSale);
-                                    newJob.put("receiptNumber", receiptNumber);
-                                    newJob.put("payType", payTypeString);
+                                    NewJob newJob = new NewJob();
+                                    newJob.setRelatedJournal(newJournal.getObjectId());
+                                    newJob.setSSID(Integer.valueOf(etSSID.getText().toString()));
+                                    newJob.setGrossSale(Double.valueOf(etGrossSale.getText().toString()));
+                                    newJob.setNetSale(Double.valueOf(etNetSale.getText().toString()));
+                                    newJob.setReceiptNumber(Integer.valueOf(etReceiptNumber.getText().toString()));
+                                    newJob.setPayType(dumpNameString);
 
-                                    newJournal.add("jobs", newJob);
+                                    newJob.saveInBackground();
 
-                                    newJob.saveEventually();
-                                    newJob.unpinInBackground();
-                                    newJob.pinInBackground();
-                                    newJournal.saveEventually();
+                                    newJournal.saveInBackground();
 
                                 }
 
@@ -137,7 +137,6 @@ public class AddJobDialogFragment extends DialogFragment {
                     Toast.makeText(getActivity(), "Please fill all fields", Toast.LENGTH_LONG).show();
 
                 }
-
             }
         });
 
@@ -155,13 +154,6 @@ public class AddJobDialogFragment extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-    }
-
-    private Boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 
 }

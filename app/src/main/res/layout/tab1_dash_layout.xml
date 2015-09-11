@@ -1,12 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    style="@style/MyMaterialTheme_v21"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/dashboard_main_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -110,5 +109,20 @@
                 android:text="View Today's Journal" />
 
         </LinearLayout>
+
+    <ProgressBar
+        android:layout_below="@id/dashboard_main_linear_layout"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/dashboard_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/snackbar_create_journal">
+    </android.support.design.widget.CoordinatorLayout>
 
 </RelativeLayout>
