@@ -58,23 +58,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1">
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+        android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/et_enter_weight"
-                android:layout_width="fill_parent"
+                android:layout_weight="1"
                 android:layout_gravity="center_vertical"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:hint="Enter Weight (kg)"
                 android:inputType="numberDecimal" />
-
-        </android.support.design.widget.TextInputLayout>
 
         <Button
             android:id="@+id/btn_calculate_dump"

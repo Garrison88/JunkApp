@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <Spinner
+        android:id="@+id/spinner_dump_dialog"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/et_gross_cost"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spinner_dump_dialog"
+        android:hint="Gross Cost"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/et_net_cost"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_gross_cost"
+        android:hint="Net Cost"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/et_dump_receipt_number"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_net_cost"
+        android:hint="Receipt Number"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/et_percent_previous"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_dump_receipt_number"
+        android:hint="Percent Previous"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/btn_save_dump"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_percent_previous"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:text="Save" />
+
+</RelativeLayout>

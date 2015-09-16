@@ -1,5 +1,6 @@
 package com.garrisonthomas.junkapp.DialogFragments;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,10 +33,20 @@ public class DailyJournalDialogFragment extends DialogFragment {
 
     Spinner truckSpinner;
     String[] truckNumber;
-    TextView tvTodaysDate;
     Button cancel, createJournal;
     EditText crew;
-    String truckSelected, todaysDate;
+    String truckSelected;
+
+    Date date = new Date();
+    SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy");
+    String todaysDate = df2.format(date);
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+        dialog.setTitle(todaysDate);
+        return dialog;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,20 +54,16 @@ public class DailyJournalDialogFragment extends DialogFragment {
 
         final View v = inflater.inflate(R.layout.daily_journal_dialog_layout, container, false);
 
-        Date date = new Date();
-        SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy");
 
-        todaysDate = df2.format(date);
         truckSpinner = (Spinner) v.findViewById(R.id.truck_spinner);
         truckNumber = getResources().getStringArray(R.array.truck_number);
-        tvTodaysDate = (TextView) v.findViewById(R.id.tv_todays_date);
-        tvTodaysDate.setText(todaysDate);
         createJournal = (Button) v.findViewById(R.id.btn_create_journal);
         cancel = (Button) v.findViewById(R.id.cancel_fragment);
 
         crew = (EditText) v.findViewById(R.id.et_crew);
 
-        truckSpinner.setAdapter(new TruckAdapter(this.getActivity(), R.layout.custom_truck_spinner, truckNumber));
+        truckSpinner.setAdapter(new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_dropdown_item_1line, truckNumber));
+//        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         truckSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
@@ -105,43 +112,6 @@ public class DailyJournalDialogFragment extends DialogFragment {
 
         setCancelable(false);
         return v;
-
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-    }
-
-    public class TruckAdapter extends ArrayAdapter<String> {
-
-        public TruckAdapter(Context ctx, int txtViewResourceId, String[] objects) {
-            super(ctx, txtViewResourceId, objects);
-        }
-
-        @Override
-        public View getDropDownView(int position, View cnvtView, ViewGroup prnt) {
-            return getCustomView(position, cnvtView, prnt);
-        }
-
-        @Override
-        public View getView(int pos, View cnvtView, ViewGroup prnt) {
-            return getCustomView(pos, cnvtView, prnt);
-        }
-
-        public View getCustomView(int position, View convertView,
-                                  ViewGroup parent) {
-            LayoutInflater inflater = getActivity().getLayoutInflater();
-            View mySpinner = inflater.inflate(R.layout.custom_truck_spinner, parent,
-                    false);
-
-            TextView main_text = (TextView) mySpinner.findViewById(R.id.spinner_text_truck_number);
-
-            main_text.setText(truckNumber[position]);
-
-            return mySpinner;
-        }
 
     }
 

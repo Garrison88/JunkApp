@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -52,6 +53,8 @@ public class AddJobDialogFragment extends DialogFragment {
 
         final View v = inflater.inflate(R.layout.add_job_layout, container, false);
 
+        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         etSSID = (EditText) v.findViewById(R.id.et_ssid);
         etGrossSale = (EditText) v.findViewById(R.id.et_gross_sale);
         etNetSale = (EditText) v.findViewById(R.id.et_net_sale);
@@ -69,7 +72,7 @@ public class AddJobDialogFragment extends DialogFragment {
         saveJob = (Button) v.findViewById(R.id.btn_save_job);
 
         ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(), R.array.job_pay_type, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         payTypeSpinner.setAdapter(adapter);
         payTypeSpinner.setSelection(0);
 

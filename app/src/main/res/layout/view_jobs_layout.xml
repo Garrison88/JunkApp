@@ -4,9 +4,91 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-<Spinner
-    android:id="@+id/view_job_spinner"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"/>
+    <LinearLayout
+        android:id="@+id/v_j_gross_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:text="Gross Sale"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="$$"
+            android:layout_weight="1"
+            android:id="@+id/tv_view_job_gross"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@id/v_j_gross_layout"
+        android:id="@+id/v_j_net_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:text="Net Sale"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="$$"
+            android:layout_weight="1"
+            android:id="@+id/tv_view_job_net"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@id/v_j_net_layout"
+        android:id="@+id/v_j_pay_type_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:text="Pay Type"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="$$"
+            android:layout_weight="1"
+            android:id="@+id/tv_view_pay_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@id/v_j_pay_type_layout"
+        android:id="@+id/v_j_receipt_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:text="Receipt Number"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="$$"
+            android:layout_weight="1"
+            android:id="@+id/tv_view_job_receipt_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <TableLayout
+        android:id="@+id/add_job_table_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TableRow
+            android:gravity="center_horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:inputType="textCapWords"
+                android:id="@+id/et_fuel_vendor"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Fuel Vendor"/>
+        </TableRow>
+
+        <TableRow
+            android:gravity="center_horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:inputType="numberDecimal"
+                android:id="@+id/et_fuel_gross_cost"
+                android:layout_width="fill_parent"
+                android:hint="Gross Cost"
+                android:layout_height="wrap_content"/>
+        </TableRow>
+
+        <TableRow
+            android:gravity="center_horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:inputType="numberDecimal"
+                android:id="@+id/et_fuel_net_cost"
+                android:layout_width="fill_parent"
+                android:hint="Net Cost"
+                android:layout_height="wrap_content"/>
+        </TableRow>
+
+        <TableRow
+            android:gravity="center_horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/et_fuel_receipt_number"
+                android:layout_width="fill_parent"
+                android:hint="Receipt Number"
+                android:layout_height="wrap_content"/>
+        </TableRow>
+
+    </TableLayout>
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Save"
+        android:id="@+id/btn_save_fuel"
+        android:layout_below="@+id/add_job_table_layout"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>

@@ -2,8 +2,7 @@
 
 <resources>
 
-    <style name="MyMaterialTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:dropDownListViewStyle">@style/TestSpinnerStyle</item>
+    <style name="MaterialTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorButtonNormal">@color/colorButtonNormal</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
@@ -14,6 +13,7 @@
         <item name="android:textViewStyle">@style/RobotoTextViewStyle</item>
         <item name="android:buttonStyle">@style/RobotoButtonStyle</item>
         <item name="android:spinnerStyle">@style/RobotoSpinnerStyle</item>
+        <item name="android:dialogTheme">@style/CustomDialog</item>
 
     </style>
 

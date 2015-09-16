@@ -1,5 +1,6 @@
 package com.garrisonthomas.junkapp.DialogFragments;
 
+import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 import com.garrisonthomas.junkapp.CurrentJournal;
 import com.garrisonthomas.junkapp.DailyJournal;
 import com.garrisonthomas.junkapp.DateHelper;
+import com.garrisonthomas.junkapp.NewDump;
 import com.garrisonthomas.junkapp.NewJob;
 import com.garrisonthomas.junkapp.R;
 import com.parse.FindCallback;
@@ -34,42 +37,44 @@ import java.util.List;
 
 public class AddDumpDialogFragment extends DialogFragment {
 
-    EditText etSSID, etGrossSale, etNetSale, etReceiptNumber;
+    EditText etGrossCost, etNetCost, etDumpReceiptNumber, etPercentPrevious;
     Button saveDump;
     Spinner dumpNameSpinner;
     String[] dumpNameArray;
-    String dumpNameString, todaysDate;
+    String dumpNameString;
+
+    Date date = new Date();
+    SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy");
+    String todaysDate = df2.format(date);
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+        dialog.setTitle(todaysDate);
+        return dialog;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        final View v = inflater.inflate(R.layout.add_job_layout, container, false);
+        final View v = inflater.inflate(R.layout.add_dump_layout, container, false);
 
-        etSSID = (EditText) v.findViewById(R.id.et_ssid);
-        etGrossSale = (EditText) v.findViewById(R.id.et_gross_sale);
-        etNetSale = (EditText) v.findViewById(R.id.et_net_sale);
-        etReceiptNumber = (EditText) v.findViewById(R.id.et_receipt_number);
+        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        Date date = new Date();
-        SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy");
-
-        todaysDate = df2.format(date);
+        etGrossCost = (EditText) v.findViewById(R.id.et_gross_cost);
+        etNetCost = (EditText) v.findViewById(R.id.et_net_cost);
+        etDumpReceiptNumber = (EditText) v.findViewById(R.id.et_dump_receipt_number);
+        etPercentPrevious = (EditText) v.findViewById(R.id.et_percent_previous);
 
         dumpNameArray = getResources().getStringArray(R.array.dumps_name);
 
-        dumpNameSpinner = (Spinner) v.findViewById(R.id.spinner_pay_type);
+        dumpNameSpinner = (Spinner) v.findViewById(R.id.spinner_dump_dialog);
 
-        saveDump = (Button) v.findViewById(R.id.btn_save_job);
+        saveDump = (Button) v.findViewById(R.id.btn_save_dump);
 
         ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(), R.array.dumps_name, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         dumpNameSpinner.setAdapter(adapter);
         dumpNameSpinner.setSelection(0);
 
@@ -93,10 +98,9 @@ public class AddDumpDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
 
-                if (!TextUtils.isEmpty(etSSID.getText())
-                        && (!TextUtils.isEmpty(etGrossSale.getText()))
-                        && (!TextUtils.isEmpty(etNetSale.getText())
-                        && (!TextUtils.isEmpty(etReceiptNumber.getText())))) {
+                if (!TextUtils.isEmpty(etGrossCost.getText())
+                        && (!TextUtils.isEmpty(etNetCost.getText())
+                        && (!TextUtils.isEmpty(etDumpReceiptNumber.getText())))) {
 
                     ParseQuery<DailyJournal> query = ParseQuery.getQuery("DailyJournal");
                     query.whereEqualTo("date", todaysDate);
@@ -107,15 +111,15 @@ public class AddDumpDialogFragment extends DialogFragment {
 
                                 for (DailyJournal newJournal : list) {
 
-                                    NewJob newJob = new NewJob();
-                                    newJob.setRelatedJournal(newJournal.getObjectId());
-                                    newJob.setSSID(Integer.valueOf(etSSID.getText().toString()));
-                                    newJob.setGrossSale(Double.valueOf(etGrossSale.getText().toString()));
-                                    newJob.setNetSale(Double.valueOf(etNetSale.getText().toString()));
-                                    newJob.setReceiptNumber(Integer.valueOf(etReceiptNumber.getText().toString()));
-                                    newJob.setPayType(dumpNameString);
+                                    NewDump newDump = new NewDump();
+                                    newDump.setRelatedJournal(newJournal.getObjectId());
+                                    newDump.setDumpName(dumpNameString);
+                                    newDump.setGrossCost(Double.valueOf(etGrossCost.getText().toString()));
+                                    newDump.setNetCost(Double.valueOf(etNetCost.getText().toString()));
+                                    newDump.setDumpReceiptNumber(Integer.valueOf(etDumpReceiptNumber.getText().toString()));
+                                    newDump.setPercentPrevious(Integer.valueOf(etPercentPrevious.getText().toString()));
 
-                                    newJob.saveInBackground();
+                                    newDump.saveInBackground();
 
                                     newJournal.saveInBackground();
 
@@ -127,8 +131,7 @@ public class AddDumpDialogFragment extends DialogFragment {
                         }
                     });
 
-                    Toast.makeText(getActivity(), "Job number " + etSSID.getText().toString() +
-                            " saved", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Dump saved", Toast.LENGTH_SHORT).show();
 
                     dismiss();
 

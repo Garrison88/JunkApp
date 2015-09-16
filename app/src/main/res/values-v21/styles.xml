@@ -2,10 +2,11 @@
 
 <resources>
 
-    <style name="MyMaterialTheme_v21" parent="MyMaterialTheme.NoActionBar">
+    <style name="MaterialTheme_v21" parent="MaterialTheme.NoActionBar">
 
         <item name="android:windowBackground">@color/windowBackground</item>
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="android:fontFamily">roboto-light</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowContentTransitions">true</item>
@@ -16,21 +17,25 @@
 
     </style>
 
-    <style name="App_EditTextStyle" parent="@android:style/Widget.EditText">
-        <item name="android:textColor">#000000</item>
-    </style>
-
-    <style name="RobotoButtonStyle" parent="android:style/Widget.Material.Button">
-        <item name="android:color">@color/colorPrimary</item>
+    <style name="App_EditTextStyle" parent="@android:style/Widget.Material.EditText">
         <item name="android:fontFamily">roboto-light</item>
     </style>
 
-    <!--<style name="RobotoSpinnerStyle" parent="android:style/Widget.Material.Spinner" />-->
+    <style name="RobotoButtonStyle" parent="android:style/Widget.Material.Button">
+        <!--<item name="android:color">@color/colorPrimary</item>-->
+        <!--<item name="android:fontFamily">roboto-light</item>-->
+    </style>
 
-    <style name="TestSpinnerStyle" parent="android:style/Widget.ListView.DropDown">
-        <item name="android:padding">2dp</item>
-        <item name="android:divider">#FFFFFF</item>
-        <item name="android:dividerHeight">1dp</item>
+    <style name="CustomDialog" parent="@android:style/Theme.Material.Dialog">
+        <item name="android:padding">5dp</item>
+        <item name="android:colorBackground">@color/dialogFragmentBackground</item>
+    </style>
+
+    <style name="TextLabel" parent="Widget.Design.TextInputLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColorHint">#ff008d</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
 </resources>

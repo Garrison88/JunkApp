@@ -3,8 +3,6 @@ package com.garrisonthomas.junkapp;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -18,10 +16,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.support.v7.widget.Toolbar;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class BaseActivity extends AppCompatActivity {
@@ -30,12 +28,18 @@ public class BaseActivity extends AppCompatActivity {
 
     int TAKE_PHOTO_CODE = 0;
     public static int count=0;
+    public static String todaysDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        Date date = new Date();
+        SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy");
+
+        todaysDate = df2.format(date);
 
     }
 
@@ -62,7 +66,7 @@ public class BaseActivity extends AppCompatActivity {
             Intent callIntent = new Intent(Intent.ACTION_DIAL, number);
             startActivity(callIntent);
 
-        } else if (id == R.id.menu_about_developer) {
+        } else if (id == R.id.action_about_developer) {
 
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.developer_website)));
             startActivity(browserIntent);
@@ -109,7 +113,6 @@ public class BaseActivity extends AppCompatActivity {
 
         if (requestCode == TAKE_PHOTO_CODE && resultCode == RESULT_OK) {
             Log.d("CameraDemo", "Pic saved");
-
 
         }
     }

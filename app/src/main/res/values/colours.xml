@@ -6,10 +6,11 @@
     <color name="colorPrimary">#F44336</color>
     <color name="colorPrimaryDark">#F44336</color>
     <!--<color name="colorPrimaryDark">#D32F2F</color>-->
-    <color name="textColorPrimary">#EEEEEE</color>
+    <color name="textColorPrimary">#ECEFF1</color>
     <color name="windowBackground">#ACC3A6</color>
     <color name="navigationBarColor">#000000</color>
     <color name="colorAccent">#EEEEEE</color>
     <color name="darkAccent">#607D8B</color>
+    <color name="dialogFragmentBackground">#607D8B</color>
 
 </resources>
