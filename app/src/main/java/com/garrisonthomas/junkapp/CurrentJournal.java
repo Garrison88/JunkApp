@@ -1,43 +1,43 @@
 package com.garrisonthomas.junkapp;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
+import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import com.garrisonthomas.junkapp.DialogFragments.AddDumpDialogFragment;
 import com.garrisonthomas.junkapp.DialogFragments.AddFuelDialogFragment;
 import com.garrisonthomas.junkapp.DialogFragments.AddJobDialogFragment;
 import com.garrisonthomas.junkapp.DialogFragments.ViewJobDialogFragment;
 import com.parse.FindCallback;
-import com.parse.ParseObject;
+import com.parse.ParseException;
 import com.parse.ParseQuery;
 
-import java.lang.reflect.Array;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.IdentityHashMap;
 import java.util.List;
 
 public class CurrentJournal extends BaseActivity {
 
-    Button addJob, viewJob, addDump, addFuel;
-    TextView todaysCrew, todaysTruck;
-    Toolbar mToolbar;
-    Spinner jobsSpinner;
-    String currentJournalId;
-    ArrayList<Integer> jobsArray;
-    int selectedJobSSID;
+    private static Button addJob, viewJob, addDump, addFuel;
+    private static TextView todaysCrew, todaysTruck;
+    private static Toolbar mToolbar;
+    private static ProgressBar toolbarProgressSpinner;
+    private static Spinner jobsSpinner;
+    private static String currentJournalId;
+    private static ArrayList<Integer> jobsArray;
+    private static int selectedJobSSID;
+    private static Bundle extras;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,11 @@ public class CurrentJournal extends BaseActivity {
 
         mToolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle(todaysDate);
+
+        toolbarProgressSpinner = (ProgressBar) findViewById(R.id.toolbar_progress_spinner);
+        toolbarProgressSpinner.setVisibility(View.VISIBLE);
+
+        mToolbar.setTitle(todaysDate);
         mToolbar.setNavigationIcon(ContextCompat.getDrawable(CurrentJournal.this, R.drawable.abc_ic_ab_back_mtrl_am_alpha));
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,7 +72,7 @@ public class CurrentJournal extends BaseActivity {
 
         jobsSpinner = (Spinner) findViewById(R.id.jobs_spinner);
 
-        Bundle extras = getIntent().getExtras();
+        extras = getIntent().getExtras();
         if (extras != null) {
             String extraCrew = extras.getString("EXTRA_CREW");
             todaysCrew.setText(extraCrew);
@@ -77,46 +81,24 @@ public class CurrentJournal extends BaseActivity {
             currentJournalId = extras.getString("EXTRA_DJ_ID");
         }
 
-        ParseQuery<NewJob> query = ParseQuery.getQuery(NewJob.class);
-        query.whereEqualTo("relatedJournal", currentJournalId);
-        query.findInBackground(new FindCallback<NewJob>() {
+        // Adds today's jobs (if any) to the spinner
+        populateSpinner();
+
+        jobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
             @Override
-            public void done(List<NewJob> list, com.parse.ParseException e) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                if (e == null) {
+                selectedJobSSID = (int) jobsSpinner.getItemAtPosition(position);
 
-                    for (NewJob job : list) {
+            }
 
-                        jobsArray.add(job.getSSID());
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
-                    }
-                    ArrayAdapter<Integer> adapter = new ArrayAdapter<>(CurrentJournal.this, android.R.layout.simple_spinner_item, jobsArray);
-                    adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-                    jobsSpinner.setAdapter(adapter);
-
-                    jobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-                        @Override
-                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                            int found = (int) jobsSpinner.getItemAtPosition(position);
-
-                            selectedJobSSID = found;
-
-                        }
-
-                        @Override
-                        public void onNothingSelected(AdapterView<?> parent) {
-
-                        }
-
-                    });
-                }
             }
 
         });
-
-
 
         addJob.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,6 +149,35 @@ public class CurrentJournal extends BaseActivity {
 
     }
 
+    public void populateSpinner() {
+
+        ParseQuery<NewJob> query = ParseQuery.getQuery(NewJob.class);
+        query.whereEqualTo("relatedJournal", currentJournalId);
+        query.findInBackground(new FindCallback<NewJob>() {
+            @Override
+            public void done(List<NewJob> list, com.parse.ParseException e) {
+
+                if (e == null) {
+
+                    for (NewJob job : list) {
+
+                        jobsArray.add(job.getSSID());
+
+                    }
+
+                    ArrayAdapter<Integer> adapter = new ArrayAdapter<>(CurrentJournal.this, android.R.layout.simple_spinner_item, jobsArray);
+                    adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+                    jobsSpinner.setAdapter(adapter);
+
+
+                }
+                toolbarProgressSpinner.setVisibility(View.INVISIBLE);
+            }
+
+        });
+
+    }
+
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
@@ -177,42 +188,8 @@ public class CurrentJournal extends BaseActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
 
-                ParseQuery<DailyJournal> query = ParseQuery.getQuery(DailyJournal.class);
-                query.whereEqualTo("objectId", currentJournalId);
-                query.findInBackground(new FindCallback<DailyJournal>() {
-                    @Override
-                    public void done(List<DailyJournal> list, com.parse.ParseException e) {
-
-                        if (e == null) {
-
-                            for (DailyJournal dj : list) {
-
-                                dj.deleteInBackground();
-
-                            }
-
-                            CurrentJournal.this.finish();
-
-                        }
-                    }
-                });
-
-//                ParseQuery<NewJob> query1 = ParseQuery.getQuery(NewJob.class);
-//                query1.whereEqualTo("relatedJournal", currentJournalId);
-//                query1.findInBackground(new FindCallback<NewJob>() {
-//                    @Override
-//                    public void done(List<NewJob> list, com.parse.ParseException e) {
-//
-//                        if (e == null) {
-//
-//                            for (NewJob nj : list) {
-//
-//                                nj.deleteInBackground();
-//
-//                            }
-//                        }
-//                    }
-//                });
+                AlertDialog diaBox = confirmJournalDeletion();
+                diaBox.show();
 
                 return false;
             }
@@ -220,12 +197,86 @@ public class CurrentJournal extends BaseActivity {
         return true;
     }
 
+    private AlertDialog confirmJournalDeletion() {
+        return new AlertDialog.Builder(this)
+
+                .setTitle(getString(R.string.confirm_journal_delete_title))
+                .setMessage(getString(R.string.confirm_journal_delete_message))
+                .setIcon(R.drawable.ic_delete_black_36dp)
+
+                .setPositiveButton("delete", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                        deleteJournal();
+
+                        dialog.dismiss();
+                    }
+
+                })
+
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+
+                    }
+                })
+                .create();
+    }
+
     @Override
     public void onResume() {
 
         super.onResume();
 
-
     }
 
+    public void deleteJournal() {
+
+        toolbarProgressSpinner.setVisibility(View.VISIBLE);
+
+        ParseQuery<DailyJournal> query = ParseQuery.getQuery(DailyJournal.class);
+        ParseQuery<NewJob> query1 = ParseQuery.getQuery(NewJob.class);
+        query.whereEqualTo("objectId", currentJournalId);
+        query.setLimit(1);
+        query1.whereEqualTo("relatedJournal", currentJournalId);
+        query.findInBackground(new FindCallback<DailyJournal>() {
+            @Override
+            public void done(List<DailyJournal> list, ParseException e) {
+
+                if (e == null) {
+
+                    for (DailyJournal dj : list) {
+
+                        dj.deleteInBackground();
+
+                    }
+                }
+            }
+        });
+
+        query1.findInBackground(new FindCallback<NewJob>() {
+            @Override
+            public void done(List<NewJob> list, ParseException e) {
+
+                if (e == null) {
+
+                    for (NewJob nj : list) {
+
+                        nj.deleteInBackground();
+
+                    }
+
+                    Toast.makeText(CurrentJournal.this, "Journal successfully deleted",
+                            Toast.LENGTH_SHORT).show();
+                    extras.clear();
+                    toolbarProgressSpinner.setVisibility(View.GONE);
+                    CurrentJournal.this.finish();
+
+                }
+            }
+        });
+
+    }
 }

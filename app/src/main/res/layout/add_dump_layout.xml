@@ -10,26 +10,50 @@
         android:layout_height="wrap_content" />
 
     <EditText
-        android:id="@+id/et_gross_cost"
+        android:id="@+id/et_add_dump_weight"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/spinner_dump_dialog"
-        android:hint="Gross Cost"
+        android:hint="Enter Weight (kgs)"
         android:inputType="numberDecimal" />
 
-    <EditText
-        android:id="@+id/et_net_cost"
+    <LinearLayout
+        android:layout_below="@id/et_add_dump_weight"
+        android:id="@+id/dump_cost_layout"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/et_gross_cost"
-        android:hint="Net Cost"
-        android:inputType="numberDecimal" />
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="Gross Cost"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tv_dump_gross_cost"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:text="Net Cost"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tv_dump_net_cost"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
 
     <EditText
         android:id="@+id/et_dump_receipt_number"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/et_net_cost"
+        android:layout_below="@id/dump_cost_layout"
         android:hint="Receipt Number"
         android:inputType="number" />
 

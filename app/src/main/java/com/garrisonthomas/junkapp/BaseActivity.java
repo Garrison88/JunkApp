@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.support.v7.widget.Toolbar;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,10 +25,8 @@ import java.util.Date;
 
 public class BaseActivity extends AppCompatActivity {
 
-
-
-    int TAKE_PHOTO_CODE = 0;
-    public static int count=0;
+    private static int TAKE_PHOTO_CODE = 0;
+    private static int count = 0;
     public static String todaysDate;
 
     @Override
@@ -45,7 +44,6 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
 
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
@@ -62,7 +60,7 @@ public class BaseActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_call_office) {
 
-            Uri number = Uri.parse("tel:18007436348");
+            Uri number = Uri.parse(getString(R.string.office_phone_number_uri));
             Intent callIntent = new Intent(Intent.ACTION_DIAL, number);
             startActivity(callIntent);
 
@@ -90,11 +88,12 @@ public class BaseActivity extends AppCompatActivity {
 
             // here,counter will be incremented each time,and the picture taken by camera will be stored as 1.jpg,2.jpg and likewise.
             count++;
-            String file = dir+count+".jpg";
+            String file = dir + count + ".jpg";
             File newfile = new File(file);
             try {
                 newfile.createNewFile();
-            } catch (IOException e) {}
+            } catch (IOException e) {
+            }
 
             Uri outputFileUri = Uri.fromFile(newfile);
 

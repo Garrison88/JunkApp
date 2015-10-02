@@ -57,11 +57,19 @@
 
     </LinearLayout>
 
+    <EditText
+        android:id="@+id/et_job_notes"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linear_layout_pay_type"
+        android:hint="Notes"
+        android:inputType="textAutoCorrect|textCapSentences|textMultiLine" />
+
     <Button
         android:id="@+id/btn_save_job"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/linear_layout_pay_type"
+        android:layout_below="@id/et_job_notes"
         android:layout_gravity="center_horizontal"
         android:text="Save" />
 

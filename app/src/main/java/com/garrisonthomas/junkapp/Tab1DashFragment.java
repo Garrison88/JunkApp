@@ -36,12 +36,12 @@ public class Tab1DashFragment extends Fragment {
 
     }
 
-    Button calcDumps, calcTotal, btnClear, newJournal, viewJournal;
-    EditText enterTotal, enterDump;
-    TextView percentOfGoal, percentOfTotal;
-    String percentOf, percentOfTotalString, todaysDate;
-    ProgressBar dashProgressBar;
-    double totalEarnings, totalDump;
+    private static Button calcDumps, calcTotal, btnClear, newJournal, viewJournal;
+    private static EditText enterTotal, enterDump;
+    private static TextView percentOfGoal, percentOfTotal;
+    private static String percentOf, percentOfTotalString, todaysDate;
+    private static ProgressBar dashProgressBar;
+    private static double totalEarnings, totalDump;
 
     FragmentManager manager;
     DailyJournalDialogFragment djFragment;

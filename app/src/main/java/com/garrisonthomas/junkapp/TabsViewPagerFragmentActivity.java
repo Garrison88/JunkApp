@@ -21,11 +21,11 @@ import android.widget.TabHost.TabContentFactory;
  */
 public class TabsViewPagerFragmentActivity extends BaseActivity implements TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener {
 
-    private TabHost mTabHost;
-    private ViewPager mViewPager;
+    private TabHost tabHost;
+    private ViewPager viewPager;
     private HashMap<String, TabInfo> mapTabInfo = new HashMap<String, TabsViewPagerFragmentActivity.TabInfo>();
 
-    Toolbar mToolbar;
+    private Toolbar toolbar;
 
     /**
      * @author mwho
@@ -52,13 +52,13 @@ public class TabsViewPagerFragmentActivity extends BaseActivity implements TabHo
      */
     class TabFactory implements TabContentFactory {
 
-        private final Context mContext;
+        private final Context context;
 
         /**
          * @param context
          */
         public TabFactory(Context context) {
-            mContext = context;
+            this.context = context;
         }
 
         /**
@@ -67,7 +67,7 @@ public class TabsViewPagerFragmentActivity extends BaseActivity implements TabHo
          * @see android.widget.TabHost.TabContentFactory#createTabContent(java.lang.String)
          */
         public View createTabContent(String tag) {
-            View v = new View(mContext);
+            View v = new View(context);
             v.setMinimumWidth(0);
             v.setMinimumHeight(0);
             return v;
@@ -88,13 +88,13 @@ public class TabsViewPagerFragmentActivity extends BaseActivity implements TabHo
         // Initialise the TabHost
         this.initialiseTabHost(savedInstanceState);
         if (savedInstanceState != null) {
-            mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab")); //set the tab as per the saved state
+            tabHost.setCurrentTabByTag(savedInstanceState.getString("tab")); //set the tab as per the saved state
         }
         // Intialise ViewPager
         this.intialiseViewPager();
 
-        mToolbar = (Toolbar) findViewById(R.id.app_bar);
-        setSupportActionBar(mToolbar);
+        toolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
 
     }
 
@@ -112,7 +112,7 @@ public class TabsViewPagerFragmentActivity extends BaseActivity implements TabHo
      */
     protected void onSaveInstanceState(Bundle outState) {
 
-        outState.putString("tab", mTabHost.getCurrentTabTag()); //save the tab selected
+        outState.putString("tab", tabHost.getCurrentTabTag()); //save the tab selected
         super.onSaveInstanceState(outState);
     }
 
@@ -127,29 +127,29 @@ public class TabsViewPagerFragmentActivity extends BaseActivity implements TabHo
         fragments.add(Fragment.instantiate(this, Tab3DumpFragment.class.getName()));
         PagerAdapter mPagerAdapter = new PagerAdapter(super.getSupportFragmentManager(), fragments);
         //
-        this.mViewPager = (ViewPager) super.findViewById(R.id.viewpager);
-        this.mViewPager.setAdapter(mPagerAdapter);
-        this.mViewPager.addOnPageChangeListener(this);
+        this.viewPager = (ViewPager) super.findViewById(R.id.viewpager);
+        this.viewPager.setAdapter(mPagerAdapter);
+        this.viewPager.addOnPageChangeListener(this);
     }
 
     /**
      * Initialise the Tab Host
      */
     private void initialiseTabHost(Bundle args) {
-        mTabHost = (TabHost) findViewById(android.R.id.tabhost);
-        mTabHost.setup();
+        tabHost = (TabHost) findViewById(android.R.id.tabhost);
+        tabHost.setup();
         TabInfo tabInfo = null;
-        mTabHost.getTabWidget().setDividerDrawable(null);
-        TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab1").setIndicator("Dashboard"), (tabInfo = new TabInfo("Tab1", Tab1DashFragment.class, args)));
+        tabHost.getTabWidget().setDividerDrawable(null);
+        TabsViewPagerFragmentActivity.AddTab(this, this.tabHost, this.tabHost.newTabSpec("Tab1").setIndicator("Dashboard"), (tabInfo = new TabInfo("Tab1", Tab1DashFragment.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
-        TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab2").setIndicator("Calculator"), (tabInfo = new TabInfo("Tab2", Tab2CalcFragment.class, args)));
+        TabsViewPagerFragmentActivity.AddTab(this, this.tabHost, this.tabHost.newTabSpec("Tab2").setIndicator("Calculator"), (tabInfo = new TabInfo("Tab2", Tab2CalcFragment.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
-        TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab3").setIndicator("Dumps"), (tabInfo = new TabInfo("Tab3", Tab3DumpFragment.class, args)));
+        TabsViewPagerFragmentActivity.AddTab(this, this.tabHost, this.tabHost.newTabSpec("Tab3").setIndicator("Dumps"), (tabInfo = new TabInfo("Tab3", Tab3DumpFragment.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
         // Default to first tab
         //this.onTabChanged("Tab1");
         //
-        mTabHost.setOnTabChangedListener(this);
+        tabHost.setOnTabChangedListener(this);
     }
 
     /**
@@ -171,10 +171,10 @@ public class TabsViewPagerFragmentActivity extends BaseActivity implements TabHo
      * @see android.widget.TabHost.OnTabChangeListener#onTabChanged(java.lang.String)
      */
     public void onTabChanged(String tag) {
-        mTabHost = (TabHost) findViewById(android.R.id.tabhost);
+        tabHost = (TabHost) findViewById(android.R.id.tabhost);
         TabInfo newTab = this.mapTabInfo.get(tag);
-        int pos = this.mTabHost.getCurrentTab();
-        this.mViewPager.setCurrentItem(pos, true);
+        int pos = this.tabHost.getCurrentTab();
+        this.viewPager.setCurrentItem(pos, true);
     }
 
     /* (non-Javadoc)
@@ -193,7 +193,7 @@ public class TabsViewPagerFragmentActivity extends BaseActivity implements TabHo
     @Override
     public void onPageSelected(int position) {
         // TODO Auto-generated method stub
-        this.mTabHost.setCurrentTab(position);
+        this.tabHost.setCurrentTab(position);
     }
 
     /* (non-Javadoc)

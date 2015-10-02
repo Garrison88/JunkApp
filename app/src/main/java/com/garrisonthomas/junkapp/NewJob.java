@@ -39,6 +39,12 @@ public class NewJob extends ParseObject {
 
     }
 
+    public String getJobNotes() {
+
+        return getString("jobNotes");
+
+    }
+
     public String getRelatedJournal() {
 
         return getString("relatedJournal");
@@ -72,6 +78,12 @@ public class NewJob extends ParseObject {
     public void setPayType(String payType) {
 
         put("payType", payType);
+
+    }
+
+    public void setJobNotes(String jobNotes) {
+
+        put("jobNotes", jobNotes);
 
     }
 

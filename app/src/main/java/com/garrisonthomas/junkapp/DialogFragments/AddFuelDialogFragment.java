@@ -29,9 +29,9 @@ import java.util.List;
 
 public class AddFuelDialogFragment extends DialogFragment {
 
-    EditText etFuelVendor, etGrossCost, etNetCost, etReceiptNumber;
-    Button saveFuel;
-    String todaysDate;
+    private static EditText etFuelVendor, etGrossCost, etNetCost, etReceiptNumber;
+    private static Button saveFuel;
+    private static String todaysDate;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

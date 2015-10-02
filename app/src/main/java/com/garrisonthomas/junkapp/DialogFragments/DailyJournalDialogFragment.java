@@ -1,7 +1,6 @@
 package com.garrisonthomas.junkapp.DialogFragments;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -14,32 +13,25 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.garrisonthomas.junkapp.CurrentJournal;
 import com.garrisonthomas.junkapp.DailyJournal;
-import com.garrisonthomas.junkapp.DateHelper;
 import com.garrisonthomas.junkapp.R;
-import com.parse.ParseObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by Garrison Thomas on 2015-08-17.
- */
 public class DailyJournalDialogFragment extends DialogFragment {
 
-    Spinner truckSpinner;
-    String[] truckNumber;
-    Button cancel, createJournal;
-    EditText crew;
-    String truckSelected;
-
-    Date date = new Date();
-    SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy");
-    String todaysDate = df2.format(date);
+    private static Spinner truckSpinner;
+    private static String[] truckNumber;
+    private static Button cancel, createJournal;
+    private static EditText crew;
+    private static String truckSelected;
+    private static Date date = new Date();
+    private static SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy");
+    private static String todaysDate = df2.format(date);
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -53,7 +45,6 @@ public class DailyJournalDialogFragment extends DialogFragment {
                              Bundle savedInstanceState) {
 
         final View v = inflater.inflate(R.layout.daily_journal_dialog_layout, container, false);
-
 
         truckSpinner = (Spinner) v.findViewById(R.id.truck_spinner);
         truckNumber = getResources().getStringArray(R.array.truck_number);
@@ -94,11 +85,13 @@ public class DailyJournalDialogFragment extends DialogFragment {
                     intent.putExtra("EXTRA_TRUCK_NUMBER", truckSelected);
                     newJournal.saveInBackground();
                     intent.putExtra("EXTRA_DJ_ID", newJournal.getObjectId());
+                    crew.getText().clear();
+                    truckSpinner.setSelection(0);
                     dismiss();
                     startActivity(intent);
 
                 } else {
-                    Toast.makeText(getActivity(), "Must enter crew", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Please enter a crew", Toast.LENGTH_SHORT).show();
                 }
             }
         });

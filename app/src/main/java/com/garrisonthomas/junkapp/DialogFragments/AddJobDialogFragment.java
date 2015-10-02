@@ -35,11 +35,11 @@ import java.util.List;
 
 public class AddJobDialogFragment extends DialogFragment {
 
-    EditText etSSID, etGrossSale, etNetSale, etReceiptNumber;
-    Button saveJob;
-    Spinner payTypeSpinner;
-    String[] payTypeArray;
-    String payTypeString, todaysDate;
+    private static EditText etSSID, etGrossSale, etNetSale, etReceiptNumber, etJobNotes;
+    private static Button saveJob;
+    private static Spinner payTypeSpinner;
+    private static String[] payTypeArray;
+    private static String payTypeString, todaysDate;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +59,7 @@ public class AddJobDialogFragment extends DialogFragment {
         etGrossSale = (EditText) v.findViewById(R.id.et_gross_sale);
         etNetSale = (EditText) v.findViewById(R.id.et_net_sale);
         etReceiptNumber = (EditText) v.findViewById(R.id.et_receipt_number);
+        etJobNotes = (EditText) v.findViewById(R.id.et_job_notes);
 
         Date date = new Date();
         SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy");
@@ -117,6 +118,7 @@ public class AddJobDialogFragment extends DialogFragment {
                                     newJob.setNetSale(Double.valueOf(etNetSale.getText().toString()));
                                     newJob.setReceiptNumber(Integer.valueOf(etReceiptNumber.getText().toString()));
                                     newJob.setPayType(payTypeString);
+                                    newJob.setJobNotes(String.valueOf(etJobNotes.getText()));
 
                                     newJob.saveInBackground();
 

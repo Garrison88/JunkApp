@@ -23,21 +23,21 @@ public class Tab2CalcFragment extends Fragment {
 
     }
 
-    Spinner vSpinner, bSpinner;
-    Button clearCost, addHST;
-    TextView tvVolumeSize, tvBedloadSize, tvTotal;
-    int[] volumePrice, bedloadPrice;
-    String[] volumeSize, bedloadSize;
-    int vPrice, bPrice;
-    double beforeTax, sum;
-    String doubleValue, totalText, sumString;
+    private static Spinner vSpinner, bSpinner;
+    private static Button clearCost, addHST;
+    private static TextView tvVolumeSize, tvBedloadSize, tvTotal;
+    private static int[] volumePrice, bedloadPrice;
+    private static String[] volumeSize, bedloadSize;
+    private static int vPrice, bPrice;
+    private static double beforeTax, sum;
+    private static String doubleValue, totalText, sumString;
 
     ArrayList<Integer> priceArray = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.tab2_calc_layout, container, false);
+        final View v = inflater.inflate(R.layout.tab2_calc_layout, container, false);
 
         addHST = (Button) v.findViewById(R.id.btn_add_hst);
         clearCost = (Button) v.findViewById(R.id.btn_clear_cost);
@@ -154,8 +154,8 @@ public class Tab2CalcFragment extends Fragment {
             for (int i : priceArray) {
                 sum += i;
             }
-            sumString = String.valueOf(sum);
-            tvTotal.setText("$" + sumString);
+            sumString = R.string.dollar_sign + String.valueOf(sum);
+            tvTotal.setText(sumString);
 
         }
     }

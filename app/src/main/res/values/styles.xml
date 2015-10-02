@@ -4,6 +4,8 @@
 
     <style name="MaterialTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorButtonNormal">@color/colorButtonNormal</item>
+        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -17,11 +19,11 @@
 
     </style>
 
-    <style name="RobotoEditTextStyle" parent="android:Widget.EditText">
+    <style name="RobotoEditTextStyle" parent="android:Widget.Holo.EditText">
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
 
-    <style name="RobotoTextViewStyle" parent="android:Widget.TextView">
+    <style name="RobotoTextViewStyle" parent="android:Widget.Holo.TextView">
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
 

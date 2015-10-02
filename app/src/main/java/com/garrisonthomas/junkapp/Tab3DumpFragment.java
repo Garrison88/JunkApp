@@ -28,15 +28,15 @@ public class Tab3DumpFragment extends Fragment {
 
     }
 
-    Spinner dumpsSpinner;
-    Button infoBtn, dirBtn, calcBtn, dumpsClearBtn, addHSTButton;
-    EditText weight;
-    String[] dumpName, directions, information;
-    int[] rate;
-    int rateNumber;
-    TextView tvDumpCost;
-    String dir, info, resultString, withTaxString;
-    double weightNumber, result, withTax;
+    private static Spinner dumpsSpinner;
+    private static Button infoBtn, dirBtn, calcBtn, dumpsClearBtn, addHSTButton;
+    private static EditText weight;
+    private static String[] dumpName, directions, information;
+    private static int[] rate;
+    private static int rateNumber;
+    private static TextView tvDumpCost;
+    private static String dir, info, resultString, withTaxString;
+    private static double weightNumber, result, withTax;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
