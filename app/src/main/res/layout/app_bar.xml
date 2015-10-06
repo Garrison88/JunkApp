@@ -14,7 +14,7 @@
     local:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
 
     <ProgressBar
-        android:id="@+id/toolbar_progress_spinner"
+        android:id="@+id/toolbar_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"

@@ -1,37 +1,27 @@
 package com.garrisonthomas.junkapp.DialogFragments;
 
 import android.app.DialogFragment;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.garrisonthomas.junkapp.DailyJournal;
-import com.garrisonthomas.junkapp.NewFuel;
-import com.garrisonthomas.junkapp.NewJob;
+import com.garrisonthomas.junkapp.ParseObjects.NewFuel;
 import com.garrisonthomas.junkapp.R;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
 public class AddFuelDialogFragment extends DialogFragment {
 
-    private static EditText etFuelVendor, etGrossCost, etNetCost, etReceiptNumber;
+    private EditText etFuelVendor, etGrossCost, etNetCost, etReceiptNumber;
     private static Button saveFuel;
-    private static String todaysDate;
+    private String currentJournalId;
+    private SharedPreferences preferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,15 +37,13 @@ public class AddFuelDialogFragment extends DialogFragment {
 
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 
+        preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+        currentJournalId = preferences.getString("universalJournalId", "none");
+
         etFuelVendor = (EditText) v.findViewById(R.id.et_fuel_vendor);
         etGrossCost = (EditText) v.findViewById(R.id.et_fuel_gross_cost);
         etNetCost = (EditText) v.findViewById(R.id.et_fuel_net_cost);
         etReceiptNumber = (EditText) v.findViewById(R.id.et_fuel_receipt_number);
-
-        Date date = new Date();
-        SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy");
-
-        todaysDate = df2.format(date);
 
         saveFuel = (Button) v.findViewById(R.id.btn_save_fuel);
 
@@ -66,33 +54,22 @@ public class AddFuelDialogFragment extends DialogFragment {
                 if (!TextUtils.isEmpty(etFuelVendor.getText())
                         && (!TextUtils.isEmpty(etNetCost.getText()))) {
 
-                    ParseQuery<DailyJournal> query = ParseQuery.getQuery("DailyJournal");
-                    query.whereEqualTo("date", todaysDate);
-                    query.setLimit(1);
-                    query.findInBackground(new FindCallback<DailyJournal>() {
-                        public void done(List<DailyJournal> list, ParseException e) {
-                            if (e == null) {
+                    NewFuel newFuel = new NewFuel();
+                    newFuel.setRelatedJournal(currentJournalId);
+                    newFuel.setFuelVendor(String.valueOf(etFuelVendor.getText()));
+                    if (!TextUtils.isEmpty(etGrossCost.getText())) {
+                        newFuel.setFuelGrossCost(Double.valueOf(String.valueOf(etGrossCost.getText())));
+                    } else {
+                        newFuel.setFuelGrossCost(0);
+                    }
+                    newFuel.setFuelNetCost(Double.valueOf(String.valueOf(etNetCost.getText())));
+                    if (!TextUtils.isEmpty(etReceiptNumber.getText())) {
+                        newFuel.setFuelReceiptNumber(String.valueOf(etReceiptNumber.getText()));
+                    } else {
+                        newFuel.setFuelReceiptNumber("Not provided");
+                    }
 
-                                for (DailyJournal newJournal : list) {
-
-                                    NewFuel newFuel = new NewFuel();
-                                    newFuel.setRelatedJournal(newJournal.getObjectId());
-                                    newFuel.setFuelVendor(String.valueOf(etFuelVendor.getText()));
-                                    newFuel.setFuelGrossCost(Double.valueOf(String.valueOf(etGrossCost.getText())));
-                                    newFuel.setFuelNetCost(Double.valueOf(String.valueOf(etNetCost.getText())));
-                                    newFuel.setFuelReceiptNumber(String.valueOf(etReceiptNumber.getText()));
-
-                                    newFuel.saveInBackground();
-
-                                    newJournal.saveInBackground();
-
-                                }
-
-                            } else {
-                                Log.d("score", "Error: " + e.getMessage());
-                            }
-                        }
-                    });
+                    newFuel.saveInBackground();
 
                     Toast.makeText(getActivity(), "Fuel entry saved", Toast.LENGTH_SHORT).show();
 
@@ -100,7 +77,7 @@ public class AddFuelDialogFragment extends DialogFragment {
 
                 } else {
 
-                    Toast.makeText(getActivity(), "Please fill all fields", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Please fill all fields", Toast.LENGTH_SHORT).show();
 
                 }
             }

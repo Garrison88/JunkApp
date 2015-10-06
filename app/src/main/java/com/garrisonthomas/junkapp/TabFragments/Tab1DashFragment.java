@@ -1,14 +1,17 @@
-package com.garrisonthomas.junkapp;
+package com.garrisonthomas.junkapp.TabFragments;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,13 +23,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.garrisonthomas.junkapp.CurrentJournal;
 import com.garrisonthomas.junkapp.DialogFragments.DailyJournalDialogFragment;
-import com.parse.FindCallback;
-import com.parse.ParseQuery;
+import com.garrisonthomas.junkapp.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
+import java.util.Locale;
 
 public class Tab1DashFragment extends Fragment {
 
@@ -39,9 +42,10 @@ public class Tab1DashFragment extends Fragment {
     private static Button calcDumps, calcTotal, btnClear, newJournal, viewJournal;
     private static EditText enterTotal, enterDump;
     private static TextView percentOfGoal, percentOfTotal;
-    private static String percentOf, percentOfTotalString, todaysDate;
+    private static String percentOf, percentOfTotalString, todaysDate, currentJournalId;
     private static ProgressBar dashProgressBar;
     private static double totalEarnings, totalDump;
+    private SharedPreferences preferences;
 
     FragmentManager manager;
     DailyJournalDialogFragment djFragment;
@@ -52,9 +56,10 @@ public class Tab1DashFragment extends Fragment {
         final View v = inflater.inflate(R.layout.tab1_dash_layout, container, false);
 
         Date date = new Date();
-        SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy");
-
+        SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy", Locale.CANADA);
         todaysDate = df2.format(date);
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
 
         calcTotal = (Button) v.findViewById(R.id.calculate_percentage);
         calcDumps = (Button) v.findViewById(R.id.calculate_dump_percentage);
@@ -83,8 +88,8 @@ public class Tab1DashFragment extends Fragment {
                 if (!TextUtils.isEmpty(enterTotal.getText())) {
 
                     totalEarnings = Integer.parseInt(enterTotal.getText().toString());
-                    percentOf = String.valueOf(Math.round((totalEarnings / 1400) * 100));
-                    percentOfGoal.setText(percentOf + "%");
+                    percentOf = String.valueOf(Math.round((totalEarnings / 1400) * 100)) + getString(R.string.percent_sign);
+                    percentOfGoal.setText(percentOf);
 
                 }
             }
@@ -98,8 +103,8 @@ public class Tab1DashFragment extends Fragment {
 
                     totalEarnings = Integer.parseInt(enterTotal.getText().toString());
                     totalDump = Integer.parseInt(enterDump.getText().toString());
-                    percentOfTotalString = String.valueOf(Math.round((totalDump / totalEarnings) * 100.0));
-                    percentOfTotal.setText(percentOfTotalString + "%");
+                    percentOfTotalString = getString(R.string.dollar_sign) + String.valueOf(Math.round((totalDump / totalEarnings) * 100.0));
+                    percentOfTotal.setText(percentOfTotalString);
 
                     final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
@@ -126,12 +131,20 @@ public class Tab1DashFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                djFragment.show(manager, "Dialog");
+                if (currentJournalId.equals("none")) {
 
+                    djFragment.show(manager, "Dialog");
+
+                } else {
+
+                    Toast.makeText(getActivity(), "Journal already exists", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
 
-        final View.OnClickListener clickListener = new View.OnClickListener() {
+        //handle snackbar clicks
+        final View.OnClickListener createJournalClickListener = new View.OnClickListener() {
             public void onClick(View v) {
 
                 djFragment.show(manager, "Dialog");
@@ -143,56 +156,24 @@ public class Tab1DashFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                dashProgressBar.setVisibility(View.VISIBLE);
+                if (currentJournalId.equals("none")) {
 
-                ParseQuery<DailyJournal> query = ParseQuery.getQuery("DailyJournal");
-                query.whereEqualTo("date", todaysDate);
-                query.orderByAscending("createdAt");
-                query.setLimit(1);
-                query.findInBackground(new FindCallback<DailyJournal>() {
-                    @Override
-                    public void done(List<DailyJournal> list, com.parse.ParseException e) {
+                    Snackbar
+                            .make(coordinatorLayoutView, "No journal available", Snackbar.LENGTH_LONG)
+                            .setActionTextColor(Color.CYAN)
+                            .setAction("CREATE", createJournalClickListener)
+                            .show();
+                } else {
 
-                        if (e == null) {
+                    Intent intent = new Intent(getActivity(), CurrentJournal.class);
+                    startActivity(intent);
 
-                            for (DailyJournal newJournal : list) {
-
-                                Intent intent = new Intent(getActivity(), CurrentJournal.class);
-                                intent.putExtra("EXTRA_DATE", todaysDate);
-                                intent.putExtra("EXTRA_CREW", newJournal.getCrew());
-                                intent.putExtra("EXTRA_TRUCK_NUMBER", newJournal.getTruckNumber());
-                                intent.putExtra("EXTRA_DJ_ID", newJournal.getObjectId());
-                                startActivity(intent);
-
-                            }
-
-                            dashProgressBar.setVisibility(View.GONE);
-
-                            if (list.size() == 0) {
-
-                                Snackbar
-                                        .make(coordinatorLayoutView, "No journal available", Snackbar.LENGTH_LONG)
-                                        .setActionTextColor(Color.YELLOW).setAction("CREATE", clickListener)
-                                        .show();
-
-                            }
-
-                        }
-                    }
-                });
-
+                }
             }
         });
 
         return v;
 
-    }
-
-    private Boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 
     @Override
@@ -206,6 +187,9 @@ public class Tab1DashFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        currentJournalId = preferences.getString("universalJournalId", "none");
+
         final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
     }

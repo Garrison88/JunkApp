@@ -1,16 +1,14 @@
 package com.garrisonthomas.junkapp.DialogFragments;
 
-import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -19,16 +17,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.garrisonthomas.junkapp.DailyJournal;
-import com.garrisonthomas.junkapp.NewDump;
+import com.garrisonthomas.junkapp.ParseObjects.NewDump;
 import com.garrisonthomas.junkapp.R;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
 public class AddDumpDialogFragment extends DialogFragment {
 
@@ -40,18 +30,8 @@ public class AddDumpDialogFragment extends DialogFragment {
     private static int[] rate;
     private static int dumpRateInt;
     private static double weightNumber, result, withTax;
-    private static String dumpNameString, resultString, withTaxString;
-
-    Date date = new Date();
-    SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy");
-    String todaysDate = df2.format(date);
-
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Dialog dialog = super.onCreateDialog(savedInstanceState);
-        dialog.setTitle(todaysDate);
-        return dialog;
-    }
+    private static String dumpNameString, resultString, withTaxString, currentJournalId;
+    private SharedPreferences preferences;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,6 +40,9 @@ public class AddDumpDialogFragment extends DialogFragment {
         final View v = inflater.inflate(R.layout.add_dump_layout, container, false);
 
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        currentJournalId = preferences.getString("universalJournalId", null);
 
         etAddDumpWeight = (EditText) v.findViewById(R.id.et_add_dump_weight);
         etDumpReceiptNumber = (EditText) v.findViewById(R.id.et_dump_receipt_number);
@@ -75,7 +58,7 @@ public class AddDumpDialogFragment extends DialogFragment {
 
         saveDump = (Button) v.findViewById(R.id.btn_save_dump);
 
-        ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(), R.array.dumps_name, android.R.layout.simple_spinner_item);
+        ArrayAdapter adapter = ArrayAdapter.createFromResource(this.getActivity(), R.array.dumps_name, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         dumpNameSpinner.setAdapter(adapter);
         dumpNameSpinner.setSelection(0);
@@ -109,11 +92,11 @@ public class AddDumpDialogFragment extends DialogFragment {
                     result = Math.round((weightNumber * dumpRateInt) * 100.00) / 100.00;
                     withTax = Math.round((result * 1.13) * 100.00) / 100.00;
 
-                    resultString = String.valueOf(result);
-                    withTaxString = String.valueOf(withTax);
+                    resultString = getString(R.string.dollar_sign) + String.valueOf(result);
+                    withTaxString = getString(R.string.dollar_sign) + String.valueOf(withTax);
 
-                    tvGrossCost.setText("$" + resultString);
-                    tvNetCost.setText("$" + withTaxString);
+                    tvGrossCost.setText(resultString);
+                    tvNetCost.setText(withTaxString);
 
                 }
             }
@@ -126,34 +109,19 @@ public class AddDumpDialogFragment extends DialogFragment {
                 if (!TextUtils.isEmpty(etAddDumpWeight.getText())
                         && (!TextUtils.isEmpty(etDumpReceiptNumber.getText()))) {
 
-                    ParseQuery<DailyJournal> query = ParseQuery.getQuery("DailyJournal");
-                    query.whereEqualTo("date", todaysDate);
-                    query.setLimit(1);
-                    query.findInBackground(new FindCallback<DailyJournal>() {
-                        public void done(List<DailyJournal> list, ParseException e) {
-                            if (e == null) {
+                    NewDump newDump = new NewDump();
+                    newDump.setRelatedJournal(currentJournalId);
+                    newDump.setDumpName(dumpNameString);
+                    newDump.setGrossCost(result);
+                    newDump.setNetCost(withTax);
+                    newDump.setDumpReceiptNumber(Integer.valueOf(etDumpReceiptNumber.getText().toString()));
+                    if (!TextUtils.isEmpty(etPercentPrevious.getText())) {
+                        newDump.setPercentPrevious(Integer.valueOf(etPercentPrevious.getText().toString()));
+                    } else {
+                        newDump.setPercentPrevious(0);
+                    }
 
-                                for (DailyJournal newJournal : list) {
-
-                                    NewDump newDump = new NewDump();
-                                    newDump.setRelatedJournal(newJournal.getObjectId());
-                                    newDump.setDumpName(dumpNameString);
-                                    newDump.setGrossCost(Double.valueOf(resultString));
-                                    newDump.setNetCost(Double.valueOf(withTaxString));
-                                    newDump.setDumpReceiptNumber(Integer.valueOf(etDumpReceiptNumber.getText().toString()));
-                                    newDump.setPercentPrevious(Integer.valueOf(etPercentPrevious.getText().toString()));
-
-                                    newDump.saveInBackground();
-
-                                    newJournal.saveInBackground();
-
-                                }
-
-                            } else {
-                                Log.d("score", "Error: " + e.getMessage());
-                            }
-                        }
-                    });
+                    newDump.saveInBackground();
 
                     Toast.makeText(getActivity(), "Dump saved", Toast.LENGTH_SHORT).show();
 
@@ -161,7 +129,7 @@ public class AddDumpDialogFragment extends DialogFragment {
 
                 } else {
 
-                    Toast.makeText(getActivity(), "Please fill all fields", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Please fill all fields", Toast.LENGTH_SHORT).show();
 
                 }
             }

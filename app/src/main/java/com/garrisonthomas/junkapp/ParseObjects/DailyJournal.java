@@ -1,4 +1,4 @@
-package com.garrisonthomas.junkapp;
+package com.garrisonthomas.junkapp.ParseObjects;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
@@ -13,9 +13,9 @@ public class DailyJournal extends ParseObject {
 
     }
 
-    public String getTruckNumber() {
+    public int getTruckNumber() {
 
-        return getString("truckNumber");
+        return getInt("truckNumber");
 
     }
 
@@ -31,7 +31,7 @@ public class DailyJournal extends ParseObject {
 
     }
 
-    public void setTruckNumber(String truckNumber) {
+    public void setTruckNumber(int truckNumber) {
 
         put("truckNumber", truckNumber);
 

@@ -16,6 +16,7 @@
         <item name="android:buttonStyle">@style/RobotoButtonStyle</item>
         <item name="android:spinnerStyle">@style/RobotoSpinnerStyle</item>
         <item name="android:dialogTheme">@style/CustomDialog</item>
+        <item name="android:textAppearanceMedium">@android:style/TextAppearance.Medium</item>
 
     </style>
 

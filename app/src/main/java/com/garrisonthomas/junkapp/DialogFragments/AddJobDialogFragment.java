@@ -1,12 +1,10 @@
 package com.garrisonthomas.junkapp.DialogFragments;
 
 import android.app.DialogFragment;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,28 +16,17 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.garrisonthomas.junkapp.CurrentJournal;
-import com.garrisonthomas.junkapp.DailyJournal;
-import com.garrisonthomas.junkapp.DateHelper;
-import com.garrisonthomas.junkapp.NewJob;
+import com.garrisonthomas.junkapp.ParseObjects.NewJob;
 import com.garrisonthomas.junkapp.R;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class AddJobDialogFragment extends DialogFragment {
 
-    private static EditText etSSID, etGrossSale, etNetSale, etReceiptNumber, etJobNotes;
+    private EditText etSSID, etGrossSale, etNetSale, etReceiptNumber, etJobNotes;
     private static Button saveJob;
     private static Spinner payTypeSpinner;
     private static String[] payTypeArray;
-    private static String payTypeString, todaysDate;
+    private String payTypeString, currentJournalId;
+    private SharedPreferences preferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,16 +42,14 @@ public class AddJobDialogFragment extends DialogFragment {
 
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 
+        preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+        currentJournalId = preferences.getString("universalJournalId", null);
+
         etSSID = (EditText) v.findViewById(R.id.et_ssid);
         etGrossSale = (EditText) v.findViewById(R.id.et_gross_sale);
         etNetSale = (EditText) v.findViewById(R.id.et_net_sale);
         etReceiptNumber = (EditText) v.findViewById(R.id.et_receipt_number);
         etJobNotes = (EditText) v.findViewById(R.id.et_job_notes);
-
-        Date date = new Date();
-        SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy");
-
-        todaysDate = df2.format(date);
 
         payTypeArray = getResources().getStringArray(R.array.job_pay_type);
 
@@ -93,6 +78,20 @@ public class AddJobDialogFragment extends DialogFragment {
 
         });
 
+        etGrossSale.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+            public void onFocusChange(View v, boolean hasFocus) {
+
+                if ((!hasFocus) && (!TextUtils.isEmpty(etGrossSale.getText()))) {
+
+                    final double doubleValue = Double.valueOf(etGrossSale.getText().toString());
+
+                    final String withTax = String.valueOf(Math.round((doubleValue * 1.13) * 100.00) / 100.00);
+                    etNetSale.setText(withTax);
+                }
+            }
+        });
+
         saveJob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,35 +101,16 @@ public class AddJobDialogFragment extends DialogFragment {
                         && (!TextUtils.isEmpty(etNetSale.getText())
                         && (!TextUtils.isEmpty(etReceiptNumber.getText())))) {
 
-                    ParseQuery<DailyJournal> query = ParseQuery.getQuery("DailyJournal");
-                    query.whereEqualTo("date", todaysDate);
-                    query.setLimit(1);
-                    query.findInBackground(new FindCallback<DailyJournal>() {
-                        public void done(List<DailyJournal> list, ParseException e) {
-                            if (e == null) {
+                    final NewJob newJob = new NewJob();
+                    newJob.setRelatedJournal(currentJournalId);
+                    newJob.setSSID(Integer.valueOf(etSSID.getText().toString()));
+                    newJob.setGrossSale(Double.valueOf(etGrossSale.getText().toString()));
+                    newJob.setNetSale(Double.valueOf(etNetSale.getText().toString()));
+                    newJob.setReceiptNumber(Integer.valueOf(etReceiptNumber.getText().toString()));
+                    newJob.setPayType(payTypeString);
+                    newJob.setJobNotes(String.valueOf(etJobNotes.getText()));
 
-                                for (DailyJournal newJournal : list) {
-
-                                    NewJob newJob = new NewJob();
-                                    newJob.setRelatedJournal(newJournal.getObjectId());
-                                    newJob.setSSID(Integer.valueOf(etSSID.getText().toString()));
-                                    newJob.setGrossSale(Double.valueOf(etGrossSale.getText().toString()));
-                                    newJob.setNetSale(Double.valueOf(etNetSale.getText().toString()));
-                                    newJob.setReceiptNumber(Integer.valueOf(etReceiptNumber.getText().toString()));
-                                    newJob.setPayType(payTypeString);
-                                    newJob.setJobNotes(String.valueOf(etJobNotes.getText()));
-
-                                    newJob.saveInBackground();
-
-                                    newJournal.saveInBackground();
-
-                                }
-
-                            } else {
-                                Log.d("score", "Error: " + e.getMessage());
-                            }
-                        }
-                    });
+                    newJob.saveInBackground();
 
                     Toast.makeText(getActivity(), "Job number " + etSSID.getText().toString() +
                             " saved", Toast.LENGTH_SHORT).show();
@@ -139,7 +119,7 @@ public class AddJobDialogFragment extends DialogFragment {
 
                 } else {
 
-                    Toast.makeText(getActivity(), "Please fill all fields", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Please fill all fields", Toast.LENGTH_SHORT).show();
 
                 }
             }

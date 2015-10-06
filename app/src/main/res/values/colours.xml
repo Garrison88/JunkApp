@@ -12,5 +12,6 @@
     <color name="colorAccent">#EEEEEE</color>
     <color name="darkAccent">#607D8B</color>
     <color name="dialogFragmentBackground">#607D8B</color>
+    <color name="snackbarActionColor">#a4c639</color>
 
 </resources>

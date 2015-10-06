@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.garrisonthomas.junkapp.NewJob;
+import com.garrisonthomas.junkapp.ParseObjects.NewJob;
 import com.garrisonthomas.junkapp.R;
 import com.parse.FindCallback;
 import com.parse.ParseQuery;

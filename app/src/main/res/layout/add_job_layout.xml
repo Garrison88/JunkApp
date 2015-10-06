@@ -4,73 +4,124 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/et_ssid"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="SSID"
-        android:inputType="number"
-        android:maxLength="4" />
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/et_gross_sale"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/et_ssid"
-        android:hint="Gross Sale"
-        android:inputType="numberDecimal" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/et_net_sale"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/et_gross_sale"
-        android:hint="Net Sale"
-        android:inputType="numberDecimal" />
+        <com.wrapp.floatlabelededittext.FloatLabeledEditText
+            android:id="@+id/et_ssid_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/et_receipt_number"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/et_net_sale"
-        android:hint="Receipt Number"
-        android:inputType="number" />
+            <EditText
+                android:id="@+id/et_ssid"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="SSID"
+                android:inputType="number"
+                android:maxLength="5" />
 
-    <LinearLayout
-        android:id="@+id/linear_layout_pay_type"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/et_receipt_number">
+        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal|center_vertical"
-            android:padding="10dp"
-            android:text="Pay Type" />
+        <com.wrapp.floatlabelededittext.FloatLabeledEditText
+            android:id="@+id/et_gross_sale_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/et_ssid_wrapper">
 
-        <Spinner
-            android:id="@+id/spinner_pay_type"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+            <EditText
+                android:id="@+id/et_gross_sale"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Gross Sale"
+                android:inputType="numberDecimal" />
 
-    </LinearLayout>
+        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
-    <EditText
-        android:id="@+id/et_job_notes"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/linear_layout_pay_type"
-        android:hint="Notes"
-        android:inputType="textAutoCorrect|textCapSentences|textMultiLine" />
+        <com.wrapp.floatlabelededittext.FloatLabeledEditText
+            android:id="@+id/et_net_sale_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/et_gross_sale_wrapper">
 
-    <Button
-        android:id="@+id/btn_save_job"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/et_job_notes"
-        android:layout_gravity="center_horizontal"
-        android:text="Save" />
+            <EditText
+                android:id="@+id/et_net_sale"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Net Sale"
+                android:inputType="numberDecimal" />
+
+        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+        <com.wrapp.floatlabelededittext.FloatLabeledEditText
+            android:id="@+id/et_receipt_number_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/et_net_sale_wrapper">
+
+            <EditText
+                android:id="@+id/et_receipt_number"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/et_net_sale_wrapper"
+                android:hint="Receipt Number"
+                android:inputType="number" />
+
+        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+        <LinearLayout
+            android:id="@+id/linear_layout_pay_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/et_receipt_number_wrapper">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal|center_vertical"
+                android:padding="10dp"
+                android:text="Pay Type" />
+
+            <Spinner
+                android:id="@+id/spinner_pay_type"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <com.wrapp.floatlabelededittext.FloatLabeledEditText
+            android:id="@+id/et_job_notes_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linear_layout_pay_type">
+
+            <EditText
+                android:id="@+id/et_job_notes"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/linear_layout_pay_type"
+                android:hint="Notes"
+                android:inputType="textAutoCorrect|textCapSentences|textMultiLine" />
+
+        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+        <Button
+            android:id="@+id/btn_save_job"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/et_job_notes_wrapper"
+            android:layout_gravity="center_horizontal"
+            android:text="Save" />
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+
 
 </RelativeLayout>

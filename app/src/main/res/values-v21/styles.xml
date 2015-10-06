@@ -15,9 +15,10 @@
         <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
         <item name="android:textAppearance">@style/TextAppearance</item>
 
+
     </style>
 
-    <style name="TextAppearance" parent="TextAppearance">
+    <style name="TextAppearance" parent="android:Widget.TextView">
         <item name="android:fontFamily">roboto-light</item>
     </style>
 
@@ -35,12 +36,5 @@
         <item name="android:padding">5dp</item>
         <item name="android:colorBackground">@color/dialogFragmentBackground</item>
     </style>
-
-    <!--<style name="TextLabel" parent="Widget.Design.TextInputLayout">-->
-        <!--<item name="android:layout_width">match_parent</item>-->
-        <!--<item name="android:layout_height">wrap_content</item>-->
-        <!--<item name="android:textColorHint">#ff008d</item>-->
-        <!--<item name="android:textSize">20sp</item>-->
-    <!--</style>-->
 
 </resources>

@@ -7,18 +7,28 @@
     <Spinner
         android:id="@+id/spinner_dump_dialog"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
-
-    <EditText
-        android:id="@+id/et_add_dump_weight"
-        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/spinner_dump_dialog"
-        android:hint="Enter Weight (kgs)"
-        android:inputType="numberDecimal" />
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"/>
+
+    <com.wrapp.floatlabelededittext.FloatLabeledEditText
+        android:id="@+id/et_add_dump_weight_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spinner_dump_dialog">
+
+        <EditText
+            android:id="@+id/et_add_dump_weight"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Weight (kgs)"
+            android:inputType="number"
+            android:maxLength="4"/>
+
+    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
     <LinearLayout
-        android:layout_below="@id/et_add_dump_weight"
+        android:layout_below="@id/et_add_dump_weight_wrapper"
         android:id="@+id/dump_cost_layout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
@@ -49,27 +59,42 @@
 
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/et_dump_receipt_number"
-        android:layout_width="fill_parent"
+    <com.wrapp.floatlabelededittext.FloatLabeledEditText
+        android:id="@+id/et_dump_receipt_number_wrapper"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/dump_cost_layout"
-        android:hint="Receipt Number"
-        android:inputType="number" />
+        android:layout_below="@id/dump_cost_layout">
 
-    <EditText
-        android:id="@+id/et_percent_previous"
-        android:layout_width="fill_parent"
+        <EditText
+            android:id="@+id/et_dump_receipt_number"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Receipt Number"
+            android:inputType="number" />
+
+    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+    <com.wrapp.floatlabelededittext.FloatLabeledEditText
+        android:id="@+id/et_percent_previous_wrapper"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/et_dump_receipt_number"
-        android:hint="Percent Previous"
-        android:inputType="number" />
+        android:layout_below="@id/et_dump_receipt_number_wrapper">
+
+        <EditText
+            android:id="@+id/et_percent_previous"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Percent Previous (optional)"
+            android:inputType="number"
+            android:maxLength="3"/>
+
+    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
     <Button
         android:id="@+id/btn_save_dump"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/et_percent_previous"
+        android:layout_below="@+id/et_percent_previous_wrapper"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:text="Save" />

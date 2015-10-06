@@ -2,6 +2,10 @@ package com.garrisonthomas.junkapp;
 
 import android.app.Application;
 
+import com.garrisonthomas.junkapp.ParseObjects.DailyJournal;
+import com.garrisonthomas.junkapp.ParseObjects.NewDump;
+import com.garrisonthomas.junkapp.ParseObjects.NewFuel;
+import com.garrisonthomas.junkapp.ParseObjects.NewJob;
 import com.parse.Parse;
 import com.parse.ParseObject;
 

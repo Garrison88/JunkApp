@@ -16,18 +16,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class BaseActivity extends AppCompatActivity {
 
-    private static int TAKE_PHOTO_CODE = 0;
-    private static int count = 0;
-    public static String todaysDate;
+    private int TAKE_PHOTO_CODE = 0;
+    private int count = 0;
+    String todaysDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +37,7 @@ public class BaseActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         Date date = new Date();
-        SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy");
-
+        SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy", Locale.CANADA);
         todaysDate = df2.format(date);
 
     }
@@ -71,13 +71,16 @@ public class BaseActivity extends AppCompatActivity {
 
         } else if (id == R.id.action_settings) {
 
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            startActivity(settingsIntent);
 
         } else if (id == R.id.action_email_office) {
 
-            Intent i = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "rcrawford@ridofittoronto.com", null));
-            startActivity(Intent.createChooser(i, "Choose an Email client :"));
+            Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "rcrawford@ridofittoronto.com", null));
+            if (emailIntent.resolveActivity(getPackageManager()) != null) {
+                startActivity(Intent.createChooser(emailIntent, "Choose an Email client :"));
+            }
+
 
         } else if (id == R.id.action_take_photo) {
 
@@ -97,10 +100,13 @@ public class BaseActivity extends AppCompatActivity {
 
             Uri outputFileUri = Uri.fromFile(newfile);
 
+
             Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
 
-            startActivityForResult(cameraIntent, TAKE_PHOTO_CODE);
+            if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(cameraIntent, TAKE_PHOTO_CODE);
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -112,6 +118,7 @@ public class BaseActivity extends AppCompatActivity {
 
         if (requestCode == TAKE_PHOTO_CODE && resultCode == RESULT_OK) {
             Log.d("CameraDemo", "Pic saved");
+            Toast.makeText(BaseActivity.this, "Photo saved to device", Toast.LENGTH_SHORT).show();
 
         }
     }

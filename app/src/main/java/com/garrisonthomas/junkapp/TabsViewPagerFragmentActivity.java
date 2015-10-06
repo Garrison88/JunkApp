@@ -14,6 +14,10 @@ import android.view.View;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
 
+import com.garrisonthomas.junkapp.TabFragments.Tab1DashFragment;
+import com.garrisonthomas.junkapp.TabFragments.Tab2CalcFragment;
+import com.garrisonthomas.junkapp.TabFragments.Tab3DumpFragment;
+
 /**
  * The <code>TabsViewPagerFragmentActivity</code> class implements the Fragment activity that maintains a TabHost using a ViewPager.
  *
@@ -24,7 +28,6 @@ public class TabsViewPagerFragmentActivity extends BaseActivity implements TabHo
     private TabHost tabHost;
     private ViewPager viewPager;
     private HashMap<String, TabInfo> mapTabInfo = new HashMap<String, TabsViewPagerFragmentActivity.TabInfo>();
-
     private Toolbar toolbar;
 
     /**

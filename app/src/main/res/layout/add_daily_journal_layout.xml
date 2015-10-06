@@ -10,6 +10,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
+
+
         <EditText
             android:inputType="textCapWords"
             android:id="@+id/et_crew"
@@ -22,9 +24,14 @@
             android:id="@+id/truck_spinner"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"/>
 
-        </Spinner>
+        <ProgressBar
+            android:id="@+id/pbar_create_journal"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

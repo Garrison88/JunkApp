@@ -1,4 +1,4 @@
-package com.garrisonthomas.junkapp;
+package com.garrisonthomas.junkapp.TabFragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,6 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.garrisonthomas.junkapp.R;
 
 import java.util.ArrayList;
 
@@ -154,7 +156,7 @@ public class Tab2CalcFragment extends Fragment {
             for (int i : priceArray) {
                 sum += i;
             }
-            sumString = R.string.dollar_sign + String.valueOf(sum);
+            sumString = getString(R.string.dollar_sign) + String.valueOf(sum);
             tvTotal.setText(sumString);
 
         }

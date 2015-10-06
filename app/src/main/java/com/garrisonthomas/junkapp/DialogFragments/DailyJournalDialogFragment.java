@@ -1,37 +1,47 @@
 package com.garrisonthomas.junkapp.DialogFragments;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.garrisonthomas.junkapp.CurrentJournal;
-import com.garrisonthomas.junkapp.DailyJournal;
+import com.garrisonthomas.junkapp.ParseObjects.DailyJournal;
 import com.garrisonthomas.junkapp.R;
+import com.parse.ParseException;
+import com.parse.SaveCallback;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class DailyJournalDialogFragment extends DialogFragment {
 
     private static Spinner truckSpinner;
     private static String[] truckNumber;
     private static Button cancel, createJournal;
-    private static EditText crew;
-    private static String truckSelected;
-    private static Date date = new Date();
-    private static SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy");
-    private static String todaysDate = df2.format(date);
+    private EditText crew;
+    private String truckSelected;
+    private Date date = new Date();
+    private SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy", Locale.CANADA);
+    private String todaysDate = df2.format(date);
+    private SharedPreferences preferences;
+    private ProgressBar pbar;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -44,7 +54,9 @@ public class DailyJournalDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        final View v = inflater.inflate(R.layout.daily_journal_dialog_layout, container, false);
+        final View v = inflater.inflate(R.layout.add_daily_journal_layout, container, false);
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
 
         truckSpinner = (Spinner) v.findViewById(R.id.truck_spinner);
         truckNumber = getResources().getStringArray(R.array.truck_number);
@@ -53,8 +65,10 @@ public class DailyJournalDialogFragment extends DialogFragment {
 
         crew = (EditText) v.findViewById(R.id.et_crew);
 
-        truckSpinner.setAdapter(new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_dropdown_item_1line, truckNumber));
-//        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        pbar = (ProgressBar) v.findViewById(R.id.pbar_create_journal);
+
+        truckSpinner.setAdapter(new ArrayAdapter<>(this.getActivity(),
+                android.R.layout.simple_dropdown_item_1line, truckNumber));
         truckSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
@@ -76,19 +90,40 @@ public class DailyJournalDialogFragment extends DialogFragment {
 
                 if (!TextUtils.isEmpty(crew.getText())) {
 
-                    DailyJournal newJournal = new DailyJournal();
+                    final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+                    pbar.setVisibility(View.VISIBLE);
+
+                    final DailyJournal newJournal = new DailyJournal();
+                    final String crewString = crew.getText().toString();
+                    final int truckNumber = Integer.valueOf(truckSelected.substring(6, 7));
                     newJournal.setDate(todaysDate);
-                    newJournal.setCrew(crew.getText().toString());
-                    newJournal.setTruckNumber(truckSelected);
-                    Intent intent = new Intent(getActivity(), CurrentJournal.class);
-                    intent.putExtra("EXTRA_CREW", crew.getText().toString());
-                    intent.putExtra("EXTRA_TRUCK_NUMBER", truckSelected);
-                    newJournal.saveInBackground();
-                    intent.putExtra("EXTRA_DJ_ID", newJournal.getObjectId());
-                    crew.getText().clear();
-                    truckSpinner.setSelection(0);
-                    dismiss();
-                    startActivity(intent);
+                    newJournal.setCrew(crewString);
+                    newJournal.setTruckNumber(truckNumber);
+                    newJournal.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.putString("crew", crewString);
+                                editor.putString("truck", truckSelected);
+                                editor.putString("universalJournalId", newJournal.getObjectId());
+                                editor.apply();
+                                crew.getText().clear();
+                                truckSpinner.setSelection(0);
+                                pbar.setVisibility(View.INVISIBLE);
+                                dismiss();
+                                Intent intent = new Intent(getActivity(), CurrentJournal.class);
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(getActivity(), "Something went wrong. Journal not created", Toast.LENGTH_SHORT).show();
+                                crew.setText("");
+                                truckSpinner.setSelection(0);
+                                dismiss();
+                            }
+                        }
+                    });
 
                 } else {
                     Toast.makeText(getActivity(), "Please enter a crew", Toast.LENGTH_SHORT).show();
@@ -99,6 +134,8 @@ public class DailyJournalDialogFragment extends DialogFragment {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                crew.setText("");
+                truckSpinner.setSelection(0);
                 dismiss();
             }
         });
@@ -107,5 +144,4 @@ public class DailyJournalDialogFragment extends DialogFragment {
         return v;
 
     }
-
 }

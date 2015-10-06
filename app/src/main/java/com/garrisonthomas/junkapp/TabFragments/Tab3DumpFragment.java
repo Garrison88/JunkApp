@@ -1,4 +1,4 @@
-package com.garrisonthomas.junkapp;
+package com.garrisonthomas.junkapp.TabFragments;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -19,6 +19,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.garrisonthomas.junkapp.R;
 
 public class Tab3DumpFragment extends Fragment {
 
