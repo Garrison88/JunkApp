@@ -95,31 +95,17 @@
                 android:text="Clear" />
 
             <Button
-                android:id="@+id/btn_new_journal"
+                android:id="@+id/btn_open_journal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="New Daily Journal" />
-
-            <Button
-                android:id="@+id/btn_view_journal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="View Today's Journal" />
+                android:text="Open Journal" />
 
         </LinearLayout>
 
-    <ProgressBar
-        android:layout_below="@id/dashboard_main_linear_layout"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/dashboard_progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:id="@+id/snackbar_create_journal">

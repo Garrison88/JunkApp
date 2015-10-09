@@ -1,6 +1,7 @@
 package com.garrisonthomas.junkapp.DialogFragments;
 
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -9,16 +10,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.garrisonthomas.junkapp.ParseObjects.NewDump;
 import com.garrisonthomas.junkapp.R;
+import com.garrisonthomas.junkapp.Utils;
+import com.parse.ParseException;
+import com.parse.SaveCallback;
 
 public class AddDumpDialogFragment extends DialogFragment {
 
@@ -32,6 +39,7 @@ public class AddDumpDialogFragment extends DialogFragment {
     private static double weightNumber, result, withTax;
     private static String dumpNameString, resultString, withTaxString, currentJournalId;
     private SharedPreferences preferences;
+    private ProgressBar pbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,12 +59,14 @@ public class AddDumpDialogFragment extends DialogFragment {
         tvGrossCost = (TextView) v.findViewById(R.id.tv_dump_gross_cost);
         tvNetCost = (TextView) v.findViewById(R.id.tv_dump_net_cost);
 
+        saveDump = (Button) v.findViewById(R.id.btn_save_dump);
+
+        pbar = (ProgressBar) v.findViewById(R.id.add_dump_pbar);
+
         dumpNameArray = getResources().getStringArray(R.array.dumps_name);
         rate = getResources().getIntArray(R.array.dumps_rate);
 
         dumpNameSpinner = (Spinner) v.findViewById(R.id.spinner_dump_dialog);
-
-        saveDump = (Button) v.findViewById(R.id.btn_save_dump);
 
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this.getActivity(), R.array.dumps_name, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
@@ -109,6 +119,11 @@ public class AddDumpDialogFragment extends DialogFragment {
                 if (!TextUtils.isEmpty(etAddDumpWeight.getText())
                         && (!TextUtils.isEmpty(etDumpReceiptNumber.getText()))) {
 
+                    Utils.hideKeyboard(v, getActivity());
+
+                    saveDump.setVisibility(View.GONE);
+                    pbar.setVisibility(View.VISIBLE);
+
                     NewDump newDump = new NewDump();
                     newDump.setRelatedJournal(currentJournalId);
                     newDump.setDumpName(dumpNameString);
@@ -121,11 +136,22 @@ public class AddDumpDialogFragment extends DialogFragment {
                         newDump.setPercentPrevious(0);
                     }
 
-                    newDump.saveInBackground();
+                    newDump.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
 
-                    Toast.makeText(getActivity(), "Dump saved", Toast.LENGTH_SHORT).show();
-
-                    dismiss();
+                            if (e == null) {
+                                Toast.makeText(getActivity(), "Dump saved", Toast.LENGTH_SHORT).show();
+                                pbar.setVisibility(View.GONE);
+                                saveDump.setVisibility(View.VISIBLE);
+                                dismiss();
+                            } else {
+                                Toast.makeText(getActivity(), getString(R.string.parse_exception_text), Toast.LENGTH_SHORT).show();
+                                pbar.setVisibility(View.GONE);
+                                saveDump.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    });
 
                 } else {
 
@@ -140,15 +166,9 @@ public class AddDumpDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-
-        super.onSaveInstanceState(outState);
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
 }

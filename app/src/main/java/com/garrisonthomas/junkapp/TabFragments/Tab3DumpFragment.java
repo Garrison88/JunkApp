@@ -114,23 +114,23 @@ public class Tab3DumpFragment extends Fragment {
 
                             if (position != 0) {
 
-                            weightNumber = Double.parseDouble(weight.getText().toString());
-                            weightNumber = weightNumber / 1000;
+                                weightNumber = Double.parseDouble(weight.getText().toString());
+                                weightNumber = weightNumber / 1000;
 
-                            result = Math.round((weightNumber * rateNumber) * 100.00) / 100.00;
-                            withTax = Math.round((result * 1.13) * 100.00) / 100.00;
+                                result = Math.round((weightNumber * rateNumber) * 100.00) / 100.00;
+                                withTax = Math.round((result * 1.13) * 100.00) / 100.00;
 
-                            resultString = String.valueOf(result);
-                            withTaxString = String.valueOf(withTax);
+                                resultString = String.valueOf(result);
+                                withTaxString = String.valueOf(withTax);
 
-                            tvDumpCost.setText("$" + resultString);
+                                tvDumpCost.setText("$" + resultString);
 
-                            weight.setText("");
+                                weight.setText("");
 
-                            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+                                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
 
-                        } else {
+                            } else {
 
                                 Toast.makeText(getActivity(), R.string.toast_no_dump_selected, Toast.LENGTH_SHORT).show();
 
@@ -224,8 +224,8 @@ public class Tab3DumpFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
 
-        outState.putString("tab", "Tab3DumpFragment"); //save the tab selected
         super.onSaveInstanceState(outState);
+        outState.putString("tab", "Tab3DumpFragment"); //save the tab selected
 
     }
 

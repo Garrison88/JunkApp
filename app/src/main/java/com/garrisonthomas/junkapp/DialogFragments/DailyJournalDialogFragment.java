@@ -6,11 +6,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,6 +25,7 @@ import android.widget.Toast;
 import com.garrisonthomas.junkapp.CurrentJournal;
 import com.garrisonthomas.junkapp.ParseObjects.DailyJournal;
 import com.garrisonthomas.junkapp.R;
+import com.garrisonthomas.junkapp.Utils;
 import com.parse.ParseException;
 import com.parse.SaveCallback;
 
@@ -43,6 +46,7 @@ public class DailyJournalDialogFragment extends DialogFragment {
     private SharedPreferences preferences;
     private ProgressBar pbar;
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
@@ -90,14 +94,15 @@ public class DailyJournalDialogFragment extends DialogFragment {
 
                 if (!TextUtils.isEmpty(crew.getText())) {
 
-                    final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    final String crewString = crew.getText().toString();
+                    final int truckNumber = Integer.valueOf(truckSelected.substring(6, 7));
+
+                    Utils.hideKeyboard(v, getActivity());
 
                     pbar.setVisibility(View.VISIBLE);
 
                     final DailyJournal newJournal = new DailyJournal();
-                    final String crewString = crew.getText().toString();
-                    final int truckNumber = Integer.valueOf(truckSelected.substring(6, 7));
+
                     newJournal.setDate(todaysDate);
                     newJournal.setCrew(crewString);
                     newJournal.setTruckNumber(truckNumber);
@@ -109,6 +114,7 @@ public class DailyJournalDialogFragment extends DialogFragment {
                                 editor.putString("crew", crewString);
                                 editor.putString("truck", truckSelected);
                                 editor.putString("universalJournalId", newJournal.getObjectId());
+                                editor.putString("todaysDate", todaysDate);
                                 editor.apply();
                                 crew.getText().clear();
                                 truckSpinner.setSelection(0);
@@ -136,6 +142,7 @@ public class DailyJournalDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 crew.setText("");
                 truckSpinner.setSelection(0);
+                Utils.hideKeyboard(v, getActivity());
                 dismiss();
             }
         });
@@ -143,5 +150,11 @@ public class DailyJournalDialogFragment extends DialogFragment {
         setCancelable(false);
         return v;
 
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 }

@@ -19,6 +19,18 @@ public class DailyJournal extends ParseObject {
 
     }
 
+    public int getPercentOfGoal() {
+
+        return getInt("percentOfGoal");
+
+    }
+
+    public int getPercentOnDump() {
+
+        return getInt("percentOnDump");
+
+    }
+
     public void setDate(String date) {
 
         put("date", date);
@@ -37,8 +49,20 @@ public class DailyJournal extends ParseObject {
 
     }
 
-    @Override
-    public String toString() {
-        return getString("ssid");
+    public void setPercentOfGoal(int percentOfGoal) {
+
+        put("percentOfGoal", percentOfGoal);
+
     }
+
+    public void setPercentOnDump(int percentOnDump) {
+
+        put("percentOnDump", percentOnDump);
+
+    }
+
+//    @Override
+//    public String toString() {
+//        return getString("ssid");
+//    }
 }

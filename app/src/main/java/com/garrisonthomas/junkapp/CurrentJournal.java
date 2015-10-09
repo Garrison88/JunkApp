@@ -27,9 +27,11 @@ import com.garrisonthomas.junkapp.ParseObjects.DailyJournal;
 import com.garrisonthomas.junkapp.ParseObjects.NewDump;
 import com.garrisonthomas.junkapp.ParseObjects.NewFuel;
 import com.garrisonthomas.junkapp.ParseObjects.NewJob;
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,10 +41,11 @@ public class CurrentJournal extends BaseActivity {
     private TextView todaysCrew, todaysTruck;
     private static ProgressBar toolbarProgressBar;
     private static Spinner jobsSpinner;
-    private String currentJournalId, spCrew, spTruck;
+    private String currentJournalId, spCrew, spTruck, spDate;
     private ArrayList<Integer> jobsArray;
     private int selectedJobSSID;
     private static SharedPreferences preferences;
+    Toolbar toolbar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,7 +53,7 @@ public class CurrentJournal extends BaseActivity {
 
         setContentView(R.layout.current_journal_layout);
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
+        toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -58,12 +61,13 @@ public class CurrentJournal extends BaseActivity {
         currentJournalId = preferences.getString("universalJournalId", "none");
         spCrew = preferences.getString("crew", "noCrew");
         spTruck = preferences.getString("truck", "noTruck");
+        spDate = preferences.getString("todaysDate", "noDate");
+
+        getSupportActionBar().setTitle(spDate);
 
         toolbarProgressBar = (ProgressBar) findViewById(R.id.toolbar_progress_bar);
-        toolbarProgressBar.setVisibility(View.VISIBLE);
 
-        toolbar.setTitle(todaysDate);
-        toolbar.setNavigationIcon(ContextCompat.getDrawable(CurrentJournal.this, R.drawable.abc_ic_ab_back_mtrl_am_alpha));
+        toolbar.setNavigationIcon(ContextCompat.getDrawable(this, R.drawable.abc_ic_ab_back_mtrl_am_alpha));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,7 +150,7 @@ public class CurrentJournal extends BaseActivity {
 
     public void populateSpinner() {
 
-        jobsSpinner = (Spinner) findViewById(R.id.jobs_spinner);
+        toolbarProgressBar.setVisibility(View.VISIBLE);
 
         ParseQuery<NewJob> query = ParseQuery.getQuery(NewJob.class);
         query.whereEqualTo("relatedJournal", currentJournalId);
@@ -171,7 +175,7 @@ public class CurrentJournal extends BaseActivity {
                 } else {
                     Toast.makeText(CurrentJournal.this, "Something went wrong: " + e, Toast.LENGTH_SHORT).show();
                 }
-                toolbarProgressBar.setVisibility(View.INVISIBLE);
+                toolbarProgressBar.setVisibility(View.GONE);
             }
 
         });
@@ -204,7 +208,17 @@ public class CurrentJournal extends BaseActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
 
-                AlertDialog diaBox = confirmJournalDeletion();
+                AlertDialog diaBox = confirmJournalDelete();
+                diaBox.show();
+
+                return false;
+            }
+        });
+        menu.findItem(R.id.action_publish_journal).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+
+                AlertDialog diaBox = confirmJournalPublish();
                 diaBox.show();
 
                 return false;
@@ -213,20 +227,20 @@ public class CurrentJournal extends BaseActivity {
         return true;
     }
 
-    private AlertDialog confirmJournalDeletion() {
-        return new AlertDialog.Builder(this)
+    private AlertDialog confirmJournalDelete() {
 
+        return new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.confirm_journal_delete_title))
                 .setMessage(getString(R.string.confirm_journal_delete_message))
-                .setIcon(R.drawable.ic_delete_black_36dp)
+                .setIcon(R.drawable.ic_delete_black_24px)
 
                 .setPositiveButton("delete", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
 
+                        dialog.dismiss();
                         deleteJournal();
 
-                        dialog.dismiss();
                     }
 
                 })
@@ -241,26 +255,51 @@ public class CurrentJournal extends BaseActivity {
                 .create();
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        populateSpinner();
-//    }
+    private AlertDialog confirmJournalPublish() {
 
-    public void deleteJournal() {
+        return new AlertDialog.Builder(this)
+                .setTitle("Finalize Journal?")
+                .setMessage("You will no longer be able to view or edit this journal")
+                .setIcon(R.drawable.ic_publish_black_24px)
+
+                .setPositiveButton("publish", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                        publishJournal();
+
+                        dialog.dismiss();
+
+
+                    }
+
+                })
+
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+
+                    }
+                })
+                .create();
+    }
+
+    private void deleteJournal() {
 
         toolbarProgressBar.setVisibility(View.VISIBLE);
 
-        ParseQuery<DailyJournal> query = ParseQuery.getQuery(DailyJournal.class);
-        ParseQuery<NewJob> query1 = ParseQuery.getQuery(NewJob.class);
-        ParseQuery<NewDump> query2 = ParseQuery.getQuery(NewDump.class);
-        ParseQuery<NewFuel> query3 = ParseQuery.getQuery(NewFuel.class);
-        query.whereEqualTo("objectId", currentJournalId);
-        query.setLimit(1);
-        query1.whereEqualTo("relatedJournal", currentJournalId);
-        query2.whereEqualTo("relatedJournal", currentJournalId);
-        query3.whereEqualTo("relatedJournal", currentJournalId);
-        query.findInBackground(new FindCallback<DailyJournal>() {
+        ParseQuery<DailyJournal> djQuery = ParseQuery.getQuery(DailyJournal.class);
+        djQuery.whereEqualTo("objectId", currentJournalId);
+        djQuery.setLimit(1);
+        final ParseQuery<NewJob> njQuery = ParseQuery.getQuery(NewJob.class);
+        njQuery.whereEqualTo("relatedJournal", currentJournalId);
+        final ParseQuery<NewDump> ndQuery = ParseQuery.getQuery(NewDump.class);
+        ndQuery.whereEqualTo("relatedJournal", currentJournalId);
+        final ParseQuery<NewFuel> nfQuery = ParseQuery.getQuery(NewFuel.class);
+        nfQuery.whereEqualTo("relatedJournal", currentJournalId);
+
+        djQuery.findInBackground(new FindCallback<DailyJournal>() {
             @Override
             public void done(List<DailyJournal> list, ParseException e) {
 
@@ -268,66 +307,140 @@ public class CurrentJournal extends BaseActivity {
 
                     for (DailyJournal dj : list) {
 
-                        dj.deleteInBackground();
-
+                        try {
+                            dj.delete();
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
                     }
                 }
+
+                njQuery.findInBackground(new FindCallback<NewJob>() {
+                    @Override
+                    public void done(List<NewJob> list, ParseException e) {
+
+                        if (e == null) {
+
+                            for (NewJob nj : list) {
+
+                                try {
+                                    nj.delete();
+                                } catch (ParseException e1) {
+                                    e1.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                });
+
+                ndQuery.findInBackground(new FindCallback<NewDump>() {
+                    @Override
+                    public void done(List<NewDump> list, ParseException e) {
+
+                        if (e == null) {
+
+                            for (NewDump nd : list) {
+                                try {
+                                    nd.delete();
+                                } catch (ParseException e1) {
+                                    e1.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                });
+
+                nfQuery.findInBackground(new FindCallback<NewFuel>() {
+                    @Override
+                    public void done(List<NewFuel> list, ParseException e) {
+
+                        if (e == null) {
+
+                            for (NewFuel nf : list) {
+
+                                try {
+                                    nf.delete();
+                                } catch (ParseException e1) {
+                                    e1.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                });
+
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("universalJournalId", "none");
+                editor.putString("crew", "noCrew");
+                editor.putString("truck", "noTruck");
+                editor.putString("date", "noDate");
+                editor.commit();
+                toolbarProgressBar.setVisibility(View.GONE);
+                Toast.makeText(CurrentJournal.this, "Journal successfully deleted",
+                        Toast.LENGTH_SHORT).show();
+                CurrentJournal.this.finish();
+
             }
         });
+    }
 
-        query1.findInBackground(new FindCallback<NewJob>() {
+    public void publishJournal() {
+
+        toolbarProgressBar.setVisibility(View.VISIBLE);
+
+        final ParseQuery<DailyJournal> djQuery = ParseQuery.getQuery(DailyJournal.class);
+        djQuery.whereEqualTo("objectId", currentJournalId);
+        djQuery.setLimit(1);
+        djQuery.findInBackground(new FindCallback<DailyJournal>() {
             @Override
-            public void done(List<NewJob> list, ParseException e) {
+            public void done(List<DailyJournal> list, ParseException e) {
 
                 if (e == null) {
 
-                    for (NewJob nj : list) {
+                    for (final DailyJournal dj : list) {
 
-                        nj.deleteInBackground();
+                        ParseQuery<NewJob> njQuery = ParseQuery.getQuery(NewJob.class);
+                        njQuery.whereEqualTo("relatedJournal", currentJournalId);
+                        njQuery.findInBackground(new FindCallback<NewJob>() {
+                            @Override
+                            public void done(List<NewJob> list, ParseException e) {
 
+                                if (e == null) {
+
+                                    double total = 0.0;
+
+                                    for (NewJob nj : list) {
+
+                                        total = total + nj.getGrossSale();
+
+                                    }
+
+                                    int intTotal = (int) ((total / 1400) * 100);
+                                    dj.setPercentOfGoal(intTotal);
+
+                                    dj.saveInBackground(new SaveCallback() {
+                                        @Override
+                                        public void done(ParseException e) {
+
+                                            if (e == null) {
+                                                SharedPreferences.Editor editor = preferences.edit();
+                                                editor.putString("universalJournalId", "none");
+                                                editor.putString("crew", "noCrew");
+                                                editor.putString("truck", "noTruck");
+                                                editor.putString("date", "noDate");
+                                                editor.apply();
+                                                toolbarProgressBar.setVisibility(View.GONE);
+                                                Toast.makeText(CurrentJournal.this, "Journal successfully published",
+                                                        Toast.LENGTH_SHORT).show();
+                                                CurrentJournal.this.finish();
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
                     }
                 }
             }
         });
-
-        query2.findInBackground(new FindCallback<NewDump>() {
-            @Override
-            public void done(List<NewDump> list, ParseException e) {
-
-                if (e == null) {
-
-                    for (NewDump nd : list) {
-
-                        nd.deleteInBackground();
-
-                    }
-                }
-            }
-        });
-
-        query3.findInBackground(new FindCallback<NewFuel>() {
-            @Override
-            public void done(List<NewFuel> list, ParseException e) {
-
-                if (e == null) {
-
-                    for (NewFuel nf : list) {
-
-                        nf.deleteInBackground();
-
-                    }
-                }
-            }
-        });
-
-        Toast.makeText(CurrentJournal.this, "Journal successfully deleted",
-                Toast.LENGTH_SHORT).show();
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("universalJournalId", "none");
-        editor.putString("crew", "noCrew");
-        editor.putString("truck", "noTruck");
-        editor.apply();
-        toolbarProgressBar.setVisibility(View.GONE);
-        CurrentJournal.this.finish();
     }
 }

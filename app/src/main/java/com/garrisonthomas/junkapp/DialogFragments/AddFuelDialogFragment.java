@@ -1,6 +1,7 @@
 package com.garrisonthomas.junkapp.DialogFragments;
 
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -9,12 +10,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.garrisonthomas.junkapp.ParseObjects.NewFuel;
 import com.garrisonthomas.junkapp.R;
+import com.garrisonthomas.junkapp.Utils;
+import com.parse.ParseException;
+import com.parse.SaveCallback;
 
 public class AddFuelDialogFragment extends DialogFragment {
 
@@ -22,6 +29,7 @@ public class AddFuelDialogFragment extends DialogFragment {
     private static Button saveFuel;
     private String currentJournalId;
     private SharedPreferences preferences;
+    private ProgressBar pbar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,6 +52,7 @@ public class AddFuelDialogFragment extends DialogFragment {
         etGrossCost = (EditText) v.findViewById(R.id.et_fuel_gross_cost);
         etNetCost = (EditText) v.findViewById(R.id.et_fuel_net_cost);
         etReceiptNumber = (EditText) v.findViewById(R.id.et_fuel_receipt_number);
+        pbar = (ProgressBar) v.findViewById(R.id.add_fuel_pbar);
 
         saveFuel = (Button) v.findViewById(R.id.btn_save_fuel);
 
@@ -53,6 +62,11 @@ public class AddFuelDialogFragment extends DialogFragment {
 
                 if (!TextUtils.isEmpty(etFuelVendor.getText())
                         && (!TextUtils.isEmpty(etNetCost.getText()))) {
+
+                    Utils.hideKeyboard(v, getActivity());
+
+                    saveFuel.setVisibility(View.GONE);
+                    pbar.setVisibility(View.VISIBLE);
 
                     NewFuel newFuel = new NewFuel();
                     newFuel.setRelatedJournal(currentJournalId);
@@ -69,11 +83,21 @@ public class AddFuelDialogFragment extends DialogFragment {
                         newFuel.setFuelReceiptNumber("Not provided");
                     }
 
-                    newFuel.saveInBackground();
-
-                    Toast.makeText(getActivity(), "Fuel entry saved", Toast.LENGTH_SHORT).show();
-
-                    dismiss();
+                    newFuel.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                Toast.makeText(getActivity(), "Fuel entry saved", Toast.LENGTH_SHORT).show();
+                                pbar.setVisibility(View.GONE);
+                                saveFuel.setVisibility(View.VISIBLE);
+                                dismiss();
+                            } else {
+                                Toast.makeText(getActivity(), getString(R.string.parse_exception_text), Toast.LENGTH_SHORT).show();
+                                pbar.setVisibility(View.GONE);
+                                saveFuel.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    });
 
                 } else {
 
@@ -88,15 +112,9 @@ public class AddFuelDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-
-        super.onSaveInstanceState(outState);
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
 }

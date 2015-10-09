@@ -28,7 +28,7 @@ public class TabsViewPagerFragmentActivity extends BaseActivity implements TabHo
     private TabHost tabHost;
     private ViewPager viewPager;
     private HashMap<String, TabInfo> mapTabInfo = new HashMap<String, TabsViewPagerFragmentActivity.TabInfo>();
-    private Toolbar toolbar;
+    Toolbar toolbar;
 
     /**
      * @author mwho
@@ -105,6 +105,7 @@ public class TabsViewPagerFragmentActivity extends BaseActivity implements TabHo
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.action_delete_journal).setVisible(false);
+        menu.findItem(R.id.action_publish_journal).setVisible(false);
         return true;
     }
 

@@ -3,15 +3,12 @@ package com.garrisonthomas.junkapp.TabFragments;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +23,7 @@ import android.widget.Toast;
 import com.garrisonthomas.junkapp.CurrentJournal;
 import com.garrisonthomas.junkapp.DialogFragments.DailyJournalDialogFragment;
 import com.garrisonthomas.junkapp.R;
+import com.garrisonthomas.junkapp.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -39,11 +37,10 @@ public class Tab1DashFragment extends Fragment {
 
     }
 
-    private static Button calcDumps, calcTotal, btnClear, newJournal, viewJournal;
+    private static Button calcDumps, calcTotal, btnClear, openJournal;
     private static EditText enterTotal, enterDump;
     private static TextView percentOfGoal, percentOfTotal;
-    private static String percentOf, percentOfTotalString, todaysDate, currentJournalId;
-    private static ProgressBar dashProgressBar;
+    private String percentOf, percentOfTotalString, currentJournalId;
     private static double totalEarnings, totalDump;
     private SharedPreferences preferences;
 
@@ -55,26 +52,19 @@ public class Tab1DashFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.tab1_dash_layout, container, false);
 
-        Date date = new Date();
-        SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy", Locale.CANADA);
-        todaysDate = df2.format(date);
-
         preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+        currentJournalId = preferences.getString("universalJournalId", "none");
 
         calcTotal = (Button) v.findViewById(R.id.calculate_percentage);
         calcDumps = (Button) v.findViewById(R.id.calculate_dump_percentage);
         btnClear = (Button) v.findViewById(R.id.btn_dash_clear);
-        newJournal = (Button) v.findViewById(R.id.btn_new_journal);
-        viewJournal = (Button) v.findViewById(R.id.btn_view_journal);
+        openJournal = (Button) v.findViewById(R.id.btn_open_journal);
 
         enterDump = (EditText) v.findViewById(R.id.et_enter_dump_cost);
         enterTotal = (EditText) v.findViewById(R.id.et_enter_total);
 
         percentOfTotal = (TextView) v.findViewById(R.id.tv_percent_of_total);
         percentOfGoal = (TextView) v.findViewById(R.id.tv_percent_of_goal);
-
-        dashProgressBar = (ProgressBar) v.findViewById(R.id.dashboard_progress_bar);
-        dashProgressBar.setVisibility(View.GONE);
 
         manager = getFragmentManager();
         djFragment = new DailyJournalDialogFragment();
@@ -106,8 +96,7 @@ public class Tab1DashFragment extends Fragment {
                     percentOfTotalString = getString(R.string.dollar_sign) + String.valueOf(Math.round((totalDump / totalEarnings) * 100.0));
                     percentOfTotal.setText(percentOfTotalString);
 
-                    final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    Utils.hideKeyboard(v, getActivity());
 
                 } else {
 
@@ -127,22 +116,6 @@ public class Tab1DashFragment extends Fragment {
             }
         });
 
-        newJournal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (currentJournalId.equals("none")) {
-
-                    djFragment.show(manager, "Dialog");
-
-                } else {
-
-                    Toast.makeText(getActivity(), "Journal already exists", Toast.LENGTH_SHORT).show();
-
-                }
-            }
-        });
-
         //handle snackbar clicks
         final View.OnClickListener createJournalClickListener = new View.OnClickListener() {
             public void onClick(View v) {
@@ -152,7 +125,7 @@ public class Tab1DashFragment extends Fragment {
             }
         };
 
-        viewJournal.setOnClickListener(new View.OnClickListener() {
+        openJournal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -179,18 +152,9 @@ public class Tab1DashFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
 
-        outState.putString("tab", "Tab1DashFragment"); //save the tab selected
         super.onSaveInstanceState(outState);
+        outState.putString("tab", "Tab1DashFragment"); //save the tab selected
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        currentJournalId = preferences.getString("universalJournalId", "none");
-
-        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-    }
 }

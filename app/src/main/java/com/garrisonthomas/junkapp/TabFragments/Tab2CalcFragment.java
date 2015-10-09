@@ -255,8 +255,8 @@ public class Tab2CalcFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
 
-        outState.putString("tab", "Tab2CalcFragment"); //save the tab selected
         super.onSaveInstanceState(outState);
+        outState.putString("tab", "Tab2CalcFragment"); //save the tab selected
 
     }
 

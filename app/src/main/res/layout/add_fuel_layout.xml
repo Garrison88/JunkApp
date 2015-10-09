@@ -4,41 +4,78 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/et_fuel_vendor"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:hint="Fuel Vendor"
-        android:inputType="textCapWords" />
+    <com.wrapp.floatlabelededittext.FloatLabeledEditText
+        android:id="@+id/et_fuel_vendor_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/et_fuel_gross_cost"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/et_fuel_vendor"
-        android:hint="Gross Cost"
-        android:inputType="numberDecimal" />
+        <EditText
+            android:id="@+id/et_fuel_vendor"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Fuel Vendor"
+            android:inputType="textCapWords" />
 
-    <EditText
-        android:id="@+id/et_fuel_net_cost"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/et_fuel_gross_cost"
-        android:hint="Net Cost"
-        android:inputType="numberDecimal" />
+    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
-    <EditText
-        android:id="@+id/et_fuel_receipt_number"
-        android:layout_width="fill_parent"
+    <com.wrapp.floatlabelededittext.FloatLabeledEditText
+        android:id="@+id/et_fuel_gross_cost_wrapper"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/et_fuel_net_cost"
-        android:hint="Receipt Number" />
+        android:layout_below="@id/et_fuel_vendor_wrapper">
+
+        <EditText
+            android:id="@+id/et_fuel_gross_cost"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Gross Cost (optional)"
+            android:inputType="numberDecimal" />
+
+    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+    <com.wrapp.floatlabelededittext.FloatLabeledEditText
+        android:id="@+id/et_fuel_net_cost_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_fuel_gross_cost_wrapper">
+
+        <EditText
+            android:id="@+id/et_fuel_net_cost"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Net Cost"
+            android:inputType="numberDecimal" />
+
+    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+    <com.wrapp.floatlabelededittext.FloatLabeledEditText
+        android:id="@+id/et_fuel_receipt_number_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_fuel_net_cost_wrapper">
+
+        <EditText
+            android:id="@+id/et_fuel_receipt_number"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/et_fuel_net_cost"
+            android:inputType="textNoSuggestions"
+            android:hint="Receipt Number (optional)" />
+
+    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+    <ProgressBar
+        android:id="@+id/add_fuel_pbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_fuel_receipt_number_wrapper"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/btn_save_fuel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/et_fuel_receipt_number"
+        android:layout_below="@+id/et_fuel_receipt_number_wrapper"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:text="Save" />
