@@ -5,7 +5,9 @@
         <item>Select a Dump</item>
         <item>Laird (Esander)</item>
         <item>Cherry (Turtle)</item>
+        <item>Fenmar</item>
         <item>Miller</item>
+        <item>Medulla</item>
         <item>Shorncliffe</item>
     </string-array>
 
@@ -13,7 +15,9 @@
         <item>Placeholder</item>
         <item>https://www.google.ca/maps/place/20+Esandar+Dr,+Toronto,+ON+M4G+1Y2/@43.7058561,-79.3591228,16z/data=!4m5!1m2!2m1!1smaps!3m1!1s0x89d4ccdd7f577725:0x5bea991514ff0f10</item>
         <item>https://www.google.ca/maps/place/242+Cherry+St,+Toronto,+ON+M5A+3L2/@43.6443606,-79.3557584,17z/data=!3m1!4b1!4m2!3m1!1s0x89d4cb185810edaf:0x3503ee91ce3ba927</item>
+        <item>https://www.google.ca/maps/place/Gfl+Environmental+East+Corporation/@43.7582708,-79.5461359,15z/data=!4m2!3m1!1s0x0:0x5d3c9659170b8d24?sa=X&amp;ved=0CGsQ_BIwCmoVChMIu7fW5_TCyAIVSowNCh2XCAie</item>
         <item>https://www.google.ca/maps/place/300+Rodick+Rd,+Markham,+ON+L6G+1B2/@43.8415689,-79.3510508,14z/data=!4m7!1m4!3m3!1s0x89d4d4ed662077ef:0xf3d7ee76dc9743ed!2s700+Rodick+Rd,+Markham,+ON+L6G+1A6!3b1!3m1!1s0x89d4d48fce85cead:0x421c57cfaba48332</item>
+        <item>https://www.google.ca/maps/place/Medulla+Waste/@43.6252573,-79.5485921,17z/data=!3m1!4b1!4m2!3m1!1s0x882b37e575349e57:0xe305a2916de58c1a</item>
         <item>https://www.google.ca/maps/place/Shorncliffe+Disposal+Service+Inc+(SDS)/@43.6212734,-79.5278621,14z/data=!4m2!3m1!1s0x0000000000000000:0x57576cf8d4df866a</item>
     </string-array>
 
@@ -21,7 +25,9 @@
         <item>Placeholder</item>
         <item>Laird/Esander: Open Monday–Friday 8–5\nRate per ton: $80\n<u>Remember to wear safety gear!</u></item>
         <item>Cherry: Open every day 6–6</item>
+        <item>Fenmar</item>
         <item>Miller: Open Monday to Friday 8–5</item>
+        <item>Medulla</item>
         <item>Shorncliffe: Open Monday to Friday 7–6 and Saturday 7–5</item>
     </string-array>
 
@@ -29,7 +35,9 @@
         <item>0</item>
         <item>82</item>
         <item>85</item>
+        <item>85</item>
         <item>88</item>
+        <item>67</item>
         <item>65</item>
     </integer-array>
 

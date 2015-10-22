@@ -22,7 +22,7 @@ public class BaseActivity extends AppCompatActivity {
 
     private int TAKE_PHOTO_CODE = 0;
     private int count = 0;
-    String todaysDate;
+    public String todaysDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

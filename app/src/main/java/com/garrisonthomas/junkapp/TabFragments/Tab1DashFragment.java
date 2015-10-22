@@ -150,6 +150,22 @@ public class Tab1DashFragment extends Fragment {
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        currentJournalId = preferences.getString("universalJournalId", "none");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (preferences.getBoolean("firstrun", true)) {
+            preferences.edit().putString("universalJournalId", "none");
+            preferences.edit().putBoolean("firstrun", false).apply();
+        }
+        currentJournalId = preferences.getString("universalJournalId", "none");
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
 
         super.onSaveInstanceState(outState);

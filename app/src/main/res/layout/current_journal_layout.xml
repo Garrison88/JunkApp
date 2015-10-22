@@ -49,7 +49,7 @@
             android:layout_height="match_parent">
 
             <Button
-                android:id="@+id/journal_add_job"
+                android:id="@+id/btn_add_job"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
@@ -82,14 +82,14 @@
 
         <Button
             android:layout_gravity="center_horizontal"
-            android:id="@+id/journal_add_dump"
+            android:id="@+id/btn_add_dump"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add Dump" />
 
         <Button
             android:layout_gravity="center_horizontal"
-            android:id="@+id/journal_add_fuel"
+            android:id="@+id/btn_add_fuel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add Fuel" />

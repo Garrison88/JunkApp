@@ -165,8 +165,8 @@ public class Tab2CalcFragment extends Fragment {
     public void showHST() {
 
         double tax = Double.parseDouble(totalText)-sum;
-
-        tvTotal.setText("$"+(Math.round((tax) * 100.00) / 100.00));
+        String taxString = "$"+(Math.round((tax) * 100.00) / 100.00);
+        tvTotal.setText(taxString);
 
     }
 

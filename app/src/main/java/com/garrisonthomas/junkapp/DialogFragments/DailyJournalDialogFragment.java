@@ -1,7 +1,6 @@
 package com.garrisonthomas.junkapp.DialogFragments;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,8 +11,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -99,6 +96,7 @@ public class DailyJournalDialogFragment extends DialogFragment {
 
                     Utils.hideKeyboard(v, getActivity());
 
+                    createJournal.setVisibility(View.GONE);
                     pbar.setVisibility(View.VISIBLE);
 
                     final DailyJournal newJournal = new DailyJournal();
@@ -118,15 +116,15 @@ public class DailyJournalDialogFragment extends DialogFragment {
                                 editor.apply();
                                 crew.getText().clear();
                                 truckSpinner.setSelection(0);
-                                pbar.setVisibility(View.INVISIBLE);
+                                pbar.setVisibility(View.GONE);
+                                createJournal.setVisibility(View.VISIBLE);
                                 dismiss();
                                 Intent intent = new Intent(getActivity(), CurrentJournal.class);
                                 startActivity(intent);
                             } else {
-                                Toast.makeText(getActivity(), "Something went wrong. Journal not created", Toast.LENGTH_SHORT).show();
-                                crew.setText("");
-                                truckSpinner.setSelection(0);
-                                dismiss();
+                                pbar.setVisibility(View.GONE);
+                                createJournal.setVisibility(View.VISIBLE);
+                                Toast.makeText(getActivity(), getString(R.string.parse_exception_text), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -155,6 +153,6 @@ public class DailyJournalDialogFragment extends DialogFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+            Utils.showKeyboardInDialog(getDialog());
     }
 }

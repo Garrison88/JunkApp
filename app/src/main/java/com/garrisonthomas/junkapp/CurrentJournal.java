@@ -27,7 +27,6 @@ import com.garrisonthomas.junkapp.ParseObjects.DailyJournal;
 import com.garrisonthomas.junkapp.ParseObjects.NewDump;
 import com.garrisonthomas.junkapp.ParseObjects.NewFuel;
 import com.garrisonthomas.junkapp.ParseObjects.NewJob;
-import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -36,16 +35,33 @@ import com.parse.SaveCallback;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class CurrentJournal extends BaseActivity {
 
-    private TextView todaysCrew, todaysTruck;
-    private static ProgressBar toolbarProgressBar;
-    private static Spinner jobsSpinner;
-    private String currentJournalId, spCrew, spTruck, spDate;
-    private ArrayList<Integer> jobsArray;
-    private int selectedJobSSID;
-    private static SharedPreferences preferences;
+    @Bind(R.id.app_bar)
     Toolbar toolbar;
+    @Bind(R.id.tv_todays_crew)
+    TextView todaysCrew;
+    @Bind(R.id.tv_todays_truck)
+    TextView todaysTruck;
+    @Bind(R.id.btn_add_job)
+    Button addJob;
+    @Bind(R.id.btn_view_job)
+    Button viewJob;
+    @Bind(R.id.btn_add_dump)
+    Button addDump;
+    @Bind(R.id.btn_add_fuel)
+    Button addFuel;
+    @Bind(R.id.toolbar_progress_bar)
+    ProgressBar toolbarProgressBar;
+    @Bind(R.id.jobs_spinner)
+    Spinner jobsSpinner;
+    private String currentJournalId, spCrew, spTruck, spDate;
+    private int selectedJobSSID;
+    private ArrayList<Integer> jobsArray;
+    private static SharedPreferences preferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,7 +69,8 @@ public class CurrentJournal extends BaseActivity {
 
         setContentView(R.layout.current_journal_layout);
 
-        toolbar = (Toolbar) findViewById(R.id.app_bar);
+        ButterKnife.bind(this);
+
         setSupportActionBar(toolbar);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -65,8 +82,6 @@ public class CurrentJournal extends BaseActivity {
 
         getSupportActionBar().setTitle(spDate);
 
-        toolbarProgressBar = (ProgressBar) findViewById(R.id.toolbar_progress_bar);
-
         toolbar.setNavigationIcon(ContextCompat.getDrawable(this, R.drawable.abc_ic_ab_back_mtrl_am_alpha));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,20 +92,27 @@ public class CurrentJournal extends BaseActivity {
 
         jobsArray = new ArrayList<>();
 
-        final Button addJob = (Button) findViewById(R.id.journal_add_job);
-        final Button viewJob = (Button) findViewById(R.id.btn_view_job);
-        final Button addDump = (Button) findViewById(R.id.journal_add_dump);
-        final Button addFuel = (Button) findViewById(R.id.journal_add_fuel);
-
-        todaysCrew = (TextView) findViewById(R.id.tv_todays_crew);
-        todaysTruck = (TextView) findViewById(R.id.tv_todays_truck);
         todaysCrew.setText(spCrew);
         todaysTruck.setText(spTruck);
 
-        jobsSpinner = (Spinner) findViewById(R.id.jobs_spinner);
-
         // Adds today's jobs (if any) to the spinner
-        populateSpinner();
+        Utils.populateSpinner(this, toolbarProgressBar, currentJournalId, jobsArray, jobsSpinner);
+
+        jobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                selectedJobSSID = (int) jobsSpinner.getItemAtPosition(position);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
+        });
 
         addJob.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,6 +134,7 @@ public class CurrentJournal extends BaseActivity {
                     ViewJobDialogFragment vjDialogFragment = new ViewJobDialogFragment();
                     Bundle vjBundle = new Bundle();
                     vjBundle.putInt("spinnerSSID", selectedJobSSID);
+                    vjBundle.putString("relatedJournalId", currentJournalId);
                     vjDialogFragment.setArguments(vjBundle);
                     FragmentManager manager = getFragmentManager();
                     vjDialogFragment.show(manager, "Dialog");
@@ -146,56 +169,6 @@ public class CurrentJournal extends BaseActivity {
 
             }
         });
-    }
-
-    public void populateSpinner() {
-
-        toolbarProgressBar.setVisibility(View.VISIBLE);
-
-        ParseQuery<NewJob> query = ParseQuery.getQuery(NewJob.class);
-        query.whereEqualTo("relatedJournal", currentJournalId);
-        query.orderByAscending("createdAt");
-        query.findInBackground(new FindCallback<NewJob>() {
-            @Override
-            public void done(List<NewJob> list, com.parse.ParseException e) {
-
-                if (e == null) {
-
-                    for (NewJob job : list) {
-
-                        jobsArray.add(job.getSSID());
-
-                    }
-
-                    ArrayAdapter<Integer> adapter = new ArrayAdapter<>(CurrentJournal.this, android.R.layout.simple_spinner_item, jobsArray);
-                    adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-                    jobsSpinner.setAdapter(adapter);
-
-
-                } else {
-                    Toast.makeText(CurrentJournal.this, "Something went wrong: " + e, Toast.LENGTH_SHORT).show();
-                }
-                toolbarProgressBar.setVisibility(View.GONE);
-            }
-
-        });
-
-        jobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                selectedJobSSID = (int) jobsSpinner.getItemAtPosition(position);
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-
-        });
-
     }
 
     @Override

@@ -46,7 +46,7 @@ public class AddJobDialogFragment extends DialogFragment {
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-        currentJournalId = preferences.getString("universalJournalId", null);
+        currentJournalId = preferences.getString("universalJournalId", "none");
 
         etSSID = (EditText) v.findViewById(R.id.et_ssid);
         etGrossSale = (EditText) v.findViewById(R.id.et_gross_sale);
@@ -62,10 +62,13 @@ public class AddJobDialogFragment extends DialogFragment {
 
         pbar = (ProgressBar) v.findViewById(R.id.add_job_pbar);
 
-        ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(), R.array.job_pay_type, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        payTypeSpinner.setAdapter(adapter);
-        payTypeSpinner.setSelection(0);
+        payTypeSpinner.setAdapter(new ArrayAdapter<>(this.getActivity(),
+                android.R.layout.simple_dropdown_item_1line, payTypeArray));
+
+//        ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(), R.array.job_pay_type, android.R.layout.simple_spinner_item);
+////        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+//        payTypeSpinner.setAdapter(adapter);
+//        payTypeSpinner.setSelection(0);
 
         payTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -151,7 +154,7 @@ public class AddJobDialogFragment extends DialogFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        Utils.showKeyboardInDialog(getDialog());
     }
 
 }

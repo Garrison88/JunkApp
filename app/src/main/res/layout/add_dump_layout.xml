@@ -12,19 +12,20 @@
         <Spinner
             android:id="@+id/spinner_dump_dialog"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
             android:paddingBottom="10dp"
             android:paddingTop="10dp" />
 
         <com.wrapp.floatlabelededittext.FloatLabeledEditText
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_weight="1">
 
             <EditText
                 android:id="@+id/et_add_dump_weight"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:hint="Weight (kgs)"
                 android:inputType="number"

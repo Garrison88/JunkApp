@@ -1,7 +1,6 @@
 package com.garrisonthomas.junkapp.DialogFragments;
 
 import android.app.DialogFragment;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -10,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -50,7 +47,7 @@ public class AddDumpDialogFragment extends DialogFragment {
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        currentJournalId = preferences.getString("universalJournalId", null);
+        currentJournalId = preferences.getString("universalJournalId", "none");
 
         etAddDumpWeight = (EditText) v.findViewById(R.id.et_add_dump_weight);
         etDumpReceiptNumber = (EditText) v.findViewById(R.id.et_dump_receipt_number);
@@ -68,10 +65,8 @@ public class AddDumpDialogFragment extends DialogFragment {
 
         dumpNameSpinner = (Spinner) v.findViewById(R.id.spinner_dump_dialog);
 
-        ArrayAdapter adapter = ArrayAdapter.createFromResource(this.getActivity(), R.array.dumps_name, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        dumpNameSpinner.setAdapter(adapter);
-        dumpNameSpinner.setSelection(0);
+        dumpNameSpinner.setAdapter(new ArrayAdapter<>(this.getActivity(),
+                android.R.layout.simple_dropdown_item_1line, dumpNameArray));
 
         dumpNameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -168,7 +163,7 @@ public class AddDumpDialogFragment extends DialogFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        Utils.showKeyboardInDialog(getDialog());
     }
 
 }
