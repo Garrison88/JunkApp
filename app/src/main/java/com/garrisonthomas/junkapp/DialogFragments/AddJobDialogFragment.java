@@ -24,6 +24,7 @@ import com.garrisonthomas.junkapp.CurrentJournal;
 import com.garrisonthomas.junkapp.ParseObjects.NewJob;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
+import com.google.gson.Gson;
 import com.parse.ParseException;
 import com.parse.SaveCallback;
 
@@ -36,6 +37,7 @@ public class AddJobDialogFragment extends DialogFragment {
     private String payTypeString, currentJournalId;
     private SharedPreferences preferences;
     private ProgressBar pbar;
+    Gson gson = new Gson();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -123,21 +125,33 @@ public class AddJobDialogFragment extends DialogFragment {
                     newJob.setPayType(payTypeString);
                     newJob.setJobNotes(String.valueOf(etJobNotes.getText()));
 
-                    newJob.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e == null) {
+                    newJob.saveEventually();
+                    newJob.pinInBackground();
+
+//                    String json = gson.toJson(newJob);
+//
+//                    SharedPreferences.Editor editor = preferences.edit();
+//                    editor.putString("job"+(etSSID.getText().toString()), json);
+//                    editor.apply();
+
+
+//                    newJob.pinInBackground("ALL_JOBS");
+
+//                    newJob.saveEventually(new SaveCallback() {
+//                        @Override
+//                        public void done(ParseException e) {
+//                            if (e == null) {
                                 Toast.makeText(getActivity(), "Job number " + etSSID.getText().toString() + " saved", Toast.LENGTH_SHORT).show();
-                                        pbar.setVisibility(View.GONE);
-                                saveJob.setVisibility(View.VISIBLE);
+//                                        pbar.setVisibility(View.GONE);
+//                                saveJob.setVisibility(View.VISIBLE);
                                 dismiss();
-                            } else {
-                                Toast.makeText(getActivity(), getString(R.string.parse_exception_text), Toast.LENGTH_SHORT).show();
-                                pbar.setVisibility(View.GONE);
-                                saveJob.setVisibility(View.VISIBLE);
-                            }
-                        }
-                    });
+//                            } else {
+//                                Toast.makeText(getActivity(), getString(R.string.parse_exception_text), Toast.LENGTH_SHORT).show();
+//                                pbar.setVisibility(View.GONE);
+//                                saveJob.setVisibility(View.VISIBLE);
+//                            }
+//                        }
+//                    });
 
                 } else {
 

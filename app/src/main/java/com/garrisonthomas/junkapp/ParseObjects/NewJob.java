@@ -1,5 +1,8 @@
 package com.garrisonthomas.junkapp.ParseObjects;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 
@@ -90,4 +93,34 @@ public class NewJob extends ParseObject {
         put("relatedJournal", relatedJournal);
 
     }
+
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(Parcel dest, int flags) {
+//
+//        dest.writeInt(getSSID());
+//        dest.writeDouble(getGrossSale());
+//        dest.writeDouble(getNetSale());
+//        dest.writeInt(getReceiptNumber());
+//        dest.writeString(getPayType());
+//        dest.writeString(getJobNotes());
+//        dest.writeString(getRelatedJournal());
+//
+//    }
+//
+//    public static final Parcelable.Creator<NewJob> CREATOR
+//            = new Parcelable.Creator<NewJob>() {
+//        public NewJob createFromParcel(Parcel in) {
+//            return new NewJob(in);
+//        }
+//
+//        public NewJob[] newArray(int size) {
+//            return new NewJob[size];
+//        }
+//    };
+
 }

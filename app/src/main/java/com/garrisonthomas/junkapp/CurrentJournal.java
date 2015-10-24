@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -22,6 +21,7 @@ import android.widget.Toast;
 import com.garrisonthomas.junkapp.DialogFragments.AddDumpDialogFragment;
 import com.garrisonthomas.junkapp.DialogFragments.AddFuelDialogFragment;
 import com.garrisonthomas.junkapp.DialogFragments.AddJobDialogFragment;
+//import com.garrisonthomas.junkapp.DialogFragments.ViewDumpDialogFragment;
 import com.garrisonthomas.junkapp.DialogFragments.ViewJobDialogFragment;
 import com.garrisonthomas.junkapp.ParseObjects.DailyJournal;
 import com.garrisonthomas.junkapp.ParseObjects.NewDump;
@@ -52,15 +52,20 @@ public class CurrentJournal extends BaseActivity {
     Button viewJob;
     @Bind(R.id.btn_add_dump)
     Button addDump;
+    @Bind(R.id.btn_view_dump)
+    Button viewDump;
     @Bind(R.id.btn_add_fuel)
     Button addFuel;
     @Bind(R.id.toolbar_progress_bar)
     ProgressBar toolbarProgressBar;
     @Bind(R.id.jobs_spinner)
     Spinner jobsSpinner;
+    @Bind(R.id.dumps_spinner)
+    Spinner dumpsSpinner;
     private String currentJournalId, spCrew, spTruck, spDate;
     private int selectedJobSSID;
     private ArrayList<Integer> jobsArray;
+    private ArrayList<String> dumpsArray;
     private static SharedPreferences preferences;
 
     @Override
@@ -91,6 +96,7 @@ public class CurrentJournal extends BaseActivity {
         });
 
         jobsArray = new ArrayList<>();
+        dumpsArray = new ArrayList<>();
 
         todaysCrew.setText(spCrew);
         todaysTruck.setText(spTruck);
@@ -112,6 +118,20 @@ public class CurrentJournal extends BaseActivity {
 
             }
 
+        });
+
+        dumpsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
         });
 
         addJob.setOnClickListener(new View.OnClickListener() {
@@ -152,12 +172,35 @@ public class CurrentJournal extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-                FragmentManager manager = getFragmentManager();
-                AddDumpDialogFragment djFragment = new AddDumpDialogFragment();
-                djFragment.show(manager, "Dialog");
+                    FragmentManager manager = getFragmentManager();
+                    AddDumpDialogFragment djFragment = new AddDumpDialogFragment();
+                    djFragment.show(manager, "Dialog");
 
             }
         });
+
+//        viewDump.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                if (dumpsArray.size() > 0) {
+//
+//                    ViewDumpDialogFragment vdDialogFragment = new ViewDumpDialogFragment();
+//                    Bundle vdBundle = new Bundle();
+//                    vdBundle.putInt("spinnerSSID", selectedJobSSID);
+//                    vdBundle.putString("relatedJournalId", currentJournalId);
+//                    vdDialogFragment.setArguments(vdBundle);
+//                    FragmentManager manager = getFragmentManager();
+//                    vdDialogFragment.show(manager, "Dialog");
+//
+//                } else {
+//
+//                    Toast.makeText(CurrentJournal.this, "No dumps to display",
+//                            Toast.LENGTH_SHORT).show();
+//
+//                }
+//            }
+//        });
 
         addFuel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -298,6 +341,7 @@ public class CurrentJournal extends BaseActivity {
 
                                 try {
                                     nj.delete();
+                                    nj.unpin();
                                 } catch (ParseException e1) {
                                     e1.printStackTrace();
                                 }
@@ -315,6 +359,7 @@ public class CurrentJournal extends BaseActivity {
                             for (NewDump nd : list) {
                                 try {
                                     nd.delete();
+                                    nd.unpin();
                                 } catch (ParseException e1) {
                                     e1.printStackTrace();
                                 }
@@ -333,6 +378,7 @@ public class CurrentJournal extends BaseActivity {
 
                                 try {
                                     nf.delete();
+                                    nf.unpin();
                                 } catch (ParseException e1) {
                                     e1.printStackTrace();
                                 }
@@ -346,7 +392,7 @@ public class CurrentJournal extends BaseActivity {
                 editor.putString("crew", "noCrew");
                 editor.putString("truck", "noTruck");
                 editor.putString("date", "noDate");
-                editor.commit();
+                editor.apply();
                 toolbarProgressBar.setVisibility(View.GONE);
                 Toast.makeText(CurrentJournal.this, "Journal successfully deleted",
                         Toast.LENGTH_SHORT).show();
@@ -373,6 +419,7 @@ public class CurrentJournal extends BaseActivity {
 
                         ParseQuery<NewJob> njQuery = ParseQuery.getQuery(NewJob.class);
                         njQuery.whereEqualTo("relatedJournal", currentJournalId);
+                        njQuery.fromPin();
                         njQuery.findInBackground(new FindCallback<NewJob>() {
                             @Override
                             public void done(List<NewJob> list, ParseException e) {
@@ -384,6 +431,11 @@ public class CurrentJournal extends BaseActivity {
                                     for (NewJob nj : list) {
 
                                         total = total + nj.getGrossSale();
+                                        try {
+                                            nj.unpin();
+                                        } catch (ParseException e1) {
+                                            e1.printStackTrace();
+                                        }
 
                                     }
 

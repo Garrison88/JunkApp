@@ -3,6 +3,7 @@
     xmlns:journal_card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <include
@@ -29,7 +30,7 @@
                 android:gravity="center_horizontal"
                 android:padding="10dp"
                 android:text="Today's Crew"
-                android:textSize="20dp" />
+                android:textSize="@dimen/abc_text_size_large_material" />
 
             <TextView
                 android:id="@+id/tv_todays_truck"
@@ -40,13 +41,13 @@
                 android:gravity="center_horizontal"
                 android:padding="10dp"
                 android:text="Today's Truck"
-                android:textSize="20dp" />
+                android:textSize="@dimen/abc_text_size_large_material" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/btn_add_job"
@@ -80,21 +81,79 @@
 
         </LinearLayout>
 
-        <Button
-            android:layout_gravity="center_horizontal"
-            android:id="@+id/btn_add_dump"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add Dump" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <Button
-            android:layout_gravity="center_horizontal"
-            android:id="@+id/btn_add_fuel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add Fuel" />
+            <Button
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/btn_add_dump"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Add Dump" />
 
+            <android.support.v7.widget.CardView
+                android:id="@+id/dump_spinner_card_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                journal_card_view:cardBackgroundColor="@color/darkAccent"
+                journal_card_view:cardUseCompatPadding="true"
+                journal_card_view:contentPadding="4dp">
 
+                <Spinner
+                    android:id="@+id/dumps_spinner"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" />
+
+            </android.support.v7.widget.CardView>
+
+            <Button
+                android:id="@+id/btn_view_dump"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:text="View Dump" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/btn_add_fuel"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Add Fuel" />
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/fuel_spinner_card_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                journal_card_view:cardBackgroundColor="@color/darkAccent"
+                journal_card_view:cardUseCompatPadding="true"
+                journal_card_view:contentPadding="4dp">
+
+                <Spinner
+                    android:id="@+id/fuel_spinner"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" />
+
+            </android.support.v7.widget.CardView>
+
+            <Button
+                android:id="@+id/btn_view_fuel"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:text="View Dump" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

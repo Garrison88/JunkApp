@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.WindowManager;
@@ -42,6 +44,13 @@ public class Utils {
 
     }
 
+    public static Boolean isInternetAvailable(Activity a) {
+        ConnectivityManager cm =
+                (ConnectivityManager) a.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
     public static void populateSpinner(final Context context, final ProgressBar pbar, String currentJournalId,
                                        final ArrayList<Integer> jobsArray, final Spinner jobsSpinner) {
 
@@ -50,6 +59,7 @@ public class Utils {
         ParseQuery<NewJob> query = ParseQuery.getQuery(NewJob.class);
         query.whereEqualTo("relatedJournal", currentJournalId);
         query.orderByAscending("createdAt");
+        query.fromLocalDatastore();
         query.findInBackground(new FindCallback<NewJob>() {
             @Override
             public void done(List<NewJob> list, com.parse.ParseException e) {

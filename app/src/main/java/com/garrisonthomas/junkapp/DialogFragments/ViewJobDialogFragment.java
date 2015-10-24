@@ -93,6 +93,7 @@ public class ViewJobDialogFragment extends DialogFragment {
         query.setLimit(1);
         query.whereEqualTo("relatedJournal", currentJournalId);
         query.whereEqualTo("ssid", vjSSID);
+        query.fromPin();
         query.findInBackground(new FindCallback<NewJob>() {
             @Override
             public void done(List<NewJob> list, com.parse.ParseException e) {
@@ -142,6 +143,7 @@ public class ViewJobDialogFragment extends DialogFragment {
 
                         final ParseQuery<NewJob> query = ParseQuery.getQuery(NewJob.class);
                         query.setLimit(1);
+                        query.fromPin();
                         query.whereEqualTo("relatedJournal", currentJournalId);
                         query.whereEqualTo("ssid", vjSSID);
 
@@ -153,11 +155,7 @@ public class ViewJobDialogFragment extends DialogFragment {
 
                                     for (NewJob nj : list) {
 
-                                        try {
-                                            nj.delete();
-                                        } catch (ParseException e1) {
-                                            e1.printStackTrace();
-                                        }
+                                        nj.deleteEventually();
                                     }
 
                                 }

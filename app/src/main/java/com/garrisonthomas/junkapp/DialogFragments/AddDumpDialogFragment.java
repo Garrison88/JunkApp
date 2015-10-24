@@ -131,22 +131,23 @@ public class AddDumpDialogFragment extends DialogFragment {
                         newDump.setPercentPrevious(0);
                     }
 
-                    newDump.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
+                    newDump.saveEventually();
+                    newDump.pinInBackground();
+//                        @Override
+//                        public void done(ParseException e) {
 
-                            if (e == null) {
-                                Toast.makeText(getActivity(), "Dump saved", Toast.LENGTH_SHORT).show();
-                                pbar.setVisibility(View.GONE);
-                                saveDump.setVisibility(View.VISIBLE);
+//                            if (e == null) {
+                                Toast.makeText(getActivity(), "Dump at " + dumpNameString + " saved", Toast.LENGTH_SHORT).show();
+//                                pbar.setVisibility(View.GONE);
+//                                saveDump.setVisibility(View.VISIBLE);
                                 dismiss();
-                            } else {
-                                Toast.makeText(getActivity(), getString(R.string.parse_exception_text), Toast.LENGTH_SHORT).show();
-                                pbar.setVisibility(View.GONE);
-                                saveDump.setVisibility(View.VISIBLE);
-                            }
-                        }
-                    });
+//                            } else {
+//                                Toast.makeText(getActivity(), getString(R.string.parse_exception_text), Toast.LENGTH_SHORT).show();
+//                                pbar.setVisibility(View.GONE);
+//                                saveDump.setVisibility(View.VISIBLE);
+//                            }
+//                        }
+//                    });
 
                 } else {
 

@@ -80,21 +80,24 @@ public class AddFuelDialogFragment extends DialogFragment {
                         newFuel.setFuelReceiptNumber("Not provided");
                     }
 
-                    newFuel.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e == null) {
+                    newFuel.saveEventually();
+                    newFuel.pinInBackground();
+
+//                    newFuel.saveInBackground(new SaveCallback() {
+//                        @Override
+//                        public void done(ParseException e) {
+//                            if (e == null) {
                                 Toast.makeText(getActivity(), "Fuel entry saved", Toast.LENGTH_SHORT).show();
-                                pbar.setVisibility(View.GONE);
-                                saveFuel.setVisibility(View.VISIBLE);
+//                                pbar.setVisibility(View.GONE);
+//                                saveFuel.setVisibility(View.VISIBLE);
                                 dismiss();
-                            } else {
-                                Toast.makeText(getActivity(), getString(R.string.parse_exception_text), Toast.LENGTH_SHORT).show();
-                                pbar.setVisibility(View.GONE);
-                                saveFuel.setVisibility(View.VISIBLE);
-                            }
-                        }
-                    });
+//                            } else {
+//                                Toast.makeText(getActivity(), getString(R.string.parse_exception_text), Toast.LENGTH_SHORT).show();
+//                                pbar.setVisibility(View.GONE);
+//                                saveFuel.setVisibility(View.VISIBLE);
+//                            }
+//                        }
+//                    });
 
                 } else {
 

@@ -1,7 +1,10 @@
 package com.garrisonthomas.junkapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -115,6 +118,13 @@ public class BaseActivity extends AppCompatActivity {
             Toast.makeText(BaseActivity.this, "Photo saved to device", Toast.LENGTH_SHORT).show();
 
         }
+    }
+
+    public Boolean isInternetAvailable() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
 }
