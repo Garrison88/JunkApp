@@ -3,7 +3,6 @@ package com.garrisonthomas.junkapp.DialogFragments;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -11,13 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.garrisonthomas.junkapp.ParseObjects.DailyJournal;
-import com.garrisonthomas.junkapp.ParseObjects.NewDump;
-import com.garrisonthomas.junkapp.ParseObjects.NewFuel;
 import com.garrisonthomas.junkapp.ParseObjects.NewJob;
 import com.garrisonthomas.junkapp.R;
 import com.parse.FindCallback;
@@ -43,8 +38,6 @@ public class ViewJobDialogFragment extends DialogFragment {
     TextView vjNotes;
     @Bind(R.id.tv_notes_display)
     TextView tvNotesDisplay;
-    @Bind(R.id.view_jobs_pbar)
-    ProgressBar vjPbar;
     @Bind(R.id.btn_delete_job)
     ImageButton deleteJobBtn;
     private static int vjSSID;
@@ -61,7 +54,6 @@ public class ViewJobDialogFragment extends DialogFragment {
 
         tvNotesDisplay.setVisibility(View.GONE);
         vjNotes.setVisibility(View.GONE);
-        vjPbar.setVisibility(View.VISIBLE);
 
         populateJobInfo();
 
@@ -98,8 +90,6 @@ public class ViewJobDialogFragment extends DialogFragment {
             @Override
             public void done(List<NewJob> list, com.parse.ParseException e) {
 
-                vjPbar.setVisibility(View.GONE);
-
                 if (e == null) {
 
                     for (NewJob job : list) {
@@ -121,14 +111,11 @@ public class ViewJobDialogFragment extends DialogFragment {
 
                             }
                         }
-
-
                     }
                 }
             }
 
         });
-
     }
 
     private void deleteJob() {
@@ -138,8 +125,6 @@ public class ViewJobDialogFragment extends DialogFragment {
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
-                        vjPbar.setVisibility(View.VISIBLE);
 
                         final ParseQuery<NewJob> query = ParseQuery.getQuery(NewJob.class);
                         query.setLimit(1);

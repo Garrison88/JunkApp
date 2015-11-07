@@ -3,24 +3,18 @@ package com.garrisonthomas.junkapp;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.garrisonthomas.junkapp.ParseObjects.NewDump;
 import com.garrisonthomas.junkapp.ParseObjects.NewJob;
 import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
@@ -51,15 +45,13 @@ public class Utils {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
-    public static void populateSpinner(final Context context, final ProgressBar pbar, String currentJournalId,
-                                       final ArrayList<Integer> jobsArray, final Spinner jobsSpinner) {
-
-        pbar.setVisibility(View.VISIBLE);
+    public static void populateJobSpinner(final Context context, String currentJournalId,
+                                          final ArrayList<Integer> jobsArray, final Spinner jobsSpinner) {
 
         ParseQuery<NewJob> query = ParseQuery.getQuery(NewJob.class);
         query.whereEqualTo("relatedJournal", currentJournalId);
         query.orderByAscending("createdAt");
-        query.fromLocalDatastore();
+        query.fromPin();
         query.findInBackground(new FindCallback<NewJob>() {
             @Override
             public void done(List<NewJob> list, com.parse.ParseException e) {
@@ -80,10 +72,43 @@ public class Utils {
                 } else {
                     Toast.makeText(context, "Something went wrong: " + e, Toast.LENGTH_SHORT).show();
                 }
-                pbar.setVisibility(View.GONE);
             }
 
         });
 
     }
+
+    public static void populateDumpSpinner(final Context context, String currentJournalId,
+                                          final ArrayList<String> dumpsArray, final Spinner dumpsSpinner) {
+
+        ParseQuery<NewDump> query = ParseQuery.getQuery(NewDump.class);
+        query.whereEqualTo("relatedJournal", currentJournalId);
+        query.orderByAscending("createdAt");
+        query.fromPin();
+        query.findInBackground(new FindCallback<NewDump>() {
+            @Override
+            public void done(List<NewDump> list, com.parse.ParseException e) {
+
+                if (e == null) {
+
+                    for (NewDump dump : list) {
+
+                        dumpsArray.add(dump.getDumpName());
+
+                    }
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, dumpsArray);
+                    adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+                    dumpsSpinner.setAdapter(adapter);
+
+
+                } else {
+                    Toast.makeText(context, "Something went wrong: " + e, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        });
+
+    }
+
 }

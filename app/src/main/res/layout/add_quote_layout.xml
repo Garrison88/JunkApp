@@ -10,12 +10,11 @@
         android:orientation="vertical">
 
         <com.wrapp.floatlabelededittext.FloatLabeledEditText
-            android:id="@+id/et_ssid_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/et_ssid"
+                android:id="@+id/et_quote_ssid"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="SSID"
@@ -30,82 +29,50 @@
             android:layout_height="wrap_content">
 
             <com.wrapp.floatlabelededittext.FloatLabeledEditText
-                android:id="@+id/et_gross_sale_wrapper"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
 
                 <EditText
-                    android:id="@+id/et_gross_sale"
-                    android:layout_width="fill_parent"
+                    android:id="@+id/et_low_end"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Gross Sale"
+                    android:hint="Low End"
                     android:inputType="numberDecimal" />
 
             </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
             <com.wrapp.floatlabelededittext.FloatLabeledEditText
-                android:id="@+id/et_net_sale_wrapper"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
 
                 <EditText
-                    android:id="@+id/et_net_sale"
-                    android:layout_width="fill_parent"
+                    android:id="@+id/et_high_end"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Net Sale"
+                    android:hint="High End (optional)"
                     android:inputType="numberDecimal" />
 
             </com.wrapp.floatlabelededittext.FloatLabeledEditText>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/receipt_and_paytype_linear_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.wrapp.floatlabelededittext.FloatLabeledEditText
-                android:id="@+id/et_receipt_number_wrapper"
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_weight="1">
-
-                <EditText
-                    android:id="@+id/et_receipt_number"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_below="@id/et_net_sale_wrapper"
-                    android:hint="Receipt #"
-                    android:inputType="number" />
-
-            </com.wrapp.floatlabelededittext.FloatLabeledEditText>
-
-            <Spinner
-                android:id="@+id/spinner_pay_type"
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_weight="1" />
 
         </LinearLayout>
 
         <com.wrapp.floatlabelededittext.FloatLabeledEditText
-            android:id="@+id/et_job_notes_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/et_job_notes"
+                android:id="@+id/et_quote_notes"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
-                android:hint="Notes (optional)"
+                android:hint="Details (optional)"
                 android:inputType="textAutoCorrect|textCapSentences|textMultiLine" />
 
         </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
         <Button
-            android:id="@+id/btn_save_job"
+            android:id="@+id/btn_save_quote"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"

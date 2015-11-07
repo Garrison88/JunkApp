@@ -35,7 +35,7 @@ public class DailyJournalDialogFragment extends DialogFragment {
     private static Spinner truckSpinner;
     private static String[] truckNumber;
     private static Button cancel, createJournal;
-    private EditText crew;
+    private EditText driver, navigator;
     private String truckSelected;
     private Date date = new Date();
     private SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy", Locale.CANADA);
@@ -64,7 +64,8 @@ public class DailyJournalDialogFragment extends DialogFragment {
         createJournal = (Button) v.findViewById(R.id.btn_create_journal);
         cancel = (Button) v.findViewById(R.id.cancel_fragment);
 
-        crew = (EditText) v.findViewById(R.id.et_crew);
+        driver = (EditText) v.findViewById(R.id.et_driver);
+        navigator = (EditText) v.findViewById(R.id.et_navigator);
 
         pbar = (ProgressBar) v.findViewById(R.id.pbar_create_journal);
 
@@ -89,9 +90,10 @@ public class DailyJournalDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
 
-                if (!TextUtils.isEmpty(crew.getText())) {
+                if (!TextUtils.isEmpty(driver.getText())) {
 
-                    final String crewString = crew.getText().toString();
+                    final String driverString = driver.getText().toString();
+                    final String navigatorString = navigator.getText().toString();
                     final int truckNumber = Integer.valueOf(truckSelected.substring(6, 7));
 
                     Utils.hideKeyboard(v, getActivity());
@@ -102,19 +104,22 @@ public class DailyJournalDialogFragment extends DialogFragment {
                     final DailyJournal newJournal = new DailyJournal();
 
                     newJournal.setDate(todaysDate);
-                    newJournal.setCrew(crewString);
+                    newJournal.setDriver(driverString);
+                    newJournal.setNavigator(navigatorString);
                     newJournal.setTruckNumber(truckNumber);
                     newJournal.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
                             if (e == null) {
                                 SharedPreferences.Editor editor = preferences.edit();
-                                editor.putString("crew", crewString);
+                                editor.putString("driver", driverString);
+                                editor.putString("navigator", navigatorString);
                                 editor.putString("truck", truckSelected);
                                 editor.putString("universalJournalId", newJournal.getObjectId());
                                 editor.putString("todaysDate", todaysDate);
                                 editor.apply();
-                                crew.getText().clear();
+                                driver.getText().clear();
+                                navigator.getText().clear();
                                 truckSpinner.setSelection(0);
                                 pbar.setVisibility(View.GONE);
                                 createJournal.setVisibility(View.VISIBLE);
@@ -138,7 +143,8 @@ public class DailyJournalDialogFragment extends DialogFragment {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                crew.setText("");
+                driver.setText("");
+                navigator.setText("");
                 truckSpinner.setSelection(0);
                 Utils.hideKeyboard(v, getActivity());
                 dismiss();

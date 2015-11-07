@@ -11,14 +11,11 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.garrisonthomas.junkapp.ParseObjects.NewFuel;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
-import com.parse.ParseException;
-import com.parse.SaveCallback;
 
 public class AddFuelDialogFragment extends DialogFragment {
 
@@ -26,7 +23,6 @@ public class AddFuelDialogFragment extends DialogFragment {
     private static Button saveFuel;
     private String currentJournalId;
     private SharedPreferences preferences;
-    private ProgressBar pbar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,7 +45,6 @@ public class AddFuelDialogFragment extends DialogFragment {
         etGrossCost = (EditText) v.findViewById(R.id.et_fuel_gross_cost);
         etNetCost = (EditText) v.findViewById(R.id.et_fuel_net_cost);
         etReceiptNumber = (EditText) v.findViewById(R.id.et_fuel_receipt_number);
-        pbar = (ProgressBar) v.findViewById(R.id.add_fuel_pbar);
 
         saveFuel = (Button) v.findViewById(R.id.btn_save_fuel);
 
@@ -61,9 +56,6 @@ public class AddFuelDialogFragment extends DialogFragment {
                         && (!TextUtils.isEmpty(etNetCost.getText()))) {
 
                     Utils.hideKeyboard(v, getActivity());
-
-                    saveFuel.setVisibility(View.GONE);
-                    pbar.setVisibility(View.VISIBLE);
 
                     NewFuel newFuel = new NewFuel();
                     newFuel.setRelatedJournal(currentJournalId);
@@ -83,25 +75,13 @@ public class AddFuelDialogFragment extends DialogFragment {
                     newFuel.saveEventually();
                     newFuel.pinInBackground();
 
-//                    newFuel.saveInBackground(new SaveCallback() {
-//                        @Override
-//                        public void done(ParseException e) {
-//                            if (e == null) {
-                                Toast.makeText(getActivity(), "Fuel entry saved", Toast.LENGTH_SHORT).show();
-//                                pbar.setVisibility(View.GONE);
-//                                saveFuel.setVisibility(View.VISIBLE);
-                                dismiss();
-//                            } else {
-//                                Toast.makeText(getActivity(), getString(R.string.parse_exception_text), Toast.LENGTH_SHORT).show();
-//                                pbar.setVisibility(View.GONE);
-//                                saveFuel.setVisibility(View.VISIBLE);
-//                            }
-//                        }
-//                    });
+                    Toast.makeText(getActivity(), "Fuel entry saved", Toast.LENGTH_SHORT).show();
+
+                    dismiss();
 
                 } else {
 
-                    Toast.makeText(getActivity(), "Please fill all fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Please fill all required fields", Toast.LENGTH_SHORT).show();
 
                 }
             }

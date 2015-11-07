@@ -101,13 +101,6 @@
 
     </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
-    <ProgressBar
-        android:id="@+id/add_dump_pbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/et_percent_previous_wrapper"
-        android:visibility="gone" />
-
     <Button
         android:id="@+id/btn_save_dump"
         android:layout_width="fill_parent"

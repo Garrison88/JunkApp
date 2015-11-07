@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,18 +16,20 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.garrisonthomas.junkapp.DialogFragments.AddDumpDialogFragment;
 import com.garrisonthomas.junkapp.DialogFragments.AddFuelDialogFragment;
 import com.garrisonthomas.junkapp.DialogFragments.AddJobDialogFragment;
-//import com.garrisonthomas.junkapp.DialogFragments.ViewDumpDialogFragment;
+import com.garrisonthomas.junkapp.DialogFragments.AddQuoteDialogFragment;
+import com.garrisonthomas.junkapp.DialogFragments.ViewDumpDialogFragment;
 import com.garrisonthomas.junkapp.DialogFragments.ViewJobDialogFragment;
 import com.garrisonthomas.junkapp.ParseObjects.DailyJournal;
 import com.garrisonthomas.junkapp.ParseObjects.NewDump;
 import com.garrisonthomas.junkapp.ParseObjects.NewFuel;
 import com.garrisonthomas.junkapp.ParseObjects.NewJob;
+import com.garrisonthomas.junkapp.ParseObjects.NewQuote;
+import com.github.clans.fab.FloatingActionButton;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -47,23 +50,25 @@ public class CurrentJournal extends BaseActivity {
     @Bind(R.id.tv_todays_truck)
     TextView todaysTruck;
     @Bind(R.id.btn_add_job)
-    Button addJob;
+    FloatingActionButton addJob;
+    @Bind(R.id.btn_add_quote)
+    FloatingActionButton addQuote;
     @Bind(R.id.btn_view_job)
     Button viewJob;
     @Bind(R.id.btn_add_dump)
-    Button addDump;
+    FloatingActionButton addDump;
     @Bind(R.id.btn_view_dump)
     Button viewDump;
     @Bind(R.id.btn_add_fuel)
-    Button addFuel;
+    FloatingActionButton addFuel;
     @Bind(R.id.toolbar_progress_bar)
     ProgressBar toolbarProgressBar;
     @Bind(R.id.jobs_spinner)
     Spinner jobsSpinner;
     @Bind(R.id.dumps_spinner)
     Spinner dumpsSpinner;
-    private String currentJournalId, spCrew, spTruck, spDate;
-    private int selectedJobSSID;
+    String currentJournalId, spDriver, spNavigator, spTruck, spDate, dumpSpinnerName;
+    int selectedJobSSID;
     private ArrayList<Integer> jobsArray;
     private ArrayList<String> dumpsArray;
     private static SharedPreferences preferences;
@@ -81,7 +86,8 @@ public class CurrentJournal extends BaseActivity {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         currentJournalId = preferences.getString("universalJournalId", "none");
-        spCrew = preferences.getString("crew", "noCrew");
+        spDriver = preferences.getString("driver", "noDriver");
+        spNavigator = preferences.getString("navigator", "noNavigator");
         spTruck = preferences.getString("truck", "noTruck");
         spDate = preferences.getString("todaysDate", "noDate");
 
@@ -98,11 +104,8 @@ public class CurrentJournal extends BaseActivity {
         jobsArray = new ArrayList<>();
         dumpsArray = new ArrayList<>();
 
-        todaysCrew.setText(spCrew);
+        todaysCrew.setText(spDriver + " & " + spNavigator);
         todaysTruck.setText(spTruck);
-
-        // Adds today's jobs (if any) to the spinner
-        Utils.populateSpinner(this, toolbarProgressBar, currentJournalId, jobsArray, jobsSpinner);
 
         jobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -124,7 +127,7 @@ public class CurrentJournal extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-
+                dumpSpinnerName = (String) dumpsSpinner.getItemAtPosition(position);
 
             }
 
@@ -140,6 +143,17 @@ public class CurrentJournal extends BaseActivity {
 
                 FragmentManager manager = getFragmentManager();
                 AddJobDialogFragment djFragment = new AddJobDialogFragment();
+                djFragment.show(manager, "Dialog");
+
+            }
+        });
+
+        addQuote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                FragmentManager manager = getFragmentManager();
+                AddQuoteDialogFragment djFragment = new AddQuoteDialogFragment();
                 djFragment.show(manager, "Dialog");
 
             }
@@ -179,28 +193,28 @@ public class CurrentJournal extends BaseActivity {
             }
         });
 
-//        viewDump.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                if (dumpsArray.size() > 0) {
-//
-//                    ViewDumpDialogFragment vdDialogFragment = new ViewDumpDialogFragment();
-//                    Bundle vdBundle = new Bundle();
-//                    vdBundle.putInt("spinnerSSID", selectedJobSSID);
-//                    vdBundle.putString("relatedJournalId", currentJournalId);
-//                    vdDialogFragment.setArguments(vdBundle);
-//                    FragmentManager manager = getFragmentManager();
-//                    vdDialogFragment.show(manager, "Dialog");
-//
-//                } else {
-//
-//                    Toast.makeText(CurrentJournal.this, "No dumps to display",
-//                            Toast.LENGTH_SHORT).show();
-//
-//                }
-//            }
-//        });
+        viewDump.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (dumpsArray.size() > 0) {
+
+                    ViewDumpDialogFragment vdDialogFragment = new ViewDumpDialogFragment();
+                    Bundle vdBundle = new Bundle();
+                    vdBundle.putString("dumpName", dumpSpinnerName);
+                    vdBundle.putString("relatedJournalId", currentJournalId);
+                    vdDialogFragment.setArguments(vdBundle);
+                    FragmentManager manager = getFragmentManager();
+                    vdDialogFragment.show(manager, "Dialog");
+
+                } else {
+
+                    Toast.makeText(CurrentJournal.this, "No dumps to display",
+                            Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
 
         addFuel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -212,6 +226,13 @@ public class CurrentJournal extends BaseActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Utils.populateJobSpinner(this, currentJournalId, jobsArray, jobsSpinner);
+        Utils.populateDumpSpinner(this, currentJournalId, dumpsArray, dumpsSpinner);
     }
 
     @Override
@@ -310,6 +331,8 @@ public class CurrentJournal extends BaseActivity {
         djQuery.setLimit(1);
         final ParseQuery<NewJob> njQuery = ParseQuery.getQuery(NewJob.class);
         njQuery.whereEqualTo("relatedJournal", currentJournalId);
+        final ParseQuery<NewQuote> nqQuery = ParseQuery.getQuery(NewQuote.class);
+        nqQuery.whereEqualTo("relatedJournal", currentJournalId);
         final ParseQuery<NewDump> ndQuery = ParseQuery.getQuery(NewDump.class);
         ndQuery.whereEqualTo("relatedJournal", currentJournalId);
         final ParseQuery<NewFuel> nfQuery = ParseQuery.getQuery(NewFuel.class);
@@ -342,6 +365,25 @@ public class CurrentJournal extends BaseActivity {
                                 try {
                                     nj.delete();
                                     nj.unpin();
+                                } catch (ParseException e1) {
+                                    e1.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                });
+
+                nqQuery.findInBackground(new FindCallback<NewQuote>() {
+                    @Override
+                    public void done(List<NewQuote> list, ParseException e) {
+
+                        if (e == null) {
+
+                            for (NewQuote nq : list) {
+
+                                try {
+                                    nq.delete();
+                                    nq.unpin();
                                 } catch (ParseException e1) {
                                     e1.printStackTrace();
                                 }
@@ -389,7 +431,8 @@ public class CurrentJournal extends BaseActivity {
 
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("universalJournalId", "none");
-                editor.putString("crew", "noCrew");
+                editor.putString("driver", "noDriver");
+                editor.putString("navigator", "noNavigator");
                 editor.putString("truck", "noTruck");
                 editor.putString("date", "noDate");
                 editor.apply();
@@ -449,7 +492,8 @@ public class CurrentJournal extends BaseActivity {
                                             if (e == null) {
                                                 SharedPreferences.Editor editor = preferences.edit();
                                                 editor.putString("universalJournalId", "none");
-                                                editor.putString("crew", "noCrew");
+                                                editor.putString("driver", "noDriver");
+                                                editor.putString("navigator", "noNavigator");
                                                 editor.putString("truck", "noTruck");
                                                 editor.putString("date", "noDate");
                                                 editor.apply();

@@ -1,7 +1,7 @@
 package com.garrisonthomas.junkapp.DialogFragments;
 
 import android.app.DialogFragment;
-import android.content.Context;
+import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -10,23 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.garrisonthomas.junkapp.CurrentJournal;
 import com.garrisonthomas.junkapp.ParseObjects.NewJob;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
-import com.google.gson.Gson;
-import com.parse.ParseException;
-import com.parse.SaveCallback;
 
 public class AddJobDialogFragment extends DialogFragment {
 
@@ -36,8 +29,7 @@ public class AddJobDialogFragment extends DialogFragment {
     private static String[] payTypeArray;
     private String payTypeString, currentJournalId;
     private SharedPreferences preferences;
-    private ProgressBar pbar;
-    Gson gson = new Gson();
+    private TimePickerDialog tpd;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,15 +54,8 @@ public class AddJobDialogFragment extends DialogFragment {
 
         saveJob = (Button) v.findViewById(R.id.btn_save_job);
 
-        pbar = (ProgressBar) v.findViewById(R.id.add_job_pbar);
-
         payTypeSpinner.setAdapter(new ArrayAdapter<>(this.getActivity(),
                 android.R.layout.simple_dropdown_item_1line, payTypeArray));
-
-//        ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(), R.array.job_pay_type, android.R.layout.simple_spinner_item);
-////        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-//        payTypeSpinner.setAdapter(adapter);
-//        payTypeSpinner.setSelection(0);
 
         payTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -113,9 +98,6 @@ public class AddJobDialogFragment extends DialogFragment {
 
                     Utils.hideKeyboard(v, getActivity());
 
-                    saveJob.setVisibility(View.GONE);
-                    pbar.setVisibility(View.VISIBLE);
-
                     final NewJob newJob = new NewJob();
                     newJob.setRelatedJournal(currentJournalId);
                     newJob.setSSID(Integer.valueOf(etSSID.getText().toString()));
@@ -128,34 +110,14 @@ public class AddJobDialogFragment extends DialogFragment {
                     newJob.saveEventually();
                     newJob.pinInBackground();
 
-//                    String json = gson.toJson(newJob);
-//
-//                    SharedPreferences.Editor editor = preferences.edit();
-//                    editor.putString("job"+(etSSID.getText().toString()), json);
-//                    editor.apply();
+                    Toast.makeText(getActivity(), "Job number " + etSSID.getText().toString() + " saved", Toast.LENGTH_SHORT).show();
 
+                    dismiss();
 
-//                    newJob.pinInBackground("ALL_JOBS");
-
-//                    newJob.saveEventually(new SaveCallback() {
-//                        @Override
-//                        public void done(ParseException e) {
-//                            if (e == null) {
-                                Toast.makeText(getActivity(), "Job number " + etSSID.getText().toString() + " saved", Toast.LENGTH_SHORT).show();
-//                                        pbar.setVisibility(View.GONE);
-//                                saveJob.setVisibility(View.VISIBLE);
-                                dismiss();
-//                            } else {
-//                                Toast.makeText(getActivity(), getString(R.string.parse_exception_text), Toast.LENGTH_SHORT).show();
-//                                pbar.setVisibility(View.GONE);
-//                                saveJob.setVisibility(View.VISIBLE);
-//                            }
-//                        }
-//                    });
 
                 } else {
 
-                    Toast.makeText(getActivity(), "Please fill all fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Please fill all required fields", Toast.LENGTH_SHORT).show();
 
                 }
             }

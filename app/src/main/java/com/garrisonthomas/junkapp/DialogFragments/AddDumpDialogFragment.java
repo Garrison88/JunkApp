@@ -13,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,8 +20,6 @@ import android.widget.Toast;
 import com.garrisonthomas.junkapp.ParseObjects.NewDump;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
-import com.parse.ParseException;
-import com.parse.SaveCallback;
 
 public class AddDumpDialogFragment extends DialogFragment {
 
@@ -36,7 +33,6 @@ public class AddDumpDialogFragment extends DialogFragment {
     private static double weightNumber, result, withTax;
     private static String dumpNameString, resultString, withTaxString, currentJournalId;
     private SharedPreferences preferences;
-    private ProgressBar pbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,8 +53,6 @@ public class AddDumpDialogFragment extends DialogFragment {
         tvNetCost = (TextView) v.findViewById(R.id.tv_dump_net_cost);
 
         saveDump = (Button) v.findViewById(R.id.btn_save_dump);
-
-        pbar = (ProgressBar) v.findViewById(R.id.add_dump_pbar);
 
         dumpNameArray = getResources().getStringArray(R.array.dumps_name);
         rate = getResources().getIntArray(R.array.dumps_rate);
@@ -116,9 +110,6 @@ public class AddDumpDialogFragment extends DialogFragment {
 
                     Utils.hideKeyboard(v, getActivity());
 
-                    saveDump.setVisibility(View.GONE);
-                    pbar.setVisibility(View.VISIBLE);
-
                     NewDump newDump = new NewDump();
                     newDump.setRelatedJournal(currentJournalId);
                     newDump.setDumpName(dumpNameString);
@@ -133,25 +124,14 @@ public class AddDumpDialogFragment extends DialogFragment {
 
                     newDump.saveEventually();
                     newDump.pinInBackground();
-//                        @Override
-//                        public void done(ParseException e) {
 
-//                            if (e == null) {
-                                Toast.makeText(getActivity(), "Dump at " + dumpNameString + " saved", Toast.LENGTH_SHORT).show();
-//                                pbar.setVisibility(View.GONE);
-//                                saveDump.setVisibility(View.VISIBLE);
-                                dismiss();
-//                            } else {
-//                                Toast.makeText(getActivity(), getString(R.string.parse_exception_text), Toast.LENGTH_SHORT).show();
-//                                pbar.setVisibility(View.GONE);
-//                                saveDump.setVisibility(View.VISIBLE);
-//                            }
-//                        }
-//                    });
+                    Toast.makeText(getActivity(), "Dump at " + dumpNameString + " saved", Toast.LENGTH_SHORT).show();
+
+                    dismiss();
 
                 } else {
 
-                    Toast.makeText(getActivity(), "Please fill all fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Please fill all required fields", Toast.LENGTH_SHORT).show();
 
                 }
             }

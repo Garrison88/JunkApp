@@ -11,32 +11,85 @@
         android:orientation="horizontal">
 
         <com.wrapp.floatlabelededittext.FloatLabeledEditText
-            android:id="@+id/et_crew_wrapper"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
 
             <EditText
-                android:id="@+id/et_crew"
+                android:id="@+id/et_driver"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="Crew"
+                android:hint="Driver"
                 android:inputType="textCapWords" />
 
         </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
-        <Spinner
-            android:id="@+id/truck_spinner"
+        <com.wrapp.floatlabelededittext.FloatLabeledEditText
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="datetime"
+                android:maxLength="5"
+                android:hint="Start Time" />
+
+        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/journal_second_row"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/journal_first_row">
+
+        <com.wrapp.floatlabelededittext.FloatLabeledEditText
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <EditText
+                android:id="@+id/et_navigator"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Navigator"
+                android:inputType="textCapWords" />
+
+        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+        <com.wrapp.floatlabelededittext.FloatLabeledEditText
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="datetime"
+                android:maxLength="5"
+                android:hint="Start Time" />
+
+        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+    </LinearLayout>
+
+
+    <Spinner
+        android:id="@+id/truck_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/journal_first_row"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/journal_second_row" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/truck_spinner"
         android:gravity="center_horizontal">
 
         <Button

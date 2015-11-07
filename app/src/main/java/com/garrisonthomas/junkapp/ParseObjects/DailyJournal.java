@@ -7,9 +7,15 @@ import com.parse.ParseObject;
 
 public class DailyJournal extends ParseObject {
 
-    public String getCrew() {
+    public String getDriver() {
 
-        return getString("crew");
+        return getString("driver");
+
+    }
+
+    public String getNavigator() {
+
+        return getString("navigator");
 
     }
 
@@ -37,9 +43,15 @@ public class DailyJournal extends ParseObject {
 
     }
 
-    public void setCrew(String crew) {
+    public void setDriver(String driver) {
 
-        put("crew", crew);
+        put("driver", driver);
+
+    }
+
+    public void setNavigator(String navigator) {
+
+        put("navigator", navigator);
 
     }
 
