@@ -22,6 +22,7 @@
 
     <style name="RobotoEditTextStyle" parent="android:Widget.Holo.EditText">
         <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textSize">@dimen/abc_text_size_medium_material</item>
     </style>
 
     <style name="RobotoTextViewStyle" parent="android:Widget.Holo.TextView">

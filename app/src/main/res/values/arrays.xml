@@ -2,7 +2,7 @@
 <resources>
 
     <string-array name="dumps_name">
-        <item>Select a Dump</item>
+        <!--<item>Select a Dump</item>-->
         <item>Laird (Esander)</item>
         <item>Cherry (Turtle)</item>
         <item>Fenmar</item>
@@ -12,7 +12,7 @@
     </string-array>
 
     <string-array name="dumps_address">
-        <item>Placeholder</item>
+        <!--<item>Placeholder</item>-->
         <item>https://www.google.ca/maps/place/20+Esandar+Dr,+Toronto,+ON+M4G+1Y2/@43.7058561,-79.3591228,16z/data=!4m5!1m2!2m1!1smaps!3m1!1s0x89d4ccdd7f577725:0x5bea991514ff0f10</item>
         <item>https://www.google.ca/maps/place/242+Cherry+St,+Toronto,+ON+M5A+3L2/@43.6443606,-79.3557584,17z/data=!3m1!4b1!4m2!3m1!1s0x89d4cb185810edaf:0x3503ee91ce3ba927</item>
         <item>https://www.google.ca/maps/place/Gfl+Environmental+East+Corporation/@43.7582708,-79.5461359,15z/data=!4m2!3m1!1s0x0:0x5d3c9659170b8d24?sa=X&amp;ved=0CGsQ_BIwCmoVChMIu7fW5_TCyAIVSowNCh2XCAie</item>
@@ -22,7 +22,7 @@
     </string-array>
 
     <string-array name="dumps_info">
-        <item>Placeholder</item>
+        <!--<item>Placeholder</item>-->
         <item>Laird/Esander: Open Monday–Friday 8–5\nRate per ton: $80\n<u>Remember to wear safety gear!</u></item>
         <item>Cherry: Open every day 6–6</item>
         <item>Fenmar</item>
@@ -32,7 +32,7 @@
     </string-array>
 
     <integer-array name="dumps_rate">
-        <item>0</item>
+        <!--<item>0</item>-->
         <item>82</item>
         <item>85</item>
         <item>85</item>
@@ -119,8 +119,6 @@
 
     <string-array name="truck_number">
         <item>Truck 1</item>
-        <item>Truck 2</item>
-        <item>Truck 3</item>
         <item>Truck 4</item>
         <item>Truck 5</item>
     </string-array>

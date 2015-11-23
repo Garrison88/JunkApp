@@ -207,8 +207,7 @@
             android:id="@+id/btn_add_job"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/fab_add"
-            fab:fab_label="Add Job"
+            android:src="@drawable/ic_assignment_turned_in_white_24dp"
             fab:fab_size="mini" />
 
         <com.github.clans.fab.FloatingActionButton
@@ -216,8 +215,7 @@
             android:id="@+id/btn_add_quote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/fab_add"
-            fab:fab_label="Add Quote"
+            android:src="@drawable/ic_attach_money_white_24dp"
             fab:fab_size="mini" />
 
         <com.github.clans.fab.FloatingActionButton
@@ -225,8 +223,7 @@
             android:id="@+id/btn_add_dump"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/fab_add"
-            fab:fab_label="Add Dump"
+            android:src="@drawable/ic_local_shipping_white_24dp"
             fab:fab_size="mini" />
 
         <com.github.clans.fab.FloatingActionButton
@@ -234,8 +231,7 @@
             android:id="@+id/btn_add_fuel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/fab_add"
-            fab:fab_label="Add Fuel"
+            android:src="@drawable/ic_local_gas_station_white_24dp"
             fab:fab_size="mini" />
 
     </com.github.clans.fab.FloatingActionMenu>

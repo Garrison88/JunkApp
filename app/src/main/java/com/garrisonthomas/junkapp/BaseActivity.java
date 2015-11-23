@@ -1,19 +1,23 @@
 package com.garrisonthomas.junkapp;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.garrisonthomas.junkapp.DialogFragments.PasswordCheckDialogFragment;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,16 +30,21 @@ public class BaseActivity extends AppCompatActivity {
     private int TAKE_PHOTO_CODE = 0;
     private int count = 0;
     public String todaysDate;
+    SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
         Date date = new Date();
         SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy", Locale.CANADA);
         todaysDate = df2.format(date);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
     }
 
@@ -49,9 +58,7 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement

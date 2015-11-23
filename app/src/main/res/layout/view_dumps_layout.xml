@@ -5,72 +5,82 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/v_d_static_layout"
-        android:layout_width="wrap_content"
+        android:id="@+id/v_d_top_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:orientation="vertical">
+        android:baselineAligned="false"
+        android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/v_d_static_layout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Gross Cost" />
+            android:layout_gravity="start"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Net Cost" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gross Cost" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Receipt #" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Net Cost" />
 
-        <TextView
-            android:id="@+id/v_d_percent_previous_text"
-            android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Receipt #" />
+
+            <TextView
+                android:id="@+id/v_d_percent_previous_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Previous" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/v_d_net_layout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Previous" />
+            android:layout_weight="1"
+            android:gravity="start"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_view_dump_gross_cost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tv_view_dump_net_cost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_view_dump_receipt_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_view_dump_percent_previous"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/v_d_net_layout"
+    <ImageButton
+        android:id="@+id/btn_delete_dump"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="end"
-        android:orientation="vertical"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true">
-
-        <TextView
-            android:id="@+id/tv_view_dump_gross_cost"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/tv_view_dump_net_cost"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/tv_view_dump_receipt_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/tv_view_dump_percent_previous"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <ImageButton
-            android:id="@+id/btn_delete_dump"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:background="@null"
-            android:src="@drawable/ic_delete_white_24px" />
-
-    </LinearLayout>
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/v_d_top_layout"
+        android:background="@null"
+        android:src="@drawable/ic_delete_white_24px" />
 
 </RelativeLayout>

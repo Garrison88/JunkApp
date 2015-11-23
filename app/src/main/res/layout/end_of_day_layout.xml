@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/top_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.wrapp.floatlabelededittext.FloatLabeledEditText
+            android:id="@+id/et_end_notes_wrapper"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <EditText
+                android:id="@+id/end_day_notes"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Truck location, load, required supplies, etc."
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLines="5" />
+
+        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+        <ImageButton
+            android:id="@+id/end_day_photo"
+            android:src="@drawable/ic_photo_camera_white_24dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:textSize="@dimen/abc_text_size_small_material"/>
+
+    </LinearLayout>
+
+    <!--<ImageView-->
+        <!--android:id="@+id/end_day_image_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:visibility="gone"-->
+        <!--android:layout_below="@id/top_linear_layout"/>-->
+
+    <LinearLayout
+        android:id="@+id/clock_out_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top_linear_layout"
+        android:layout_centerHorizontal="true">
+
+        <Button
+            android:id="@+id/driver_end_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="DRIVER OUT"
+            android:textSize="@dimen/abc_text_size_small_material"/>
+
+        <Button
+            android:id="@+id/nav_end_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="NAVIGATOR OUT"
+            android:textSize="@dimen/abc_text_size_small_material"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/clock_out_layout"
+        android:layout_centerHorizontal="true">
+
+        <Button
+            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+            android:id="@+id/cancel_publish_dialog"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:layout_weight="1"/>
+
+        <Button
+            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+            android:id="@+id/archive_journal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Archive"
+            android:layout_weight="1"/>
+
+        <ProgressBar
+            android:id="@+id/publish_pbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

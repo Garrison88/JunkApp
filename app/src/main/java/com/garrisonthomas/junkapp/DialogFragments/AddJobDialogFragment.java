@@ -24,7 +24,7 @@ import com.garrisonthomas.junkapp.Utils;
 public class AddJobDialogFragment extends DialogFragment {
 
     private EditText etSSID, etGrossSale, etNetSale, etReceiptNumber, etJobNotes;
-    private static Button saveJob;
+    private static Button saveJob, cancelJob;
     private static Spinner payTypeSpinner;
     private static String[] payTypeArray;
     private String payTypeString, currentJournalId;
@@ -53,6 +53,7 @@ public class AddJobDialogFragment extends DialogFragment {
         payTypeSpinner = (Spinner) v.findViewById(R.id.spinner_pay_type);
 
         saveJob = (Button) v.findViewById(R.id.btn_save_job);
+        cancelJob = (Button) v.findViewById(R.id.btn_cancel_job);
 
         payTypeSpinner.setAdapter(new ArrayAdapter<>(this.getActivity(),
                 android.R.layout.simple_dropdown_item_1line, payTypeArray));
@@ -123,6 +124,14 @@ public class AddJobDialogFragment extends DialogFragment {
             }
         });
 
+        cancelJob.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+
+        setCancelable(false);
         return v;
 
     }

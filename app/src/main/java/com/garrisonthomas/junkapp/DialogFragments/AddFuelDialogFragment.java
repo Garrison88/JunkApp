@@ -20,7 +20,7 @@ import com.garrisonthomas.junkapp.Utils;
 public class AddFuelDialogFragment extends DialogFragment {
 
     private EditText etFuelVendor, etGrossCost, etNetCost, etReceiptNumber;
-    private static Button saveFuel;
+    private static Button saveFuel, cancelFuel;
     private String currentJournalId;
     private SharedPreferences preferences;
 
@@ -47,6 +47,7 @@ public class AddFuelDialogFragment extends DialogFragment {
         etReceiptNumber = (EditText) v.findViewById(R.id.et_fuel_receipt_number);
 
         saveFuel = (Button) v.findViewById(R.id.btn_save_fuel);
+        cancelFuel = (Button) v.findViewById(R.id.btn_cancel_fuel);
 
         saveFuel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +88,14 @@ public class AddFuelDialogFragment extends DialogFragment {
             }
         });
 
+        cancelFuel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+
+        setCancelable(false);
         return v;
 
     }

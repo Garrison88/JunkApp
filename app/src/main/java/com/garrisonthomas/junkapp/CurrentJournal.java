@@ -22,6 +22,7 @@ import com.garrisonthomas.junkapp.DialogFragments.AddDumpDialogFragment;
 import com.garrisonthomas.junkapp.DialogFragments.AddFuelDialogFragment;
 import com.garrisonthomas.junkapp.DialogFragments.AddJobDialogFragment;
 import com.garrisonthomas.junkapp.DialogFragments.AddQuoteDialogFragment;
+import com.garrisonthomas.junkapp.DialogFragments.EndOfDayDialogFragment;
 import com.garrisonthomas.junkapp.DialogFragments.ViewDumpDialogFragment;
 import com.garrisonthomas.junkapp.DialogFragments.ViewJobDialogFragment;
 import com.garrisonthomas.junkapp.ParseObjects.DailyJournal;
@@ -33,7 +34,6 @@ import com.github.clans.fab.FloatingActionButton;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +67,7 @@ public class CurrentJournal extends BaseActivity {
     Spinner jobsSpinner;
     @Bind(R.id.dumps_spinner)
     Spinner dumpsSpinner;
+
     String currentJournalId, spDriver, spNavigator, spTruck, spDate, dumpSpinnerName;
     int selectedJobSSID;
     private ArrayList<Integer> jobsArray;
@@ -137,6 +138,9 @@ public class CurrentJournal extends BaseActivity {
             }
         });
 
+        Utils.populateJobSpinner(this, currentJournalId, jobsArray, jobsSpinner);
+        Utils.populateDumpSpinner(this, currentJournalId, dumpsArray, dumpsSpinner);
+
         addJob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -186,9 +190,9 @@ public class CurrentJournal extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-                    FragmentManager manager = getFragmentManager();
-                    AddDumpDialogFragment djFragment = new AddDumpDialogFragment();
-                    djFragment.show(manager, "Dialog");
+                FragmentManager manager = getFragmentManager();
+                AddDumpDialogFragment djFragment = new AddDumpDialogFragment();
+                djFragment.show(manager, "Dialog");
 
             }
         });
@@ -226,13 +230,7 @@ public class CurrentJournal extends BaseActivity {
 
             }
         });
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Utils.populateJobSpinner(this, currentJournalId, jobsArray, jobsSpinner);
-        Utils.populateDumpSpinner(this, currentJournalId, dumpsArray, dumpsSpinner);
     }
 
     @Override
@@ -255,8 +253,9 @@ public class CurrentJournal extends BaseActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
 
-                AlertDialog diaBox = confirmJournalPublish();
-                diaBox.show();
+                FragmentManager manager = getFragmentManager();
+                EndOfDayDialogFragment djFragment = new EndOfDayDialogFragment();
+                djFragment.show(manager, "Dialog");
 
                 return false;
             }
@@ -292,35 +291,6 @@ public class CurrentJournal extends BaseActivity {
                 .create();
     }
 
-    private AlertDialog confirmJournalPublish() {
-
-        return new AlertDialog.Builder(this)
-                .setTitle("Finalize Journal?")
-                .setMessage("You will no longer be able to view or edit this journal")
-                .setIcon(R.drawable.ic_publish_black_24px)
-
-                .setPositiveButton("publish", new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int whichButton) {
-
-                        publishJournal();
-
-                        dialog.dismiss();
-
-
-                    }
-
-                })
-
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        dialog.dismiss();
-
-                    }
-                })
-                .create();
-    }
 
     private void deleteJournal() {
 
@@ -445,71 +415,5 @@ public class CurrentJournal extends BaseActivity {
         });
     }
 
-    public void publishJournal() {
 
-        toolbarProgressBar.setVisibility(View.VISIBLE);
-
-        final ParseQuery<DailyJournal> djQuery = ParseQuery.getQuery(DailyJournal.class);
-        djQuery.whereEqualTo("objectId", currentJournalId);
-        djQuery.setLimit(1);
-        djQuery.findInBackground(new FindCallback<DailyJournal>() {
-            @Override
-            public void done(List<DailyJournal> list, ParseException e) {
-
-                if (e == null) {
-
-                    for (final DailyJournal dj : list) {
-
-                        ParseQuery<NewJob> njQuery = ParseQuery.getQuery(NewJob.class);
-                        njQuery.whereEqualTo("relatedJournal", currentJournalId);
-                        njQuery.fromPin();
-                        njQuery.findInBackground(new FindCallback<NewJob>() {
-                            @Override
-                            public void done(List<NewJob> list, ParseException e) {
-
-                                if (e == null) {
-
-                                    double total = 0.0;
-
-                                    for (NewJob nj : list) {
-
-                                        total = total + nj.getGrossSale();
-                                        try {
-                                            nj.unpin();
-                                        } catch (ParseException e1) {
-                                            e1.printStackTrace();
-                                        }
-
-                                    }
-
-                                    int intTotal = (int) ((total / 1400) * 100);
-                                    dj.setPercentOfGoal(intTotal);
-
-                                    dj.saveInBackground(new SaveCallback() {
-                                        @Override
-                                        public void done(ParseException e) {
-
-                                            if (e == null) {
-                                                SharedPreferences.Editor editor = preferences.edit();
-                                                editor.putString("universalJournalId", "none");
-                                                editor.putString("driver", "noDriver");
-                                                editor.putString("navigator", "noNavigator");
-                                                editor.putString("truck", "noTruck");
-                                                editor.putString("date", "noDate");
-                                                editor.apply();
-                                                toolbarProgressBar.setVisibility(View.GONE);
-                                                Toast.makeText(CurrentJournal.this, "Journal successfully published",
-                                                        Toast.LENGTH_SHORT).show();
-                                                CurrentJournal.this.finish();
-                                            }
-                                        }
-                                    });
-                                }
-                            }
-                        });
-                    }
-                }
-            }
-        });
-    }
 }

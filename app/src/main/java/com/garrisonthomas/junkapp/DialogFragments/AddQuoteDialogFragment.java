@@ -20,7 +20,7 @@ import com.garrisonthomas.junkapp.Utils;
 public class AddQuoteDialogFragment extends DialogFragment {
 
     private static EditText etQuoteSSID, etLowEnd, etHighEnd, etQuoteNotes;
-    private static Button saveQuote;
+    private static Button saveQuote, cancelQuote;
     private static String currentJournalId;
     private SharedPreferences preferences;
 
@@ -41,6 +41,7 @@ public class AddQuoteDialogFragment extends DialogFragment {
         etQuoteNotes = (EditText) v.findViewById(R.id.et_quote_notes);
 
         saveQuote = (Button) v.findViewById(R.id.btn_save_quote);
+        cancelQuote = (Button) v.findViewById(R.id.btn_cancel_quote);
 
         saveQuote.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +79,14 @@ public class AddQuoteDialogFragment extends DialogFragment {
             }
         });
 
+        cancelQuote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+
+        setCancelable(false);
         return v;
 
     }

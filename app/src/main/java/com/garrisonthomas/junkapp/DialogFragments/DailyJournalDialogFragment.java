@@ -1,6 +1,8 @@
 package com.garrisonthomas.junkapp.DialogFragments;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.garrisonthomas.junkapp.CurrentJournal;
@@ -27,6 +30,7 @@ import com.parse.ParseException;
 import com.parse.SaveCallback;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -34,7 +38,7 @@ public class DailyJournalDialogFragment extends DialogFragment {
 
     private static Spinner truckSpinner;
     private static String[] truckNumber;
-    private static Button cancel, createJournal;
+    private static Button cancel, createJournal, dStartTime, nStartTime;
     private EditText driver, navigator;
     private String truckSelected;
     private Date date = new Date();
@@ -59,10 +63,18 @@ public class DailyJournalDialogFragment extends DialogFragment {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
 
+        final Calendar c = Calendar.getInstance();
+        final int hour = c.get(Calendar.HOUR_OF_DAY);
+        final int minute = c.get(Calendar.MINUTE);
+
         truckSpinner = (Spinner) v.findViewById(R.id.truck_spinner);
         truckNumber = getResources().getStringArray(R.array.truck_number);
         createJournal = (Button) v.findViewById(R.id.btn_create_journal);
         cancel = (Button) v.findViewById(R.id.cancel_fragment);
+        dStartTime = (Button) v.findViewById(R.id.driver_start_time);
+        dStartTime.setTransformationMethod(null);
+        nStartTime = (Button) v.findViewById(R.id.nav_start_time);
+        nStartTime.setTransformationMethod(null);
 
         driver = (EditText) v.findViewById(R.id.et_driver);
         navigator = (EditText) v.findViewById(R.id.et_navigator);
@@ -86,15 +98,66 @@ public class DailyJournalDialogFragment extends DialogFragment {
             }
         });
 
+        dStartTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimePickerDialog tpd = new TimePickerDialog(getActivity(), AlertDialog.BUTTON_NEUTRAL,
+                        new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hour, int minute) {
+                        String aMpM = "a.m.";
+                        if(hour > 12)
+                        {
+                            hour -= 12;
+                            aMpM = "p.m.";
+                        }
+                        if (minute == 0) {
+                            dStartTime.setText(hour + ":" + minute + "0 " + aMpM);
+                        } else {
+                            dStartTime.setText(hour + ":" + minute + " " + aMpM);
+                        }
+                    }
+                }, hour, minute, false);
+                tpd.show();
+            }
+        });
+
+        nStartTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimePickerDialog tpd = new TimePickerDialog(getActivity(), AlertDialog.BUTTON_NEUTRAL,
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hour, int minute) {
+                                String aMpM = "a.m.";
+                                if(hour > 12)
+                                {
+                                    hour -= 12;
+                                    aMpM = "p.m.";
+                                }
+                                if (minute == 0) {
+                                    nStartTime.setText(hour + ":" + minute + "0 " + aMpM);
+                                } else {
+                                    nStartTime.setText(hour + ":" + minute + " " + aMpM);
+                                }
+                            }
+                        }, hour, minute, false);
+                tpd.show();
+            }
+        });
+
         createJournal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (!TextUtils.isEmpty(driver.getText())) {
+                if (!TextUtils.isEmpty(driver.getText()) && !dStartTime.getText().equals("START TIME")) {
 
                     final String driverString = driver.getText().toString();
                     final String navigatorString = navigator.getText().toString();
                     final int truckNumber = Integer.valueOf(truckSelected.substring(6, 7));
+                    final String driverST = dStartTime.getText().toString();
+                    final String navST = nStartTime.getText().toString();
+
 
                     Utils.hideKeyboard(v, getActivity());
 
@@ -105,9 +168,12 @@ public class DailyJournalDialogFragment extends DialogFragment {
 
                     newJournal.setDate(todaysDate);
                     newJournal.setDriver(driverString);
+                    newJournal.setDriverStartTime(driverST);
                     newJournal.setNavigator(navigatorString);
+                    newJournal.setNavStartTime(navST);
                     newJournal.setTruckNumber(truckNumber);
-                    newJournal.saveInBackground(new SaveCallback() {
+                    newJournal.pinInBackground();
+                    newJournal.saveEventually(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
                             if (e == null) {
@@ -135,7 +201,7 @@ public class DailyJournalDialogFragment extends DialogFragment {
                     });
 
                 } else {
-                    Toast.makeText(getActivity(), "Please enter a crew", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Please enter at minimum a driver and start time", Toast.LENGTH_SHORT).show();
                 }
             }
         });

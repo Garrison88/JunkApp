@@ -76,20 +76,20 @@ public class Tab3DumpFragment extends Fragment {
                 dirBtn.setOnClickListener(new View.OnClickListener() {
 
                     public void onClick(View v) {
-                        if (position != 0) {
+//                        if (position != 0) {
                             Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
                                     Uri.parse(dir));
                             startActivity(intent);
-                        } else {
-                            Toast.makeText(getActivity(), R.string.toast_no_dump_selected, Toast.LENGTH_SHORT).show();
-                        }
+//                        } else {
+//                            Toast.makeText(getActivity(), R.string.toast_no_dump_selected, Toast.LENGTH_SHORT).show();
+//                        }
                     }
                 });
 
                 infoBtn.setOnClickListener(new View.OnClickListener() {
 
                     public void onClick(View v) {
-                        if (position != 0) {
+//                        if (position != 0) {
                             new AlertDialog.Builder(getActivity())
                                     .setTitle("Dump Info")
                                     .setMessage(info)
@@ -100,9 +100,9 @@ public class Tab3DumpFragment extends Fragment {
                                     })
                                     .setIcon(R.drawable.ic_dashboard_white_24dp)
                                     .show();
-                        } else {
-                            Toast.makeText(getActivity(), R.string.toast_no_dump_selected, Toast.LENGTH_SHORT).show();
-                        }
+//                        } else {
+//                            Toast.makeText(getActivity(), R.string.toast_no_dump_selected, Toast.LENGTH_SHORT).show();
+//                        }
                     }
                 });
 
@@ -112,7 +112,7 @@ public class Tab3DumpFragment extends Fragment {
 
                         if (!TextUtils.isEmpty(weight.getText())) {
 
-                            if (position != 0) {
+//                            if (position != 0) {
 
                                 weightNumber = Double.parseDouble(weight.getText().toString());
                                 weightNumber = weightNumber / 1000;
@@ -130,11 +130,11 @@ public class Tab3DumpFragment extends Fragment {
                                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
 
-                            } else {
-
-                                Toast.makeText(getActivity(), R.string.toast_no_dump_selected, Toast.LENGTH_SHORT).show();
-
-                            }
+//                            } else {
+//
+//                                Toast.makeText(getActivity(), R.string.toast_no_dump_selected, Toast.LENGTH_SHORT).show();
+//
+//                            }
 
                         } else {
 
@@ -208,9 +208,9 @@ public class Tab3DumpFragment extends Fragment {
             main_text.setText(dumpName[position]);
 
             TextView subSpinner = (TextView) mySpinner.findViewById(R.id.spinner_text_dump_rate);
-            if (position == 0) {
-                subSpinner.setVisibility(View.GONE);
-            }
+//            if (position == 0) {
+//                subSpinner.setVisibility(View.GONE);
+//            }
             subSpinner.setText("$" + rate[position] + "/tonne");
 
 //            ImageView left_icon = (ImageView) mySpinner.findViewById(R.id.left_pic);

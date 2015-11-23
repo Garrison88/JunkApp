@@ -31,6 +31,7 @@
     </style>
 
     <style name="CustomDialog" parent="@android:style/Theme.Material.Dialog">
+        <item name="android:fontFamily">roboto-thin</item>
         <item name="android:textSize">@dimen/abc_text_size_medium_material</item>
         <item name="android:textViewStyle">@style/TextViewStyle</item>
         <item name="android:editTextStyle">@style/EditTextStyle</item>

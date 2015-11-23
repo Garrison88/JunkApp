@@ -13,27 +13,23 @@
             android:id="@+id/spinner_dump_dialog"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:layout_gravity="center_vertical"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp" />
+            android:layout_gravity="center_vertical"/>
 
         <com.wrapp.floatlabelededittext.FloatLabeledEditText
             android:layout_width="0dp"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1">
 
             <EditText
                 android:id="@+id/et_add_dump_weight"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:hint="Weight (kgs)"
                 android:inputType="number"
                 android:maxLength="4" />
 
 
         </com.wrapp.floatlabelededittext.FloatLabeledEditText>
-
 
 
     </LinearLayout>
@@ -44,29 +40,47 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/et_add_dump_weight_wrapper">
 
-        <TextView
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Gross Cost" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_dump_gross_cost"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Gross Cost"
+                android:layout_gravity="center_horizontal"/>
 
-        <TextView
+            <TextView
+                android:id="@+id/tv_dump_gross_cost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Net Cost" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_dump_net_cost"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Net Cost"
+                android:layout_gravity="center_horizontal"/>
+
+            <TextView
+                android:id="@+id/tv_dump_net_cost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -101,13 +115,28 @@
 
     </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
-    <Button
-        android:id="@+id/btn_save_dump"
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/et_percent_previous_wrapper"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:text="Save" />
+        android:layout_below="@id/et_percent_previous_wrapper"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_cancel_dump"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal"
+            android:text="Cancel" />
+
+        <Button
+            android:id="@+id/btn_save_dump"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Save" />
+
+    </LinearLayout>
 
 </RelativeLayout>

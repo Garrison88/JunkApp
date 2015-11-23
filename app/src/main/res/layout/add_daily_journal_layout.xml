@@ -12,7 +12,7 @@
 
         <com.wrapp.floatlabelededittext.FloatLabeledEditText
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1">
 
             <EditText
@@ -24,19 +24,15 @@
 
         </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
-        <com.wrapp.floatlabelededittext.FloatLabeledEditText
+        <Button
+            android:id="@+id/driver_start_time"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="datetime"
-                android:maxLength="5"
-                android:hint="Start Time" />
-
-        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:text="START"
+            android:drawableStart="@drawable/ic_access_time_white_24dp"
+            android:textSize="@dimen/abc_text_size_small_material" />
 
     </LinearLayout>
 
@@ -44,12 +40,12 @@
         android:id="@+id/journal_second_row"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@id/journal_first_row">
+        android:layout_below="@id/journal_first_row"
+        android:orientation="horizontal">
 
         <com.wrapp.floatlabelededittext.FloatLabeledEditText
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1">
 
             <EditText
@@ -61,28 +57,22 @@
 
         </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
-        <com.wrapp.floatlabelededittext.FloatLabeledEditText
+        <Button
+            android:id="@+id/nav_start_time"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="datetime"
-                android:maxLength="5"
-                android:hint="Start Time" />
-
-        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:text="START"
+            android:drawableStart="@drawable/ic_access_time_white_24dp"
+            android:textSize="@dimen/abc_text_size_small_material" />
 
     </LinearLayout>
-
 
     <Spinner
         android:id="@+id/truck_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_below="@+id/journal_second_row" />
 
     <LinearLayout

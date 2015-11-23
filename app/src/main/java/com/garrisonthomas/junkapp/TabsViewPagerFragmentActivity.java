@@ -1,11 +1,9 @@
 package com.garrisonthomas.junkapp;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Vector;
-
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +16,10 @@ import com.garrisonthomas.junkapp.TabFragments.Tab1DashFragment;
 import com.garrisonthomas.junkapp.TabFragments.Tab2CalcFragment;
 import com.garrisonthomas.junkapp.TabFragments.Tab3DumpFragment;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Vector;
+
 /**
  * The <code>TabsViewPagerFragmentActivity</code> class implements the Fragment activity that maintains a TabHost using a ViewPager.
  *
@@ -29,6 +31,8 @@ public class TabsViewPagerFragmentActivity extends BaseActivity implements TabHo
     private ViewPager viewPager;
     private HashMap<String, TabInfo> mapTabInfo = new HashMap<String, TabsViewPagerFragmentActivity.TabInfo>();
     Toolbar toolbar;
+    SharedPreferences preferences;
+    private String pref;
 
     /**
      * @author mwho
@@ -99,6 +103,24 @@ public class TabsViewPagerFragmentActivity extends BaseActivity implements TabHo
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
 
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+//        pref = preferences.getString("firstrun", "0");
+//        SharedPreferences.Editor editor = preferences.edit();
+//        editor.putString("firstrun", "noEntry").commit();
+//
+//    }
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//
+//        if (pref.equals("0")) {
+//
+//            FragmentManager manager = getFragmentManager();
+//            PasswordCheckDialogFragment djFragment = new PasswordCheckDialogFragment();
+//            djFragment.show(manager, "Dialog");
+//
+//        }
     }
 
     @Override

@@ -25,7 +25,7 @@ public class AddDumpDialogFragment extends DialogFragment {
 
     private static EditText etAddDumpWeight, etDumpReceiptNumber, etPercentPrevious;
     private static TextView tvGrossCost, tvNetCost;
-    private static Button saveDump;
+    private static Button saveDump, cancelDump;
     private static Spinner dumpNameSpinner;
     private static String[] dumpNameArray;
     private static int[] rate;
@@ -53,6 +53,7 @@ public class AddDumpDialogFragment extends DialogFragment {
         tvNetCost = (TextView) v.findViewById(R.id.tv_dump_net_cost);
 
         saveDump = (Button) v.findViewById(R.id.btn_save_dump);
+        cancelDump = (Button) v.findViewById(R.id.btn_cancel_dump);
 
         dumpNameArray = getResources().getStringArray(R.array.dumps_name);
         rate = getResources().getIntArray(R.array.dumps_rate);
@@ -94,7 +95,9 @@ public class AddDumpDialogFragment extends DialogFragment {
                     resultString = getString(R.string.dollar_sign) + String.valueOf(result);
                     withTaxString = getString(R.string.dollar_sign) + String.valueOf(withTax);
 
+                    tvGrossCost.setVisibility(View.VISIBLE);
                     tvGrossCost.setText(resultString);
+                    tvNetCost.setVisibility(View.VISIBLE);
                     tvNetCost.setText(withTaxString);
 
                 }
@@ -137,6 +140,14 @@ public class AddDumpDialogFragment extends DialogFragment {
             }
         });
 
+        cancelDump.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+
+        setCancelable(false);
         return v;
 
     }
