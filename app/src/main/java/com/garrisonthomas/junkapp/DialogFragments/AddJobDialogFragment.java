@@ -1,7 +1,5 @@
-package com.garrisonthomas.junkapp.DialogFragments;
+package com.garrisonthomas.junkapp.dialogfragments;
 
-import android.app.DialogFragment;
-import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -17,19 +15,19 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.garrisonthomas.junkapp.ParseObjects.NewJob;
+import com.garrisonthomas.junkapp.AddItemDialogFragment;
+import com.garrisonthomas.junkapp.parseobjects.NewJob;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
 
-public class AddJobDialogFragment extends DialogFragment {
+public class AddJobDialogFragment extends AddItemDialogFragment {
 
     private EditText etSSID, etGrossSale, etNetSale, etReceiptNumber, etJobNotes;
-    private static Button saveJob, cancelJob;
+    private static Button startTime, endTime, saveJob, cancelJob;
     private static Spinner payTypeSpinner;
     private static String[] payTypeArray;
     private String payTypeString, currentJournalId;
     private SharedPreferences preferences;
-    private TimePickerDialog tpd;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,6 +50,8 @@ public class AddJobDialogFragment extends DialogFragment {
 
         payTypeSpinner = (Spinner) v.findViewById(R.id.spinner_pay_type);
 
+        startTime = (Button) v.findViewById(R.id.job_start_time);
+        endTime = (Button) v.findViewById(R.id.job_end_time);
         saveJob = (Button) v.findViewById(R.id.btn_save_job);
         cancelJob = (Button) v.findViewById(R.id.btn_cancel_job);
 
@@ -82,9 +82,23 @@ public class AddJobDialogFragment extends DialogFragment {
 
                     final double doubleValue = Double.valueOf(etGrossSale.getText().toString());
 
-                    final String withTax = String.valueOf(Math.round((doubleValue * 1.13) * 100.00) / 100.00);
+                    final String withTax = String.valueOf(Utils.calculateTax(doubleValue));
                     etNetSale.setText(withTax);
                 }
+            }
+        });
+
+        startTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.chooseTime(getActivity(), startTime);
+            }
+        });
+
+        endTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.chooseTime(getActivity(), endTime);
             }
         });
 
@@ -102,6 +116,8 @@ public class AddJobDialogFragment extends DialogFragment {
                     final NewJob newJob = new NewJob();
                     newJob.setRelatedJournal(currentJournalId);
                     newJob.setSSID(Integer.valueOf(etSSID.getText().toString()));
+                    newJob.setStartTime(String.valueOf(startTime.getText()));
+                    newJob.setEndTime(String.valueOf(endTime.getText()));
                     newJob.setGrossSale(Double.valueOf(etGrossSale.getText().toString()));
                     newJob.setNetSale(Double.valueOf(etNetSale.getText().toString()));
                     newJob.setReceiptNumber(Integer.valueOf(etReceiptNumber.getText().toString()));
@@ -124,12 +140,7 @@ public class AddJobDialogFragment extends DialogFragment {
             }
         });
 
-        cancelJob.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        cancelFragment(cancelJob);
 
         setCancelable(false);
         return v;

@@ -1,6 +1,5 @@
-package com.garrisonthomas.junkapp.DialogFragments;
+package com.garrisonthomas.junkapp.dialogfragments;
 
-import android.app.DialogFragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -17,11 +16,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.garrisonthomas.junkapp.ParseObjects.NewDump;
+import com.garrisonthomas.junkapp.AddItemDialogFragment;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
+import com.garrisonthomas.junkapp.parseobjects.NewDump;
 
-public class AddDumpDialogFragment extends DialogFragment {
+public class AddDumpDialogFragment extends AddItemDialogFragment {
 
     private static EditText etAddDumpWeight, etDumpReceiptNumber, etPercentPrevious;
     private static TextView tvGrossCost, tvNetCost;
@@ -86,11 +86,10 @@ public class AddDumpDialogFragment extends DialogFragment {
 
                 if ((!hasFocus) && (!TextUtils.isEmpty(etAddDumpWeight.getText()))) {
 
-                    weightNumber = Double.parseDouble(etAddDumpWeight.getText().toString());
-                    weightNumber = weightNumber / 1000;
+                    weightNumber = Double.parseDouble(etAddDumpWeight.getText().toString()) / 1000;
 
                     result = Math.round((weightNumber * dumpRateInt) * 100.00) / 100.00;
-                    withTax = Math.round((result * 1.13) * 100.00) / 100.00;
+                    withTax = Utils.calculateTax(result);
 
                     resultString = getString(R.string.dollar_sign) + String.valueOf(result);
                     withTaxString = getString(R.string.dollar_sign) + String.valueOf(withTax);
@@ -140,12 +139,7 @@ public class AddDumpDialogFragment extends DialogFragment {
             }
         });
 
-        cancelDump.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        cancelFragment(cancelDump);
 
         setCancelable(false);
         return v;

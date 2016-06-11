@@ -1,4 +1,4 @@
-package com.garrisonthomas.junkapp.DialogFragments;
+package com.garrisonthomas.junkapp.dialogfragments;
 
 
 import android.app.Dialog;

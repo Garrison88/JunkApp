@@ -1,4 +1,4 @@
-package com.garrisonthomas.junkapp.ParseObjects;
+package com.garrisonthomas.junkapp.parseobjects;
 
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
@@ -7,6 +7,12 @@ import com.parse.ParseObject;
 @ParseClassName("DailyJournal")
 
 public class DailyJournal extends ParseObject {
+
+//    public String getJournalID() {
+//
+//        return getString("journalID");
+//
+//    }
 
     public String getDriver() {
 
@@ -66,6 +72,12 @@ public class DailyJournal extends ParseObject {
         return getInt("percentOnDump");
 
     }
+
+//    public void setJournalID(String journalID) {
+//
+//        put("journalID", journalID);
+//
+//    }
 
     public void setDate(String date) {
 

@@ -1,7 +1,9 @@
 package com.garrisonthomas.junkapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -9,15 +11,18 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.garrisonthomas.junkapp.ParseObjects.NewDump;
-import com.garrisonthomas.junkapp.ParseObjects.NewJob;
+import com.garrisonthomas.junkapp.parseobjects.NewDump;
+import com.garrisonthomas.junkapp.parseobjects.NewJob;
 import com.parse.FindCallback;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -108,6 +113,28 @@ public class Utils {
             }
 
         });
+
+    }
+
+    public static double calculateTax(double grossSale){
+        return Math.round((grossSale * 1.13) * 100.00) / 100.00;
+    }
+
+    public static void chooseTime (Context context, final Button button) {
+
+        final Calendar c = Calendar.getInstance();
+        final int hour = c.get(Calendar.HOUR_OF_DAY);
+        final int minute = c.get(Calendar.MINUTE);
+
+        TimePickerDialog mTimePicker;
+        mTimePicker = new TimePickerDialog(context, AlertDialog.BUTTON_POSITIVE, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                button.setText(selectedHour + ":" + selectedMinute);
+            }
+        }, hour, minute, true);//Yes 24 hour time
+        mTimePicker.setTitle(null);
+        mTimePicker.show();
 
     }
 

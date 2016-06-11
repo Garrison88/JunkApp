@@ -1,4 +1,4 @@
-package com.garrisonthomas.junkapp.TabFragments;
+package com.garrisonthomas.junkapp.tabfragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.garrisonthomas.junkapp.R;
+import com.garrisonthomas.junkapp.Utils;
 
 import java.util.ArrayList;
 
@@ -110,6 +111,7 @@ public class Tab2CalcFragment extends Fragment {
             }
         });
 
+        //clears priceArray and all textViews
         clearCost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -134,7 +136,7 @@ public class Tab2CalcFragment extends Fragment {
                     doubleValue = tvTotal.getText().toString();
                     beforeTax = Double.parseDouble(doubleValue.substring(1));
 
-                    totalText = Double.toString(Math.round((beforeTax * 1.13) * 100.00) / 100.00);
+                    totalText = Double.toString(Utils.calculateTax(beforeTax));
                     tvTotal.setText("$" + totalText);
 
                     addHST.setText("Display Tax");
@@ -165,7 +167,7 @@ public class Tab2CalcFragment extends Fragment {
     public void showHST() {
 
         double tax = Double.parseDouble(totalText)-sum;
-        String taxString = "$"+(Math.round((tax) * 100.00) / 100.00);
+        String taxString = "$"+ (Math.round(tax * 100.00) / 100.00);
         tvTotal.setText(taxString);
 
     }

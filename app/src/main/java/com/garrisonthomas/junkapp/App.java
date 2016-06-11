@@ -2,11 +2,11 @@ package com.garrisonthomas.junkapp;
 
 import android.app.Application;
 
-import com.garrisonthomas.junkapp.ParseObjects.DailyJournal;
-import com.garrisonthomas.junkapp.ParseObjects.NewDump;
-import com.garrisonthomas.junkapp.ParseObjects.NewFuel;
-import com.garrisonthomas.junkapp.ParseObjects.NewJob;
-import com.garrisonthomas.junkapp.ParseObjects.NewQuote;
+import com.garrisonthomas.junkapp.parseobjects.DailyJournal;
+import com.garrisonthomas.junkapp.parseobjects.NewDump;
+import com.garrisonthomas.junkapp.parseobjects.NewFuel;
+import com.garrisonthomas.junkapp.parseobjects.NewJob;
+import com.garrisonthomas.junkapp.parseobjects.NewQuote;
 import com.parse.Parse;
 import com.parse.ParseObject;
 
@@ -22,9 +22,19 @@ public class App extends Application {
         ParseObject.registerSubclass(DailyJournal.class);
         ParseObject.registerSubclass(NewQuote.class);
 
-        Parse.enableLocalDatastore(this);
+//        Parse.enableLocalDatastore(this);
 
-        Parse.initialize(this, "gTmFRethcBdeRGLimnNH5pYCdgmxeeMS9EzEdzj3", "us6N0TVBxNQMDFi75yzpeBRWcQeSNxnjiw3DgyXj");
+        Parse.initialize(new Parse.Configuration.Builder(this)
+                .applicationId("gTmFRethcBdeRGLimnNH5pYCdgmxeeMS9EzEdzj3")
+                .clientKey(null)
+                .server("http://ridofit.herokuapp.com/parse/") // The trailing slash is important.
+                .enableLocalDataStore()
+
+
+
+        .build()
+        );
+//        Parse.initialize(this, "vG7mYtAwz0fePvXLkLEh1BsS5P5ZfZMdNhO9sdZR", "z2IzDj8VHgtHGaCsRqYhAAUEq1LzymwnBgBi1U5j");
 
     }
 }

@@ -1,33 +1,26 @@
-package com.garrisonthomas.junkapp.TabFragments;
+package com.garrisonthomas.junkapp.tabfragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.garrisonthomas.junkapp.CurrentJournal;
-import com.garrisonthomas.junkapp.DialogFragments.DailyJournalDialogFragment;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import com.garrisonthomas.junkapp.dialogfragments.DailyJournalDialogFragment;
 
 public class Tab1DashFragment extends Fragment {
 
@@ -66,7 +59,7 @@ public class Tab1DashFragment extends Fragment {
         percentOfTotal = (TextView) v.findViewById(R.id.tv_percent_of_total);
         percentOfGoal = (TextView) v.findViewById(R.id.tv_percent_of_goal);
 
-        manager = getFragmentManager();
+        manager = getActivity().getSupportFragmentManager();
         djFragment = new DailyJournalDialogFragment();
 
         final View coordinatorLayoutView = v.findViewById(R.id.snackbar_create_journal);

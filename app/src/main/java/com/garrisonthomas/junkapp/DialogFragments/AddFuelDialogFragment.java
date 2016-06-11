@@ -1,6 +1,5 @@
-package com.garrisonthomas.junkapp.DialogFragments;
+package com.garrisonthomas.junkapp.dialogfragments;
 
-import android.app.DialogFragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -13,11 +12,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.garrisonthomas.junkapp.ParseObjects.NewFuel;
+import com.garrisonthomas.junkapp.AddItemDialogFragment;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
+import com.garrisonthomas.junkapp.parseobjects.NewFuel;
 
-public class AddFuelDialogFragment extends DialogFragment {
+public class AddFuelDialogFragment extends AddItemDialogFragment {
 
     private EditText etFuelVendor, etGrossCost, etNetCost, etReceiptNumber;
     private static Button saveFuel, cancelFuel;
@@ -88,12 +88,7 @@ public class AddFuelDialogFragment extends DialogFragment {
             }
         });
 
-        cancelFuel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        cancelFragment(cancelFuel);
 
         setCancelable(false);
         return v;

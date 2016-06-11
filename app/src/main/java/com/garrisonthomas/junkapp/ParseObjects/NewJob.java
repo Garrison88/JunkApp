@@ -1,4 +1,4 @@
-package com.garrisonthomas.junkapp.ParseObjects;
+package com.garrisonthomas.junkapp.parseobjects;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
@@ -22,6 +22,18 @@ public class NewJob extends ParseObject {
     public double getNetSale() {
 
         return getDouble("netSale");
+
+    }
+
+    public String getStartTime() {
+
+        return getString("startTime");
+
+    }
+
+    public String getEndTime() {
+
+        return getString("endTime");
 
     }
 
@@ -64,6 +76,18 @@ public class NewJob extends ParseObject {
     public void setNetSale(double netSale) {
 
         put("netSale", netSale);
+
+    }
+
+    public void setStartTime(String startTime) {
+
+        put("startTime", startTime);
+
+    }
+
+    public void setEndTime(String endTime) {
+
+        put("endTime", endTime);
 
     }
 

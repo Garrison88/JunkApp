@@ -1,4 +1,4 @@
-package com.garrisonthomas.junkapp.ParseObjects;
+package com.garrisonthomas.junkapp.parseobjects;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;

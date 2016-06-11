@@ -1,4 +1,4 @@
-package com.garrisonthomas.junkapp.TabFragments;
+package com.garrisonthomas.junkapp.tabfragments;
 
 import android.app.AlertDialog;
 import android.content.Context;

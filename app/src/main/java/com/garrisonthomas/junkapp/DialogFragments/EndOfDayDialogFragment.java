@@ -1,4 +1,4 @@
-package com.garrisonthomas.junkapp.DialogFragments;
+package com.garrisonthomas.junkapp.dialogfragments;
 
 
 import android.app.Activity;
@@ -25,8 +25,8 @@ import android.widget.ProgressBar;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.garrisonthomas.junkapp.ParseObjects.DailyJournal;
-import com.garrisonthomas.junkapp.ParseObjects.NewJob;
+import com.garrisonthomas.junkapp.parseobjects.DailyJournal;
+import com.garrisonthomas.junkapp.parseobjects.NewJob;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
 import com.parse.FindCallback;
@@ -132,47 +132,14 @@ public class EndOfDayDialogFragment extends DialogFragment {
         dEndTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimePickerDialog tpd = new TimePickerDialog(getActivity(), AlertDialog.BUTTON_NEUTRAL,
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker view, int hour, int minute) {
-                                String aMpM = "a.m.";
-                                if (hour > 12) {
-                                    hour -= 12;
-                                    aMpM = "p.m.";
-                                }
-                                if (minute == 0) {
-                                    dEndTime.setText(hour + ":" + minute + "0 " + aMpM);
-                                } else {
-                                    dEndTime.setText(hour + ":" + minute + " " + aMpM);
-                                }
-                            }
-                        }, hour, minute, false);
-                tpd.show();
+                Utils.chooseTime(getActivity(), dEndTime);
             }
         });
 
         nEndTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimePickerDialog tpd = new TimePickerDialog(getActivity(), AlertDialog.BUTTON_NEUTRAL,
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker view, int hour, int minute) {
-                                String aMpM = "a.m.";
-                                if(hour > 12)
-                                {
-                                    hour -= 12;
-                                    aMpM = "p.m.";
-                                }
-                                if (minute == 0) {
-                                    nEndTime.setText(hour + ":" + minute + "0 " + aMpM);
-                                } else {
-                                    nEndTime.setText(hour + ":" + minute + " " + aMpM);
-                                }
-                            }
-                        }, hour, minute, false);
-                tpd.show();
+                Utils.chooseTime(getActivity(), nEndTime);
             }
         });
 

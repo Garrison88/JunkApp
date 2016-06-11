@@ -12,9 +12,9 @@ import android.view.View;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
 
-import com.garrisonthomas.junkapp.TabFragments.Tab1DashFragment;
-import com.garrisonthomas.junkapp.TabFragments.Tab2CalcFragment;
-import com.garrisonthomas.junkapp.TabFragments.Tab3DumpFragment;
+import com.garrisonthomas.junkapp.tabfragments.Tab1DashFragment;
+import com.garrisonthomas.junkapp.tabfragments.Tab2CalcFragment;
+import com.garrisonthomas.junkapp.tabfragments.Tab3DumpFragment;
 
 import java.util.HashMap;
 import java.util.List;

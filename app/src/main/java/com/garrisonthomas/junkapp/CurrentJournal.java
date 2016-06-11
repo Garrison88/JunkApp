@@ -18,18 +18,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.garrisonthomas.junkapp.DialogFragments.AddDumpDialogFragment;
-import com.garrisonthomas.junkapp.DialogFragments.AddFuelDialogFragment;
-import com.garrisonthomas.junkapp.DialogFragments.AddJobDialogFragment;
-import com.garrisonthomas.junkapp.DialogFragments.AddQuoteDialogFragment;
-import com.garrisonthomas.junkapp.DialogFragments.EndOfDayDialogFragment;
-import com.garrisonthomas.junkapp.DialogFragments.ViewDumpDialogFragment;
-import com.garrisonthomas.junkapp.DialogFragments.ViewJobDialogFragment;
-import com.garrisonthomas.junkapp.ParseObjects.DailyJournal;
-import com.garrisonthomas.junkapp.ParseObjects.NewDump;
-import com.garrisonthomas.junkapp.ParseObjects.NewFuel;
-import com.garrisonthomas.junkapp.ParseObjects.NewJob;
-import com.garrisonthomas.junkapp.ParseObjects.NewQuote;
+import com.garrisonthomas.junkapp.dialogfragments.AddDumpDialogFragment;
+import com.garrisonthomas.junkapp.dialogfragments.AddFuelDialogFragment;
+import com.garrisonthomas.junkapp.dialogfragments.AddJobDialogFragment;
+import com.garrisonthomas.junkapp.dialogfragments.AddQuoteDialogFragment;
+import com.garrisonthomas.junkapp.dialogfragments.EndOfDayDialogFragment;
+import com.garrisonthomas.junkapp.dialogfragments.ViewDumpDialogFragment;
+import com.garrisonthomas.junkapp.dialogfragments.ViewJobDialogFragment;
+import com.garrisonthomas.junkapp.parseobjects.DailyJournal;
+import com.garrisonthomas.junkapp.parseobjects.NewDump;
+import com.garrisonthomas.junkapp.parseobjects.NewFuel;
+import com.garrisonthomas.junkapp.parseobjects.NewJob;
+import com.garrisonthomas.junkapp.parseobjects.NewQuote;
 import com.github.clans.fab.FloatingActionButton;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -265,7 +265,7 @@ public class CurrentJournal extends BaseActivity {
 
     private AlertDialog confirmJournalDelete() {
 
-        return new AlertDialog.Builder(this)
+        return new AlertDialog.Builder(CurrentJournal.this)
                 .setTitle(getString(R.string.confirm_journal_delete_title))
                 .setMessage(getString(R.string.confirm_journal_delete_message))
                 .setIcon(R.drawable.ic_delete_black_24px)
@@ -414,6 +414,5 @@ public class CurrentJournal extends BaseActivity {
             }
         });
     }
-
 
 }

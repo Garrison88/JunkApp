@@ -1,8 +1,6 @@
-package com.garrisonthomas.junkapp.DialogFragments;
+package com.garrisonthomas.junkapp.dialogfragments;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,18 +17,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.garrisonthomas.junkapp.CurrentJournal;
-import com.garrisonthomas.junkapp.ParseObjects.DailyJournal;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
+import com.garrisonthomas.junkapp.parseobjects.DailyJournal;
 import com.parse.ParseException;
 import com.parse.SaveCallback;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -62,10 +58,6 @@ public class DailyJournalDialogFragment extends DialogFragment {
         final View v = inflater.inflate(R.layout.add_daily_journal_layout, container, false);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-
-        final Calendar c = Calendar.getInstance();
-        final int hour = c.get(Calendar.HOUR_OF_DAY);
-        final int minute = c.get(Calendar.MINUTE);
 
         truckSpinner = (Spinner) v.findViewById(R.id.truck_spinner);
         truckNumber = getResources().getStringArray(R.array.truck_number);
@@ -101,48 +93,14 @@ public class DailyJournalDialogFragment extends DialogFragment {
         dStartTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimePickerDialog tpd = new TimePickerDialog(getActivity(), AlertDialog.BUTTON_NEUTRAL,
-                        new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hour, int minute) {
-                        String aMpM = "a.m.";
-                        if(hour > 12)
-                        {
-                            hour -= 12;
-                            aMpM = "p.m.";
-                        }
-                        if (minute == 0) {
-                            dStartTime.setText(hour + ":" + minute + "0 " + aMpM);
-                        } else {
-                            dStartTime.setText(hour + ":" + minute + " " + aMpM);
-                        }
-                    }
-                }, hour, minute, false);
-                tpd.show();
+                Utils.chooseTime(getActivity(), dStartTime);
             }
         });
 
         nStartTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimePickerDialog tpd = new TimePickerDialog(getActivity(), AlertDialog.BUTTON_NEUTRAL,
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker view, int hour, int minute) {
-                                String aMpM = "a.m.";
-                                if(hour > 12)
-                                {
-                                    hour -= 12;
-                                    aMpM = "p.m.";
-                                }
-                                if (minute == 0) {
-                                    nStartTime.setText(hour + ":" + minute + "0 " + aMpM);
-                                } else {
-                                    nStartTime.setText(hour + ":" + minute + " " + aMpM);
-                                }
-                            }
-                        }, hour, minute, false);
-                tpd.show();
+                Utils.chooseTime(getActivity(), nStartTime);
             }
         });
 
@@ -172,6 +130,7 @@ public class DailyJournalDialogFragment extends DialogFragment {
                     newJournal.setNavigator(navigatorString);
                     newJournal.setNavStartTime(navST);
                     newJournal.setTruckNumber(truckNumber);
+
                     newJournal.pinInBackground();
                     newJournal.saveEventually(new SaveCallback() {
                         @Override
@@ -196,6 +155,8 @@ public class DailyJournalDialogFragment extends DialogFragment {
                                 pbar.setVisibility(View.GONE);
                                 createJournal.setVisibility(View.VISIBLE);
                                 Toast.makeText(getActivity(), getString(R.string.parse_exception_text), Toast.LENGTH_SHORT).show();
+                                e.printStackTrace();
+
                             }
                         }
                     });

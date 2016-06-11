@@ -1,4 +1,4 @@
-package com.garrisonthomas.junkapp.DialogFragments;
+package com.garrisonthomas.junkapp.dialogfragments;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -12,7 +12,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.garrisonthomas.junkapp.ParseObjects.NewDump;
+import com.garrisonthomas.junkapp.parseobjects.NewDump;
 import com.garrisonthomas.junkapp.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
