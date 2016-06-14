@@ -21,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Truck location, load, required supplies, etc."
                 android:inputType="textCapSentences|textMultiLine"
-                android:maxLines="5" />
+                android:maxLines="4" />
 
         </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
@@ -55,16 +55,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="DRIVER OUT"
-            android:textSize="@dimen/abc_text_size_small_material"/>
+            android:text="DRIVER OUT"/>
 
         <Button
             android:id="@+id/nav_end_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="NAVIGATOR OUT"
-            android:textSize="@dimen/abc_text_size_small_material"/>
+            android:text="NAV OUT"/>
 
     </LinearLayout>
 

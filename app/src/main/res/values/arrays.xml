@@ -3,8 +3,8 @@
 
     <string-array name="dumps_name">
         <!--<item>Select a Dump</item>-->
-        <item>Laird (Esander)</item>
-        <item>Cherry (Turtle)</item>
+        <item>Laird</item>
+        <item>Cherry</item>
         <item>Fenmar</item>
         <item>Miller</item>
         <item>Medulla West</item>
@@ -24,18 +24,16 @@
     </string-array>
 
     <string-array name="dumps_info">
-        <!--<item>Placeholder</item>-->
-        <item>Laird/Esander: Open Monday–Friday 8–5\nRate per ton: $80\n<u>Remember to wear safety gear!</u></item>
+        <item>Laird: Open Monday–Friday 8–5\nRate per ton: $80\n<u>Remember to wear safety gear!</u></item>
         <item>Cherry: Open every day 6–6</item>
         <item>Fenmar</item>
         <item>Miller: Open Monday to Friday 8–5</item>
         <item>Medulla West</item>
-        <item>Medulla East</item>
+        <item>Medulla East: 300 Nugget Ave</item>
         <item>Shorncliffe: Open Monday to Friday 7–6 and Saturday 7–5</item>
     </string-array>
 
     <integer-array name="dumps_rate">
-        <!--<item>0</item>-->
         <item>82</item>
         <item>85</item>
         <item>85</item>

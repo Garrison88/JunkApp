@@ -10,15 +10,15 @@
         android:orientation="vertical">
 
         <com.wrapp.floatlabelededittext.FloatLabeledEditText
-            android:id="@+id/et_ssid_wrapper"
+            android:id="@+id/et_sid_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/et_ssid"
+                android:id="@+id/et_sid"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="SSID"
+                android:hint="SID"
                 android:inputType="number"
                 android:maxLength="5" />
 
@@ -66,14 +66,14 @@
     android:layout_height="wrap_content">
             <Button
                 android:layout_weight="1"
-                android:text="Start"
+                android:text="@string/start"
                 android:id="@+id/job_start_time"
                 android:drawableStart="@drawable/ic_access_time_white_24dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content" />
             <Button
                 android:layout_weight="1"
-                android:text="End"
+                android:text="@string/end"
                 android:id="@+id/job_end_time"
                 android:drawableStart="@drawable/ic_access_time_white_24dp"
                 android:layout_width="0dp"

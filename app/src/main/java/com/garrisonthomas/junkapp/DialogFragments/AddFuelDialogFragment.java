@@ -12,12 +12,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.garrisonthomas.junkapp.AddItemDialogFragment;
+import com.garrisonthomas.junkapp.AddItemHelper;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
 import com.garrisonthomas.junkapp.parseobjects.NewFuel;
 
-public class AddFuelDialogFragment extends AddItemDialogFragment {
+public class AddFuelDialogFragment extends AddItemHelper {
 
     private EditText etFuelVendor, etGrossCost, etNetCost, etReceiptNumber;
     private static Button saveFuel, cancelFuel;
@@ -88,7 +88,12 @@ public class AddFuelDialogFragment extends AddItemDialogFragment {
             }
         });
 
-        cancelFragment(cancelFuel);
+        cancelFuel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
 
         setCancelable(false);
         return v;

@@ -65,7 +65,7 @@ public class Utils {
 
                     for (NewJob job : list) {
 
-                        jobsArray.add(job.getSSID());
+                        jobsArray.add(job.getSID());
 
                     }
 
@@ -84,7 +84,7 @@ public class Utils {
     }
 
     public static void populateDumpSpinner(final Context context, String currentJournalId,
-                                          final ArrayList<String> dumpsArray, final Spinner dumpsSpinner) {
+                                           final ArrayList<String> dumpsArray, final Spinner dumpsSpinner) {
 
         ParseQuery<NewDump> query = ParseQuery.getQuery(NewDump.class);
         query.whereEqualTo("relatedJournal", currentJournalId);
@@ -98,7 +98,7 @@ public class Utils {
 
                     for (NewDump dump : list) {
 
-                        dumpsArray.add(dump.getDumpName());
+                        dumpsArray.add(dump.getDumpName() + " (" + dump.getDumpReceiptNumber() + ")");
 
                     }
 
@@ -116,23 +116,28 @@ public class Utils {
 
     }
 
-    public static double calculateTax(double grossSale){
+    public static double calculateTax(double grossSale) {
         return Math.round((grossSale * 1.13) * 100.00) / 100.00;
     }
 
-    public static void chooseTime (Context context, final Button button) {
+    public static void chooseTime(Context context, final Button button) {
 
         final Calendar c = Calendar.getInstance();
         final int hour = c.get(Calendar.HOUR_OF_DAY);
         final int minute = c.get(Calendar.MINUTE);
+//        final String aMpM = " a.m.";
 
         TimePickerDialog mTimePicker;
         mTimePicker = new TimePickerDialog(context, AlertDialog.BUTTON_POSITIVE, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                button.setText(selectedHour + ":" + selectedMinute);
+                if (selectedMinute == 00) {
+                    button.setText(selectedHour + ":" + selectedMinute + "0");
+                } else {
+                    button.setText(selectedHour + ":" + selectedMinute);
+                }
             }
-        }, hour, minute, true);//Yes 24 hour time
+        }, hour, minute, false);//Yes 24 hour time
         mTimePicker.setTitle(null);
         mTimePicker.show();
 

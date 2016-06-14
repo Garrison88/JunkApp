@@ -15,14 +15,14 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.garrisonthomas.junkapp.AddItemDialogFragment;
+import com.garrisonthomas.junkapp.AddItemHelper;
 import com.garrisonthomas.junkapp.parseobjects.NewJob;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
 
-public class AddJobDialogFragment extends AddItemDialogFragment {
+public class AddJobDialogFragment extends AddItemHelper {
 
-    private EditText etSSID, etGrossSale, etNetSale, etReceiptNumber, etJobNotes;
+    private EditText etSID, etGrossSale, etNetSale, etReceiptNumber, etJobNotes;
     private static Button startTime, endTime, saveJob, cancelJob;
     private static Spinner payTypeSpinner;
     private static String[] payTypeArray;
@@ -40,7 +40,7 @@ public class AddJobDialogFragment extends AddItemDialogFragment {
         preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
         currentJournalId = preferences.getString("universalJournalId", "none");
 
-        etSSID = (EditText) v.findViewById(R.id.et_ssid);
+        etSID = (EditText) v.findViewById(R.id.et_sid);
         etGrossSale = (EditText) v.findViewById(R.id.et_gross_sale);
         etNetSale = (EditText) v.findViewById(R.id.et_net_sale);
         etReceiptNumber = (EditText) v.findViewById(R.id.et_receipt_number);
@@ -106,16 +106,16 @@ public class AddJobDialogFragment extends AddItemDialogFragment {
             @Override
             public void onClick(View v) {
 
-                if (!TextUtils.isEmpty(etSSID.getText())
+                if (!TextUtils.isEmpty(etSID.getText())
                         && (!TextUtils.isEmpty(etGrossSale.getText()))
                         && (!TextUtils.isEmpty(etNetSale.getText())
                         && (!TextUtils.isEmpty(etReceiptNumber.getText())))) {
 
                     Utils.hideKeyboard(v, getActivity());
 
-                    final NewJob newJob = new NewJob();
+                    NewJob newJob = new NewJob();
                     newJob.setRelatedJournal(currentJournalId);
-                    newJob.setSSID(Integer.valueOf(etSSID.getText().toString()));
+                    newJob.setSID(Integer.valueOf(etSID.getText().toString()));
                     newJob.setStartTime(String.valueOf(startTime.getText()));
                     newJob.setEndTime(String.valueOf(endTime.getText()));
                     newJob.setGrossSale(Double.valueOf(etGrossSale.getText().toString()));
@@ -127,7 +127,7 @@ public class AddJobDialogFragment extends AddItemDialogFragment {
                     newJob.saveEventually();
                     newJob.pinInBackground();
 
-                    Toast.makeText(getActivity(), "Job number " + etSSID.getText().toString() + " saved", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Job number " + etSID.getText().toString() + " saved", Toast.LENGTH_SHORT).show();
 
                     dismiss();
 
@@ -140,7 +140,12 @@ public class AddJobDialogFragment extends AddItemDialogFragment {
             }
         });
 
-        cancelFragment(cancelJob);
+        cancelJob.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
 
         setCancelable(false);
         return v;

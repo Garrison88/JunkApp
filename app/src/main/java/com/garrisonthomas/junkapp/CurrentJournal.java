@@ -37,6 +37,8 @@ import com.parse.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -68,8 +70,8 @@ public class CurrentJournal extends BaseActivity {
     @Bind(R.id.dumps_spinner)
     Spinner dumpsSpinner;
 
-    String currentJournalId, spDriver, spNavigator, spTruck, spDate, dumpSpinnerName;
-    int selectedJobSSID;
+    String currentJournalId, spDriver, spNavigator, spTruck, spDate, dumpSpinnerText;
+    int selectedJobSID, dumpReceiptNumber;
     private ArrayList<Integer> jobsArray;
     private ArrayList<String> dumpsArray;
     private static SharedPreferences preferences;
@@ -105,7 +107,7 @@ public class CurrentJournal extends BaseActivity {
         jobsArray = new ArrayList<>();
         dumpsArray = new ArrayList<>();
 
-        todaysCrew.setText(spDriver + " & " + spNavigator);
+        todaysCrew.setText("Driver: " + spDriver + "\n" + "Nav: " + spNavigator);
         todaysTruck.setText(spTruck);
 
         jobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -113,7 +115,7 @@ public class CurrentJournal extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                selectedJobSSID = (int) jobsSpinner.getItemAtPosition(position);
+                selectedJobSID = (int) jobsSpinner.getItemAtPosition(position);
 
             }
 
@@ -128,7 +130,12 @@ public class CurrentJournal extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                dumpSpinnerName = (String) dumpsSpinner.getItemAtPosition(position);
+                dumpSpinnerText = (String) dumpsSpinner.getItemAtPosition(position);
+
+                Matcher m = Pattern.compile("\\(([^)]+)\\)").matcher(dumpSpinnerText);
+                while(m.find()) {
+                    dumpReceiptNumber = Integer.parseInt(m.group(1));
+                }
 
             }
 
@@ -171,7 +178,7 @@ public class CurrentJournal extends BaseActivity {
 
                     ViewJobDialogFragment vjDialogFragment = new ViewJobDialogFragment();
                     Bundle vjBundle = new Bundle();
-                    vjBundle.putInt("spinnerSSID", selectedJobSSID);
+                    vjBundle.putInt("spinnerSID", selectedJobSID);
                     vjBundle.putString("relatedJournalId", currentJournalId);
                     vjDialogFragment.setArguments(vjBundle);
                     FragmentManager manager = getFragmentManager();
@@ -205,7 +212,8 @@ public class CurrentJournal extends BaseActivity {
 
                     ViewDumpDialogFragment vdDialogFragment = new ViewDumpDialogFragment();
                     Bundle vdBundle = new Bundle();
-                    vdBundle.putString("dumpName", dumpSpinnerName);
+                    vdBundle.putString("dumpName", dumpSpinnerText);
+                    vdBundle.putInt("dumpReceiptNumber", dumpReceiptNumber);
                     vdBundle.putString("relatedJournalId", currentJournalId);
                     vdDialogFragment.setArguments(vdBundle);
                     FragmentManager manager = getFragmentManager();

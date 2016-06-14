@@ -14,6 +14,7 @@ public class App extends Application {
 
     @Override
     public void onCreate() {
+
         super.onCreate();
 
         ParseObject.registerSubclass(NewJob.class);
@@ -22,19 +23,12 @@ public class App extends Application {
         ParseObject.registerSubclass(DailyJournal.class);
         ParseObject.registerSubclass(NewQuote.class);
 
-//        Parse.enableLocalDatastore(this);
-
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId("gTmFRethcBdeRGLimnNH5pYCdgmxeeMS9EzEdzj3")
                 .clientKey(null)
                 .server("http://ridofit.herokuapp.com/parse/") // The trailing slash is important.
                 .enableLocalDataStore()
-
-
-
-        .build()
+                .build()
         );
-//        Parse.initialize(this, "vG7mYtAwz0fePvXLkLEh1BsS5P5ZfZMdNhO9sdZR", "z2IzDj8VHgtHGaCsRqYhAAUEq1LzymwnBgBi1U5j");
-
     }
 }

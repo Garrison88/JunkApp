@@ -16,12 +16,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.garrisonthomas.junkapp.AddItemDialogFragment;
+import com.garrisonthomas.junkapp.AddItemHelper;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
 import com.garrisonthomas.junkapp.parseobjects.NewDump;
 
-public class AddDumpDialogFragment extends AddItemDialogFragment {
+public class AddDumpDialogFragment extends AddItemHelper {
 
     private static EditText etAddDumpWeight, etDumpReceiptNumber, etPercentPrevious;
     private static TextView tvGrossCost, tvNetCost;
@@ -89,6 +89,7 @@ public class AddDumpDialogFragment extends AddItemDialogFragment {
                     weightNumber = Double.parseDouble(etAddDumpWeight.getText().toString()) / 1000;
 
                     result = Math.round((weightNumber * dumpRateInt) * 100.00) / 100.00;
+
                     withTax = Utils.calculateTax(result);
 
                     resultString = getString(R.string.dollar_sign) + String.valueOf(result);
@@ -139,7 +140,12 @@ public class AddDumpDialogFragment extends AddItemDialogFragment {
             }
         });
 
-        cancelFragment(cancelDump);
+        cancelDump.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
 
         setCancelable(false);
         return v;

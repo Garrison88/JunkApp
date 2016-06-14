@@ -8,7 +8,7 @@ import android.widget.Button;
 /**
  * Created by Garrison on 2016-06-11.
  */
-public class AddItemDialogFragment extends DialogFragment {
+public class AddItemHelper extends DialogFragment {
 
     public Button save;
     public SharedPreferences sharedPreferences;

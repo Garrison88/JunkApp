@@ -7,9 +7,9 @@ import com.parse.ParseObject;
 
 public class NewJob extends ParseObject {
 
-    public int getSSID() {
+    public int getSID() {
 
-        return getInt("ssid");
+        return getInt("sid");
 
     }
 
@@ -61,9 +61,9 @@ public class NewJob extends ParseObject {
 
     }
 
-    public void setSSID(int ssid) {
+    public void setSID(int sid) {
 
-        put("ssid", ssid);
+        put("sid", sid);
 
     }
 

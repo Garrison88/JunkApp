@@ -1,6 +1,5 @@
 package com.garrisonthomas.junkapp.dialogfragments;
 
-import android.app.DialogFragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -13,12 +12,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.garrisonthomas.junkapp.AddItemDialogFragment;
+import com.garrisonthomas.junkapp.AddItemHelper;
 import com.garrisonthomas.junkapp.parseobjects.NewQuote;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
 
-public class AddQuoteDialogFragment extends AddItemDialogFragment {
+public class AddQuoteDialogFragment extends AddItemHelper {
 
     private static EditText etQuoteSSID, etLowEnd, etHighEnd, etQuoteNotes;
     private static Button saveQuote, cancelQuote;
@@ -80,7 +79,12 @@ public class AddQuoteDialogFragment extends AddItemDialogFragment {
             }
         });
 
-        cancelFragment(cancelQuote);
+        cancelQuote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
 
         setCancelable(false);
         return v;
