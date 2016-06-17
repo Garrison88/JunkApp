@@ -31,6 +31,7 @@ import com.garrisonthomas.junkapp.parseobjects.NewFuel;
 import com.garrisonthomas.junkapp.parseobjects.NewJob;
 import com.garrisonthomas.junkapp.parseobjects.NewQuote;
 import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -51,12 +52,16 @@ public class CurrentJournal extends BaseActivity {
     TextView todaysCrew;
     @Bind(R.id.tv_todays_truck)
     TextView todaysTruck;
+    @Bind(R.id.floating_action_menu)
+    FloatingActionMenu FAM;
     @Bind(R.id.btn_add_job)
     FloatingActionButton addJob;
-    @Bind(R.id.btn_add_quote)
-    FloatingActionButton addQuote;
     @Bind(R.id.btn_view_job)
     Button viewJob;
+    @Bind(R.id.btn_add_quote)
+    FloatingActionButton addQuote;
+    @Bind(R.id.btn_view_quote)
+    Button viewQuote;
     @Bind(R.id.btn_add_dump)
     FloatingActionButton addDump;
     @Bind(R.id.btn_view_dump)
@@ -73,6 +78,7 @@ public class CurrentJournal extends BaseActivity {
     String currentJournalId, spDriver, spNavigator, spTruck, spDate, dumpSpinnerText;
     int selectedJobSID, dumpReceiptNumber;
     private ArrayList<Integer> jobsArray;
+    private ArrayList<Integer> quotesArray;
     private ArrayList<String> dumpsArray;
     private static SharedPreferences preferences;
 
@@ -105,6 +111,7 @@ public class CurrentJournal extends BaseActivity {
         });
 
         jobsArray = new ArrayList<>();
+        quotesArray = new ArrayList<>();
         dumpsArray = new ArrayList<>();
 
         todaysCrew.setText("Driver: " + spDriver + "\n" + "Nav: " + spNavigator);
@@ -155,17 +162,7 @@ public class CurrentJournal extends BaseActivity {
                 FragmentManager manager = getFragmentManager();
                 AddJobDialogFragment djFragment = new AddJobDialogFragment();
                 djFragment.show(manager, "Dialog");
-
-            }
-        });
-
-        addQuote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                FragmentManager manager = getFragmentManager();
-                AddQuoteDialogFragment djFragment = new AddQuoteDialogFragment();
-                djFragment.show(manager, "Dialog");
+                FAM.close(false);
 
             }
         });
@@ -193,6 +190,41 @@ public class CurrentJournal extends BaseActivity {
             }
         });
 
+        addQuote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                FragmentManager manager = getFragmentManager();
+                AddQuoteDialogFragment djFragment = new AddQuoteDialogFragment();
+                djFragment.show(manager, "Dialog");
+                FAM.close(false);
+
+            }
+        });
+
+        viewQuote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (quotesArray.size() > 0) {
+
+                    ViewJobDialogFragment vjDialogFragment = new ViewJobDialogFragment();
+                    Bundle vjBundle = new Bundle();
+                    vjBundle.putInt("spinnerSID", selectedJobSID);
+                    vjBundle.putString("relatedJournalId", currentJournalId);
+                    vjDialogFragment.setArguments(vjBundle);
+                    FragmentManager manager = getFragmentManager();
+                    vjDialogFragment.show(manager, "Dialog");
+
+                } else {
+
+                    Toast.makeText(CurrentJournal.this, "No quotes to display",
+                            Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
+
         addDump.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -200,6 +232,7 @@ public class CurrentJournal extends BaseActivity {
                 FragmentManager manager = getFragmentManager();
                 AddDumpDialogFragment djFragment = new AddDumpDialogFragment();
                 djFragment.show(manager, "Dialog");
+                FAM.close(false);
 
             }
         });
@@ -235,6 +268,7 @@ public class CurrentJournal extends BaseActivity {
                 FragmentManager manager = getFragmentManager();
                 AddFuelDialogFragment djFragment = new AddFuelDialogFragment();
                 djFragment.show(manager, "Dialog");
+                FAM.close(false);
 
             }
         });

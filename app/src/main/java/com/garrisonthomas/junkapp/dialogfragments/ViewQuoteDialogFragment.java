@@ -1,7 +1,6 @@
 package com.garrisonthomas.junkapp.dialogfragments;
 
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -22,7 +21,10 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ViewJobDialogFragment extends DialogFragment {
+/**
+ * Created by Garrison on 2016-06-16.
+ */
+public class ViewQuoteDialogFragment extends ViewItemHelper {
 
     @Bind(R.id.tv_view_job_gross)
     TextView vjGross;
@@ -70,7 +72,7 @@ public class ViewJobDialogFragment extends DialogFragment {
         deleteJobBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ViewItemHelper.deleteItem(ViewJobDialogFragment.this, currentJournalId, thisJobId, getActivity(), "NewJob");
+                ViewItemHelper.deleteItem(ViewQuoteDialogFragment.this, currentJournalId, thisJobId, getActivity(), "NewQuote");
             }
         });
 
@@ -131,4 +133,5 @@ public class ViewJobDialogFragment extends DialogFragment {
 
         });
     }
+
 }

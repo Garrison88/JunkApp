@@ -2,14 +2,10 @@ package com.garrisonthomas.junkapp;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.view.View;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -29,19 +25,6 @@ import java.util.List;
  * Created by GarrisonThomas on 2015-10-08.
  */
 public class Utils {
-
-    public static void hideKeyboard(View v, Activity a) {
-
-        InputMethodManager imm = (InputMethodManager) a.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-
-    }
-
-    public static void showKeyboardInDialog(Dialog d) {
-
-        d.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-
-    }
 
     public static Boolean isInternetAvailable(Activity a) {
         ConnectivityManager cm =
@@ -125,7 +108,6 @@ public class Utils {
         final Calendar c = Calendar.getInstance();
         final int hour = c.get(Calendar.HOUR_OF_DAY);
         final int minute = c.get(Calendar.MINUTE);
-//        final String aMpM = " a.m.";
 
         TimePickerDialog mTimePicker;
         mTimePicker = new TimePickerDialog(context, AlertDialog.BUTTON_POSITIVE, new TimePickerDialog.OnTimeSetListener() {
@@ -133,6 +115,8 @@ public class Utils {
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                 if (selectedMinute == 00) {
                     button.setText(selectedHour + ":" + selectedMinute + "0");
+                } else if (selectedMinute < 10){
+                    button.setText(selectedHour + ":" + String.format("%02d", selectedMinute));
                 } else {
                     button.setText(selectedHour + ":" + selectedMinute);
                 }

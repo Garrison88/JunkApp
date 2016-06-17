@@ -2,9 +2,9 @@
 
 <resources>
 
-    <style name="MaterialTheme_v21" parent="MaterialTheme.NoActionBar">
+    <style name="MaterialTheme_v21" parent="CustomTheme.NoActionBar">
 
-        <item name="android:fontFamily">roboto-light</item>
+        <item name="android:fontFamily">work-sans</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowContentTransitions">true</item>
@@ -12,31 +12,30 @@
         <item name="android:windowAllowReturnTransitionOverlap">true</item>
         <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
         <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
-        <item name="android:textViewStyle">@style/TextViewStyle</item>
         <item name="android:dialogTheme">@style/CustomDialog</item>
 
 
     </style>
 
     <style name="TextViewStyle" parent="android:Widget.Material.TextView">
-        <item name="android:fontFamily">roboto-regular</item>
+        <item name="android:fontFamily">work-sans</item>
     </style>
 
     <style name="EditTextStyle" parent="@android:style/Widget.Material.EditText">
-        <item name="android:fontFamily">roboto-regular</item>
+        <item name="android:fontFamily">work-sans</item>
     </style>
 
-    <style name="RobotoButtonStyle" parent="android:style/Widget.Material.Button">
-        <item name="android:fontFamily">roboto-regular</item>
+    <style name="CustomButtonStyle" parent="android:style/Widget.Material.Button">
+        <item name="android:fontFamily">work-sans</item>
     </style>
 
     <style name="CustomDialog" parent="@android:style/Theme.Material.Dialog">
-        <item name="android:fontFamily">roboto-regular</item>
-        <item name="android:textSize">@dimen/abc_text_size_medium_material</item>
-        <item name="android:textViewStyle">@style/TextViewStyle</item>
-        <item name="android:editTextStyle">@style/EditTextStyle</item>
+        <item name="android:fontFamily">work-sans</item>
+        <!--<item name="android:textSize">@dimen/abc_text_size_medium_material</item>-->
+        <item name="android:textViewStyle">@style/CustomTextViewStyle</item>
+        <item name="android:editTextStyle">@style/CustomEditTextStyle</item>
+        <item name="android:buttonStyle">@style/CustomButtonStyle</item>
         <item name="android:padding">5dp</item>
-        <item name="android:windowSoftInputMode">adjustResize</item>
         <item name="android:colorBackground">@color/dialogFragmentBackground</item>
     </style>
 

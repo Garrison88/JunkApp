@@ -98,7 +98,7 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
                 android:paddingTop="8dp"
-                android:hint="$0.0"
+                android:hint="$0.00"
                 android:textSize="75sp" />
 
             <LinearLayout

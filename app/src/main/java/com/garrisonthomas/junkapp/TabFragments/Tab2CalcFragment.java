@@ -57,7 +57,7 @@ public class Tab2CalcFragment extends Fragment {
         volumeSize = v.getResources().getStringArray(R.array.string_volume_name);
         bedloadSize = v.getResources().getStringArray(R.array.string_bedload_name);
 
-        vSpinner.setAdapter(new VolumeAdapter(getActivity(), R.layout.custom_volume_spinner, volumeSize));
+        vSpinner.setAdapter(new CustomVolumeSpinnerAdapter(getActivity(), R.layout.custom_spinner_layout, volumeSize));
         vSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
@@ -85,7 +85,7 @@ public class Tab2CalcFragment extends Fragment {
 
         });
 
-        bSpinner.setAdapter(new BedloadAdapter(getActivity(), R.layout.custom_bedload_spinner, bedloadSize));
+        bSpinner.setAdapter(new CustomBedloadSpinnerAdapter(getActivity(), R.layout.custom_spinner_layout, bedloadSize));
         bSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
@@ -172,9 +172,9 @@ public class Tab2CalcFragment extends Fragment {
 
     }
 
-    public class VolumeAdapter extends ArrayAdapter<String> {
+    public class CustomVolumeSpinnerAdapter extends ArrayAdapter<String> {
 
-        public VolumeAdapter(Context ctx, int txtViewResourceId, String[] objects) {
+        public CustomVolumeSpinnerAdapter(Context ctx, int txtViewResourceId, String[] objects) {
             super(ctx, txtViewResourceId, objects);
         }
 
@@ -191,13 +191,13 @@ public class Tab2CalcFragment extends Fragment {
         public View getCustomView(int position, View convertView,
                                   ViewGroup parent) {
             LayoutInflater inflater = getActivity().getLayoutInflater();
-            View mySpinner = inflater.inflate(R.layout.custom_volume_spinner, parent,
+            View mySpinner = inflater.inflate(R.layout.custom_spinner_layout, parent,
                     false);
 
-            TextView main_text = (TextView) mySpinner.findViewById(R.id.spinner_text_volume_name);
+            TextView main_text = (TextView) mySpinner.findViewById(R.id.tv_custom_spinner_first);
             main_text.setText(volumeSize[position]);
 
-            TextView subSpinner = (TextView) mySpinner.findViewById(R.id.spinner_text_volume_price);
+            TextView subSpinner = (TextView) mySpinner.findViewById(R.id.tv_custom_spinner_second);
 
             if (position == 0 || position == 12) {
                 subSpinner.setVisibility(View.GONE);
@@ -213,9 +213,9 @@ public class Tab2CalcFragment extends Fragment {
 
     }
 
-    public class BedloadAdapter extends ArrayAdapter<String> {
+    public class CustomBedloadSpinnerAdapter extends ArrayAdapter<String> {
 
-        public BedloadAdapter(Context ctx, int txtViewResourceId, String[] objects) {
+        public CustomBedloadSpinnerAdapter(Context ctx, int txtViewResourceId, String[] objects) {
             super(ctx, txtViewResourceId, objects);
         }
 
@@ -232,13 +232,13 @@ public class Tab2CalcFragment extends Fragment {
         public View getCustomView(int position, View convertView,
                                   ViewGroup parent) {
             LayoutInflater inflater = getActivity().getLayoutInflater();
-            View mySpinner = inflater.inflate(R.layout.custom_bedload_spinner, parent,
+            View mySpinner = inflater.inflate(R.layout.custom_spinner_layout, parent,
                     false);
 
-            TextView main_text = (TextView) mySpinner.findViewById(R.id.spinner_text_bedload_name);
+            TextView main_text = (TextView) mySpinner.findViewById(R.id.tv_custom_spinner_first);
             main_text.setText(bedloadSize[position]);
 
-            TextView subSpinner = (TextView) mySpinner.findViewById(R.id.spinner_text_bedload_price);
+            TextView subSpinner = (TextView) mySpinner.findViewById(R.id.tv_custom_spinner_second);
 
             if (position == 0) {
                 subSpinner.setVisibility(View.GONE);

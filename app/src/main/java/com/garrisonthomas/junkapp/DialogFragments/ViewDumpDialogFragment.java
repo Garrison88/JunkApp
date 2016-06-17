@@ -66,8 +66,7 @@ public class ViewDumpDialogFragment extends ViewItemHelper {
         deleteDumpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteItem(currentJournalId, thisDumpID, getActivity(), "NewDump");
-//                ViewDumpDialogFragment.this.dismiss();
+                deleteItem(ViewDumpDialogFragment.this, currentJournalId, thisDumpID, getActivity(), "NewDump");
             }
         });
 

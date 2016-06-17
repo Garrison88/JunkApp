@@ -18,11 +18,12 @@ import java.util.List;
  */
 public abstract class ViewItemHelper extends DialogFragment {
 
-    public static void deleteItem(final String currentJournalId, final String itemID, final Context context, final String parseClass) {
+    public static void deleteItem(final DialogFragment df, final String currentJournalId, final String itemID, final Context context, final String parseClass) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage("Delete this entry?")
                 .setCancelable(false)
+                .setIcon(R.drawable.ic_delete_black_24px)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, int id) {
 
@@ -44,6 +45,7 @@ public abstract class ViewItemHelper extends DialogFragment {
                                     }
                                     Toast.makeText(context, "Item successfully deleted",
                                             Toast.LENGTH_SHORT).show();
+                                    df.dismiss();
                                 }
                             }
                         });

@@ -7,9 +7,9 @@ import com.parse.ParseObject;
 
 public class NewQuote extends ParseObject {
 
-    public int getQuoteSSID() {
+    public int getQuoteSID() {
 
-        return getInt("quoteSSID");
+        return getInt("quoteSID");
 
     }
 
@@ -37,9 +37,9 @@ public class NewQuote extends ParseObject {
 
     }
 
-    public void setQuoteSSID(int quoteSSID) {
+    public void setQuoteSID(int quoteSID) {
 
-        put("quoteSSID", quoteSSID);
+        put("quoteSID", quoteSID);
 
     }
 

@@ -11,7 +11,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.garrisonthomas.junkapp.R;
+import com.garrisonthomas.junkapp.Utils;
 
 public class Tab3DumpFragment extends Fragment {
 
@@ -37,7 +37,7 @@ public class Tab3DumpFragment extends Fragment {
     private static int[] rate;
     private static int rateNumber;
     private static TextView tvDumpCost;
-    private static String dir, info, resultString, withTaxString;
+    private static String info, resultString, withTaxString;
     private static double weightNumber, result, withTax;
 
     @Override
@@ -63,13 +63,13 @@ public class Tab3DumpFragment extends Fragment {
         information = v.getResources().getStringArray(R.array.dumps_info);
         rate = v.getResources().getIntArray(R.array.dumps_rate);
 
-        dumpsSpinner.setAdapter(new DumpsAdapter(getActivity(), R.layout.custom_bedload_spinner, dumpName));
+        dumpsSpinner.setAdapter(new DumpsAdapter(getActivity(), R.layout.custom_spinner_layout, dumpName));
         dumpsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
 
-                dir = directions[position];
+                final String dir = getString(R.string.google_maps_url) + directions[position];
                 info = information[position];
                 rateNumber = rate[position];
 
@@ -118,7 +118,7 @@ public class Tab3DumpFragment extends Fragment {
                                 weightNumber = weightNumber / 1000;
 
                                 result = Math.round((weightNumber * rateNumber) * 100.00) / 100.00;
-                                withTax = Math.round((result * 1.13) * 100.00) / 100.00;
+                                withTax = Utils.calculateTax(result);
 
                                 resultString = String.valueOf(result);
                                 withTaxString = String.valueOf(withTax);
@@ -126,9 +126,6 @@ public class Tab3DumpFragment extends Fragment {
                                 tvDumpCost.setText("$" + resultString);
 
                                 weight.setText("");
-
-                                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
 
 //                            } else {
 //

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -16,9 +17,9 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.garrisonthomas.junkapp.AddItemHelper;
-import com.garrisonthomas.junkapp.parseobjects.NewJob;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
+import com.garrisonthomas.junkapp.parseobjects.NewJob;
 
 public class AddJobDialogFragment extends AddItemHelper {
 
@@ -111,8 +112,6 @@ public class AddJobDialogFragment extends AddItemHelper {
                         && (!TextUtils.isEmpty(etNetSale.getText())
                         && (!TextUtils.isEmpty(etReceiptNumber.getText())))) {
 
-                    Utils.hideKeyboard(v, getActivity());
-
                     NewJob newJob = new NewJob();
                     newJob.setRelatedJournal(currentJournalId);
                     newJob.setSID(Integer.valueOf(etSID.getText().toString()));
@@ -155,7 +154,7 @@ public class AddJobDialogFragment extends AddItemHelper {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Utils.showKeyboardInDialog(getDialog());
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
 }

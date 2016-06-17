@@ -2,39 +2,36 @@
 
 <resources>
 
-    <style name="MaterialTheme.NoActionBar" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorButtonNormal">@color/colorButtonNormal</item>
+    <style name="CustomTheme.NoActionBar" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@color/windowBackground</item>
-        <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <!--<item name="android:textColorPrimary">@color/textColorPrimary</item>-->
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:editTextStyle">@style/RobotoEditTextStyle</item>
-        <item name="android:textViewStyle">@style/RobotoTextViewStyle</item>
-        <item name="android:buttonStyle">@style/RobotoButtonStyle</item>
-        <item name="android:spinnerStyle">@style/RobotoSpinnerStyle</item>
+        <item name="android:editTextStyle">@style/CustomEditTextStyle</item>
+        <item name="android:textViewStyle">@style/CustomTextViewStyle</item>
+        <item name="android:buttonStyle">@style/CustomButtonStyle</item>
+        <item name="android:spinnerStyle">@style/CustomSpinnerStyle</item>
         <item name="android:dialogTheme">@style/CustomDialog</item>
-        <item name="android:textAppearanceMedium">@android:style/TextAppearance.Medium</item>
 
     </style>
 
-    <style name="RobotoEditTextStyle" parent="android:Widget.Holo.EditText">
-        <item name="android:fontFamily">sans-serif-light</item>
-        <item name="android:textSize">@dimen/abc_text_size_medium_material</item>
+    <style name="CustomEditTextStyle" parent="android:Widget.Material.EditText">
+        <item name="android:fontFamily">work-sans</item>
     </style>
 
-    <style name="RobotoTextViewStyle" parent="android:Widget.Holo.TextView">
-        <item name="android:fontFamily">sans-serif-light</item>
+    <style name="CustomTextViewStyle" parent="android:Widget.Material.TextView">
+        <item name="android:fontFamily">work-sans</item>
     </style>
 
-    <style name="RobotoButtonStyle" parent="android:Widget.Holo.Button">
-        <item name="android:fontFamily">sans-serif-light</item>
+    <style name="CustomButtonStyle" parent="android:Widget.Material.Button">
+        <item name="android:fontFamily">work-sans</item>
     </style>
 
-    <style name="RobotoSpinnerStyle" parent="android:Widget.Holo.Spinner">
-        <item name="android:fontFamily">sans-serif-light</item>
+    <style name="CustomSpinnerStyle" parent="android:Widget.Material.Spinner">
+        <item name="android:fontFamily">work-sans</item>
     </style>
 
 </resources>

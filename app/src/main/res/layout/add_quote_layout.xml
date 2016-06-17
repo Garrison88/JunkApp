@@ -14,7 +14,7 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/et_quote_ssid"
+                android:id="@+id/et_quote_sid"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="SSID"

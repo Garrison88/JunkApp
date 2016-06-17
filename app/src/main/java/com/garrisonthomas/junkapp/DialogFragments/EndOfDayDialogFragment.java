@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,13 +21,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.garrisonthomas.junkapp.parseobjects.DailyJournal;
-import com.garrisonthomas.junkapp.parseobjects.NewJob;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
+import com.garrisonthomas.junkapp.parseobjects.DailyJournal;
+import com.garrisonthomas.junkapp.parseobjects.NewJob;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -283,7 +281,6 @@ public class EndOfDayDialogFragment extends DialogFragment {
                                                 editor.putString("truck", "noTruck");
                                                 editor.putString("date", "noDate");
                                                 editor.apply();
-                                                Utils.hideKeyboard(getView(), getActivity());
                                                 Toast.makeText(getActivity(), "Journal successfully archived",
                                                         Toast.LENGTH_SHORT).show();
                                                 getActivity().finish();
@@ -302,6 +299,5 @@ public class EndOfDayDialogFragment extends DialogFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Utils.showKeyboardInDialog(getDialog());
     }
 }

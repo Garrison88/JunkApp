@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.garrisonthomas.junkapp.AddItemHelper;
 import com.garrisonthomas.junkapp.R;
-import com.garrisonthomas.junkapp.Utils;
 import com.garrisonthomas.junkapp.parseobjects.NewFuel;
 
 public class AddFuelDialogFragment extends AddItemHelper {
@@ -55,8 +54,6 @@ public class AddFuelDialogFragment extends AddItemHelper {
 
                 if (!TextUtils.isEmpty(etFuelVendor.getText())
                         && (!TextUtils.isEmpty(etNetCost.getText()))) {
-
-                    Utils.hideKeyboard(v, getActivity());
 
                     NewFuel newFuel = new NewFuel();
                     newFuel.setRelatedJournal(currentJournalId);
@@ -103,7 +100,6 @@ public class AddFuelDialogFragment extends AddItemHelper {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Utils.showKeyboardInDialog(getDialog());
     }
 
 }

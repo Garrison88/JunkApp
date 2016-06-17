@@ -13,13 +13,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.garrisonthomas.junkapp.AddItemHelper;
-import com.garrisonthomas.junkapp.parseobjects.NewQuote;
 import com.garrisonthomas.junkapp.R;
-import com.garrisonthomas.junkapp.Utils;
+import com.garrisonthomas.junkapp.parseobjects.NewQuote;
 
 public class AddQuoteDialogFragment extends AddItemHelper {
 
-    private static EditText etQuoteSSID, etLowEnd, etHighEnd, etQuoteNotes;
+    private static EditText etQuoteSID, etLowEnd, etHighEnd, etQuoteNotes;
     private static Button saveQuote, cancelQuote;
     private static String currentJournalId;
     private SharedPreferences preferences;
@@ -35,7 +34,7 @@ public class AddQuoteDialogFragment extends AddItemHelper {
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         currentJournalId = preferences.getString("universalJournalId", "none");
 
-        etQuoteSSID = (EditText) v.findViewById(R.id.et_quote_ssid);
+        etQuoteSID = (EditText) v.findViewById(R.id.et_quote_sid);
         etLowEnd = (EditText) v.findViewById(R.id.et_low_end);
         etHighEnd = (EditText) v.findViewById(R.id.et_high_end);
         etQuoteNotes = (EditText) v.findViewById(R.id.et_quote_notes);
@@ -47,14 +46,12 @@ public class AddQuoteDialogFragment extends AddItemHelper {
             @Override
             public void onClick(View v) {
 
-                if (!TextUtils.isEmpty(etQuoteSSID.getText())
+                if (!TextUtils.isEmpty(etQuoteSID.getText())
                         && (!TextUtils.isEmpty(etLowEnd.getText()))) {
-
-                    Utils.hideKeyboard(v, getActivity());
 
                     NewQuote newQuote = new NewQuote();
                     newQuote.setRelatedJournal(currentJournalId);
-                    newQuote.setQuoteSSID(Integer.valueOf(etQuoteSSID.getText().toString()));
+                    newQuote.setQuoteSID(Integer.valueOf(etQuoteSID.getText().toString()));
                     newQuote.setLowEnd(Integer.valueOf(etLowEnd.getText().toString()));
                     if (!TextUtils.isEmpty(etHighEnd.getText())) {
                         newQuote.setHighEnd(Integer.valueOf(etHighEnd.getText().toString()));
@@ -63,10 +60,10 @@ public class AddQuoteDialogFragment extends AddItemHelper {
                     }
                     newQuote.setQuoteNotes(String.valueOf(etQuoteNotes.getText()));
 
-                    newQuote.saveEventually();
                     newQuote.pinInBackground();
+                    newQuote.saveEventually();
 
-                    Toast.makeText(getActivity(), "Quote number " + etQuoteSSID.getText().toString() + " saved",
+                    Toast.makeText(getActivity(), "Quote number " + etQuoteSID.getText().toString() + " saved",
                             Toast.LENGTH_SHORT).show();
 
                     dismiss();
@@ -94,7 +91,6 @@ public class AddQuoteDialogFragment extends AddItemHelper {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Utils.showKeyboardInDialog(getDialog());
     }
 
 }

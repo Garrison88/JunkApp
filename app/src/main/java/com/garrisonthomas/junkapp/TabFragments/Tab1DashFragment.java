@@ -19,10 +19,13 @@ import android.widget.Toast;
 
 import com.garrisonthomas.junkapp.CurrentJournal;
 import com.garrisonthomas.junkapp.R;
-import com.garrisonthomas.junkapp.Utils;
 import com.garrisonthomas.junkapp.dialogfragments.DailyJournalDialogFragment;
 
 public class Tab1DashFragment extends Fragment {
+
+    public Tab1DashFragment() {
+        // Required empty public constructor
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -88,8 +91,6 @@ public class Tab1DashFragment extends Fragment {
                     totalDump = Integer.parseInt(enterDump.getText().toString());
                     percentOfTotalString = getString(R.string.dollar_sign) + String.valueOf(Math.round((totalDump / totalEarnings) * 100.0));
                     percentOfTotal.setText(percentOfTotalString);
-
-                    Utils.hideKeyboard(v, getActivity());
 
                 } else {
 

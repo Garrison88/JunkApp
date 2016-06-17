@@ -116,9 +116,6 @@ public class DailyJournalDialogFragment extends DialogFragment {
                     final String driverST = dStartTime.getText().toString();
                     final String navST = nStartTime.getText().toString();
 
-
-                    Utils.hideKeyboard(v, getActivity());
-
                     createJournal.setVisibility(View.GONE);
                     pbar.setVisibility(View.VISIBLE);
 
@@ -173,7 +170,6 @@ public class DailyJournalDialogFragment extends DialogFragment {
                 driver.setText("");
                 navigator.setText("");
                 truckSpinner.setSelection(0);
-                Utils.hideKeyboard(v, getActivity());
                 dismiss();
             }
         });
@@ -186,6 +182,5 @@ public class DailyJournalDialogFragment extends DialogFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-            Utils.showKeyboardInDialog(getDialog());
     }
 }
