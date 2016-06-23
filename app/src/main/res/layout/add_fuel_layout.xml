@@ -19,25 +19,10 @@
     </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
     <com.wrapp.floatlabelededittext.FloatLabeledEditText
-        android:id="@+id/et_fuel_gross_cost_wrapper"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/et_fuel_vendor_wrapper">
-
-        <EditText
-            android:id="@+id/et_fuel_gross_cost"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint="Gross Cost (optional)"
-            android:inputType="numberDecimal" />
-
-    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
-
-    <com.wrapp.floatlabelededittext.FloatLabeledEditText
         android:id="@+id/et_fuel_net_cost_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/et_fuel_gross_cost_wrapper">
+        android:layout_below="@id/et_fuel_vendor_wrapper">
 
         <EditText
             android:id="@+id/et_fuel_net_cost"

@@ -59,7 +59,7 @@ public class AddDumpDialogFragment extends AddItemHelper {
         cancelDump = (Button) v.findViewById(R.id.btn_cancel_dump);
 
         dumpNameArray = getResources().getStringArray(R.array.dumps_name);
-        materialArray = getResources().getStringArray(R.array.material);
+        materialArray = getResources().getStringArray(R.array.cherry_material);
         rate = getResources().getIntArray(R.array.dumps_rate);
 
         dumpNameSpinner = (Spinner) v.findViewById(R.id.spinner_dump_dialog);
@@ -107,8 +107,6 @@ public class AddDumpDialogFragment extends AddItemHelper {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
-
-
 
             }
 

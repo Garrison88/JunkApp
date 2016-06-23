@@ -17,9 +17,9 @@
                 android:id="@+id/et_quote_sid"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="SSID"
+                android:hint="SID"
                 android:inputType="number"
-                android:maxLength="5" />
+                android:maxLength="6" />
 
         </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
@@ -55,6 +55,28 @@
                     android:inputType="numberDecimal" />
 
             </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/quote_start_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableStart="@drawable/ic_access_time_white_24dp"
+                android:text="@string/start" />
+
+            <Button
+                android:id="@+id/quote_end_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableStart="@drawable/ic_access_time_white_24dp"
+                android:text="@string/end" />
 
         </LinearLayout>
 

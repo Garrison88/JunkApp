@@ -32,7 +32,7 @@ public class Tab2CalcFragment extends Fragment {
     private static int[] volumePrice, bedloadPrice;
     private static String[] volumeSize, bedloadSize;
     private static int vPrice, bPrice;
-    private static double beforeTax, sum;
+    private static double beforeTax, sum, discount;
     private static String doubleValue, totalText, sumString;
 
     ArrayList<Integer> priceArray = new ArrayList<>();
@@ -65,13 +65,17 @@ public class Tab2CalcFragment extends Fragment {
 
                 vSpinner.setSelection(0);
                 vPrice = volumePrice[position];
-                if (position != 0 && position != 12) {
+                if (position != 0 && position != 12 && position != 15) {
                     if (!TextUtils.isEmpty(tvVolumeSize.getText())) {
                         tvVolumeSize.append("\n" + "+" + "\n");
                     }
-
-                    tvVolumeSize.append(volumeSize[position] + " ($" + volumePrice[position] + ")");
-                    priceArray.add(vPrice);
+                    if (position >= 16) {
+                        tvVolumeSize.append(volumeSize[position]);
+                        discount = vPrice/100;
+                    } else {
+                        tvVolumeSize.append(volumeSize[position] + " ($" + volumePrice[position] + ")");
+                        priceArray.add(vPrice);
+                    }
 
                     calcCost();
 
@@ -91,6 +95,7 @@ public class Tab2CalcFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
 
+                bSpinner.setSelection(0);
                 bPrice = bedloadPrice[position];
                 if (position != 0) {
                     if (!TextUtils.isEmpty(tvBedloadSize.getText())) {
@@ -101,7 +106,7 @@ public class Tab2CalcFragment extends Fragment {
                     priceArray.add(bPrice);
 
                     calcCost();
-                    bSpinner.setSelection(0);
+
                 }
             }
 
@@ -158,6 +163,9 @@ public class Tab2CalcFragment extends Fragment {
             for (int i : priceArray) {
                 sum += i;
             }
+            if (discount != 0.0) {
+                sum = sum * discount;
+            }
             sumString = getString(R.string.dollar_sign) + String.valueOf(sum);
             tvTotal.setText(sumString);
 
@@ -199,7 +207,7 @@ public class Tab2CalcFragment extends Fragment {
 
             TextView subSpinner = (TextView) mySpinner.findViewById(R.id.tv_custom_spinner_second);
 
-            if (position == 0 || position == 12) {
+            if (position == 0 || position == 12 || position >= 15) {
                 subSpinner.setVisibility(View.GONE);
             } else {
                 subSpinner.setText("$" + volumePrice[position]);

@@ -195,7 +195,7 @@ public class EndOfDayDialogFragment extends DialogFragment {
         return new AlertDialog.Builder(getActivity())
                 .setTitle("Archive Journal?")
                 .setMessage("You will no longer be able to view or edit this journal")
-                .setIcon(R.drawable.ic_publish_black_24px)
+                .setIcon(R.drawable.ic_warning_white_24dp)
 
                 .setPositiveButton("archive", new DialogInterface.OnClickListener() {
 

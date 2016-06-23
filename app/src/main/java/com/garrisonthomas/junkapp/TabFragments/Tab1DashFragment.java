@@ -2,7 +2,6 @@ package com.garrisonthomas.junkapp.tabfragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
@@ -46,7 +45,7 @@ public class Tab1DashFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.tab1_dash_layout, container, false);
+        final View v = inflater.inflate(R.layout.tab1_journal_layout, container, false);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
         currentJournalId = preferences.getString("universalJournalId", "none");
@@ -127,7 +126,7 @@ public class Tab1DashFragment extends Fragment {
 
                     Snackbar
                             .make(coordinatorLayoutView, "No journal available", Snackbar.LENGTH_LONG)
-                            .setActionTextColor(Color.CYAN)
+                            .setActionTextColor(getContext().getResources().getColor(R.color.colorAccent))
                             .setAction("CREATE", createJournalClickListener)
                             .show();
                 } else {
@@ -153,7 +152,7 @@ public class Tab1DashFragment extends Fragment {
     public void onStart() {
         super.onStart();
         if (preferences.getBoolean("firstrun", true)) {
-            preferences.edit().putString("universalJournalId", "none");
+            preferences.edit().putString("universalJournalId", "none").apply();
             preferences.edit().putBoolean("firstrun", false).apply();
         }
         currentJournalId = preferences.getString("universalJournalId", "none");

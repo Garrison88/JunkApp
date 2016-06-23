@@ -14,12 +14,13 @@ import android.widget.Toast;
 
 import com.garrisonthomas.junkapp.AddItemHelper;
 import com.garrisonthomas.junkapp.R;
+import com.garrisonthomas.junkapp.Utils;
 import com.garrisonthomas.junkapp.parseobjects.NewQuote;
 
 public class AddQuoteDialogFragment extends AddItemHelper {
 
     private static EditText etQuoteSID, etLowEnd, etHighEnd, etQuoteNotes;
-    private static Button saveQuote, cancelQuote;
+    private static Button saveQuote, cancelQuote, startTime, endTime;
     private static String currentJournalId;
     private SharedPreferences preferences;
 
@@ -39,8 +40,24 @@ public class AddQuoteDialogFragment extends AddItemHelper {
         etHighEnd = (EditText) v.findViewById(R.id.et_high_end);
         etQuoteNotes = (EditText) v.findViewById(R.id.et_quote_notes);
 
+        startTime = (Button) v.findViewById(R.id.quote_start_time);
+        endTime = (Button) v.findViewById(R.id.quote_end_time);
         saveQuote = (Button) v.findViewById(R.id.btn_save_quote);
         cancelQuote = (Button) v.findViewById(R.id.btn_cancel_quote);
+
+        startTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.chooseTime(getActivity(), startTime);
+            }
+        });
+
+        endTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.chooseTime(getActivity(), endTime);
+            }
+        });
 
         saveQuote.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,6 +69,8 @@ public class AddQuoteDialogFragment extends AddItemHelper {
                     NewQuote newQuote = new NewQuote();
                     newQuote.setRelatedJournal(currentJournalId);
                     newQuote.setQuoteSID(Integer.valueOf(etQuoteSID.getText().toString()));
+                    newQuote.setQuoteStartTime(String.valueOf(startTime.getText()));
+                    newQuote.setQuoteEndTime(String.valueOf(endTime.getText()));
                     newQuote.setLowEnd(Integer.valueOf(etLowEnd.getText().toString()));
                     if (!TextUtils.isEmpty(etHighEnd.getText())) {
                         newQuote.setHighEnd(Integer.valueOf(etHighEnd.getText().toString()));

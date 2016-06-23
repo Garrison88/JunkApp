@@ -47,7 +47,7 @@ public class ViewDumpDialogFragment extends ViewItemHelper {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        final View v = inflater.inflate(R.layout.view_dumps_layout, container, false);
+        final View v = inflater.inflate(R.layout.view_dump_layout, container, false);
 
         ButterKnife.bind(this, v);
 

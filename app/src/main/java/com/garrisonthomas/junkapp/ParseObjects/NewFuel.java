@@ -13,12 +13,6 @@ public class NewFuel extends ParseObject {
 
     }
 
-    public double getFuelGrossCost() {
-
-        return getDouble("fuelGrossCost");
-
-    }
-
     public double getFuelNetCost() {
 
         return getDouble("fuelNetCost");
@@ -40,12 +34,6 @@ public class NewFuel extends ParseObject {
     public void setFuelVendor(String fuelVendor) {
 
         put("fuelVendor", fuelVendor);
-
-    }
-
-    public void setFuelGrossCost(double fuelGrossCost) {
-
-        put("fuelGrossCost", fuelGrossCost);
 
     }
 

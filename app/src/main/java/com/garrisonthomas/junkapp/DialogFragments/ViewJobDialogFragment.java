@@ -30,13 +30,13 @@ public class ViewJobDialogFragment extends DialogFragment {
     TextView vjNet;
     @Bind(R.id.tv_view_pay_type)
     TextView vjPayType;
-    @Bind(R.id.tv_view_time)
+    @Bind(R.id.tv_view_job_time)
     TextView vjTime;
     @Bind(R.id.tv_view_job_receipt_number)
     TextView vjReceiptNumber;
     @Bind(R.id.tv_view_job_notes)
     TextView vjNotes;
-    @Bind(R.id.tv_notes_display)
+    @Bind(R.id.tv_view_job_notes_display)
     TextView tvNotesDisplay;
     @Bind(R.id.btn_view_job_ok)
     Button okBtn;
@@ -51,7 +51,7 @@ public class ViewJobDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        final View v = inflater.inflate(R.layout.view_jobs_layout, container, false);
+        final View v = inflater.inflate(R.layout.view_job_layout, container, false);
 
         ButterKnife.bind(this, v);
 
@@ -82,7 +82,7 @@ public class ViewJobDialogFragment extends DialogFragment {
 
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         Bundle vjBundle = getArguments();
-        vjSID = vjBundle.getInt("spinnerSID");
+        vjSID = vjBundle.getInt("jobSpinnerSID");
         currentJournalId = vjBundle.getString("relatedJournalId");
         dialog.setTitle("SID: " + String.valueOf(vjSID));
         dialog.setCanceledOnTouchOutside(false);

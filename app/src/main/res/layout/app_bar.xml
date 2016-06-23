@@ -7,7 +7,7 @@
     android:id="@+id/app_bar"
     android:layout_width="match_parent"
     android:layout_height="56dp"
-    android:navigationIcon="@drawable/abc_ic_ab_back_mtrl_am_alpha"
+    android:navigationIcon="@drawable/ic_arrow_back_white_24dp"
     android:minHeight="?attr/actionBarSize"
     android:background="?attr/colorPrimary"
     local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"

@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.garrisonthomas.junkapp.parseobjects.NewDump;
 import com.garrisonthomas.junkapp.parseobjects.NewJob;
+import com.garrisonthomas.junkapp.parseobjects.NewQuote;
 import com.parse.FindCallback;
 import com.parse.ParseQuery;
 
@@ -55,6 +56,39 @@ public class Utils {
                     ArrayAdapter<Integer> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, jobsArray);
                     adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
                     jobsSpinner.setAdapter(adapter);
+
+
+                } else {
+                    Toast.makeText(context, "Something went wrong: " + e, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        });
+
+    }
+
+    public static void populateQuoteSpinner(final Context context, String currentJournalId,
+                                          final ArrayList<Integer> quotesArray, final Spinner quotesSpinner) {
+
+        ParseQuery<NewQuote> query = ParseQuery.getQuery(NewQuote.class);
+        query.whereEqualTo("relatedJournal", currentJournalId);
+        query.orderByAscending("createdAt");
+        query.fromPin();
+        query.findInBackground(new FindCallback<NewQuote>() {
+            @Override
+            public void done(List<NewQuote> list, com.parse.ParseException e) {
+
+                if (e == null) {
+
+                    for (NewQuote quote : list) {
+
+                        quotesArray.add(quote.getQuoteSID());
+
+                    }
+
+                    ArrayAdapter<Integer> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, quotesArray);
+                    adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+                    quotesSpinner.setAdapter(adapter);
 
 
                 } else {

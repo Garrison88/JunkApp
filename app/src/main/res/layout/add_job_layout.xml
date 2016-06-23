@@ -27,7 +27,7 @@
                     android:layout_height="match_parent"
                     android:hint="SID"
                     android:inputType="number"
-                    android:maxLength="5" />
+                    android:maxLength="6" />
 
             </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
@@ -87,6 +87,7 @@
                     android:layout_weight="1"
                     android:drawableStart="@drawable/ic_access_time_white_24dp"
                     android:text="@string/end" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -99,7 +100,8 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:dropDownWidth="@dimen/custom_spinner_width" />
+                    android:dropDownWidth="@dimen/custom_spinner_width"
+                    android:gravity="bottom"/>
 
                 <com.wrapp.floatlabelededittext.FloatLabeledEditText
                     android:id="@+id/et_receipt_number_wrapper"

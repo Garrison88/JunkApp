@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -37,7 +38,7 @@ public class Tab3DumpFragment extends Fragment {
     private static int[] rate;
     private static int rateNumber;
     private static TextView tvDumpCost;
-    private static String info, resultString, withTaxString;
+    private static String info, resultString, withTaxString, selectedDumpName;
     private static double weightNumber, result, withTax;
 
     @Override
@@ -72,6 +73,7 @@ public class Tab3DumpFragment extends Fragment {
                 final String dir = getString(R.string.google_maps_url) + directions[position];
                 info = information[position];
                 rateNumber = rate[position];
+                selectedDumpName = dumpName[position];
 
                 dirBtn.setOnClickListener(new View.OnClickListener() {
 
@@ -91,14 +93,14 @@ public class Tab3DumpFragment extends Fragment {
                     public void onClick(View v) {
 //                        if (position != 0) {
                             new AlertDialog.Builder(getActivity())
-                                    .setTitle("Dump Info")
+                                    .setTitle(selectedDumpName)
                                     .setMessage(info)
                                     .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
                                             // continue with delete
                                         }
                                     })
-                                    .setIcon(R.drawable.ic_dashboard_white_24dp)
+//                                    .setIcon(R.drawable.ic_info_outline_white_36dp)
                                     .show();
 //                        } else {
 //                            Toast.makeText(getActivity(), R.string.toast_no_dump_selected, Toast.LENGTH_SHORT).show();
@@ -112,7 +114,11 @@ public class Tab3DumpFragment extends Fragment {
 
                         if (!TextUtils.isEmpty(weight.getText())) {
 
-//                            if (position != 0) {
+                            View view = getActivity().getCurrentFocus();
+                            if (view != null) {
+                                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                            }
 
                                 weightNumber = Double.parseDouble(weight.getText().toString());
                                 weightNumber = weightNumber / 1000;
@@ -126,12 +132,6 @@ public class Tab3DumpFragment extends Fragment {
                                 tvDumpCost.setText("$" + resultString);
 
                                 weight.setText("");
-
-//                            } else {
-//
-//                                Toast.makeText(getActivity(), R.string.toast_no_dump_selected, Toast.LENGTH_SHORT).show();
-//
-//                            }
 
                         } else {
 
@@ -205,13 +205,7 @@ public class Tab3DumpFragment extends Fragment {
             main_text.setText(dumpName[position]);
 
             TextView subSpinner = (TextView) mySpinner.findViewById(R.id.spinner_text_dump_rate);
-//            if (position == 0) {
-//                subSpinner.setVisibility(View.GONE);
-//            }
             subSpinner.setText("$" + rate[position] + "/tonne");
-
-//            ImageView left_icon = (ImageView) mySpinner.findViewById(R.id.left_pic);
-//            left_icon.setImageResource(R.drawable.dump_truck);
 
             return mySpinner;
         }

@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.ViewItemHelper;
-import com.garrisonthomas.junkapp.parseobjects.NewJob;
+import com.garrisonthomas.junkapp.parseobjects.NewQuote;
 import com.parse.FindCallback;
 import com.parse.ParseQuery;
 
@@ -26,41 +26,37 @@ import butterknife.ButterKnife;
  */
 public class ViewQuoteDialogFragment extends ViewItemHelper {
 
-    @Bind(R.id.tv_view_job_gross)
-    TextView vjGross;
-    @Bind(R.id.tv_view_job_net)
-    TextView vjNet;
-    @Bind(R.id.tv_view_pay_type)
-    TextView vjPayType;
-    @Bind(R.id.tv_view_time)
-    TextView vjTime;
-    @Bind(R.id.tv_view_job_receipt_number)
-    TextView vjReceiptNumber;
-    @Bind(R.id.tv_view_job_notes)
-    TextView vjNotes;
-    @Bind(R.id.tv_notes_display)
-    TextView tvNotesDisplay;
-    @Bind(R.id.btn_view_job_ok)
+    @Bind(R.id.tv_view_quote_low_end)
+    TextView vqLowEnd;
+    @Bind(R.id.tv_view_quote_high_end)
+    TextView vqHighEnd;
+    @Bind(R.id.tv_view_quote_time)
+    TextView vqTime;
+    @Bind(R.id.tv_view_quote_notes)
+    TextView vqNotes;
+    @Bind(R.id.tv_view_quote_notes_display)
+    TextView tvQuoteNotesDisplay;
+    @Bind(R.id.btn_view_quote_ok)
     Button okBtn;
-    @Bind(R.id.btn_delete_job)
-    ImageButton deleteJobBtn;
-    private static int vjSID;
+    @Bind(R.id.btn_delete_quote)
+    ImageButton deleteQuoteBtn;
+    private static int vqSID;
     public static String currentJournalId;
-    public static String thisJobId;
+    public static String thisQuoteId;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        final View v = inflater.inflate(R.layout.view_jobs_layout, container, false);
+        final View v = inflater.inflate(R.layout.view_quote_layout, container, false);
 
         ButterKnife.bind(this, v);
 
-        tvNotesDisplay.setVisibility(View.GONE);
-        vjNotes.setVisibility(View.GONE);
+        tvQuoteNotesDisplay.setVisibility(View.GONE);
+        vqNotes.setVisibility(View.GONE);
 
-        populateJobInfo();
+        populateQuoteInfo();
 
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,10 +65,10 @@ public class ViewQuoteDialogFragment extends ViewItemHelper {
             }
         });
 
-        deleteJobBtn.setOnClickListener(new View.OnClickListener() {
+        deleteQuoteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ViewItemHelper.deleteItem(ViewQuoteDialogFragment.this, currentJournalId, thisJobId, getActivity(), "NewQuote");
+                ViewItemHelper.deleteItem(ViewQuoteDialogFragment.this, currentJournalId, thisQuoteId, getActivity(), "NewQuote");
             }
         });
 
@@ -83,47 +79,45 @@ public class ViewQuoteDialogFragment extends ViewItemHelper {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         Dialog dialog = super.onCreateDialog(savedInstanceState);
-        Bundle vjBundle = getArguments();
-        vjSID = vjBundle.getInt("spinnerSID");
-        currentJournalId = vjBundle.getString("relatedJournalId");
-        dialog.setTitle("SID: " + String.valueOf(vjSID));
+        Bundle vqBundle = getArguments();
+        vqSID = vqBundle.getInt("quoteSpinnerSID");
+        currentJournalId = vqBundle.getString("relatedJournalId");
+        dialog.setTitle("SID: " + String.valueOf(vqSID));
         dialog.setCanceledOnTouchOutside(false);
 
         return dialog;
     }
 
-    public void populateJobInfo() {
+    public void populateQuoteInfo() {
 
-        ParseQuery<NewJob> query = ParseQuery.getQuery(NewJob.class);
+        ParseQuery<NewQuote> query = ParseQuery.getQuery(NewQuote.class);
         query.setLimit(1);
         query.whereEqualTo("relatedJournal", currentJournalId);
-        query.whereEqualTo("sid", vjSID);
+        query.whereEqualTo("quoteSID", vqSID);
         query.fromPin();
-        query.findInBackground(new FindCallback<NewJob>() {
+        query.findInBackground(new FindCallback<NewQuote>() {
             @Override
-            public void done(List<NewJob> list, com.parse.ParseException e) {
+            public void done(List<NewQuote> list, com.parse.ParseException e) {
 
                 if (e == null) {
 
-                    for (NewJob job : list) {
+                    for (NewQuote quote : list) {
 
                         if (isAdded()) {
 
-                            thisJobId = job.getObjectId();
-                            String grossSaleString = getString(R.string.dollar_sign) + job.getGrossSale();
-                            String netSaleString = getString(R.string.dollar_sign) + job.getNetSale();
-                            String startEndTime = job.getStartTime() + " - " + job.getEndTime();
-                            vjGross.setText(grossSaleString);
-                            vjNet.setText(netSaleString);
-                            vjPayType.setText(job.getPayType());
-                            vjTime.setText(startEndTime);
-                            vjReceiptNumber.setText(String.valueOf(job.getReceiptNumber()));
-                            vjNotes.setText(job.getJobNotes());
+                            thisQuoteId = quote.getObjectId();
+                            String lowEndString = getString(R.string.dollar_sign) + quote.getLowEnd();
+                            String highEndString = getString(R.string.dollar_sign) + quote.getHighEnd();
+                            String startEndTime = quote.getQuoteStartTime() + " - " + quote.getQuoteEndTime();
+                            vqLowEnd.setText(lowEndString);
+                            vqHighEnd.setText(highEndString);
+                            vqTime.setText(startEndTime);
+                            vqNotes.setText(quote.getQuoteNotes());
 
-                            if (!TextUtils.isEmpty(vjNotes.getText())) {
+                            if (!TextUtils.isEmpty(vqNotes.getText())) {
 
-                                tvNotesDisplay.setVisibility(View.VISIBLE);
-                                vjNotes.setVisibility(View.VISIBLE);
+                                tvQuoteNotesDisplay.setVisibility(View.VISIBLE);
+                                vqNotes.setVisibility(View.VISIBLE);
 
                             }
                         }

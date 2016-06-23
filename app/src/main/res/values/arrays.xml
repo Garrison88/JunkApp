@@ -4,50 +4,91 @@
     <string-array name="dumps_name">
         <item>Laird</item>
         <item>Cherry</item>
+        <item>Shorncliffe</item>
         <item>Fenmar</item>
         <item>Miller</item>
         <item>Medulla West</item>
         <item>Medulla East</item>
-        <item>Shorncliffe</item>
+        <item>GFL Pickering</item>
+        <item>GFL Etobicoke</item>
+        <item>GFL Mississauga</item>
+        <item>WM Etobicoke</item>
+        <item>WM St Catherines</item>
+        <item>WM Hamilton</item>
+        <item>Mountain Transfer</item>
+        <item>Tor-Can</item>
+        <item>Tuff Recycling Inc.</item>
     </string-array>
 
     <!--this is the shortened Google Maps URL that follows https://goo.gl/maps/-->
     <string-array name="dumps_address">
         <item>chdEuWRNCvk</item>
         <item>k9YybVBD7sP2</item>
+        <item>iokV72f1kqs</item>
         <item>Yj2ZaQx8hi92</item>
         <item>XmboWmDyZHK2</item>
         <item>L5JrwkPeH9z</item>
         <item>uth6xb1UntM2</item>
-        <item>iokV72f1kqs</item>
+        <item>vEaHEorrRtp</item>
+        <item>aXRTAE9EnY12</item>
+        <item>pR2MAnHYbjy</item>
+        <item>VwSddASj28m</item>
+        <item>8RhgJwRJkPC2</item>
+        <item>JrrVP4GSyWQ2</item>
+        <item>VvK2ZeZMXPN2</item>
+        <item>Bis8RuzouZG2</item>
+        <item>11YUh7iN9hz</item>
     </string-array>
 
     <string-array name="dumps_info">
-        <item>Laird: Open Monday–Friday 8–5\nRemember to wear safety gear!\n</item>
-        <item>Cherry: Open every day 6–6</item>
-        <item>Fenmar</item>
-        <item>Miller: Open Monday to Friday 8–5</item>
-        <item>Medulla West</item>
-        <item>Medulla East: 300 Nugget Ave</item>
-        <item>Shorncliffe: Open Monday to Friday 7–6 and Saturday 7–5</item>
+        <item>Open Monday–Friday 8–5\nRemember to wear safety gear!\n</item>
+        <item>Open every day 6–6</item>
+        <item>Open Monday to Friday 7–6 and Saturday 7–5</item>
+        <item>Open Mon to Fri 6-6 and Sat 7-1 </item>
+        <item>Open Monday to Friday 8–5</item>
+        <item>Open Monday to Friday 6-8</item>
+        <item>300 Nugget Ave</item>
+        <item>$40 min</item>
+        <item>Islington and Rexdale. $40 min</item>
+        <item>403 and Mavis. $40 min</item>
+        <item>Evans and Islington. No min</item>
+        <item>QEW and Welland. No min</item>
+        <item>Upper Ottawa and Rymal. No min</item>
+        <item>Red Hill Valley and QEW. No min</item>
+        <item>Open 24/7. Kennedy and 401. $65 min. *EXTRA $25 after hours and on weekends*</item>
+        <item>Brampton. No min</item>
     </string-array>
 
     <integer-array name="dumps_rate">
         <item>82</item>
         <item>85</item>
+        <item>65</item>
         <item>77</item>
         <item>90</item>
         <item>67</item>
         <item>67</item>
+        <item>85</item>
+        <item>85</item>
+        <item>85</item>
+        <item>82</item>
+        <item>82</item>
+        <item>117</item>
+        <item>117</item>
+        <item>79</item>
         <item>65</item>
     </integer-array>
 
-    <string-array name="material">
+    <string-array name="cherry_material">
         <item>Garbage</item>
         <item>Metal</item>
         <item>Paper</item>
-        <item>Concrete</item>
     </string-array>
+
+    <integer-array name="cherry_rebate">
+        <item>0</item>
+        <item>90</item>
+        <item>10</item>
+    </integer-array>
 
     <string-array name="string_volume_name">
         <item>Add Volume</item>
@@ -62,9 +103,14 @@
         <item>3/4</item>
         <item>7/8</item>
         <item>Full</item>
-        <item>Extras</item>
+        <item>EXTRAS</item>
         <item>Labour</item>
         <item>1 Tire</item>
+        <item>DISCOUNTS</item>
+        <item>5% off</item>
+        <item>10% off</item>
+        <item>15% off</item>
+        <item>20% off</item>
     </string-array>
 
     <integer-array name="string_volume_price">
@@ -83,6 +129,11 @@
         <item>0</item>
         <item>99</item>
         <item>15</item>
+        <item>0</item>
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
     </integer-array>
 
     <string-array name="string_bedload_name">
@@ -137,6 +188,7 @@
         <item>MasterCard</item>
         <item>Visa</item>
         <item>Invoice</item>
+        <item>Combo</item>
     </string-array>
 
 </resources>

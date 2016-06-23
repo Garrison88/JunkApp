@@ -6,28 +6,27 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="8dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:paddingTop="8dp">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        dumps_card_view:cardUseCompatPadding="true"
-        dumps_card_view:contentPadding="5dp"
-        dumps_card_view:cardBackgroundColor="@color/darkAccent">
-
-        <Spinner
-            android:id="@+id/spinner_dumps"
+        <android.support.v7.widget.CardView
             android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:spinnerMode="dropdown" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            dumps_card_view:cardBackgroundColor="@color/darkAccent"
+            dumps_card_view:cardUseCompatPadding="true"
+            dumps_card_view:contentPadding="5dp">
 
-    </android.support.v7.widget.CardView>
+            <Spinner
+                android:id="@+id/spinner_dumps"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent" />
+
+        </android.support.v7.widget.CardView>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,45 +35,45 @@
             android:weightSum="2">
 
             <Button
-                android:drawableStart="@drawable/ic_my_location_white_36dp"
                 android:id="@+id/btn_dump_directions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Location"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:drawableStart="@drawable/ic_my_location_white_36dp"
+                android:text="Location" />
 
             <Button
-                android:drawableStart="@drawable/ic_info_outline_white_36dp"
                 android:id="@+id/btn_dump_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Dump Info"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:drawableStart="@drawable/ic_info_outline_white_36dp"
+                android:text="Dump Info" />
 
         </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/et_enter_weight"
-                android:layout_weight="1"
-                android:layout_gravity="center_vertical"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
                 android:hint="Enter Weight (kg)"
                 android:inputType="numberDecimal" />
 
-        <Button
-            android:id="@+id/btn_calculate_dump"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Calculate Cost" />
+            <Button
+                android:id="@+id/btn_calculate_dump"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Calculate Cost" />
 
 
-    </LinearLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -82,8 +81,8 @@
         android:id="@+id/dumps_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_alignParentBottom="true"
+        android:orientation="vertical"
         dumps_card_view:cardCornerRadius="0dp">
 
         <LinearLayout
@@ -97,8 +96,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
-                android:paddingTop="8dp"
                 android:hint="$0.00"
+                android:paddingTop="8dp"
                 android:textSize="75sp" />
 
             <LinearLayout

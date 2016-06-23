@@ -27,6 +27,7 @@
 
     <style name="CustomButtonStyle" parent="android:style/Widget.Material.Button">
         <item name="android:fontFamily">work-sans</item>
+        <item name="android:color">@color/colorButtonNormal</item>
     </style>
 
     <style name="CustomDialog" parent="@android:style/Theme.Material.Dialog">

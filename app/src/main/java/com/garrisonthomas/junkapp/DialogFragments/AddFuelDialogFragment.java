@@ -18,7 +18,7 @@ import com.garrisonthomas.junkapp.parseobjects.NewFuel;
 
 public class AddFuelDialogFragment extends AddItemHelper {
 
-    private EditText etFuelVendor, etGrossCost, etNetCost, etReceiptNumber;
+    private EditText etFuelVendor, etNetCost, etReceiptNumber;
     private static Button saveFuel, cancelFuel;
     private String currentJournalId;
     private SharedPreferences preferences;
@@ -41,7 +41,6 @@ public class AddFuelDialogFragment extends AddItemHelper {
         currentJournalId = preferences.getString("universalJournalId", "none");
 
         etFuelVendor = (EditText) v.findViewById(R.id.et_fuel_vendor);
-        etGrossCost = (EditText) v.findViewById(R.id.et_fuel_gross_cost);
         etNetCost = (EditText) v.findViewById(R.id.et_fuel_net_cost);
         etReceiptNumber = (EditText) v.findViewById(R.id.et_fuel_receipt_number);
 
@@ -58,11 +57,6 @@ public class AddFuelDialogFragment extends AddItemHelper {
                     NewFuel newFuel = new NewFuel();
                     newFuel.setRelatedJournal(currentJournalId);
                     newFuel.setFuelVendor(String.valueOf(etFuelVendor.getText()));
-                    if (!TextUtils.isEmpty(etGrossCost.getText())) {
-                        newFuel.setFuelGrossCost(Double.valueOf(String.valueOf(etGrossCost.getText())));
-                    } else {
-                        newFuel.setFuelGrossCost(0);
-                    }
                     newFuel.setFuelNetCost(Double.valueOf(String.valueOf(etNetCost.getText())));
                     if (!TextUtils.isEmpty(etReceiptNumber.getText())) {
                         newFuel.setFuelReceiptNumber(String.valueOf(etReceiptNumber.getText()));

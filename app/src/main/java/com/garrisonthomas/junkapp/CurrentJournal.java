@@ -25,6 +25,7 @@ import com.garrisonthomas.junkapp.dialogfragments.AddQuoteDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.EndOfDayDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.ViewDumpDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.ViewJobDialogFragment;
+import com.garrisonthomas.junkapp.dialogfragments.ViewQuoteDialogFragment;
 import com.garrisonthomas.junkapp.parseobjects.DailyJournal;
 import com.garrisonthomas.junkapp.parseobjects.NewDump;
 import com.garrisonthomas.junkapp.parseobjects.NewFuel;
@@ -72,11 +73,13 @@ public class CurrentJournal extends BaseActivity {
     ProgressBar toolbarProgressBar;
     @Bind(R.id.jobs_spinner)
     Spinner jobsSpinner;
+    @Bind(R.id.quotes_spinner)
+    Spinner quotesSpinner;
     @Bind(R.id.dumps_spinner)
     Spinner dumpsSpinner;
 
     String currentJournalId, spDriver, spNavigator, spTruck, spDate, dumpSpinnerText;
-    int selectedJobSID, dumpReceiptNumber;
+    int selectedJobSID, selectedQuoteSID, dumpReceiptNumber;
     private ArrayList<Integer> jobsArray;
     private ArrayList<Integer> quotesArray;
     private ArrayList<String> dumpsArray;
@@ -102,7 +105,7 @@ public class CurrentJournal extends BaseActivity {
 
         getSupportActionBar().setTitle(spDate);
 
-        toolbar.setNavigationIcon(ContextCompat.getDrawable(this, R.drawable.abc_ic_ab_back_mtrl_am_alpha));
+        toolbar.setNavigationIcon(ContextCompat.getDrawable(this, R.drawable.ic_arrow_back_white_24dp));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,6 +136,22 @@ public class CurrentJournal extends BaseActivity {
 
         });
 
+        quotesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                selectedQuoteSID = (int) quotesSpinner.getItemAtPosition(position);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
+        });
+
         dumpsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -153,6 +172,7 @@ public class CurrentJournal extends BaseActivity {
         });
 
         Utils.populateJobSpinner(this, currentJournalId, jobsArray, jobsSpinner);
+        Utils.populateQuoteSpinner(this, currentJournalId, quotesArray, quotesSpinner);
         Utils.populateDumpSpinner(this, currentJournalId, dumpsArray, dumpsSpinner);
 
         addJob.setOnClickListener(new View.OnClickListener() {
@@ -175,7 +195,7 @@ public class CurrentJournal extends BaseActivity {
 
                     ViewJobDialogFragment vjDialogFragment = new ViewJobDialogFragment();
                     Bundle vjBundle = new Bundle();
-                    vjBundle.putInt("spinnerSID", selectedJobSID);
+                    vjBundle.putInt("jobSpinnerSID", selectedJobSID);
                     vjBundle.putString("relatedJournalId", currentJournalId);
                     vjDialogFragment.setArguments(vjBundle);
                     FragmentManager manager = getFragmentManager();
@@ -208,13 +228,13 @@ public class CurrentJournal extends BaseActivity {
 
                 if (quotesArray.size() > 0) {
 
-                    ViewJobDialogFragment vjDialogFragment = new ViewJobDialogFragment();
-                    Bundle vjBundle = new Bundle();
-                    vjBundle.putInt("spinnerSID", selectedJobSID);
-                    vjBundle.putString("relatedJournalId", currentJournalId);
-                    vjDialogFragment.setArguments(vjBundle);
+                    ViewQuoteDialogFragment vqDialogFragment = new ViewQuoteDialogFragment();
+                    Bundle vqBundle = new Bundle();
+                    vqBundle.putInt("quoteSpinnerSID", selectedQuoteSID);
+                    vqBundle.putString("relatedJournalId", currentJournalId);
+                    vqDialogFragment.setArguments(vqBundle);
                     FragmentManager manager = getFragmentManager();
-                    vjDialogFragment.show(manager, "Dialog");
+                    vqDialogFragment.show(manager, "Dialog");
 
                 } else {
 
@@ -310,7 +330,7 @@ public class CurrentJournal extends BaseActivity {
         return new AlertDialog.Builder(CurrentJournal.this)
                 .setTitle(getString(R.string.confirm_journal_delete_title))
                 .setMessage(getString(R.string.confirm_journal_delete_message))
-                .setIcon(R.drawable.ic_delete_black_24px)
+                .setIcon(R.drawable.ic_warning_white_24dp)
 
                 .setPositiveButton("delete", new DialogInterface.OnClickListener() {
 

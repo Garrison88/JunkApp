@@ -25,6 +25,18 @@ public class NewQuote extends ParseObject {
 
     }
 
+    public String getQuoteStartTime() {
+
+        return getString("quoteStartTime");
+
+    }
+
+    public String getQuoteEndTime() {
+
+        return getString("quoteEndTime");
+
+    }
+
     public String getQuoteNotes() {
 
         return getString("quoteNotes");
@@ -52,6 +64,18 @@ public class NewQuote extends ParseObject {
     public void setHighEnd(int highEnd) {
 
         put("highEnd", highEnd);
+
+    }
+
+    public void setQuoteStartTime(String quoteStartTime) {
+
+        put("quoteStartTime", quoteStartTime);
+
+    }
+
+    public void setQuoteEndTime(String quoteEndTime) {
+
+        put("quoteEndTime", quoteEndTime);
 
     }
 

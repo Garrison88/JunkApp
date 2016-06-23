@@ -7,14 +7,14 @@
         android:id="@+id/action_call_office"
         android:title="Call Office"
         android:orderInCategory="1"
-        android:icon="@drawable/ic_local_phone_white_36dp"
+        android:icon="@drawable/ic_call_white_24dp"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_email_office"
         android:title="Email Office"
         android:orderInCategory="2"
-        android:icon="@drawable/ic_email_white_36dp"
+        android:icon="@drawable/ic_email_white_24dp"
         app:showAsAction="ifRoom" />
 
     <item
