@@ -30,9 +30,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_weight="1"
-            android:text="@string/start"
-            android:drawableStart="@drawable/ic_access_time_white_24dp"
-            android:textSize="@dimen/abc_text_size_small_material" />
+            android:hint="@string/start"
+            android:drawableStart="@drawable/ic_access_time_white_24dp" />
 
     </LinearLayout>
 
@@ -63,9 +62,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_weight="1"
-            android:text="@string/start"
-            android:drawableStart="@drawable/ic_access_time_white_24dp"
-            android:textSize="@dimen/abc_text_size_small_material" />
+            android:hint="@string/start"
+            android:drawableStart="@drawable/ic_access_time_white_24dp" />
 
     </LinearLayout>
 

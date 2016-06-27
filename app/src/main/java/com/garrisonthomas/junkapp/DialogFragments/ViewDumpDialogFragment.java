@@ -104,10 +104,10 @@ public class ViewDumpDialogFragment extends ViewItemHelper {
 
                             thisDumpID = dump.getObjectId();
 
-                            String grossSaleString = getString(R.string.dollar_sign) + String.valueOf(dump.getGrossCost());
-                            String netSaleString = getString(R.string.dollar_sign) + String.valueOf(dump.getNetCost());
-                            vdGross.setText(grossSaleString);
-                            vdNet.setText(netSaleString);
+                            String grossCostString = getString(R.string.dollar_sign) + String.valueOf(dump.getGrossCost());
+                            String netCostString = getString(R.string.dollar_sign) + String.valueOf(dump.getNetCost());
+                            vdGross.setText(grossCostString);
+                            vdNet.setText(netCostString);
                             vdReceiptNumber.setText(String.valueOf(dump.getDumpReceiptNumber()));
                             vdPercentPrevious.setText(String.valueOf(dump.getPercentPrevious()) + "%");
 

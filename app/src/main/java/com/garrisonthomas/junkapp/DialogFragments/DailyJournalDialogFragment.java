@@ -1,6 +1,7 @@
 package com.garrisonthomas.junkapp.dialogfragments;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -109,6 +111,13 @@ public class DailyJournalDialogFragment extends DialogFragment {
             public void onClick(View v) {
 
                 if (!TextUtils.isEmpty(driver.getText()) && !dStartTime.getText().equals("START TIME")) {
+
+                    //hide keyboard when OK is clicked
+                    View view = getActivity().getCurrentFocus();
+                    if (view != null) {
+                        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
 
                     final String driverString = driver.getText().toString();
                     final String navigatorString = navigator.getText().toString();

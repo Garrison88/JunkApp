@@ -10,13 +10,13 @@
     <string name="office_phone_number_uri">tel:18007436348</string>
     <string name="google_maps_url">https://goo.gl/maps/</string>
     <string name="confirm_journal_delete_message">This will also delete all associated entries</string>
-    <string name="confirm_journal_delete_title">Are you sure?</string>
+    <string name="confirm_journal_delete_title">Delete this journal?</string>
     <string name="dollar_sign">$</string>
     <string name="percent_sign">%</string>
     <string name="parse_exception_text">Something went wrong. Please try again</string>
     <string name="password">rickthestick</string>
     <string name="icon_author"><div>Icon made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div></string>
-    <string name="start">START</string>
+    <string name="start">Start</string>
     <string name="end">End</string>
 
 </resources>

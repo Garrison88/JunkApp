@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -18,7 +19,7 @@ import com.garrisonthomas.junkapp.parseobjects.NewFuel;
 
 public class AddFuelDialogFragment extends AddItemHelper {
 
-    private EditText etFuelVendor, etNetCost, etReceiptNumber;
+    private EditText etFuelVendor, etFuelCost, etReceiptNumber;
     private static Button saveFuel, cancelFuel;
     private String currentJournalId;
     private SharedPreferences preferences;
@@ -41,7 +42,7 @@ public class AddFuelDialogFragment extends AddItemHelper {
         currentJournalId = preferences.getString("universalJournalId", "none");
 
         etFuelVendor = (EditText) v.findViewById(R.id.et_fuel_vendor);
-        etNetCost = (EditText) v.findViewById(R.id.et_fuel_net_cost);
+        etFuelCost = (EditText) v.findViewById(R.id.et_fuel_cost);
         etReceiptNumber = (EditText) v.findViewById(R.id.et_fuel_receipt_number);
 
         saveFuel = (Button) v.findViewById(R.id.btn_save_fuel);
@@ -52,17 +53,14 @@ public class AddFuelDialogFragment extends AddItemHelper {
             public void onClick(View v) {
 
                 if (!TextUtils.isEmpty(etFuelVendor.getText())
-                        && (!TextUtils.isEmpty(etNetCost.getText()))) {
+                        && (!TextUtils.isEmpty(etFuelCost.getText()))
+                        && (!TextUtils.isEmpty(etReceiptNumber.getText()))) {
 
                     NewFuel newFuel = new NewFuel();
                     newFuel.setRelatedJournal(currentJournalId);
                     newFuel.setFuelVendor(String.valueOf(etFuelVendor.getText()));
-                    newFuel.setFuelNetCost(Double.valueOf(String.valueOf(etNetCost.getText())));
-                    if (!TextUtils.isEmpty(etReceiptNumber.getText())) {
-                        newFuel.setFuelReceiptNumber(String.valueOf(etReceiptNumber.getText()));
-                    } else {
-                        newFuel.setFuelReceiptNumber("Not provided");
-                    }
+                    newFuel.setFuelCost(Double.valueOf(String.valueOf(etFuelCost.getText())));
+                    newFuel.setFuelReceiptNumber(String.valueOf(etReceiptNumber.getText()));
 
                     newFuel.saveEventually();
                     newFuel.pinInBackground();
@@ -73,7 +71,7 @@ public class AddFuelDialogFragment extends AddItemHelper {
 
                 } else {
 
-                    Toast.makeText(getActivity(), "Please fill all required fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Please fill all fields", Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -94,6 +92,8 @@ public class AddFuelDialogFragment extends AddItemHelper {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        // This helps to always show cancel and save button when keyboard is open
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
 }

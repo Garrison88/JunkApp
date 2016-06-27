@@ -84,7 +84,7 @@ public class ViewJobDialogFragment extends DialogFragment {
         Bundle vjBundle = getArguments();
         vjSID = vjBundle.getInt("jobSpinnerSID");
         currentJournalId = vjBundle.getString("relatedJournalId");
-        dialog.setTitle("SID: " + String.valueOf(vjSID));
+        dialog.setTitle("Job SID: " + String.valueOf(vjSID));
         dialog.setCanceledOnTouchOutside(false);
 
         return dialog;

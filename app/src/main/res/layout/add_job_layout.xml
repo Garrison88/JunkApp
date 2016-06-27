@@ -23,7 +23,7 @@
 
                 <EditText
                     android:id="@+id/et_sid"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="SID"
                     android:inputType="number"
@@ -78,7 +78,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:drawableStart="@drawable/ic_access_time_white_24dp"
-                    android:text="@string/start" />
+                    android:hint="@string/start" />
 
                 <Button
                     android:id="@+id/job_end_time"
@@ -86,7 +86,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:drawableStart="@drawable/ic_access_time_white_24dp"
-                    android:text="@string/end" />
+                    android:hint="@string/end" />
 
             </LinearLayout>
 
@@ -101,7 +101,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:dropDownWidth="@dimen/custom_spinner_width"
-                    android:gravity="bottom"/>
+                    android:gravity="bottom" />
 
                 <com.wrapp.floatlabelededittext.FloatLabeledEditText
                     android:id="@+id/et_receipt_number_wrapper"
@@ -144,8 +144,7 @@
     <LinearLayout
         android:id="@+id/add_job_button_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
         <Button
             android:id="@+id/btn_cancel_job"
@@ -153,7 +152,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground"
             android:text="Cancel" />
+
+        <View
+            android:layout_height="fill_parent"
+            android:layout_width="1dp"
+            android:background="#505154"
+            android:layout_marginBottom="7dp" android:layout_marginTop="7dp"/>
 
         <Button
             android:id="@+id/btn_save_job"
@@ -161,6 +167,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground"
             android:text="Save" />
 
     </LinearLayout>

@@ -154,6 +154,7 @@ public class AddJobDialogFragment extends AddItemHelper {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        // This helps to always show cancel and save button when keyboard is open
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 

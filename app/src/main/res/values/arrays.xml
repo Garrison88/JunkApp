@@ -40,11 +40,43 @@
         <item>11YUh7iN9hz</item>
     </string-array>
 
+    <string-array name="dumps_phone_number">
+        <item>4164236396</item>
+        <item>4164062040</item>
+        <item>4162392009</item>
+        <item>4167433220</item>
+        <item>9054756660</item>
+        <item>4162399300</item>
+        <item>4162978697</item>
+        <item>9054282755</item>
+        <item>4167449535</item>
+        <item>9056151116</item>
+        <item>4162017175</item>
+        <item>9056879605</item>
+        <item>18006651898</item>
+        <item>18006651898</item>
+        <item>9058563900</item>
+        <item>9054553800</item>
+    </string-array>
+
     <string-array name="dumps_info">
-        <item>Open Monday–Friday 8–5\nRemember to wear safety gear!\n</item>
-        <item>Open every day 6–6</item>
-        <item>Open Monday to Friday 7–6 and Saturday 7–5</item>
-        <item>Open Mon to Fri 6-6 and Sat 7-1 </item>
+        <item>Location: Laird and Eglington
+            \nHours: Monday–Friday 5am to 6pm
+            \nSaturday 6am to 1pm
+            \nClosed Sunday
+            \n
+            \n**Remember to wear safety gear!**</item>
+        <item>Location: Cherry and Lakeshore
+            \nHours: Monday-Friday 4am to 9:30pm
+            \nSaturday-Sunday 6am to 6pm</item>
+        <item>Location: Bloor and Kipling
+            \nHours: Monday–Friday 7am to 7pm
+            \nSaturday 6am to 1pm
+            \nClosed Sunday</item>
+        <item>Location: Weston and Finch
+            \nHours: Monday-Friday 6am to 6pm
+            \nSaturday 7am to 3pm
+            \nClosed Sunday</item>
         <item>Open Monday to Friday 8–5</item>
         <item>Open Monday to Friday 6-8</item>
         <item>300 Nugget Ave</item>
@@ -55,7 +87,11 @@
         <item>QEW and Welland. No min</item>
         <item>Upper Ottawa and Rymal. No min</item>
         <item>Red Hill Valley and QEW. No min</item>
-        <item>Open 24/7. Kennedy and 401. $65 min. *EXTRA $25 after hours and on weekends*</item>
+        <item>Hours: 24/7
+            \nKennedy and 401
+            \n$65 min
+            \n
+            \n**Extra $25/tonne after hours and on weekends**</item>
         <item>Brampton. No min</item>
     </string-array>
 
@@ -78,13 +114,15 @@
         <item>65</item>
     </integer-array>
 
-    <string-array name="cherry_material">
+    <string-array name="material">
         <item>Garbage</item>
         <item>Metal</item>
         <item>Paper</item>
+        <item>Concrete</item>
+        <item>Dirt</item>
     </string-array>
 
-    <integer-array name="cherry_rebate">
+    <integer-array name="material_rebate">
         <item>0</item>
         <item>90</item>
         <item>10</item>
@@ -130,10 +168,10 @@
         <item>99</item>
         <item>15</item>
         <item>0</item>
-        <item>5</item>
-        <item>10</item>
-        <item>15</item>
-        <item>20</item>
+        <item>95</item>
+        <item>90</item>
+        <item>85</item>
+        <item>80</item>
     </integer-array>
 
     <string-array name="string_bedload_name">
@@ -188,7 +226,7 @@
         <item>MasterCard</item>
         <item>Visa</item>
         <item>Invoice</item>
-        <item>Combo</item>
+        <item>Other</item>
     </string-array>
 
 </resources>

@@ -1,121 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <com.wrapp.floatlabelededittext.FloatLabeledEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/et_quote_sid"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="SID"
-                android:inputType="number"
-                android:maxLength="6" />
-
-        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
-
-        <LinearLayout
-            android:id="@+id/sales_linear_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.wrapp.floatlabelededittext.FloatLabeledEditText
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <EditText
-                    android:id="@+id/et_low_end"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Low End"
-                    android:inputType="numberDecimal" />
-
-            </com.wrapp.floatlabelededittext.FloatLabeledEditText>
-
-            <com.wrapp.floatlabelededittext.FloatLabeledEditText
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <EditText
-                    android:id="@+id/et_high_end"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="High End (optional)"
-                    android:inputType="numberDecimal" />
-
-            </com.wrapp.floatlabelededittext.FloatLabeledEditText>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/quote_start_time"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableStart="@drawable/ic_access_time_white_24dp"
-                android:text="@string/start" />
-
-            <Button
-                android:id="@+id/quote_end_time"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableStart="@drawable/ic_access_time_white_24dp"
-                android:text="@string/end" />
-
-        </LinearLayout>
-
-        <com.wrapp.floatlabelededittext.FloatLabeledEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/et_quote_notes"
-                android:layout_width="fill_parent"
-                android:layout_height="match_parent"
-                android:hint="Details (optional)"
-                android:inputType="textAutoCorrect|textCapSentences|textMultiLine" />
-
-        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btn_cancel_quote"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_gravity="center_horizontal"
-                android:text="Cancel" />
+            <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/btn_save_quote"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Save" />
+                <EditText
+                    android:id="@+id/et_quote_sid"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="SID"
+                    android:inputType="number"
+                    android:maxLength="6" />
+
+            </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+            <LinearLayout
+                android:id="@+id/sales_linear_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/et_low_end"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Low End"
+                        android:inputType="numberDecimal" />
+
+                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/et_high_end"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="High End (optional)"
+                        android:inputType="numberDecimal" />
+
+                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/quote_start_time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableStart="@drawable/ic_access_time_white_24dp"
+                    android:hint="@string/start" />
+
+                <Button
+                    android:id="@+id/quote_end_time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableStart="@drawable/ic_access_time_white_24dp"
+                    android:hint="@string/end" />
+
+            </LinearLayout>
+
+            <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_quote_notes"
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Details (optional)"
+                    android:inputType="textAutoCorrect|textCapSentences|textMultiLine"
+                    android:maxLines="4" />
+
+            </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
         </LinearLayout>
 
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_cancel_quote"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:text="Cancel" />
+
+        <Button
+            android:id="@+id/btn_save_quote"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:text="Save" />
+
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

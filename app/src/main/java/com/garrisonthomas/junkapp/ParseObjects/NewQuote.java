@@ -13,15 +13,15 @@ public class NewQuote extends ParseObject {
 
     }
 
-    public int getLowEnd() {
+    public double getLowEnd() {
 
-        return getInt("lowEnd");
+        return getDouble("lowEnd");
 
     }
 
-    public int getHighEnd() {
+    public double getHighEnd() {
 
-        return getInt("highEnd");
+        return getDouble("highEnd");
 
     }
 
@@ -55,13 +55,13 @@ public class NewQuote extends ParseObject {
 
     }
 
-    public void setLowEnd(int lowEnd) {
+    public void setLowEnd(double lowEnd) {
 
         put("lowEnd", lowEnd);
 
     }
 
-    public void setHighEnd(int highEnd) {
+    public void setHighEnd(double highEnd) {
 
         put("highEnd", highEnd);
 

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -71,9 +72,9 @@ public class AddQuoteDialogFragment extends AddItemHelper {
                     newQuote.setQuoteSID(Integer.valueOf(etQuoteSID.getText().toString()));
                     newQuote.setQuoteStartTime(String.valueOf(startTime.getText()));
                     newQuote.setQuoteEndTime(String.valueOf(endTime.getText()));
-                    newQuote.setLowEnd(Integer.valueOf(etLowEnd.getText().toString()));
+                    newQuote.setLowEnd(Double.valueOf(etLowEnd.getText().toString()));
                     if (!TextUtils.isEmpty(etHighEnd.getText())) {
-                        newQuote.setHighEnd(Integer.valueOf(etHighEnd.getText().toString()));
+                        newQuote.setHighEnd(Double.valueOf(etHighEnd.getText().toString()));
                     } else {
                         newQuote.setHighEnd(0);
                     }
@@ -110,6 +111,8 @@ public class AddQuoteDialogFragment extends AddItemHelper {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        // This helps to always show cancel and save button when keyboard is open
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
 }

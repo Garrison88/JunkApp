@@ -4,7 +4,6 @@
 
     <style name="CustomTheme.NoActionBar" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@color/windowBackground</item>
-        <!--<item name="android:textColorPrimary">@color/textColorPrimary</item>-->
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -15,6 +14,7 @@
         <item name="android:buttonStyle">@style/CustomButtonStyle</item>
         <item name="android:spinnerStyle">@style/CustomSpinnerStyle</item>
         <item name="android:dialogTheme">@style/CustomDialog</item>
+        <item name="android:fontFamily">work-sans</item>
 
     </style>
 
@@ -32,6 +32,16 @@
 
     <style name="CustomSpinnerStyle" parent="android:Widget.Material.Spinner">
         <item name="android:fontFamily">work-sans</item>
+    </style>
+
+    <style name="CustomDialog" parent="@android:style/Theme.Material.Dialog">
+        <item name="android:fontFamily">work-sans</item>
+        <item name="android:textSize">@dimen/abc_text_size_medium_material</item>
+        <item name="android:textViewStyle">@style/CustomTextViewStyle</item>
+        <item name="android:editTextStyle">@style/CustomEditTextStyle</item>
+        <item name="android:buttonStyle">@style/CustomButtonStyle</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:colorBackground">@color/dialogFragmentBackground</item>
     </style>
 
 </resources>

@@ -41,7 +41,7 @@ dependencies {
     compile 'com.android.support:design:+'
     compile 'com.android.support:recyclerview-v7:+'
     compile 'com.android.support:support-v4:+'
-    compile 'com.parse.bolts:bolts-android:1.2.1'
+//    compile 'com.parse.bolts:bolts-android:1.2.1'
     compile 'com.parse:parse-android:1.13.0'
     compile 'org.apache.commons:commons-lang3:3.4'
     compile 'com.mikepenz:iconics-core:2.6.6@aar'

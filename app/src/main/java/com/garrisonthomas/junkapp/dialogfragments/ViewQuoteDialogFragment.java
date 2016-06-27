@@ -1,6 +1,7 @@
 package com.garrisonthomas.junkapp.dialogfragments;
 
 import android.app.Dialog;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -56,6 +57,10 @@ public class ViewQuoteDialogFragment extends ViewItemHelper {
         tvQuoteNotesDisplay.setVisibility(View.GONE);
         vqNotes.setVisibility(View.GONE);
 
+        Typeface custom_font = Typeface.createFromAsset(v.getContext().getApplicationContext().getAssets(),  "fonts/WorkSans-Regular.ttf");
+
+        vqNotes.setTypeface(custom_font);
+
         populateQuoteInfo();
 
         okBtn.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +87,7 @@ public class ViewQuoteDialogFragment extends ViewItemHelper {
         Bundle vqBundle = getArguments();
         vqSID = vqBundle.getInt("quoteSpinnerSID");
         currentJournalId = vqBundle.getString("relatedJournalId");
-        dialog.setTitle("SID: " + String.valueOf(vqSID));
+        dialog.setTitle("Quote SID: " + String.valueOf(vqSID));
         dialog.setCanceledOnTouchOutside(false);
 
         return dialog;

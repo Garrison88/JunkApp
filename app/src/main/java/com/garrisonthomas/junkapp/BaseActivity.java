@@ -6,16 +6,12 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -81,33 +77,33 @@ public class BaseActivity extends AppCompatActivity {
                 startActivity(Intent.createChooser(emailIntent, "Choose an Email client :"));
             }
 
-
-        } else if (id == R.id.action_take_photo) {
-
-            //here,we are making a folder named picFolder to store pics taken by the camera using this application
-            final String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/JunkPics/";
-            File newdir = new File(dir);
-            newdir.mkdirs();
-
-            // here,counter will be incremented each time,and the picture taken by camera will be stored as 1.jpg,2.jpg and likewise.
-            count++;
-            String file = dir + count + ".jpg";
-            File newfile = new File(file);
-            try {
-                newfile.createNewFile();
-            } catch (IOException e) {
-            }
-
-            Uri outputFileUri = Uri.fromFile(newfile);
-
-
-            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-
-            if (cameraIntent.resolveActivity(getPackageManager()) != null) {
-                startActivityForResult(cameraIntent, TAKE_PHOTO_CODE);
-            }
         }
+//         else if (id == R.id.action_take_photo) {
+//
+//            //here,we are making a folder named picFolder to store pics taken by the camera using this application
+//            final String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/JunkPics/";
+//            File newdir = new File(dir);
+//            newdir.mkdirs();
+//
+//            // here,counter will be incremented each time,and the picture taken by camera will be stored as 1.jpg,2.jpg and likewise.
+//            count++;
+//            String file = dir + count + ".jpg";
+//            File newfile = new File(file);
+//            try {
+//                newfile.createNewFile();
+//            } catch (IOException e) {
+//            }
+//
+//            Uri outputFileUri = Uri.fromFile(newfile);
+//
+//
+//            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+//
+//            if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+//                startActivityForResult(cameraIntent, TAKE_PHOTO_CODE);
+//            }
+//        }
 
         return super.onOptionsItemSelected(item);
     }

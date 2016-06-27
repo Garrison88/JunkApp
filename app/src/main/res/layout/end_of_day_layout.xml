@@ -7,41 +7,32 @@
     <LinearLayout
         android:id="@+id/top_linear_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:text="filler text"
+            android:id="@+id/tv_end_day_percent_of_goal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"/>
 
         <com.wrapp.floatlabelededittext.FloatLabeledEditText
             android:id="@+id/et_end_notes_wrapper"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/end_day_notes"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:hint="Truck location, load, required supplies, etc."
-                android:inputType="textCapSentences|textMultiLine"
+                android:inputType="textCapSentences|textMultiLine|textAutoCorrect"
                 android:maxLines="4" />
 
         </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
-        <ImageButton
-            android:id="@+id/end_day_photo"
-            android:src="@drawable/ic_photo_camera_white_24dp"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:visibility="gone"
-            android:textSize="@dimen/abc_text_size_small_material"/>
-
     </LinearLayout>
-
-    <!--<ImageView-->
-        <!--android:id="@+id/end_day_image_view"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:visibility="gone"-->
-        <!--android:layout_below="@id/top_linear_layout"/>-->
 
     <LinearLayout
         android:id="@+id/clock_out_layout"
@@ -55,14 +46,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="DRIVER OUT"/>
+            android:hint="Driver Out"
+            android:drawableStart="@drawable/ic_access_time_white_24dp"/>
 
         <Button
             android:id="@+id/nav_end_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="NAV OUT"/>
+            android:hint="Nav Out"
+            android:drawableStart="@drawable/ic_access_time_white_24dp"/>
 
     </LinearLayout>
 

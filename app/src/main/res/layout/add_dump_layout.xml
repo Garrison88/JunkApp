@@ -1,171 +1,179 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fadeScrollbars="false"
     android:orientation="vertical">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
 
         <LinearLayout
-            android:id="@+id/et_add_dump_weight_wrapper"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <Spinner
-                android:id="@+id/spinner_dump_dialog"
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:dropDownWidth="@dimen/custom_spinner_width" />
+            <LinearLayout
+                android:id="@+id/et_add_dump_weight_wrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Spinner
+                    android:prompt="@string/toast_no_dump_selected"
+                    android:id="@+id/spinner_dump_dialog"
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:dropDownWidth="@dimen/custom_spinner_width" />
+
+                <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/et_add_dump_weight"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Weight (kgs)"
+                        android:inputType="number"
+                        android:maxLength="4" />
+
+
+                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/material_wrapper"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <Spinner
+                    android:id="@+id/spinner_material"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:dropDownWidth="@dimen/custom_spinner_width" />
+
+                <TextView
+                    android:id="@+id/tv_rebate"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/dump_cost_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:text="Gross Cost" />
+
+                    <TextView
+                        android:id="@+id/tv_dump_gross_cost"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:text="Net Cost" />
+
+                    <TextView
+                        android:id="@+id/tv_dump_net_cost"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal" />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
             <com.wrapp.floatlabelededittext.FloatLabeledEditText
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:id="@+id/et_dump_receipt_number_wrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/et_add_dump_weight"
+                    android:id="@+id/et_dump_receipt_number"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Weight (kgs)"
-                    android:inputType="number"
-                    android:maxLength="4" />
-
+                    android:hint="Receipt Number"
+                    android:inputType="number" />
 
             </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/material_wrapper"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone">
-
-            <Spinner
-                android:id="@+id/spinner_material"
-                android:layout_width="0dp"
+            <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                android:id="@+id/et_percent_previous_wrapper"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:dropDownWidth="@dimen/custom_spinner_width" />
+                android:layout_below="@id/et_dump_receipt_number_wrapper">
 
-            <EditText
-                android:id="@+id/et_market_value"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Market value" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/dump_cost_layout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Gross Cost"/>
-
-                <TextView
-                    android:id="@+id/tv_dump_gross_cost"
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/et_percent_previous"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"/>
+                    android:hint="Percent Previous (optional)"
+                    android:inputType="number"
+                    android:maxLength="3" />
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Net Cost"/>
-
-                <TextView
-                    android:id="@+id/tv_dump_net_cost"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"/>
-
-            </LinearLayout>
+            </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
         </LinearLayout>
 
-        <com.wrapp.floatlabelededittext.FloatLabeledEditText
-            android:id="@+id/et_dump_receipt_number_wrapper"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    </ScrollView>
 
-            <EditText
-                android:id="@+id/et_dump_receipt_number"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:hint="Receipt Number"
-                android:inputType="number" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
-
-        <com.wrapp.floatlabelededittext.FloatLabeledEditText
-            android:id="@+id/et_percent_previous_wrapper"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/btn_cancel_dump"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/et_dump_receipt_number_wrapper">
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:text="Cancel" />
 
-            <EditText
-                android:id="@+id/et_percent_previous"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:hint="Percent Previous (optional)"
-                android:inputType="number"
-                android:maxLength="3" />
-
-        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/btn_save_dump"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/et_percent_previous_wrapper"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btn_cancel_dump"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="1"
-                android:text="Cancel" />
-
-            <Button
-                android:id="@+id/btn_save_dump"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="1"
-                android:text="Save" />
-
-        </LinearLayout>
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:text="Save" />
 
     </LinearLayout>
 
-</ScrollView>
+</LinearLayout>

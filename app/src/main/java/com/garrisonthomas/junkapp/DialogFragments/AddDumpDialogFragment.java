@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -24,7 +25,7 @@ import com.garrisonthomas.junkapp.parseobjects.NewDump;
 
 public class AddDumpDialogFragment extends AddItemHelper {
 
-    private static EditText etAddDumpWeight, etMarketValue, etDumpReceiptNumber, etPercentPrevious;
+    private static EditText etAddDumpWeight, etDumpReceiptNumber, etPercentPrevious;
     private static TextView tvGrossCost, tvNetCost;
     private static Button saveDump, cancelDump;
     private static Spinner dumpNameSpinner, materialSpinner;
@@ -48,7 +49,6 @@ public class AddDumpDialogFragment extends AddItemHelper {
         currentJournalId = preferences.getString("universalJournalId", "none");
 
         etAddDumpWeight = (EditText) v.findViewById(R.id.et_add_dump_weight);
-        etMarketValue = (EditText) v.findViewById(R.id.et_market_value);
         etDumpReceiptNumber = (EditText) v.findViewById(R.id.et_dump_receipt_number);
         etPercentPrevious = (EditText) v.findViewById(R.id.et_percent_previous);
 
@@ -59,7 +59,7 @@ public class AddDumpDialogFragment extends AddItemHelper {
         cancelDump = (Button) v.findViewById(R.id.btn_cancel_dump);
 
         dumpNameArray = getResources().getStringArray(R.array.dumps_name);
-        materialArray = getResources().getStringArray(R.array.cherry_material);
+        materialArray = getResources().getStringArray(R.array.material);
         rate = getResources().getIntArray(R.array.dumps_rate);
 
         dumpNameSpinner = (Spinner) v.findViewById(R.id.spinner_dump_dialog);
@@ -81,7 +81,7 @@ public class AddDumpDialogFragment extends AddItemHelper {
 
                 //if a dump that accepts multiple materials is selected, display a secondary spinner (materialSpinner)
 
-                if (position == 1 || position == 3 || position == 6) {
+                if (position == 1 || position == 2 || position == 4) {
 
                     materialWrapper.setVisibility(View.VISIBLE);
 
@@ -193,6 +193,8 @@ public class AddDumpDialogFragment extends AddItemHelper {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        // This helps to always show cancel and save button when keyboard is open
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
 }

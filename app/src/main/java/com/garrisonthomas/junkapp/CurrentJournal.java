@@ -24,6 +24,7 @@ import com.garrisonthomas.junkapp.dialogfragments.AddJobDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.AddQuoteDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.EndOfDayDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.ViewDumpDialogFragment;
+import com.garrisonthomas.junkapp.dialogfragments.ViewFuelDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.ViewJobDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.ViewQuoteDialogFragment;
 import com.garrisonthomas.junkapp.parseobjects.DailyJournal;
@@ -67,6 +68,8 @@ public class CurrentJournal extends BaseActivity {
     FloatingActionButton addDump;
     @Bind(R.id.btn_view_dump)
     Button viewDump;
+    @Bind(R.id.btn_view_fuel)
+    Button viewFuel;
     @Bind(R.id.btn_add_fuel)
     FloatingActionButton addFuel;
     @Bind(R.id.toolbar_progress_bar)
@@ -77,13 +80,26 @@ public class CurrentJournal extends BaseActivity {
     Spinner quotesSpinner;
     @Bind(R.id.dumps_spinner)
     Spinner dumpsSpinner;
+    @Bind(R.id.fuel_spinner)
+    Spinner fuelSpinner;
 
-    String currentJournalId, spDriver, spNavigator, spTruck, spDate, dumpSpinnerText;
+    String currentJournalId, spDriver, spNavigator, spTruck, spDate, dumpSpinnerText, fuelReceiptNumber;
+
     int selectedJobSID, selectedQuoteSID, dumpReceiptNumber;
+
     private ArrayList<Integer> jobsArray;
+//    private ArrayAdapter<Integer> jobAdapter;
     private ArrayList<Integer> quotesArray;
     private ArrayList<String> dumpsArray;
+    private ArrayList<String> fuelArray;
+
     private static SharedPreferences preferences;
+
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        jobAdapter.notifyDataSetChanged();
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -116,9 +132,19 @@ public class CurrentJournal extends BaseActivity {
         jobsArray = new ArrayList<>();
         quotesArray = new ArrayList<>();
         dumpsArray = new ArrayList<>();
+        fuelArray = new ArrayList<>();
+
+        Utils.populateJobSpinner(this, currentJournalId, jobsArray, jobsSpinner);
+        Utils.populateQuoteSpinner(this, currentJournalId, quotesArray, quotesSpinner);
+        Utils.populateDumpSpinner(this, currentJournalId, dumpsArray, dumpsSpinner);
+        Utils.populateFuelSpinner(this, currentJournalId, fuelArray, fuelSpinner);
 
         todaysCrew.setText("Driver: " + spDriver + "\n" + "Nav: " + spNavigator);
         todaysTruck.setText(spTruck);
+
+//        jobAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, jobsArray);
+//        jobAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+//        jobsSpinner.setAdapter(jobAdapter);
 
         jobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -171,9 +197,19 @@ public class CurrentJournal extends BaseActivity {
             }
         });
 
-        Utils.populateJobSpinner(this, currentJournalId, jobsArray, jobsSpinner);
-        Utils.populateQuoteSpinner(this, currentJournalId, quotesArray, quotesSpinner);
-        Utils.populateDumpSpinner(this, currentJournalId, dumpsArray, dumpsSpinner);
+        fuelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                fuelReceiptNumber = (String) fuelSpinner.getItemAtPosition(position);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         addJob.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -293,6 +329,29 @@ public class CurrentJournal extends BaseActivity {
             }
         });
 
+        viewFuel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (fuelArray.size() > 0) {
+
+                    ViewFuelDialogFragment vfDialogFragment = new ViewFuelDialogFragment();
+                    Bundle vfBundle = new Bundle();
+                    vfBundle.putString("fuelReceiptNumber", fuelReceiptNumber);
+                    vfBundle.putString("relatedJournalId", currentJournalId);
+                    vfDialogFragment.setArguments(vfBundle);
+                    FragmentManager manager = getFragmentManager();
+                    vfDialogFragment.show(manager, "Dialog");
+
+                } else {
+
+                    Toast.makeText(CurrentJournal.this, "No fuel entries to display",
+                            Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
+
     }
 
     @Override
@@ -300,7 +359,7 @@ public class CurrentJournal extends BaseActivity {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.action_email_office).setVisible(false);
         menu.findItem(R.id.action_call_office).setVisible(false);
-        menu.findItem(R.id.action_take_photo).setVisible(false);
+//        menu.findItem(R.id.action_take_photo).setVisible(false);
         menu.findItem(R.id.action_delete_journal).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

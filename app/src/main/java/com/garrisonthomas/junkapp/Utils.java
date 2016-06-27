@@ -13,6 +13,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.garrisonthomas.junkapp.parseobjects.NewDump;
+import com.garrisonthomas.junkapp.parseobjects.NewFuel;
 import com.garrisonthomas.junkapp.parseobjects.NewJob;
 import com.garrisonthomas.junkapp.parseobjects.NewQuote;
 import com.parse.FindCallback;
@@ -91,6 +92,7 @@ public class Utils {
                     quotesSpinner.setAdapter(adapter);
 
 
+
                 } else {
                     Toast.makeText(context, "Something went wrong: " + e, Toast.LENGTH_SHORT).show();
                 }
@@ -133,6 +135,39 @@ public class Utils {
 
     }
 
+    public static void populateFuelSpinner(final Context context, String currentJournalId,
+                                           final ArrayList<String> fuelArray, final Spinner fuelSpinner) {
+
+        ParseQuery<NewFuel> query = ParseQuery.getQuery(NewFuel.class);
+        query.whereEqualTo("relatedJournal", currentJournalId);
+        query.orderByAscending("createdAt");
+        query.fromPin();
+        query.findInBackground(new FindCallback<NewFuel>() {
+            @Override
+            public void done(List<NewFuel> list, com.parse.ParseException e) {
+
+                if (e == null) {
+
+                    for (NewFuel fuel : list) {
+
+                        fuelArray.add(fuel.getFuelReceiptNumber());
+
+                    }
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, fuelArray);
+                    adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+                    fuelSpinner.setAdapter(adapter);
+
+
+                } else {
+                    Toast.makeText(context, "Something went wrong: " + e, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        });
+
+    }
+
     public static double calculateTax(double grossSale) {
         return Math.round((grossSale * 1.13) * 100.00) / 100.00;
     }
@@ -144,7 +179,7 @@ public class Utils {
         final int minute = c.get(Calendar.MINUTE);
 
         TimePickerDialog mTimePicker;
-        mTimePicker = new TimePickerDialog(context, AlertDialog.BUTTON_POSITIVE, new TimePickerDialog.OnTimeSetListener() {
+        mTimePicker = new TimePickerDialog(context, AlertDialog.THEME_DEVICE_DEFAULT_DARK, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                 if (selectedMinute == 00) {

@@ -1,40 +1,35 @@
 package com.garrisonthomas.junkapp.dialogfragments;
 
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
 import com.garrisonthomas.junkapp.parseobjects.DailyJournal;
 import com.garrisonthomas.junkapp.parseobjects.NewJob;
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.Calendar;
 import java.util.List;
 
 public class EndOfDayDialogFragment extends DialogFragment {
@@ -43,11 +38,9 @@ public class EndOfDayDialogFragment extends DialogFragment {
     ProgressBar publishPbar;
     EditText endOfDayNotes;
     Button cancel, archive, dEndTime, nEndTime;
-    ImageButton addPhoto;
+    TextView tvPercentOfGoal;
     String currentJournalId, todaysDate, todaysTruck;
-    private int PICK_IMAGE_REQUEST;
-    byte[] image;
-//    ImageView endDayImage;
+    int percentOfGoal;
 
     @NonNull
     @Override
@@ -63,69 +56,29 @@ public class EndOfDayDialogFragment extends DialogFragment {
 
         final View v = inflater.inflate(R.layout.end_of_day_layout, container, false);
 
+
         preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+
         publishPbar = (ProgressBar) v.findViewById(R.id.publish_pbar);
+
         endOfDayNotes = (EditText) v.findViewById(R.id.end_day_notes);
+
         cancel = (Button) v.findViewById(R.id.cancel_publish_dialog);
         archive = (Button) v.findViewById(R.id.archive_journal);
-        addPhoto = (ImageButton) v.findViewById(R.id.end_day_photo);
         dEndTime = (Button) v.findViewById(R.id.driver_end_time);
         dEndTime.setTransformationMethod(null);
         nEndTime = (Button) v.findViewById(R.id.nav_end_time);
         nEndTime.setTransformationMethod(null);
 
+        tvPercentOfGoal = (TextView) v.findViewById(R.id.tv_end_day_percent_of_goal);
+
         todaysDate = preferences.getString("todaysDate", "noDate");
         todaysTruck = preferences.getString("truck", "noTruck");
 
-        final Calendar c = Calendar.getInstance();
-        final int hour = c.get(Calendar.HOUR_OF_DAY);
-        final int minute = c.get(Calendar.MINUTE);
-
-        PICK_IMAGE_REQUEST = 1;
-
         currentJournalId = preferences.getString("universalJournalId", "none");
 
-        addPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent();
-// Show only images, no videos or anything else
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-// Always show the chooser (if there are multiple options available)
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-                // Locate the image in res > drawable-hdpi
-//                Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
-//                        R.drawable.fab_add);
-//                // Convert it to byte
-//                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                // Compress image to lower quality scale 1 - 100
-//                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-//                byte[] image = stream.toByteArray();
-
-//                // Create the ParseFile
-//                ParseFile file = new ParseFile("androidbegin.png", image);
-//                // Upload the image into Parse Cloud
-//                file.saveInBackground();
-//
-//                // Create a New Class called "ImageUpload" in Parse
-//                ParseObject imgupload = new ParseObject("ImageUpload");
-//
-//                // Create a column named "ImageName" and set the string
-//                imgupload.put("ImageName", "AndroidBegin Logo");
-//
-//                // Create a column named "ImageFile" and insert the image
-//                imgupload.put("ImageFile", file);
-//
-//                // Create the class and the columns
-//                imgupload.saveInBackground();
-//
-//                // Show a simple toast message
-//                Toast.makeText(getActivity(), "Image Uploaded",
-//                        Toast.LENGTH_SHORT).show();
-            }
-        });
+        //calculates total profit for day divided by 1400, and sets tvPercentOfGoal to display it
+        calculatePercentOfGoal();
 
         dEndTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,22 +125,6 @@ public class EndOfDayDialogFragment extends DialogFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
-
-            Uri uri = data.getData();
-
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 15, stream);
-                image = stream.toByteArray();
-
-                addPhoto.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     private AlertDialog confirmJournalArchive() {
@@ -222,7 +159,6 @@ public class EndOfDayDialogFragment extends DialogFragment {
 
         final String DET = dEndTime.getText().toString();
         final String NET = nEndTime.getText().toString();
-//        final ParseFile file = new ParseFile(todaysDate+"_"+todaysTruck+".jpeg", image);
 
         publishPbar.setVisibility(View.VISIBLE);
         archive.setVisibility(View.GONE);
@@ -242,55 +178,59 @@ public class EndOfDayDialogFragment extends DialogFragment {
                         dj.setEndOfDayNotes(endNotes);
                         dj.setDriverEndTime(DET);
                         dj.setNavEndTime(NET);
-//                        dj.setEndPhoto(file);
+                        dj.setPercentOfGoal(percentOfGoal);
 
-                        ParseQuery<NewJob> njQuery = ParseQuery.getQuery(NewJob.class);
-                        njQuery.whereEqualTo("relatedJournal", currentJournalId);
-                        njQuery.fromPin();
-                        njQuery.findInBackground(new FindCallback<NewJob>() {
+                        dj.saveInBackground(new SaveCallback() {
                             @Override
-                            public void done(List<NewJob> list, ParseException e) {
+                            public void done(ParseException e) {
 
                                 if (e == null) {
-
-                                    double total = 0.0;
-
-                                    for (NewJob nj : list) {
-
-                                        total = total + nj.getGrossSale();
-                                        try {
-                                            nj.unpin();
-                                        } catch (ParseException e1) {
-                                            e1.printStackTrace();
-                                        }
-
-                                    }
-
-                                    int intTotal = (int) ((total / 1400) * 100);
-                                    dj.setPercentOfGoal(intTotal);
-
-                                    dj.saveInBackground(new SaveCallback() {
+                                    SharedPreferences.Editor editor = preferences.edit();
+                                    editor.putString("universalJournalId", "none");
+                                    editor.putString("driver", "noDriver");
+                                    editor.putString("navigator", "noNavigator");
+                                    editor.putString("truck", "noTruck");
+                                    editor.putString("date", "noDate");
+                                    editor.apply();
+                                    Toast.makeText(getActivity(), "Journal successfully archived",
+                                            Toast.LENGTH_SHORT).show();
+                                    dj.unpinInBackground(new DeleteCallback() {
                                         @Override
                                         public void done(ParseException e) {
-
-                                            if (e == null) {
-                                                SharedPreferences.Editor editor = preferences.edit();
-                                                editor.putString("universalJournalId", "none");
-                                                editor.putString("driver", "noDriver");
-                                                editor.putString("navigator", "noNavigator");
-                                                editor.putString("truck", "noTruck");
-                                                editor.putString("date", "noDate");
-                                                editor.apply();
-                                                Toast.makeText(getActivity(), "Journal successfully archived",
-                                                        Toast.LENGTH_SHORT).show();
-                                                getActivity().finish();
-                                            }
+                                            getActivity().finish();
                                         }
-                                    });
-                                }
+
+
+                                });
                             }
-                        });
+                        }
+                    });
+                }
+                }
+            }
+        });
+    }
+
+    public void calculatePercentOfGoal() {
+        ParseQuery<NewJob> njQuery = ParseQuery.getQuery(NewJob.class);
+        njQuery.whereEqualTo("relatedJournal", currentJournalId);
+        njQuery.fromPin();
+        njQuery.findInBackground(new FindCallback<NewJob>() {
+            @Override
+            public void done(List<NewJob> list, ParseException e) {
+
+                if (e == null) {
+
+                    double total = 0.0;
+
+                    for (NewJob nj : list) {
+
+                        total += nj.getGrossSale();
+
                     }
+
+                    percentOfGoal = (int) ((total / 1400) * 100);
+                    tvPercentOfGoal.setText(String.valueOf(percentOfGoal) + "% of goal");
                 }
             }
         });
@@ -299,5 +239,7 @@ public class EndOfDayDialogFragment extends DialogFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        // This helps to always show cancel and save button when keyboard is open
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 }

@@ -17,12 +17,12 @@
         android:icon="@drawable/ic_email_white_24dp"
         app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/action_take_photo"
-        android:title="Take Photo"
-        android:orderInCategory="3"
-        android:icon="@drawable/ic_photo_camera_white_24dp"
-        app:showAsAction="ifRoom" />
+    <!--<item-->
+        <!--android:id="@+id/action_take_photo"-->
+        <!--android:title="Take Photo"-->
+        <!--android:orderInCategory="3"-->
+        <!--android:icon="@drawable/ic_photo_camera_white_24dp"-->
+        <!--app:showAsAction="ifRoom" />-->
 
     <item
         android:id="@+id/action_settings"

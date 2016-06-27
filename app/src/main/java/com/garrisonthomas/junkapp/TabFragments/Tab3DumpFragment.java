@@ -34,7 +34,7 @@ public class Tab3DumpFragment extends Fragment {
     private static Spinner dumpsSpinner;
     private static Button infoBtn, dirBtn, calcBtn, dumpsClearBtn, addHSTButton;
     private static EditText weight;
-    private static String[] dumpName, directions, information;
+    private static String[] dumpName, directions, information, dumpPhoneNumberArray;
     private static int[] rate;
     private static int rateNumber;
     private static TextView tvDumpCost;
@@ -63,6 +63,7 @@ public class Tab3DumpFragment extends Fragment {
         directions = v.getResources().getStringArray(R.array.dumps_address);
         information = v.getResources().getStringArray(R.array.dumps_info);
         rate = v.getResources().getIntArray(R.array.dumps_rate);
+        dumpPhoneNumberArray = v.getResources().getStringArray(R.array.dumps_phone_number);
 
         dumpsSpinner.setAdapter(new DumpsAdapter(getActivity(), R.layout.custom_spinner_layout, dumpName));
         dumpsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -78,33 +79,35 @@ public class Tab3DumpFragment extends Fragment {
                 dirBtn.setOnClickListener(new View.OnClickListener() {
 
                     public void onClick(View v) {
-//                        if (position != 0) {
                             Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
                                     Uri.parse(dir));
                             startActivity(intent);
-//                        } else {
-//                            Toast.makeText(getActivity(), R.string.toast_no_dump_selected, Toast.LENGTH_SHORT).show();
-//                        }
                     }
                 });
 
                 infoBtn.setOnClickListener(new View.OnClickListener() {
 
                     public void onClick(View v) {
-//                        if (position != 0) {
                             new AlertDialog.Builder(getActivity())
                                     .setTitle(selectedDumpName)
                                     .setMessage(info)
+                                    .setPositiveButton("Call", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                            Uri number = Uri.parse("tel:"+dumpPhoneNumberArray[position]);
+                                            Intent callIntent = new Intent(Intent.ACTION_DIAL, number);
+                                            startActivity(callIntent);
+
+                                        }
+                                    })
                                     .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
                                             // continue with delete
                                         }
                                     })
-//                                    .setIcon(R.drawable.ic_info_outline_white_36dp)
                                     .show();
-//                        } else {
-//                            Toast.makeText(getActivity(), R.string.toast_no_dump_selected, Toast.LENGTH_SHORT).show();
-//                        }
+
                     }
                 });
 

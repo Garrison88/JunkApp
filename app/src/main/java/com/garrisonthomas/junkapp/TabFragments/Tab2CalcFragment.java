@@ -32,7 +32,7 @@ public class Tab2CalcFragment extends Fragment {
     private static int[] volumePrice, bedloadPrice;
     private static String[] volumeSize, bedloadSize;
     private static int vPrice, bPrice;
-    private static double beforeTax, sum, discount;
+    private double beforeTax, sum, discount;
     private static String doubleValue, totalText, sumString;
 
     ArrayList<Integer> priceArray = new ArrayList<>();
@@ -68,16 +68,16 @@ public class Tab2CalcFragment extends Fragment {
                 if (position != 0 && position != 12 && position != 15) {
                     if (!TextUtils.isEmpty(tvVolumeSize.getText())) {
                         tvVolumeSize.append("\n" + "+" + "\n");
+
                     }
                     if (position >= 16) {
                         tvVolumeSize.append(volumeSize[position]);
-                        discount = vPrice/100;
+                        discount = vPrice / 100;
                     } else {
                         tvVolumeSize.append(volumeSize[position] + " ($" + volumePrice[position] + ")");
                         priceArray.add(vPrice);
+                        calcCost();
                     }
-
-                    calcCost();
 
                 }
             }
@@ -136,16 +136,16 @@ public class Tab2CalcFragment extends Fragment {
             public void onClick(View v) {
 
                 if (addHST.getText().equals("Add HST")) {
-                if (!TextUtils.isEmpty(tvTotal.getText())) {
+                    if (!TextUtils.isEmpty(tvTotal.getText())) {
 
-                    doubleValue = tvTotal.getText().toString();
-                    beforeTax = Double.parseDouble(doubleValue.substring(1));
+                        doubleValue = tvTotal.getText().toString();
+                        beforeTax = Double.parseDouble(doubleValue.substring(1));
 
-                    totalText = Double.toString(Utils.calculateTax(beforeTax));
-                    tvTotal.setText("$" + totalText);
+                        totalText = Double.toString(Utils.calculateTax(beforeTax));
+                        tvTotal.setText("$" + totalText);
 
-                    addHST.setText("Display Tax");
-                }
+                        addHST.setText("Display Tax");
+                    }
                 } else {
                     showHST();
                     addHST.setClickable(false);
@@ -163,9 +163,7 @@ public class Tab2CalcFragment extends Fragment {
             for (int i : priceArray) {
                 sum += i;
             }
-            if (discount != 0.0) {
-                sum = sum * discount;
-            }
+
             sumString = getString(R.string.dollar_sign) + String.valueOf(sum);
             tvTotal.setText(sumString);
 
@@ -174,8 +172,8 @@ public class Tab2CalcFragment extends Fragment {
 
     public void showHST() {
 
-        double tax = Double.parseDouble(totalText)-sum;
-        String taxString = "$"+ (Math.round(tax * 100.00) / 100.00);
+        double tax = Double.parseDouble(totalText) - sum;
+        String taxString = "$" + (Math.round(tax * 100.00) / 100.00);
         tvTotal.setText(taxString);
 
     }

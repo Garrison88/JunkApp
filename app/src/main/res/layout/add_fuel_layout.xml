@@ -25,10 +25,10 @@
         android:layout_below="@id/et_fuel_vendor_wrapper">
 
         <EditText
-            android:id="@+id/et_fuel_net_cost"
+            android:id="@+id/et_fuel_cost"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:hint="Net Cost"
+            android:hint="Cost"
             android:inputType="numberDecimal" />
 
     </com.wrapp.floatlabelededittext.FloatLabeledEditText>
@@ -43,17 +43,16 @@
             android:id="@+id/et_fuel_receipt_number"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/et_fuel_net_cost"
-            android:inputType="textNoSuggestions"
-            android:hint="Receipt Number (optional)" />
+            android:layout_below="@id/et_fuel_cost"
+            android:inputType="textNoSuggestions|textCapCharacters"
+            android:hint="Receipt Number"/>
 
     </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/et_fuel_receipt_number_wrapper"
-        android:orientation="horizontal">
+        android:layout_below="@id/et_fuel_receipt_number_wrapper">
 
         <Button
             android:id="@+id/btn_cancel_fuel"
