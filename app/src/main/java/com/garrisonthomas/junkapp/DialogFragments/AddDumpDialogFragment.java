@@ -1,5 +1,6 @@
 package com.garrisonthomas.junkapp.dialogfragments;
 
+import android.app.DialogFragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -18,30 +19,33 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.garrisonthomas.junkapp.AddItemHelper;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
 import com.garrisonthomas.junkapp.parseobjects.NewDump;
 
-public class AddDumpDialogFragment extends AddItemHelper {
+public class AddDumpDialogFragment extends DialogFragment {
 
     private static EditText etAddDumpWeight, etDumpReceiptNumber, etPercentPrevious;
     private static TextView tvGrossCost, tvNetCost;
     private static Button saveDump, cancelDump;
     private static Spinner dumpNameSpinner, materialSpinner;
     private static String[] dumpNameArray, materialArray;
-    private static int[] rate;
-    private static int dumpRateInt;
-    private static double weightNumber, result, withTax;
-    private static String dumpNameString, resultString, withTaxString, currentJournalId;
+    private static int[] dumpRateArray;
+    private static int pricePerTonne;
+    private static double result, resultWithTax;
+    private static String dumpNameString, currentJournalId;
     private static LinearLayout dumpCostLayout, materialWrapper;
     private SharedPreferences preferences;
+//    private FragmentTabHost mTabHost;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         final View v = inflater.inflate(R.layout.add_dump_layout, container, false);
+
+//        mTabHost = new FragmentTabHost(getActivity());
+//        mTabHost.setup(getActivity(), getChildFragmentManager(), R.layout.add_dump_layout);
 
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 
@@ -60,13 +64,26 @@ public class AddDumpDialogFragment extends AddItemHelper {
 
         dumpNameArray = getResources().getStringArray(R.array.dumps_name);
         materialArray = getResources().getStringArray(R.array.material);
-        rate = getResources().getIntArray(R.array.dumps_rate);
+        dumpRateArray = getResources().getIntArray(R.array.dumps_rate);
 
         dumpNameSpinner = (Spinner) v.findViewById(R.id.spinner_dump_dialog);
         materialSpinner = (Spinner) v.findViewById(R.id.spinner_material);
 
         dumpCostLayout = (LinearLayout) v.findViewById(R.id.dump_cost_layout);
         materialWrapper = (LinearLayout) v.findViewById(R.id.material_wrapper);
+
+//        Bundle arg1 = new Bundle();
+//        arg1.putInt("Arg for Frag1", 1);
+//        mTabHost.addTab(mTabHost.newTabSpec("Tab1").setIndicator("Frag Tab1"),
+//                AddJobDialogFragment.class, arg1);
+//
+//        Bundle arg2 = new Bundle();
+//        arg2.putInt("Arg for Frag2", 2);
+//        mTabHost.addTab(mTabHost.newTabSpec("Tab2").setIndicator("Frag Tab2"),
+//                AddQuoteDialogFragment.class, arg2);
+//
+//        return mTabHost;
+
 
         dumpNameSpinner.setAdapter(new ArrayAdapter<>(this.getActivity(),
                 android.R.layout.simple_dropdown_item_1line, dumpNameArray));
@@ -79,20 +96,8 @@ public class AddDumpDialogFragment extends AddItemHelper {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
 
-                //if a dump that accepts multiple materials is selected, display a secondary spinner (materialSpinner)
-
-                if (position == 1 || position == 2 || position == 4) {
-
-                    materialWrapper.setVisibility(View.VISIBLE);
-
-                } else {
-
-                    materialWrapper.setVisibility(View.GONE);
-
-                }
-
                 dumpNameString = dumpNameArray[position];
-                dumpRateInt = rate[position];
+                pricePerTonne = dumpRateArray[position];
 
             }
 
@@ -121,20 +126,64 @@ public class AddDumpDialogFragment extends AddItemHelper {
 
             public void onFocusChange(View v, boolean hasFocus) {
 
-                if ((!hasFocus) && (!TextUtils.isEmpty(etAddDumpWeight.getText()))) {
+                if (!TextUtils.isEmpty(etAddDumpWeight.getText())) {
 
-                    weightNumber = Double.parseDouble(etAddDumpWeight.getText().toString()) / 1000;
+                    int userSuppliedWeight = Integer.parseInt(String.valueOf(etAddDumpWeight.getText()));
+                    double weightInKgs = userSuppliedWeight * .001;
 
-                    result = Math.round((weightNumber * dumpRateInt) * 100.00) / 100.00;
+                    switch (dumpNameSpinner.getSelectedItemPosition()) {
+//                        Cherry
+                        case 1:
+//                        GFL Pickering
+                        case 7:
+//                        GFL Etobicoke
+                        case 8:
+//                        GFL Mississauga
+                        case 9:
+                            if (userSuppliedWeight <= 480) {
+                                result = 40;
+                            } else {
+                                result = Math.round(weightInKgs * pricePerTonne) * 100.00 / 100.00;
+                            }
+                            break;
+//                        Shorncliffe
+                        case 2:
+                            if (userSuppliedWeight <= 380) {
+                                result = 25;
+                            } else {
+                                result = Math.round((weightInKgs * pricePerTonne) * 100.00) / 100.00;
+                            }
+                            break;
+//                        Fenmar
+                        case 3:
+                            if (userSuppliedWeight <= 520) {
+                                result = 40;
+                            } else {
+                                result = Math.round((weightInKgs * pricePerTonne) * 100.00) / 100.00;
+                            }
+                            break;
+//                        Tor-Can
+                        case 14:
+                            if (userSuppliedWeight <= 820) {
+                                result = 65;
+                            } else {
+                                result = Math.round((weightInKgs * pricePerTonne) * 100.00) / 100.00;
+                            }
+                            break;
+                        default:
+                            result = Math.round((weightInKgs * pricePerTonne) * 100.00) / 100.00;
+                            break;
+                    }
 
-                    withTax = Utils.calculateTax(result);
+                    resultWithTax = Utils.calculateTax(result);
 
-                    resultString = getString(R.string.dollar_sign) + String.valueOf(result);
-                    withTaxString = getString(R.string.dollar_sign) + String.valueOf(withTax);
+                    String resultString = getString(R.string.dollar_sign) + String.valueOf(result);
+                    String withTaxString = getString(R.string.dollar_sign) + String.valueOf(resultWithTax);
 
                     dumpCostLayout.setVisibility(View.VISIBLE);
                     tvGrossCost.setText(resultString);
                     tvNetCost.setText(withTaxString);
+
 
                 } else if (TextUtils.isEmpty(etAddDumpWeight.getText())) {
 
@@ -142,6 +191,7 @@ public class AddDumpDialogFragment extends AddItemHelper {
 
                 }
             }
+
         });
 
         saveDump.setOnClickListener(new View.OnClickListener() {
@@ -155,7 +205,7 @@ public class AddDumpDialogFragment extends AddItemHelper {
                     newDump.setRelatedJournal(currentJournalId);
                     newDump.setDumpName(dumpNameString);
                     newDump.setGrossCost(result);
-                    newDump.setNetCost(withTax);
+                    newDump.setNetCost(resultWithTax);
                     newDump.setDumpReceiptNumber(Integer.valueOf(etDumpReceiptNumber.getText().toString()));
                     if (!TextUtils.isEmpty(etPercentPrevious.getText())) {
                         newDump.setPercentPrevious(Integer.valueOf(etPercentPrevious.getText().toString()));
@@ -189,6 +239,12 @@ public class AddDumpDialogFragment extends AddItemHelper {
         return v;
 
     }
+
+//    @Override
+//    public void onDestroyView() {
+//        super.onDestroyView();
+//        mTabHost = null;
+//    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

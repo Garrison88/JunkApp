@@ -78,32 +78,6 @@ public class BaseActivity extends AppCompatActivity {
             }
 
         }
-//         else if (id == R.id.action_take_photo) {
-//
-//            //here,we are making a folder named picFolder to store pics taken by the camera using this application
-//            final String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/JunkPics/";
-//            File newdir = new File(dir);
-//            newdir.mkdirs();
-//
-//            // here,counter will be incremented each time,and the picture taken by camera will be stored as 1.jpg,2.jpg and likewise.
-//            count++;
-//            String file = dir + count + ".jpg";
-//            File newfile = new File(file);
-//            try {
-//                newfile.createNewFile();
-//            } catch (IOException e) {
-//            }
-//
-//            Uri outputFileUri = Uri.fromFile(newfile);
-//
-//
-//            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-//
-//            if (cameraIntent.resolveActivity(getPackageManager()) != null) {
-//                startActivityForResult(cameraIntent, TAKE_PHOTO_CODE);
-//            }
-//        }
 
         return super.onOptionsItemSelected(item);
     }

@@ -16,7 +16,7 @@ import com.garrisonthomas.junkapp.tabfragments.Tab3DumpFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TabsViewPagerFragmentActivity extends BaseActivity {
+public class TabsViewPagerActivity extends BaseActivity {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;

@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * Created by GarrisonThomas on 2015-10-08.
  */
-public class Utils {
+public abstract class Utils {
 
     public static Boolean isInternetAvailable(Activity a) {
         ConnectivityManager cm =

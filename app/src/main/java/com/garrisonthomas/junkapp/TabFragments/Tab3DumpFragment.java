@@ -208,7 +208,7 @@ public class Tab3DumpFragment extends Fragment {
             main_text.setText(dumpName[position]);
 
             TextView subSpinner = (TextView) mySpinner.findViewById(R.id.spinner_text_dump_rate);
-            subSpinner.setText("$" + rate[position] + "/tonne");
+            subSpinner.setText("$" + rate[position] + "/MT");
 
             return mySpinner;
         }
