@@ -20,12 +20,6 @@ import java.util.ArrayList;
 
 public class Tab2CalcFragment extends Fragment {
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
     private static Spinner vSpinner, bSpinner;
     private static Button clearCost, addHST;
     private static TextView tvVolumeSize, tvBedloadSize, tvTotal;
@@ -33,7 +27,13 @@ public class Tab2CalcFragment extends Fragment {
     private static String[] volumeSize, bedloadSize;
     private static int vPrice, bPrice;
     private double beforeTax, sum, discount;
-    private static String doubleValue, totalText, sumString;
+    private static String doubleValue, totalText;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
 
     ArrayList<Integer> priceArray = new ArrayList<>();
 
@@ -72,13 +72,13 @@ public class Tab2CalcFragment extends Fragment {
                     }
                     if (position >= 16) {
                         tvVolumeSize.append(volumeSize[position]);
-                        discount = vPrice / 100;
+                        discount = vPrice * .010;
+                        calcCost();
                     } else {
                         tvVolumeSize.append(volumeSize[position] + " ($" + volumePrice[position] + ")");
                         priceArray.add(vPrice);
                         calcCost();
                     }
-
                 }
             }
 
@@ -127,6 +127,7 @@ public class Tab2CalcFragment extends Fragment {
                 tvTotal.setText("");
                 addHST.setClickable(true);
                 addHST.setText("Add HST");
+                discount = 0.0;
 
             }
         });
@@ -164,7 +165,10 @@ public class Tab2CalcFragment extends Fragment {
                 sum += i;
             }
 
-            sumString = getString(R.string.dollar_sign) + String.valueOf(sum);
+            if (discount!=0.0) {
+                sum *= discount;
+            }
+            String sumString = getString(R.string.dollar_sign) + (Math.round(sum * 100.00) / 100.00);
             tvTotal.setText(sumString);
 
         }
@@ -173,7 +177,7 @@ public class Tab2CalcFragment extends Fragment {
     public void showHST() {
 
         double tax = Double.parseDouble(totalText) - sum;
-        String taxString = "$" + (Math.round(tax * 100.00) / 100.00);
+        String taxString = getString(R.string.dollar_sign) + (Math.round(tax * 100.00) / 100.00);
         tvTotal.setText(taxString);
 
     }

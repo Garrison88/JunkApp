@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.garrisonthomas.junkapp.AddItemHelper;
 import com.garrisonthomas.junkapp.CurrentJournal;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
@@ -32,7 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class DailyJournalDialogFragment extends DialogFragment {
+public class DailyJournalDialogFragment extends AddItemHelper {
 
     private static Spinner truckSpinner;
     private static String[] truckNumber;
@@ -64,7 +64,7 @@ public class DailyJournalDialogFragment extends DialogFragment {
         truckSpinner = (Spinner) v.findViewById(R.id.truck_spinner);
         truckNumber = getResources().getStringArray(R.array.truck_number);
         createJournal = (Button) v.findViewById(R.id.btn_create_journal);
-        cancel = (Button) v.findViewById(R.id.cancel_fragment);
+        cancel = (Button) v.findViewById(R.id.btn_cancel_journal);
         dStartTime = (Button) v.findViewById(R.id.driver_start_time);
         dStartTime.setTransformationMethod(null);
         nStartTime = (Button) v.findViewById(R.id.nav_start_time);

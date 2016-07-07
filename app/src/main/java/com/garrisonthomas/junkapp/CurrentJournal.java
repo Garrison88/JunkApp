@@ -1,10 +1,11 @@
 package com.garrisonthomas.junkapp;
 
-import android.app.FragmentManager;
+
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -18,10 +19,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.garrisonthomas.junkapp.dialogfragments.AddDumpDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.AddFuelDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.AddJobDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.AddQuoteDialogFragment;
+import com.garrisonthomas.junkapp.dialogfragments.DumpTabHost;
 import com.garrisonthomas.junkapp.dialogfragments.EndOfDayDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.ViewDumpDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.ViewFuelDialogFragment;
@@ -134,6 +135,7 @@ public class CurrentJournal extends BaseActivity {
         dumpsArray = new ArrayList<>();
         fuelArray = new ArrayList<>();
 
+        // Populate the various spinners with the available entries
         Utils.populateJobSpinner(this, currentJournalId, jobsArray, jobsSpinner);
         Utils.populateQuoteSpinner(this, currentJournalId, quotesArray, quotesSpinner);
         Utils.populateDumpSpinner(this, currentJournalId, dumpsArray, dumpsSpinner);
@@ -215,7 +217,7 @@ public class CurrentJournal extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-                FragmentManager manager = getFragmentManager();
+                FragmentManager manager = getSupportFragmentManager();
                 AddJobDialogFragment djFragment = new AddJobDialogFragment();
                 djFragment.show(manager, "Dialog");
                 FAM.close(false);
@@ -234,7 +236,7 @@ public class CurrentJournal extends BaseActivity {
                     vjBundle.putInt("jobSpinnerSID", selectedJobSID);
                     vjBundle.putString("relatedJournalId", currentJournalId);
                     vjDialogFragment.setArguments(vjBundle);
-                    FragmentManager manager = getFragmentManager();
+                    FragmentManager manager = getSupportFragmentManager();
                     vjDialogFragment.show(manager, "Dialog");
 
                 } else {
@@ -250,7 +252,7 @@ public class CurrentJournal extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-                FragmentManager manager = getFragmentManager();
+                FragmentManager manager = getSupportFragmentManager();
                 AddQuoteDialogFragment djFragment = new AddQuoteDialogFragment();
                 djFragment.show(manager, "Dialog");
                 FAM.close(false);
@@ -269,7 +271,7 @@ public class CurrentJournal extends BaseActivity {
                     vqBundle.putInt("quoteSpinnerSID", selectedQuoteSID);
                     vqBundle.putString("relatedJournalId", currentJournalId);
                     vqDialogFragment.setArguments(vqBundle);
-                    FragmentManager manager = getFragmentManager();
+                    FragmentManager manager = getSupportFragmentManager();
                     vqDialogFragment.show(manager, "Dialog");
 
                 } else {
@@ -285,8 +287,8 @@ public class CurrentJournal extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-                FragmentManager manager = getFragmentManager();
-                AddDumpDialogFragment djFragment = new AddDumpDialogFragment();
+                FragmentManager manager = getSupportFragmentManager();
+                DumpTabHost djFragment = new DumpTabHost();
                 djFragment.show(manager, "Dialog");
                 FAM.close(false);
 
@@ -305,7 +307,7 @@ public class CurrentJournal extends BaseActivity {
                     vdBundle.putInt("dumpReceiptNumber", dumpReceiptNumber);
                     vdBundle.putString("relatedJournalId", currentJournalId);
                     vdDialogFragment.setArguments(vdBundle);
-                    FragmentManager manager = getFragmentManager();
+                    FragmentManager manager = getSupportFragmentManager();
                     vdDialogFragment.show(manager, "Dialog");
 
                 } else {
@@ -321,7 +323,7 @@ public class CurrentJournal extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-                FragmentManager manager = getFragmentManager();
+                FragmentManager manager = getSupportFragmentManager();
                 AddFuelDialogFragment djFragment = new AddFuelDialogFragment();
                 djFragment.show(manager, "Dialog");
                 FAM.close(false);
@@ -340,7 +342,7 @@ public class CurrentJournal extends BaseActivity {
                     vfBundle.putString("fuelReceiptNumber", fuelReceiptNumber);
                     vfBundle.putString("relatedJournalId", currentJournalId);
                     vfDialogFragment.setArguments(vfBundle);
-                    FragmentManager manager = getFragmentManager();
+                    FragmentManager manager = getSupportFragmentManager();
                     vfDialogFragment.show(manager, "Dialog");
 
                 } else {
@@ -374,7 +376,7 @@ public class CurrentJournal extends BaseActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
 
-                FragmentManager manager = getFragmentManager();
+                FragmentManager manager = getSupportFragmentManager();
                 EndOfDayDialogFragment djFragment = new EndOfDayDialogFragment();
                 djFragment.show(manager, "Dialog");
 

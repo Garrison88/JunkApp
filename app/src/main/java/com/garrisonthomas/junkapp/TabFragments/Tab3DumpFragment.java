@@ -33,12 +33,12 @@ public class Tab3DumpFragment extends Fragment {
 
     private static Spinner dumpsSpinner;
     private static Button infoBtn, dirBtn, calcBtn, dumpsClearBtn, addHSTButton;
-    private static EditText weight;
-    private static String[] dumpName, directions, information, dumpPhoneNumberArray;
-    private static int[] rate;
-    private static int rateNumber;
+    private static EditText etWeight;
+    private static String[] dumpNameArray, dumpDirectionsArray, dumpInfoArray, dumpPhoneNumberArray;
+    private static int[] dumpRateArray;
+    private static int selectedDumpRate;
     private static TextView tvDumpCost;
-    private static String info, resultString, withTaxString, selectedDumpName;
+    private static String selectedDumpInfo, withTaxString, selectedDumpName;
     private static double weightNumber, result, withTax;
 
     @Override
@@ -55,26 +55,26 @@ public class Tab3DumpFragment extends Fragment {
 
         dumpsSpinner = (Spinner) v.findViewById(R.id.spinner_dumps);
 
-        weight = (EditText) v.findViewById(R.id.et_enter_weight);
+        etWeight = (EditText) v.findViewById(R.id.et_enter_weight);
 
         tvDumpCost = (TextView) v.findViewById(R.id.tv_dump_cost);
 
-        dumpName = v.getResources().getStringArray(R.array.dumps_name);
-        directions = v.getResources().getStringArray(R.array.dumps_address);
-        information = v.getResources().getStringArray(R.array.dumps_info);
-        rate = v.getResources().getIntArray(R.array.dumps_rate);
+        dumpNameArray = v.getResources().getStringArray(R.array.dumps_name);
+        dumpDirectionsArray = v.getResources().getStringArray(R.array.dumps_address);
+        dumpInfoArray = v.getResources().getStringArray(R.array.dumps_info);
+        dumpRateArray = v.getResources().getIntArray(R.array.dumps_rate);
         dumpPhoneNumberArray = v.getResources().getStringArray(R.array.dumps_phone_number);
 
-        dumpsSpinner.setAdapter(new DumpsAdapter(getActivity(), R.layout.custom_spinner_layout, dumpName));
+        dumpsSpinner.setAdapter(new DumpsAdapter(getActivity(), R.layout.custom_spinner_layout, dumpNameArray));
         dumpsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
 
-                final String dir = getString(R.string.google_maps_url) + directions[position];
-                info = information[position];
-                rateNumber = rate[position];
-                selectedDumpName = dumpName[position];
+                final String dir = getString(R.string.google_maps_url) + dumpDirectionsArray[position];
+                selectedDumpInfo = dumpInfoArray[position];
+                selectedDumpRate = dumpRateArray[position];
+                selectedDumpName = dumpNameArray[position];
 
                 dirBtn.setOnClickListener(new View.OnClickListener() {
 
@@ -90,7 +90,7 @@ public class Tab3DumpFragment extends Fragment {
                     public void onClick(View v) {
                             new AlertDialog.Builder(getActivity())
                                     .setTitle(selectedDumpName)
-                                    .setMessage(info)
+                                    .setMessage(selectedDumpInfo)
                                     .setPositiveButton("Call", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
@@ -103,7 +103,7 @@ public class Tab3DumpFragment extends Fragment {
                                     })
                                     .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
-                                            // continue with delete
+                                            // close dialog
                                         }
                                     })
                                     .show();
@@ -115,26 +115,27 @@ public class Tab3DumpFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                        if (!TextUtils.isEmpty(weight.getText())) {
+                        if (!TextUtils.isEmpty(etWeight.getText())) {
 
+                            // close keyboard
                             View view = getActivity().getCurrentFocus();
                             if (view != null) {
                                 InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                             }
 
-                                weightNumber = Double.parseDouble(weight.getText().toString());
+                                weightNumber = Double.parseDouble(etWeight.getText().toString());
                                 weightNumber = weightNumber / 1000;
 
-                                result = Math.round((weightNumber * rateNumber) * 100.00) / 100.00;
+                                result = Math.round((weightNumber * selectedDumpRate) * 100.00) / 100.00;
                                 withTax = Utils.calculateTax(result);
 
-                                resultString = String.valueOf(result);
+                                String resultString = String.valueOf(result);
                                 withTaxString = String.valueOf(withTax);
 
                                 tvDumpCost.setText("$" + resultString);
 
-                                weight.setText("");
+                                etWeight.setText("");
 
                         } else {
 
@@ -162,7 +163,7 @@ public class Tab3DumpFragment extends Fragment {
 
                         if (!TextUtils.isEmpty(tvDumpCost.getText())) {
 
-                            tvDumpCost.setText("$0.0");
+                            tvDumpCost.setText("");
                             withTaxString = "";
 
                         }
@@ -203,12 +204,12 @@ public class Tab3DumpFragment extends Fragment {
             View mySpinner = inflater.inflate(R.layout.custom_dumps_spinner, parent,
                     false);
 
-            TextView main_text = (TextView) mySpinner.findViewById(R.id.spinner_text_dump_name);
+            TextView mainText = (TextView) mySpinner.findViewById(R.id.spinner_text_dump_name);
 
-            main_text.setText(dumpName[position]);
+            mainText.setText(dumpNameArray[position]);
 
-            TextView subSpinner = (TextView) mySpinner.findViewById(R.id.spinner_text_dump_rate);
-            subSpinner.setText("$" + rate[position] + "/MT");
+            TextView subText = (TextView) mySpinner.findViewById(R.id.spinner_text_dump_rate);
+            subText.setText("$" + dumpRateArray[position] + "/MT");
 
             return mySpinner;
         }

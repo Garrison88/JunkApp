@@ -81,12 +81,19 @@
         android:gravity="center_horizontal">
 
         <Button
-            android:id="@+id/cancel_fragment"
+            android:id="@+id/btn_cancel_journal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground"
             android:text="Cancel" />
+
+        <View
+            android:layout_height="fill_parent"
+            android:layout_width="1dp"
+            android:background="#505154"
+            android:layout_marginBottom="7dp" android:layout_marginTop="7dp"/>
 
         <Button
             android:id="@+id/btn_create_journal"
@@ -94,6 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground"
             android:text="Create" />
 
         <ProgressBar

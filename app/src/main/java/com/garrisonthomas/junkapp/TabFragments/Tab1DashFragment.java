@@ -2,6 +2,7 @@ package com.garrisonthomas.junkapp.tabfragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
@@ -126,7 +127,7 @@ public class Tab1DashFragment extends Fragment {
 
                     Snackbar
                             .make(coordinatorLayoutView, "No journal available", Snackbar.LENGTH_LONG)
-                            .setActionTextColor(getContext().getResources().getColor(R.color.colorAccent))
+                            .setActionTextColor(Color.CYAN)
                             .setAction("CREATE", createJournalClickListener)
                             .show();
                 } else {

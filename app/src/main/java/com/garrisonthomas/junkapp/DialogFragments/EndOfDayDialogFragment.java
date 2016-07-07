@@ -3,7 +3,6 @@ package com.garrisonthomas.junkapp.dialogfragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,6 +21,7 @@ import android.widget.Toast;
 
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
+import com.garrisonthomas.junkapp.ViewItemHelper;
 import com.garrisonthomas.junkapp.parseobjects.DailyJournal;
 import com.garrisonthomas.junkapp.parseobjects.NewJob;
 import com.parse.DeleteCallback;
@@ -32,7 +32,7 @@ import com.parse.SaveCallback;
 
 import java.util.List;
 
-public class EndOfDayDialogFragment extends DialogFragment {
+public class EndOfDayDialogFragment extends ViewItemHelper {
 
     SharedPreferences preferences;
     ProgressBar publishPbar;

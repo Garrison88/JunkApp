@@ -44,7 +44,7 @@
 
                     <EditText
                         android:id="@+id/et_gross_sale"
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:hint="Gross Sale"
                         android:inputType="numberDecimal" />
@@ -59,7 +59,7 @@
 
                     <EditText
                         android:id="@+id/et_net_sale"
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:hint="Net Sale"
                         android:inputType="numberDecimal" />
@@ -106,7 +106,7 @@
                 <com.wrapp.floatlabelededittext.FloatLabeledEditText
                     android:id="@+id/et_receipt_number_wrapper"
                     android:layout_width="0dp"
-                    android:layout_height="fill_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1">
 
                     <EditText
@@ -129,7 +129,7 @@
 
                 <EditText
                     android:id="@+id/et_job_notes"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="Notes (optional)"
                     android:inputType="textAutoCorrect|textCapSentences|textMultiLine"
@@ -156,7 +156,7 @@
             android:text="Cancel" />
 
         <View
-            android:layout_height="fill_parent"
+            android:layout_height="match_parent"
             android:layout_width="1dp"
             android:background="#505154"
             android:layout_marginBottom="7dp" android:layout_marginTop="7dp"/>

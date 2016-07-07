@@ -41,7 +41,7 @@
 
         <EditText
             android:id="@+id/et_fuel_receipt_number"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/et_fuel_cost"
             android:inputType="textNoSuggestions|textCapCharacters"
@@ -50,6 +50,7 @@
     </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
     <LinearLayout
+        android:id="@+id/add_fuel_button_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/et_fuel_receipt_number_wrapper">
@@ -58,16 +59,24 @@
             android:id="@+id/btn_cancel_fuel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground"
             android:text="Cancel" />
+
+        <View
+            android:layout_height="fill_parent"
+            android:layout_width="1dp"
+            android:background="#505154"
+            android:layout_marginBottom="7dp" android:layout_marginTop="7dp"/>
 
         <Button
             android:id="@+id/btn_save_fuel"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground"
             android:text="Save" />
 
     </LinearLayout>

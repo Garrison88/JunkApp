@@ -8,7 +8,7 @@
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#424242</color>
     <color name="navigationBarColor">#000000</color>
-    <color name="colorAccent">#03A9F4</color>
+    <color name="colorAccent">#FFFFFF</color>
     <color name="darkAccent">#727272</color>
     <color name="dialogFragmentBackground">#424242</color>
     <color name="snackbarActionColor">#03A9F4</color>

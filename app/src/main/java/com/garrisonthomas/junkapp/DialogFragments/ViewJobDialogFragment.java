@@ -1,7 +1,6 @@
 package com.garrisonthomas.junkapp.dialogfragments;
 
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -22,7 +21,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ViewJobDialogFragment extends DialogFragment {
+public class ViewJobDialogFragment extends ViewItemHelper {
 
     @Bind(R.id.tv_view_job_gross)
     TextView vjGross;
