@@ -27,8 +27,8 @@ public class ViewDumpDialogFragment extends ViewItemHelper {
 
     @Bind(R.id.tv_view_dump_gross_cost)
     TextView vdGross;
-    @Bind(R.id.tv_view_dump_net_cost)
-    TextView vdNet;
+    @Bind(R.id.tv_view_dump_tonnage)
+    TextView vdTonnage;
     @Bind(R.id.tv_view_dump_receipt_number)
     TextView vdReceiptNumber;
     @Bind(R.id.tv_view_dump_percent_previous)
@@ -105,9 +105,9 @@ public class ViewDumpDialogFragment extends ViewItemHelper {
                             thisDumpID = dump.getObjectId();
 
                             String grossCostString = getString(R.string.dollar_sign) + String.valueOf(dump.getGrossCost());
-                            String netCostString = getString(R.string.dollar_sign) + String.valueOf(dump.getNetCost());
+                            String tonnageString = String.valueOf(dump.getTonnage());
                             vdGross.setText(grossCostString);
-                            vdNet.setText(netCostString);
+                            vdTonnage.setText(tonnageString);
                             vdReceiptNumber.setText(String.valueOf(dump.getDumpReceiptNumber()));
                             vdPercentPrevious.setText(String.valueOf(dump.getPercentPrevious()) + "%");
 

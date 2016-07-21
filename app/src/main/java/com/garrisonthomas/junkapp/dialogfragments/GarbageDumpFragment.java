@@ -19,19 +19,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.garrisonthomas.junkapp.R;
-import com.garrisonthomas.junkapp.Utils;
 import com.garrisonthomas.junkapp.parseobjects.NewDump;
 
 public class GarbageDumpFragment extends Fragment {
 
     private static EditText etAddDumpWeight, etDumpReceiptNumber, etPercentPrevious;
-    private static TextView tvGrossCost, tvNetCost;
+    private static TextView tvGrossCost;
     private static Button saveDump, cancelDump;
     private static Spinner dumpNameSpinner;
     private static String[] dumpNameArray;
     private static int[] dumpRateArray;
     private static int pricePerTonne;
-    private static double result, resultWithTax;
+    private static double result, weightInTonnes;
     private static String dumpNameString, currentJournalId;
     private static LinearLayout dumpCostLayout;
     private SharedPreferences preferences;
@@ -50,7 +49,6 @@ public class GarbageDumpFragment extends Fragment {
         etPercentPrevious = (EditText) v.findViewById(R.id.et_percent_previous);
 
         tvGrossCost = (TextView) v.findViewById(R.id.tv_dump_gross_cost);
-        tvNetCost = (TextView) v.findViewById(R.id.tv_dump_net_cost);
 
         saveDump = (Button) v.findViewById(R.id.btn_save_dump);
         cancelDump = (Button) v.findViewById(R.id.btn_cancel_dump);
@@ -89,8 +87,7 @@ public class GarbageDumpFragment extends Fragment {
 
                 if (!TextUtils.isEmpty(etAddDumpWeight.getText())) {
 
-                    int userSuppliedWeight = Integer.parseInt(String.valueOf(etAddDumpWeight.getText()));
-                    double weightInKgs = userSuppliedWeight * .001;
+                    weightInTonnes = Double.parseDouble(String.valueOf(etAddDumpWeight.getText()));
 
                     switch (dumpNameSpinner.getSelectedItemPosition()) {
 //                        Cherry
@@ -101,49 +98,45 @@ public class GarbageDumpFragment extends Fragment {
                         case 8:
 //                        GFL Mississauga
                         case 9:
-                            if (userSuppliedWeight <= 480) {
+                            if (weightInTonnes <= .48) {
                                 result = 40;
                             } else {
-                                result = Math.round((weightInKgs * pricePerTonne) * 100.00) / 100.00;
+                                result = Math.round((GarbageDumpFragment.weightInTonnes * pricePerTonne) * 100.00) / 100.00;
                             }
                             break;
 //                        Shorncliffe
                         case 2:
-                            if (userSuppliedWeight <= 380) {
+                            if (weightInTonnes <= .38) {
                                 result = 25;
                             } else {
-                                result = Math.round((weightInKgs * pricePerTonne) * 100.00) / 100.00;
+                                result = Math.round((GarbageDumpFragment.weightInTonnes * pricePerTonne) * 100.00) / 100.00;
                             }
                             break;
 //                        Fenmar
                         case 3:
-                            if (userSuppliedWeight <= 520) {
+                            if (weightInTonnes <= .52) {
                                 result = 40;
                             } else {
-                                result = Math.round((weightInKgs * pricePerTonne) * 100.00) / 100.00;
+                                result = Math.round((GarbageDumpFragment.weightInTonnes * pricePerTonne) * 100.00) / 100.00;
                             }
                             break;
 //                        Tor-Can
                         case 14:
-                            if (userSuppliedWeight <= 820) {
+                            if (weightInTonnes <= .82) {
                                 result = 65;
                             } else {
-                                result = Math.round((weightInKgs * pricePerTonne) * 100.00) / 100.00;
+                                result = Math.round((GarbageDumpFragment.weightInTonnes * pricePerTonne) * 100.00) / 100.00;
                             }
                             break;
                         default:
-                            result = Math.round((weightInKgs * pricePerTonne) * 100.00) / 100.00;
+                            result = Math.round((GarbageDumpFragment.weightInTonnes * pricePerTonne) * 100.00) / 100.00;
                             break;
                     }
 
-                    resultWithTax = Utils.calculateTax(result);
-
                     String resultString = getString(R.string.dollar_sign) + String.valueOf(result);
-                    String withTaxString = getString(R.string.dollar_sign) + String.valueOf(resultWithTax);
 
                     dumpCostLayout.setVisibility(View.VISIBLE);
                     tvGrossCost.setText(resultString);
-                    tvNetCost.setText(withTaxString);
 
 
                 } else if (TextUtils.isEmpty(etAddDumpWeight.getText())) {
@@ -166,7 +159,7 @@ public class GarbageDumpFragment extends Fragment {
                     newDump.setRelatedJournal(currentJournalId);
                     newDump.setDumpName(dumpNameString);
                     newDump.setGrossCost(result);
-                    newDump.setNetCost(resultWithTax);
+                    newDump.setTonnage(weightInTonnes);
                     newDump.setDumpReceiptNumber(Integer.valueOf(etDumpReceiptNumber.getText().toString()));
                     if (!TextUtils.isEmpty(etPercentPrevious.getText())) {
                         newDump.setPercentPrevious(Integer.valueOf(etPercentPrevious.getText().toString()));

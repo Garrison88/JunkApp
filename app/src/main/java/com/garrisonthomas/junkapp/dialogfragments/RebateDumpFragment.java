@@ -1,5 +1,6 @@
 package com.garrisonthomas.junkapp.dialogfragments;
 
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -116,7 +117,7 @@ public class RebateDumpFragment extends Fragment {
                     newDump.setRelatedJournal(currentJournalId);
                     newDump.setDumpName(rebateLocationString);
 //                    newDump.setGrossCost(result);
-//                    newDump.setNetCost(resultWithTax);
+//                    newDump.setTonnage(resultWithTax);
 //                    newDump.setDumpReceiptNumber(Integer.valueOf(etDumpReceiptNumber.getText().toString()));
 //                    if (!TextUtils.isEmpty(etPercentPrevious.getText())) {
 //                        newDump.setPercentPrevious(Integer.valueOf(etPercentPrevious.getText().toString()));

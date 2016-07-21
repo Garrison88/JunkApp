@@ -38,8 +38,8 @@
                         android:id="@+id/et_add_dump_weight"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Weight (kgs)"
-                        android:inputType="number"
+                        android:hint="Weight (mt)"
+                        android:inputType="numberDecimal"
                         android:maxLength="4" />
 
 
@@ -59,7 +59,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_gravity="center">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -69,26 +70,6 @@
 
                     <TextView
                         android:id="@+id/tv_dump_gross_cost"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_horizontal"
-                        android:text="Net Cost" />
-
-                    <TextView
-                        android:id="@+id/tv_dump_net_cost"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal" />

@@ -174,8 +174,7 @@ public class EndOfDayDialogFragment extends ViewItemHelper {
 
                     for (final DailyJournal dj : list) {
 
-                        String endNotes = endOfDayNotes.getText().toString();
-                        dj.setEndOfDayNotes(endNotes);
+                        dj.setEndOfDayNotes(endOfDayNotes.getText().toString());
                         dj.setDriverEndTime(DET);
                         dj.setNavEndTime(NET);
                         dj.setPercentOfGoal(percentOfGoal);

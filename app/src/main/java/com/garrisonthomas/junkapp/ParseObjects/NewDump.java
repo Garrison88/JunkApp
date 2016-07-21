@@ -19,9 +19,9 @@ public class NewDump extends ParseObject {
 
     }
 
-    public double getNetCost() {
+    public double getTonnage() {
 
-        return getDouble("netCost");
+        return getDouble("tonnage");
 
     }
 
@@ -55,9 +55,9 @@ public class NewDump extends ParseObject {
 
     }
 
-    public void setNetCost(double netCost) {
+    public void setTonnage(double tonnage) {
 
-        put("netCost", netCost);
+        put("tonnage", tonnage);
 
     }
 
