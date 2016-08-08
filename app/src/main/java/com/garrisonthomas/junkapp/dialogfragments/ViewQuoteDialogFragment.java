@@ -11,8 +11,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
-import com.garrisonthomas.junkapp.ViewItemHelper;
 import com.garrisonthomas.junkapp.parseobjects.NewQuote;
 import com.parse.FindCallback;
 import com.parse.ParseQuery;
@@ -25,7 +25,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Garrison on 2016-06-16.
  */
-public class ViewQuoteDialogFragment extends ViewItemHelper {
+public class ViewQuoteDialogFragment extends DialogFragmentHelper {
 
     @Bind(R.id.tv_view_quote_low_end)
     TextView vqLowEnd;
@@ -73,7 +73,7 @@ public class ViewQuoteDialogFragment extends ViewItemHelper {
         deleteQuoteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ViewItemHelper.deleteItem(ViewQuoteDialogFragment.this, currentJournalId, thisQuoteId, getActivity(), "NewQuote");
+//                DialogFragmentHelper.deleteItem(ViewQuoteDialogFragment.this, currentJournalId, thisQuoteId, getActivity(), "NewQuote");
             }
         });
 

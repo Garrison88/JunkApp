@@ -9,8 +9,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
-import com.garrisonthomas.junkapp.ViewItemHelper;
 import com.garrisonthomas.junkapp.parseobjects.NewFuel;
 import com.parse.FindCallback;
 import com.parse.ParseQuery;
@@ -23,7 +23,7 @@ import butterknife.ButterKnife;
 /**
  * Created by GarrisonThomas on 2015-10-22.
  */
-public class ViewFuelDialogFragment extends ViewItemHelper {
+public class ViewFuelDialogFragment extends DialogFragmentHelper {
 
     @Bind(R.id.tv_view_fuel_vendor)
     TextView vfVendor;
@@ -56,7 +56,7 @@ public class ViewFuelDialogFragment extends ViewItemHelper {
         deleteFuelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteItem(ViewFuelDialogFragment.this, currentJournalId, thisFuelID, getActivity(), "NewFuel");
+//                deleteItem(ViewFuelDialogFragment.this, currentJournalId, thisFuelID, getActivity(), "NewFuel");
             }
         });
 

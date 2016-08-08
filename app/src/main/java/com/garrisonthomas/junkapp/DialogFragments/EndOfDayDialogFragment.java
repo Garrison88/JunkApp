@@ -15,13 +15,13 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
+import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
-import com.garrisonthomas.junkapp.ViewItemHelper;
 import com.garrisonthomas.junkapp.parseobjects.DailyJournal;
 import com.garrisonthomas.junkapp.parseobjects.NewJob;
 import com.parse.DeleteCallback;
@@ -32,14 +32,14 @@ import com.parse.SaveCallback;
 
 import java.util.List;
 
-public class EndOfDayDialogFragment extends ViewItemHelper {
+public class EndOfDayDialogFragment extends DialogFragmentHelper {
 
     SharedPreferences preferences;
-    ProgressBar publishPbar;
     EditText endOfDayNotes;
     Button cancel, archive, dEndTime, nEndTime;
     TextView tvPercentOfGoal;
-    String currentJournalId, todaysDate, todaysTruck;
+    String currentJournalId, todaysDate, firebaseJournalURL;
+    Firebase fbrJournal;
     int percentOfGoal;
 
     @NonNull
@@ -59,8 +59,6 @@ public class EndOfDayDialogFragment extends ViewItemHelper {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
 
-        publishPbar = (ProgressBar) v.findViewById(R.id.publish_pbar);
-
         endOfDayNotes = (EditText) v.findViewById(R.id.end_day_notes);
 
         cancel = (Button) v.findViewById(R.id.cancel_publish_dialog);
@@ -73,9 +71,8 @@ public class EndOfDayDialogFragment extends ViewItemHelper {
         tvPercentOfGoal = (TextView) v.findViewById(R.id.tv_end_day_percent_of_goal);
 
         todaysDate = preferences.getString("todaysDate", "noDate");
-        todaysTruck = preferences.getString("truck", "noTruck");
-
         currentJournalId = preferences.getString("universalJournalId", "none");
+        firebaseJournalURL = preferences.getString("firebaseURL", "none");
 
         //calculates total profit for day divided by 1400, and sets tvPercentOfGoal to display it
         calculatePercentOfGoal();
@@ -108,7 +105,7 @@ public class EndOfDayDialogFragment extends ViewItemHelper {
                 final String DET = dEndTime.getText().toString();
                 final String NET = nEndTime.getText().toString();
 
-                if (!DET.equals("DRIVER OUT") && !NET.equals("NAVIGATOR OUT")) {
+                if (!DET.equals("Driver Out") && !NET.equals("Nav Out")) {
                     AlertDialog diaBox = confirmJournalArchive();
                     diaBox.show();
                 } else {
@@ -160,8 +157,15 @@ public class EndOfDayDialogFragment extends ViewItemHelper {
         final String DET = dEndTime.getText().toString();
         final String NET = nEndTime.getText().toString();
 
-        publishPbar.setVisibility(View.VISIBLE);
-        archive.setVisibility(View.GONE);
+        showProgressDialog("Archiving Journal...");
+
+        fbrJournal = new Firebase(firebaseJournalURL);
+
+        fbrJournal.child("driverEndTime").setValue(DET);
+        fbrJournal.child("navEndTime").setValue(NET);
+        fbrJournal.child("percentOfGoal").setValue(percentOfGoal);
+        fbrJournal.child("endOfDayNotes").setValue(endOfDayNotes.getText().toString());
+        fbrJournal.child("archived").setValue(true);
 
         final ParseQuery<DailyJournal> djQuery = ParseQuery.getQuery(DailyJournal.class);
         djQuery.whereEqualTo("objectId", currentJournalId);
@@ -178,6 +182,7 @@ public class EndOfDayDialogFragment extends ViewItemHelper {
                         dj.setDriverEndTime(DET);
                         dj.setNavEndTime(NET);
                         dj.setPercentOfGoal(percentOfGoal);
+                        dj.setArchived(true);
 
                         dj.saveInBackground(new SaveCallback() {
                             @Override
@@ -188,14 +193,16 @@ public class EndOfDayDialogFragment extends ViewItemHelper {
                                     editor.putString("universalJournalId", "none");
                                     editor.putString("driver", "noDriver");
                                     editor.putString("navigator", "noNavigator");
-                                    editor.putString("truck", "noTruck");
+                                    editor.putString("truck", "none");
                                     editor.putString("date", "noDate");
+                                    editor.putString("firebaseURL", "none");
                                     editor.apply();
                                     Toast.makeText(getActivity(), "Journal successfully archived",
                                             Toast.LENGTH_SHORT).show();
                                     dj.unpinInBackground(new DeleteCallback() {
                                         @Override
                                         public void done(ParseException e) {
+                                            hideProgressDialog();
                                             getActivity().finish();
                                         }
 
@@ -228,8 +235,10 @@ public class EndOfDayDialogFragment extends ViewItemHelper {
 
                     }
 
+                    String totalString = String.valueOf(total);
                     percentOfGoal = (int) ((total / 1400) * 100);
-                    tvPercentOfGoal.setText(String.valueOf(percentOfGoal) + "% of goal");
+                    String percentOfGoalString = "$" + totalString + " profit (" + String.valueOf(percentOfGoal) + "% of goal)";
+                    tvPercentOfGoal.setText(percentOfGoalString);
                 }
             }
         });

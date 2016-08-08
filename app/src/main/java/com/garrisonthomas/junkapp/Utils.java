@@ -1,11 +1,8 @@
 package com.garrisonthomas.junkapp;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -14,7 +11,6 @@ import android.widget.Toast;
 
 import com.garrisonthomas.junkapp.parseobjects.NewDump;
 import com.garrisonthomas.junkapp.parseobjects.NewFuel;
-import com.garrisonthomas.junkapp.parseobjects.NewJob;
 import com.garrisonthomas.junkapp.parseobjects.NewQuote;
 import com.parse.FindCallback;
 import com.parse.ParseQuery;
@@ -28,48 +24,13 @@ import java.util.List;
  */
 public abstract class Utils {
 
-    public static Boolean isInternetAvailable(Activity a) {
-        ConnectivityManager cm =
-                (ConnectivityManager) a.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
-    }
-
-    public static void populateJobSpinner(final Context context, String currentJournalId,
+    public static void populateJobSpinner(final Context context,
                                           final ArrayList<Integer> jobsArray, final Spinner jobsSpinner) {
-
-        ParseQuery<NewJob> query = ParseQuery.getQuery(NewJob.class);
-        query.whereEqualTo("relatedJournal", currentJournalId);
-        query.orderByAscending("createdAt");
-        query.fromPin();
-        query.findInBackground(new FindCallback<NewJob>() {
-            @Override
-            public void done(List<NewJob> list, com.parse.ParseException e) {
-
-                if (e == null) {
-
-                    for (NewJob job : list) {
-
-                        jobsArray.add(job.getSID());
-
-                    }
-
-                    ArrayAdapter<Integer> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, jobsArray);
-                    adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-                    jobsSpinner.setAdapter(adapter);
-
-
-                } else {
-                    Toast.makeText(context, "Something went wrong: " + e, Toast.LENGTH_SHORT).show();
-                }
-            }
-
-        });
 
     }
 
     public static void populateQuoteSpinner(final Context context, String currentJournalId,
-                                          final ArrayList<Integer> quotesArray, final Spinner quotesSpinner) {
+                                            final ArrayList<Integer> quotesArray, final Spinner quotesSpinner) {
 
         ParseQuery<NewQuote> query = ParseQuery.getQuery(NewQuote.class);
         query.whereEqualTo("relatedJournal", currentJournalId);
@@ -90,7 +51,6 @@ public abstract class Utils {
                     ArrayAdapter<Integer> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, quotesArray);
                     adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
                     quotesSpinner.setAdapter(adapter);
-
 
 
                 } else {
@@ -184,7 +144,7 @@ public abstract class Utils {
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                 if (selectedMinute == 00) {
                     button.setText(selectedHour + ":" + selectedMinute + "0");
-                } else if (selectedMinute < 10){
+                } else if (selectedMinute < 10) {
                     button.setText(selectedHour + ":" + String.format("%02d", selectedMinute));
                 } else {
                     button.setText(selectedHour + ":" + selectedMinute);

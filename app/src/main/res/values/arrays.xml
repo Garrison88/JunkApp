@@ -17,7 +17,7 @@
         <item>WM Hamilton</item>
         <item>Mountain Transfer</item>
         <item>Tor-Can</item>
-        <item>Tuff Recycling Inc.</item>
+        <item>Tuff Recycling Inc</item>
     </string-array>
 
     <!--this is the shortened Google Maps URL that follows https://goo.gl/maps/-->
@@ -52,7 +52,7 @@
         <item>VvK2ZeZMXPN2</item>
         <!--Tor-Can-->
         <item>Bis8RuzouZG2</item>
-        <!--Tuff Recycling Inc.-->
+        <!--Tuff Recycling Inc-->
         <item>11YUh7iN9hz</item>
     </string-array>
 
@@ -79,8 +79,7 @@
         <!--Laird-->
         <item>Location: Laird and Eglington
             \nHours: Monday–Friday 5am-6pm
-            \nSaturday 6am-1pm
-            \nClosed Sunday
+            \nClosed Saturday-Sunday
             \n
             \n**Remember to wear safety gear**</item>
         <!--Cherry-->
@@ -149,7 +148,7 @@
             \n$65 min
             \n
             \n**Extra $25/tonne after hours and on weekends**</item>
-        <!--Tuff Recycling Inc.-->
+        <!--Tuff Recycling Inc-->
         <item>Location: Brampton (Queen St E and 410)
             \nHours: Monday-Friday 6am-6pm
             \nSaturday 6am-1pm
@@ -282,9 +281,9 @@
     </string-array>
 
     <string-array name="truck_number">
-        <item>Truck 4</item>
-        <item>Truck 5</item>
-        <item>Truck 6</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
     </string-array>
 
     <string-array name="job_pay_type">

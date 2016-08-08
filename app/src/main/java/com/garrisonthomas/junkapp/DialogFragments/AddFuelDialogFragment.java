@@ -12,20 +12,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.garrisonthomas.junkapp.AddItemHelper;
+import com.firebase.client.Firebase;
+import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.parseobjects.NewFuel;
 
-public class AddFuelDialogFragment extends AddItemHelper {
+public class AddFuelDialogFragment extends DialogFragmentHelper {
 
     private EditText etFuelVendor, etFuelCost, etReceiptNumber;
     private static Button saveFuel, cancelFuel;
     private String currentJournalId;
     private SharedPreferences preferences;
+    private Firebase fbrFuel;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
 
     }
 
@@ -47,6 +52,8 @@ public class AddFuelDialogFragment extends AddItemHelper {
         saveFuel = (Button) v.findViewById(R.id.btn_save_fuel);
         cancelFuel = (Button) v.findViewById(R.id.btn_cancel_fuel);
 
+
+
         saveFuel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,6 +67,13 @@ public class AddFuelDialogFragment extends AddItemHelper {
                     newFuel.setFuelVendor(String.valueOf(etFuelVendor.getText()));
                     newFuel.setFuelCost(Double.valueOf(String.valueOf(etFuelCost.getText())));
                     newFuel.setFuelReceiptNumber(String.valueOf(etReceiptNumber.getText()));
+
+                    fbrFuel = new Firebase(preferences.getString("firebaseURL", "none") + "/" + "fuel/" +
+                            String.valueOf(etFuelVendor.getText()) + " (" + String.valueOf(etReceiptNumber.getText()) + ")");
+
+//                    fbrJob.setValue(newFuel);
+
+                    fbrFuel.child("cost").setValue(Double.valueOf(etFuelCost.getText().toString()));
 
                     newFuel.saveEventually();
                     newFuel.pinInBackground();
@@ -79,6 +93,7 @@ public class AddFuelDialogFragment extends AddItemHelper {
         cancelFuel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 dismiss();
             }
         });
@@ -87,7 +102,4 @@ public class AddFuelDialogFragment extends AddItemHelper {
         return v;
 
     }
-
-
-
 }

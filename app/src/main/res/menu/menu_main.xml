@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MainActivity">
+    tools:context=".BaseActivity">
 
     <item
         android:id="@+id/action_call_office"
@@ -17,12 +17,11 @@
         android:icon="@drawable/ic_email_white_24dp"
         app:showAsAction="ifRoom" />
 
-    <!--<item-->
-        <!--android:id="@+id/action_take_photo"-->
-        <!--android:title="Take Photo"-->
-        <!--android:orderInCategory="3"-->
-        <!--android:icon="@drawable/ic_photo_camera_white_24dp"-->
-        <!--app:showAsAction="ifRoom" />-->
+    <item
+        android:id="@+id/action_login_logout"
+        android:title="Login"
+        android:orderInCategory="3"
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_settings"

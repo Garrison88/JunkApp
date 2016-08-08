@@ -16,34 +16,25 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.garrisonthomas.junkapp.AddItemHelper;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 import com.garrisonthomas.junkapp.CurrentJournal;
+import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
-import com.garrisonthomas.junkapp.parseobjects.DailyJournal;
-import com.parse.ParseException;
-import com.parse.SaveCallback;
+import com.garrisonthomas.junkapp.parseobjects.DailyJournalObject;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+public class DailyJournalDialogFragment extends DialogFragmentHelper {
 
-public class DailyJournalDialogFragment extends AddItemHelper {
-
-    private static Spinner truckSpinner;
-    private static String[] truckNumber;
+    private Spinner truckSpinner;
+    private String[] truckArray;
     private static Button cancel, createJournal, dStartTime, nStartTime;
     private EditText driver, navigator;
     private String truckSelected;
-    private Date date = new Date();
-    private SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy", Locale.CANADA);
-    private String todaysDate = df2.format(date);
     private SharedPreferences preferences;
-    private ProgressBar pbar;
 
     @NonNull
     @Override
@@ -59,10 +50,10 @@ public class DailyJournalDialogFragment extends AddItemHelper {
 
         final View v = inflater.inflate(R.layout.add_daily_journal_layout, container, false);
 
-        preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         truckSpinner = (Spinner) v.findViewById(R.id.truck_spinner);
-        truckNumber = getResources().getStringArray(R.array.truck_number);
+        truckArray = v.getResources().getStringArray(R.array.truck_number);
         createJournal = (Button) v.findViewById(R.id.btn_create_journal);
         cancel = (Button) v.findViewById(R.id.btn_cancel_journal);
         dStartTime = (Button) v.findViewById(R.id.driver_start_time);
@@ -73,22 +64,20 @@ public class DailyJournalDialogFragment extends AddItemHelper {
         driver = (EditText) v.findViewById(R.id.et_driver);
         navigator = (EditText) v.findViewById(R.id.et_navigator);
 
-        pbar = (ProgressBar) v.findViewById(R.id.pbar_create_journal);
-
         truckSpinner.setAdapter(new ArrayAdapter<>(this.getActivity(),
-                android.R.layout.simple_dropdown_item_1line, truckNumber));
+                android.R.layout.simple_dropdown_item_1line, truckArray));
         truckSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
 
-                truckSelected = truckNumber[position];
+                truckSelected = truckArray[position];
 
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                truckSelected = truckArray[0];
             }
         });
 
@@ -115,57 +104,60 @@ public class DailyJournalDialogFragment extends AddItemHelper {
                     //hide keyboard when OK is clicked
                     View view = getActivity().getCurrentFocus();
                     if (view != null) {
-                        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     }
 
+                    showProgressDialog("Creating journal...");
+
                     final String driverString = driver.getText().toString();
                     final String navigatorString = navigator.getText().toString();
-                    final int truckNumber = Integer.valueOf(truckSelected.substring(6, 7));
                     final String driverST = dStartTime.getText().toString();
                     final String navST = nStartTime.getText().toString();
 
-                    createJournal.setVisibility(View.GONE);
-                    pbar.setVisibility(View.VISIBLE);
+                    final String firebaseJournalRef = firebaseURL + "journals/" +
+                            todaysDateNumerical + "/T" + truckSelected + "/";
 
-                    final DailyJournal newJournal = new DailyJournal();
+                    Firebase fbrJournal = new Firebase(firebaseJournalRef);
 
-                    newJournal.setDate(todaysDate);
-                    newJournal.setDriver(driverString);
-                    newJournal.setDriverStartTime(driverST);
-                    newJournal.setNavigator(navigatorString);
-                    newJournal.setNavStartTime(navST);
-                    newJournal.setTruckNumber(truckNumber);
+                    DailyJournalObject journal = new DailyJournalObject();
 
-                    newJournal.pinInBackground();
-                    newJournal.saveEventually(new SaveCallback() {
+                    journal.setDate(todaysDate);
+                    journal.setDriver(driverString);
+                    journal.setDriverStartTime(driverST);
+                    journal.setNavigator(navigatorString);
+                    journal.setNavStartTime(navST);
+                    journal.setTruckNumber(truckSelected);
+
+                    fbrJournal.setValue(journal, new Firebase.CompletionListener() {
+
                         @Override
-                        public void done(ParseException e) {
-                            if (e == null) {
+                        public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+
+                            if (firebaseError != null) {
+
+                                System.out.println("Data could not be saved. " + firebaseError.getMessage());
+
+                            } else {
+
                                 SharedPreferences.Editor editor = preferences.edit();
                                 editor.putString("driver", driverString);
                                 editor.putString("navigator", navigatorString);
                                 editor.putString("truck", truckSelected);
-                                editor.putString("universalJournalId", newJournal.getObjectId());
+                                editor.putString("firebaseURL", firebaseJournalRef);
                                 editor.putString("todaysDate", todaysDate);
                                 editor.apply();
-                                driver.getText().clear();
-                                navigator.getText().clear();
-                                truckSpinner.setSelection(0);
-                                pbar.setVisibility(View.GONE);
-                                createJournal.setVisibility(View.VISIBLE);
-                                dismiss();
+
+                                hideProgressDialog();
+                                getDialog().dismiss();
                                 Intent intent = new Intent(getActivity(), CurrentJournal.class);
                                 startActivity(intent);
-                            } else {
-                                pbar.setVisibility(View.GONE);
-                                createJournal.setVisibility(View.VISIBLE);
-                                Toast.makeText(getActivity(), getString(R.string.parse_exception_text), Toast.LENGTH_SHORT).show();
-                                e.printStackTrace();
 
                             }
                         }
                     });
+
+//                    fbrJournal.child("journalAuthor").setValue(auth.getCurrentUser().getEmail());
 
                 } else {
                     Toast.makeText(getActivity(), "Please enter at minimum a driver and start time", Toast.LENGTH_SHORT).show();
@@ -179,7 +171,7 @@ public class DailyJournalDialogFragment extends AddItemHelper {
                 driver.setText("");
                 navigator.setText("");
                 truckSpinner.setSelection(0);
-                dismiss();
+                dismissAllowingStateLoss();
             }
         });
 

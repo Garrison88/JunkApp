@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.parseobjects.NewDump;
 
@@ -34,6 +35,15 @@ public class GarbageDumpFragment extends Fragment {
     private static String dumpNameString, currentJournalId;
     private static LinearLayout dumpCostLayout;
     private SharedPreferences preferences;
+    private Firebase fbrDump, firebaseDumpInfoRef;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        firebaseDumpInfoRef = new Firebase("https://junkapp-43226.firebaseio.com/dumpInfo");
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -166,6 +176,16 @@ public class GarbageDumpFragment extends Fragment {
                     } else {
                         newDump.setPercentPrevious(0);
                     }
+
+                    fbrDump = new Firebase(preferences.getString("firebaseURL", "none") + "/" + "dumps/" + dumpNameString + " (" +
+                            String.valueOf(etDumpReceiptNumber.getText()) + ")");
+
+                    fbrDump.child("grossCost").setValue(result);
+                    fbrDump.child("tonnage").setValue(weightInTonnes);
+                    if (!TextUtils.isEmpty(etPercentPrevious.getText())){
+                        fbrDump.child("percentPrevious").setValue(Integer.valueOf(etPercentPrevious.getText().toString()));
+                    }
+
 
                     newDump.pinInBackground();
                     newDump.saveEventually();

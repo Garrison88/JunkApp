@@ -11,10 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
-import com.garrisonthomas.junkapp.AddItemHelper;
+import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
 
-public class DumpTabHost extends AddItemHelper {
+public class DumpTabHost extends DialogFragmentHelper {
 
     private SectionsPagerAdapter sectionsPagerAdapter;
     private ViewPager viewPager;

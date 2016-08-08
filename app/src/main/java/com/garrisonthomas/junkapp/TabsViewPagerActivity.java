@@ -21,10 +21,7 @@ public class TabsViewPagerActivity extends BaseActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-//    private IconicsDrawable journalIcon = new IconicsDrawable(this)
-//            .icon(Octicons.Icon.oct_repo)
-//            .color(Color.BLACK)
-//            .sizeDp(24);
+    Menu menu;
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -37,6 +34,9 @@ public class TabsViewPagerActivity extends BaseActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        if (user != null) {
+            toolbar.setSubtitle(user.getEmail());
+        }
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);

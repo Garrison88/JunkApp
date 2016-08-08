@@ -9,8 +9,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
-import com.garrisonthomas.junkapp.ViewItemHelper;
 import com.garrisonthomas.junkapp.parseobjects.NewDump;
 import com.parse.FindCallback;
 import com.parse.ParseQuery;
@@ -23,14 +23,14 @@ import butterknife.ButterKnife;
 /**
  * Created by GarrisonThomas on 2015-10-22.
  */
-public class ViewDumpDialogFragment extends ViewItemHelper {
+public class ViewDumpDialogFragment extends DialogFragmentHelper {
 
     @Bind(R.id.tv_view_dump_gross_cost)
     TextView vdGross;
     @Bind(R.id.tv_view_dump_tonnage)
     TextView vdTonnage;
-    @Bind(R.id.tv_view_dump_receipt_number)
-    TextView vdReceiptNumber;
+//    @Bind(R.id.tv_view_dump_receipt_number)
+//    TextView vdReceiptNumber;
     @Bind(R.id.tv_view_dump_percent_previous)
     TextView vdPercentPrevious;
     @Bind(R.id.v_d_percent_previous_text)
@@ -66,7 +66,7 @@ public class ViewDumpDialogFragment extends ViewItemHelper {
         deleteDumpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteItem(ViewDumpDialogFragment.this, currentJournalId, thisDumpID, getActivity(), "NewDump");
+//                deleteItem(ViewDumpDialogFragment.this, currentJournalId, thisDumpID, getActivity(), "NewDump");
             }
         });
 
@@ -108,7 +108,7 @@ public class ViewDumpDialogFragment extends ViewItemHelper {
                             String tonnageString = String.valueOf(dump.getTonnage());
                             vdGross.setText(grossCostString);
                             vdTonnage.setText(tonnageString);
-                            vdReceiptNumber.setText(String.valueOf(dump.getDumpReceiptNumber()));
+//                            vdReceiptNumber.setText(String.valueOf(dump.getDumpReceiptNumber()));
                             vdPercentPrevious.setText(String.valueOf(dump.getPercentPrevious()) + "%");
 
 

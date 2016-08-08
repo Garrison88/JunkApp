@@ -13,12 +13,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 import com.garrisonthomas.junkapp.dialogfragments.AddFuelDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.AddJobDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.AddQuoteDialogFragment;
@@ -28,19 +32,10 @@ import com.garrisonthomas.junkapp.dialogfragments.ViewDumpDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.ViewFuelDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.ViewJobDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.ViewQuoteDialogFragment;
-import com.garrisonthomas.junkapp.parseobjects.DailyJournal;
-import com.garrisonthomas.junkapp.parseobjects.NewDump;
-import com.garrisonthomas.junkapp.parseobjects.NewFuel;
-import com.garrisonthomas.junkapp.parseobjects.NewJob;
-import com.garrisonthomas.junkapp.parseobjects.NewQuote;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -73,8 +68,6 @@ public class CurrentJournal extends BaseActivity {
     Button viewFuel;
     @Bind(R.id.btn_add_fuel)
     FloatingActionButton addFuel;
-    @Bind(R.id.toolbar_progress_bar)
-    ProgressBar toolbarProgressBar;
     @Bind(R.id.jobs_spinner)
     Spinner jobsSpinner;
     @Bind(R.id.quotes_spinner)
@@ -84,23 +77,16 @@ public class CurrentJournal extends BaseActivity {
     @Bind(R.id.fuel_spinner)
     Spinner fuelSpinner;
 
-    String currentJournalId, spDriver, spNavigator, spTruck, spDate, dumpSpinnerText, fuelReceiptNumber;
+    String firebaseJournalURL, currentJournalId, spDriver, spNavigator, spDate, dumpSpinnerText, fuelReceiptNumber, spTruck;
 
     int selectedJobSID, selectedQuoteSID, dumpReceiptNumber;
 
     private ArrayList<Integer> jobsArray;
-//    private ArrayAdapter<Integer> jobAdapter;
     private ArrayList<Integer> quotesArray;
     private ArrayList<String> dumpsArray;
     private ArrayList<String> fuelArray;
 
     private static SharedPreferences preferences;
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        jobAdapter.notifyDataSetChanged();
-//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -115,9 +101,10 @@ public class CurrentJournal extends BaseActivity {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         currentJournalId = preferences.getString("universalJournalId", "none");
+        firebaseJournalURL = preferences.getString("firebaseURL", "none");
         spDriver = preferences.getString("driver", "noDriver");
         spNavigator = preferences.getString("navigator", "noNavigator");
-        spTruck = preferences.getString("truck", "noTruck");
+        spTruck = preferences.getString("truck", "none");
         spDate = preferences.getString("todaysDate", "noDate");
 
         getSupportActionBar().setTitle(spDate);
@@ -136,17 +123,56 @@ public class CurrentJournal extends BaseActivity {
         fuelArray = new ArrayList<>();
 
         // Populate the various spinners with the available entries
-        Utils.populateJobSpinner(this, currentJournalId, jobsArray, jobsSpinner);
+
         Utils.populateQuoteSpinner(this, currentJournalId, quotesArray, quotesSpinner);
         Utils.populateDumpSpinner(this, currentJournalId, dumpsArray, dumpsSpinner);
         Utils.populateFuelSpinner(this, currentJournalId, fuelArray, fuelSpinner);
 
-        todaysCrew.setText("Driver: " + spDriver + "\n" + "Nav: " + spNavigator);
-        todaysTruck.setText(spTruck);
+        String crewString = "Driver: " + spDriver + "\n" + "Nav: " + spNavigator;
+        todaysCrew.setText(crewString);
+        todaysTruck.setText("Truck #: " + spTruck);
 
-//        jobAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, jobsArray);
-//        jobAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-//        jobsSpinner.setAdapter(jobAdapter);
+
+        Firebase jobs = new Firebase(firebaseJournalURL + "/jobs");
+        jobs.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot snapshot, String previousChild) {
+
+                jobsArray.add(Integer.valueOf(snapshot.getKey()));
+
+                ArrayAdapter<Integer> adapter = new ArrayAdapter<>(CurrentJournal.this,
+                        android.R.layout.simple_spinner_item, jobsArray);
+                adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+                jobsSpinner.setAdapter(adapter);
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                jobsArray.remove(Integer.valueOf(dataSnapshot.getKey()));
+
+                ArrayAdapter<Integer> adapter = new ArrayAdapter<>(CurrentJournal.this,
+                        android.R.layout.simple_spinner_item, jobsArray);
+                adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+                jobsSpinner.setAdapter(adapter);
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
 
         jobsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -187,7 +213,7 @@ public class CurrentJournal extends BaseActivity {
                 dumpSpinnerText = (String) dumpsSpinner.getItemAtPosition(position);
 
                 Matcher m = Pattern.compile("\\(([^)]+)\\)").matcher(dumpSpinnerText);
-                while(m.find()) {
+                while (m.find()) {
                     dumpReceiptNumber = Integer.parseInt(m.group(1));
                 }
 
@@ -234,7 +260,7 @@ public class CurrentJournal extends BaseActivity {
                     ViewJobDialogFragment vjDialogFragment = new ViewJobDialogFragment();
                     Bundle vjBundle = new Bundle();
                     vjBundle.putInt("jobSpinnerSID", selectedJobSID);
-                    vjBundle.putString("relatedJournalId", currentJournalId);
+                    vjBundle.putString("firebaseJournalURL", firebaseJournalURL);
                     vjDialogFragment.setArguments(vjBundle);
                     FragmentManager manager = getSupportFragmentManager();
                     vjDialogFragment.show(manager, "Dialog");
@@ -417,110 +443,12 @@ public class CurrentJournal extends BaseActivity {
 
     private void deleteJournal() {
 
-        toolbarProgressBar.setVisibility(View.VISIBLE);
+        showProgressDialog("Deleting journal...");
 
-        ParseQuery<DailyJournal> djQuery = ParseQuery.getQuery(DailyJournal.class);
-        djQuery.whereEqualTo("objectId", currentJournalId);
-        djQuery.setLimit(1);
-        final ParseQuery<NewJob> njQuery = ParseQuery.getQuery(NewJob.class);
-        njQuery.whereEqualTo("relatedJournal", currentJournalId);
-        final ParseQuery<NewQuote> nqQuery = ParseQuery.getQuery(NewQuote.class);
-        nqQuery.whereEqualTo("relatedJournal", currentJournalId);
-        final ParseQuery<NewDump> ndQuery = ParseQuery.getQuery(NewDump.class);
-        ndQuery.whereEqualTo("relatedJournal", currentJournalId);
-        final ParseQuery<NewFuel> nfQuery = ParseQuery.getQuery(NewFuel.class);
-        nfQuery.whereEqualTo("relatedJournal", currentJournalId);
-
-        djQuery.findInBackground(new FindCallback<DailyJournal>() {
+        Firebase firebaseRef = new Firebase(firebaseJournalURL);
+        firebaseRef.removeValue(new Firebase.CompletionListener() {
             @Override
-            public void done(List<DailyJournal> list, ParseException e) {
-
-                if (e == null) {
-
-                    for (DailyJournal dj : list) {
-
-                        try {
-                            dj.delete();
-                        } catch (ParseException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
-                }
-
-                njQuery.findInBackground(new FindCallback<NewJob>() {
-                    @Override
-                    public void done(List<NewJob> list, ParseException e) {
-
-                        if (e == null) {
-
-                            for (NewJob nj : list) {
-
-                                try {
-                                    nj.delete();
-                                    nj.unpin();
-                                } catch (ParseException e1) {
-                                    e1.printStackTrace();
-                                }
-                            }
-                        }
-                    }
-                });
-
-                nqQuery.findInBackground(new FindCallback<NewQuote>() {
-                    @Override
-                    public void done(List<NewQuote> list, ParseException e) {
-
-                        if (e == null) {
-
-                            for (NewQuote nq : list) {
-
-                                try {
-                                    nq.delete();
-                                    nq.unpin();
-                                } catch (ParseException e1) {
-                                    e1.printStackTrace();
-                                }
-                            }
-                        }
-                    }
-                });
-
-                ndQuery.findInBackground(new FindCallback<NewDump>() {
-                    @Override
-                    public void done(List<NewDump> list, ParseException e) {
-
-                        if (e == null) {
-
-                            for (NewDump nd : list) {
-                                try {
-                                    nd.delete();
-                                    nd.unpin();
-                                } catch (ParseException e1) {
-                                    e1.printStackTrace();
-                                }
-                            }
-                        }
-                    }
-                });
-
-                nfQuery.findInBackground(new FindCallback<NewFuel>() {
-                    @Override
-                    public void done(List<NewFuel> list, ParseException e) {
-
-                        if (e == null) {
-
-                            for (NewFuel nf : list) {
-
-                                try {
-                                    nf.delete();
-                                    nf.unpin();
-                                } catch (ParseException e1) {
-                                    e1.printStackTrace();
-                                }
-                            }
-                        }
-                    }
-                });
+            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
 
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("universalJournalId", "none");
@@ -529,13 +457,126 @@ public class CurrentJournal extends BaseActivity {
                 editor.putString("truck", "noTruck");
                 editor.putString("date", "noDate");
                 editor.apply();
-                toolbarProgressBar.setVisibility(View.GONE);
+
+                hideProgressDialog();
                 Toast.makeText(CurrentJournal.this, "Journal successfully deleted",
                         Toast.LENGTH_SHORT).show();
                 CurrentJournal.this.finish();
 
             }
         });
+
+//        ParseQuery<DailyJournal> djQuery = ParseQuery.getQuery(DailyJournal.class);
+//        djQuery.whereEqualTo("objectId", currentJournalId);
+//        djQuery.setLimit(1);
+//        final ParseQuery<NewJob> njQuery = ParseQuery.getQuery(NewJob.class);
+//        njQuery.whereEqualTo("relatedJournal", currentJournalId);
+//        final ParseQuery<NewQuote> nqQuery = ParseQuery.getQuery(NewQuote.class);
+//        nqQuery.whereEqualTo("relatedJournal", currentJournalId);
+//        final ParseQuery<NewDump> ndQuery = ParseQuery.getQuery(NewDump.class);
+//        ndQuery.whereEqualTo("relatedJournal", currentJournalId);
+//        final ParseQuery<NewFuel> nfQuery = ParseQuery.getQuery(NewFuel.class);
+//        nfQuery.whereEqualTo("relatedJournal", currentJournalId);
+//
+//        djQuery.findInBackground(new FindCallback<DailyJournal>() {
+//            @Override
+//            public void done(List<DailyJournal> list, ParseException e) {
+//
+//                if (e == null) {
+//
+//                    for (DailyJournal dj : list) {
+//
+//                        try {
+//                            dj.delete();
+//                        } catch (ParseException e1) {
+//                            e1.printStackTrace();
+//                        }
+//                    }
+//                }
+//
+//                njQuery.findInBackground(new FindCallback<NewJob>() {
+//                    @Override
+//                    public void done(List<NewJob> list, ParseException e) {
+//
+//                        if (e == null) {
+//
+//                            for (NewJob nj : list) {
+//
+//                                try {
+//                                    nj.delete();
+//                                    nj.unpin();
+//                                } catch (ParseException e1) {
+//                                    e1.printStackTrace();
+//                                }
+//                            }
+//                        }
+//                    }
+//                });
+//
+//                nqQuery.findInBackground(new FindCallback<NewQuote>() {
+//                    @Override
+//                    public void done(List<NewQuote> list, ParseException e) {
+//
+//                        if (e == null) {
+//
+//                            for (NewQuote nq : list) {
+//
+//                                try {
+//                                    nq.delete();
+//                                    nq.unpin();
+//                                } catch (ParseException e1) {
+//                                    e1.printStackTrace();
+//                                }
+//                            }
+//                        }
+//                    }
+//                });
+//
+//                ndQuery.findInBackground(new FindCallback<NewDump>() {
+//                    @Override
+//                    public void done(List<NewDump> list, ParseException e) {
+//
+//                        if (e == null) {
+//
+//                            for (NewDump nd : list) {
+//                                try {
+//                                    nd.delete();
+//                                    nd.unpin();
+//                                } catch (ParseException e1) {
+//                                    e1.printStackTrace();
+//                                }
+//                            }
+//                        }
+//                    }
+//                });
+//
+//                nfQuery.findInBackground(new FindCallback<NewFuel>() {
+//                    @Override
+//                    public void done(List<NewFuel> list, ParseException e) {
+//
+//                        if (e == null) {
+//
+//                            for (NewFuel nf : list) {
+//
+//                                try {
+//                                    nf.delete();
+//                                    nf.unpin();
+//                                } catch (ParseException e1) {
+//                                    e1.printStackTrace();
+//                                }
+//                            }
+//                        }
+//                    }
+//                });
+//
+
+//                hideProgressDialog();
+//                Toast.makeText(CurrentJournal.this, "Journal successfully deleted",
+//                        Toast.LENGTH_SHORT).show();
+//                CurrentJournal.this.finish();
+//
+//            }
+//        });
     }
 
 }

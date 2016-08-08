@@ -15,18 +15,19 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.garrisonthomas.junkapp.AddItemHelper;
+import com.firebase.client.Firebase;
+import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
-import com.garrisonthomas.junkapp.parseobjects.NewJob;
+import com.garrisonthomas.junkapp.parseobjects.JobObject;
 
-public class AddJobDialogFragment extends AddItemHelper {
+public class AddJobDialogFragment extends DialogFragmentHelper {
 
     private EditText etSID, etGrossSale, etNetSale, etReceiptNumber, etJobNotes;
     private static Button startTime, endTime, saveJob, cancelJob;
     private static Spinner payTypeSpinner;
     private static String[] payTypeArray;
-    private String payTypeString, currentJournalId;
+    private String payTypeString, firebaseJournalRef;
     private SharedPreferences preferences;
 
     @Override
@@ -38,7 +39,7 @@ public class AddJobDialogFragment extends AddItemHelper {
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-        currentJournalId = preferences.getString("universalJournalId", "none");
+        firebaseJournalRef = preferences.getString("firebaseURL", "none");
 
         etSID = (EditText) v.findViewById(R.id.et_sid);
         etGrossSale = (EditText) v.findViewById(R.id.et_gross_sale);
@@ -111,19 +112,20 @@ public class AddJobDialogFragment extends AddItemHelper {
                         && (!TextUtils.isEmpty(etNetSale.getText())
                         && (!TextUtils.isEmpty(etReceiptNumber.getText())))) {
 
-                    NewJob newJob = new NewJob();
-                    newJob.setRelatedJournal(currentJournalId);
-                    newJob.setSID(Integer.valueOf(etSID.getText().toString()));
-                    newJob.setStartTime(String.valueOf(startTime.getText()));
-                    newJob.setEndTime(String.valueOf(endTime.getText()));
-                    newJob.setGrossSale(Double.valueOf(etGrossSale.getText().toString()));
-                    newJob.setNetSale(Double.valueOf(etNetSale.getText().toString()));
-                    newJob.setReceiptNumber(Integer.valueOf(etReceiptNumber.getText().toString()));
-                    newJob.setPayType(payTypeString);
-                    newJob.setJobNotes(String.valueOf(etJobNotes.getText()));
+                    Firebase fbrJob = new Firebase(firebaseJournalRef + "jobs/" + String.valueOf(etSID.getText()));
 
-                    newJob.saveEventually();
-                    newJob.pinInBackground();
+                    JobObject job = new JobObject();
+
+                    job.setSID(Integer.valueOf(etSID.getText().toString()));
+                    job.setGrossSale(Double.valueOf(etGrossSale.getText().toString()));
+                    job.setNetSale(Double.valueOf(etNetSale.getText().toString()));
+                    job.setStartTime(String.valueOf(startTime.getText()));
+                    job.setEndTime(String.valueOf(endTime.getText()));
+                    job.setPayType(payTypeString);
+                    job.setReceiptNumber(Integer.valueOf(etReceiptNumber.getText().toString()));
+                    job.setJobNotes(String.valueOf(etJobNotes.getText()));
+
+                    fbrJob.setValue(job);
 
                     Toast.makeText(getActivity(), "Job number " + etSID.getText().toString() + " saved", Toast.LENGTH_SHORT).show();
 

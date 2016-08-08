@@ -2,6 +2,7 @@ package com.garrisonthomas.junkapp;
 
 import android.app.Application;
 
+import com.firebase.client.Firebase;
 import com.garrisonthomas.junkapp.parseobjects.DailyJournal;
 import com.garrisonthomas.junkapp.parseobjects.NewDump;
 import com.garrisonthomas.junkapp.parseobjects.NewFuel;
@@ -16,6 +17,9 @@ public class App extends Application {
     public void onCreate() {
 
         super.onCreate();
+
+        Firebase.setAndroidContext(this);
+        Firebase.getDefaultConfig().setPersistenceEnabled(true);
 
         ParseObject.registerSubclass(NewJob.class);
         ParseObject.registerSubclass(NewDump.class);

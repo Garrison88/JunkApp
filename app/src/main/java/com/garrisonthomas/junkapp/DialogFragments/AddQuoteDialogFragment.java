@@ -12,17 +12,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.garrisonthomas.junkapp.AddItemHelper;
+import com.firebase.client.Firebase;
+import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
 import com.garrisonthomas.junkapp.parseobjects.NewQuote;
 
-public class AddQuoteDialogFragment extends AddItemHelper {
+public class AddQuoteDialogFragment extends DialogFragmentHelper {
 
     private static EditText etQuoteSID, etLowEnd, etHighEnd, etQuoteNotes;
     private static Button saveQuote, cancelQuote, startTime, endTime;
     private static String currentJournalId;
     private SharedPreferences preferences;
+    private Firebase fbrQuote;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -78,6 +80,20 @@ public class AddQuoteDialogFragment extends AddItemHelper {
                         newQuote.setHighEnd(0);
                     }
                     newQuote.setQuoteNotes(String.valueOf(etQuoteNotes.getText()));
+
+                    fbrQuote = new Firebase(preferences.getString("firebaseURL", "none") + "/" + "quotes/" + String.valueOf(etQuoteSID.getText()));
+
+//                    fbrJob.setValue(newQuote);
+
+                    fbrQuote.child("startTime").setValue(String.valueOf(startTime.getText()));
+                    fbrQuote.child("endTime").setValue(String.valueOf(endTime.getText()));
+                    fbrQuote.child("lowEnd").setValue(Double.valueOf(etLowEnd.getText().toString()));
+                    if (!TextUtils.isEmpty(etHighEnd.getText())){
+                        fbrQuote.child("highEnd").setValue(Double.valueOf(etHighEnd.getText().toString()));
+                    }
+                    if (!TextUtils.isEmpty(etQuoteNotes.getText())){
+                        fbrQuote.child("notes").setValue(String.valueOf(etQuoteNotes.getText()));
+                    }
 
                     newQuote.pinInBackground();
                     newQuote.saveEventually();

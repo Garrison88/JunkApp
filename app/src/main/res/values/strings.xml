@@ -14,9 +14,9 @@
     <string name="dollar_sign">$</string>
     <string name="percent_sign">%</string>
     <string name="parse_exception_text">Something went wrong. Please try again</string>
-    <string name="password">rickthestick</string>
     <string name="icon_author"><div>Icon made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div></string>
     <string name="start">Start</string>
     <string name="end">End</string>
+    <string name="auth_failed">Authentication Failed</string>
 
 </resources>

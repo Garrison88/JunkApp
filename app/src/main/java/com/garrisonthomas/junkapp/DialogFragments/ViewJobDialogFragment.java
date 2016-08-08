@@ -2,7 +2,6 @@ package com.garrisonthomas.junkapp.dialogfragments;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,18 +9,19 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
+import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
-import com.garrisonthomas.junkapp.ViewItemHelper;
-import com.garrisonthomas.junkapp.parseobjects.NewJob;
-import com.parse.FindCallback;
-import com.parse.ParseQuery;
-
-import java.util.List;
+import com.garrisonthomas.junkapp.parseobjects.JobObject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ViewJobDialogFragment extends ViewItemHelper {
+public class ViewJobDialogFragment extends DialogFragmentHelper {
 
     @Bind(R.id.tv_view_job_gross)
     TextView vjGross;
@@ -42,9 +42,7 @@ public class ViewJobDialogFragment extends ViewItemHelper {
     @Bind(R.id.btn_delete_job)
     ImageButton deleteJobBtn;
     private static int vjSID;
-    public static String currentJournalId;
-    public static String thisJobId;
-
+    public static String firebaseJournalURL;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,7 +67,8 @@ public class ViewJobDialogFragment extends ViewItemHelper {
         deleteJobBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ViewItemHelper.deleteItem(ViewJobDialogFragment.this, currentJournalId, thisJobId, getActivity(), "NewJob");
+                DialogFragmentHelper.deleteItem(ViewJobDialogFragment.this,
+                        firebaseJournalURL + "/jobs/" + String.valueOf(vjSID));
             }
         });
 
@@ -82,7 +81,7 @@ public class ViewJobDialogFragment extends ViewItemHelper {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         Bundle vjBundle = getArguments();
         vjSID = vjBundle.getInt("jobSpinnerSID");
-        currentJournalId = vjBundle.getString("relatedJournalId");
+        firebaseJournalURL = vjBundle.getString("firebaseJournalURL");
         dialog.setTitle("Job SID: " + String.valueOf(vjSID));
         dialog.setCanceledOnTouchOutside(false);
 
@@ -91,43 +90,48 @@ public class ViewJobDialogFragment extends ViewItemHelper {
 
     public void populateJobInfo() {
 
-        ParseQuery<NewJob> query = ParseQuery.getQuery(NewJob.class);
-        query.setLimit(1);
-        query.whereEqualTo("relatedJournal", currentJournalId);
-        query.whereEqualTo("sid", vjSID);
-        query.fromPin();
-        query.findInBackground(new FindCallback<NewJob>() {
+        Firebase ref = new Firebase(firebaseJournalURL + "/jobs");
+        Query queryRef = ref.orderByChild("sid").equalTo(vjSID);
+        queryRef.addChildEventListener(new ChildEventListener() {
+
             @Override
-            public void done(List<NewJob> list, com.parse.ParseException e) {
+            public void onChildAdded(DataSnapshot snapshot, String previousChildKey) {
 
-                if (e == null) {
-
-                    for (NewJob job : list) {
-
-                        if (isAdded()) {
-
-                            thisJobId = job.getObjectId();
-                            String grossSaleString = getString(R.string.dollar_sign) + job.getGrossSale();
-                            String netSaleString = getString(R.string.dollar_sign) + job.getNetSale();
-                            String startEndTime = job.getStartTime() + " - " + job.getEndTime();
-                            vjGross.setText(grossSaleString);
-                            vjNet.setText(netSaleString);
-                            vjPayType.setText(job.getPayType());
-                            vjTime.setText(startEndTime);
-                            vjReceiptNumber.setText(String.valueOf(job.getReceiptNumber()));
-                            vjNotes.setText(job.getJobNotes());
-
-                            if (!TextUtils.isEmpty(vjNotes.getText())) {
-
-                                tvNotesDisplay.setVisibility(View.VISIBLE);
-                                vjNotes.setVisibility(View.VISIBLE);
-
-                            }
-                        }
-                    }
+                JobObject jobObject = snapshot.getValue(JobObject.class);
+                vjGross.setText(String.valueOf(jobObject.getGrossSale()));
+                vjNet.setText(String.valueOf(jobObject.getNetSale()));
+                vjPayType.setText(jobObject.getPayType());
+                vjTime.setText(jobObject.getStartTime() + " - " + jobObject.getEndTime());
+                vjReceiptNumber.setText(String.valueOf(jobObject.getReceiptNumber()));
+                // if there are no notes, do not display them
+                if (jobObject.getJobNotes() != null) {
+                    tvNotesDisplay.setVisibility(View.VISIBLE);
+                    vjNotes.setVisibility(View.VISIBLE);
+                    vjNotes.setText(jobObject.getJobNotes());
                 }
+
             }
 
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
         });
+
     }
 }

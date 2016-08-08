@@ -73,6 +73,12 @@ public class DailyJournal extends ParseObject {
 
     }
 
+    public boolean getArchived() {
+
+        return getBoolean("archived");
+
+    }
+
 //    public void setJournalID(String journalID) {
 //
 //        put("journalID", journalID);
@@ -148,6 +154,12 @@ public class DailyJournal extends ParseObject {
     public void setPercentOnDump(int percentOnDump) {
 
         put("percentOnDump", percentOnDump);
+
+    }
+
+    public void setArchived(boolean archived) {
+
+        put("archived", archived);
 
     }
 }
