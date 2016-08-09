@@ -19,18 +19,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
-import com.garrisonthomas.junkapp.parseobjects.DailyJournal;
-import com.garrisonthomas.junkapp.parseobjects.NewJob;
-import com.parse.DeleteCallback;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
-import com.parse.SaveCallback;
-
-import java.util.List;
 
 public class EndOfDayDialogFragment extends DialogFragmentHelper {
 
@@ -72,10 +64,10 @@ public class EndOfDayDialogFragment extends DialogFragmentHelper {
 
         todaysDate = preferences.getString("todaysDate", "noDate");
         currentJournalId = preferences.getString("universalJournalId", "none");
-        firebaseJournalURL = preferences.getString("firebaseURL", "none");
+        firebaseJournalURL = preferences.getString("firebaseRef", "none");
 
         //calculates total profit for day divided by 1400, and sets tvPercentOfGoal to display it
-        calculatePercentOfGoal();
+//        calculatePercentOfGoal();
 
         dEndTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,84 +157,116 @@ public class EndOfDayDialogFragment extends DialogFragmentHelper {
         fbrJournal.child("navEndTime").setValue(NET);
         fbrJournal.child("percentOfGoal").setValue(percentOfGoal);
         fbrJournal.child("endOfDayNotes").setValue(endOfDayNotes.getText().toString());
-        fbrJournal.child("archived").setValue(true);
-
-        final ParseQuery<DailyJournal> djQuery = ParseQuery.getQuery(DailyJournal.class);
-        djQuery.whereEqualTo("objectId", currentJournalId);
-        djQuery.setLimit(1);
-        djQuery.findInBackground(new FindCallback<DailyJournal>() {
+        fbrJournal.child("archived").setValue(true, new Firebase.CompletionListener() {
             @Override
-            public void done(List<DailyJournal> list, ParseException e) {
+            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("firebaseRef", "none");
+                editor.putString("driver", "noDriver");
+                editor.putString("navigator", "noNavigator");
+                editor.putString("truck", "none");
+                editor.putString("date", "noDate");
+                editor.apply();
+                Toast.makeText(getActivity(), "Journal successfully archived",
+                        Toast.LENGTH_SHORT).show();
 
-                if (e == null) {
-
-                    for (final DailyJournal dj : list) {
-
-                        dj.setEndOfDayNotes(endOfDayNotes.getText().toString());
-                        dj.setDriverEndTime(DET);
-                        dj.setNavEndTime(NET);
-                        dj.setPercentOfGoal(percentOfGoal);
-                        dj.setArchived(true);
-
-                        dj.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-
-                                if (e == null) {
-                                    SharedPreferences.Editor editor = preferences.edit();
-                                    editor.putString("universalJournalId", "none");
-                                    editor.putString("driver", "noDriver");
-                                    editor.putString("navigator", "noNavigator");
-                                    editor.putString("truck", "none");
-                                    editor.putString("date", "noDate");
-                                    editor.putString("firebaseURL", "none");
-                                    editor.apply();
-                                    Toast.makeText(getActivity(), "Journal successfully archived",
-                                            Toast.LENGTH_SHORT).show();
-                                    dj.unpinInBackground(new DeleteCallback() {
-                                        @Override
-                                        public void done(ParseException e) {
-                                            hideProgressDialog();
-                                            getActivity().finish();
-                                        }
-
-
-                                });
-                            }
-                        }
-                    });
-                }
-                }
+                hideProgressDialog();
+                getActivity().finish();
             }
         });
-    }
 
-    public void calculatePercentOfGoal() {
-        ParseQuery<NewJob> njQuery = ParseQuery.getQuery(NewJob.class);
-        njQuery.whereEqualTo("relatedJournal", currentJournalId);
-        njQuery.fromPin();
-        njQuery.findInBackground(new FindCallback<NewJob>() {
-            @Override
-            public void done(List<NewJob> list, ParseException e) {
+//        DailyJournalObject journal = new DailyJournalObject();
+//
+//        journal.setDriverEndTime(DET);
+//        journal.setNavEndTime(NET);
+//        journal.setPercentOfGoal(percentOfGoal);
+//        journal.setEndOfDayNotes(endOfDayNotes.getText().toString());
+//        journal.setArchived(true);
+//
+//        fbrJournal.setValue(journal, new Firebase.CompletionListener() {
+//            @Override
+//            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
 
-                if (e == null) {
-
-                    double total = 0.0;
-
-                    for (NewJob nj : list) {
-
-                        total += nj.getGrossSale();
-
-                    }
-
-                    String totalString = String.valueOf(total);
-                    percentOfGoal = (int) ((total / 1400) * 100);
-                    String percentOfGoalString = "$" + totalString + " profit (" + String.valueOf(percentOfGoal) + "% of goal)";
-                    tvPercentOfGoal.setText(percentOfGoalString);
-                }
             }
-        });
-    }
+//        });
+
+
+//
+//        final ParseQuery<DailyJournal> djQuery = ParseQuery.getQuery(DailyJournal.class);
+//        djQuery.whereEqualTo("objectId", currentJournalId);
+//        djQuery.setLimit(1);
+//        djQuery.findInBackground(new FindCallback<DailyJournal>() {
+//            @Override
+//            public void done(List<DailyJournal> list, ParseException e) {
+//
+//                if (e == null) {
+//
+//                    for (final DailyJournal dj : list) {
+//
+//                        dj.setEndOfDayNotes(endOfDayNotes.getText().toString());
+//                        dj.setDriverEndTime(DET);
+//                        dj.setNavEndTime(NET);
+//                        dj.setPercentOfGoal(percentOfGoal);
+//                        dj.setArchived(true);
+//
+//                        dj.saveInBackground(new SaveCallback() {
+//                            @Override
+//                            public void done(ParseException e) {
+//
+//                                if (e == null) {
+//                                    SharedPreferences.Editor editor = preferences.edit();
+//                                    editor.putString("firebaseURL", "none");
+//                                    editor.putString("universalJournalId", "none");
+//                                    editor.putString("driver", "noDriver");
+//                                    editor.putString("navigator", "noNavigator");
+//                                    editor.putString("truck", "none");
+//                                    editor.putString("date", "noDate");
+//                                    editor.apply();
+//                                    Toast.makeText(getActivity(), "Journal successfully archived",
+//                                            Toast.LENGTH_SHORT).show();
+//                                    dj.unpinInBackground(new DeleteCallback() {
+//                                        @Override
+//                                        public void done(ParseException e) {
+//
+//                                        }
+//
+//
+//                                });
+//                            }
+//                        }
+//                    });
+//                }
+//                }
+//            }
+//        });
+//    }
+
+//    public void calculatePercentOfGoal() {
+//        ParseQuery<NewJob> njQuery = ParseQuery.getQuery(NewJob.class);
+//        njQuery.whereEqualTo("relatedJournal", currentJournalId);
+//        njQuery.fromPin();
+//        njQuery.findInBackground(new FindCallback<NewJob>() {
+//            @Override
+//            public void done(List<NewJob> list, ParseException e) {
+//
+//                if (e == null) {
+//
+//                    double total = 0.0;
+//
+//                    for (NewJob nj : list) {
+//
+//                        total += nj.getGrossSale();
+//
+//                    }
+//
+//                    String totalString = String.valueOf(total);
+//                    percentOfGoal = (int) ((total / 1400) * 100);
+//                    String percentOfGoalString = "$" + totalString + " profit (" + String.valueOf(percentOfGoal) + "% of goal)";
+//                    tvPercentOfGoal.setText(percentOfGoalString);
+//                }
+//            }
+//        });
+//    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

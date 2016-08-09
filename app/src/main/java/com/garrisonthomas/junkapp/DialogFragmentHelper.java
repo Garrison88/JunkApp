@@ -24,10 +24,14 @@ public class DialogFragmentHelper extends DialogFragment {
     public String firebaseURL;
     public FirebaseAuth auth = FirebaseAuth.getInstance();
     public Date date = new Date();
-    public SimpleDateFormat df1 = new SimpleDateFormat("yyyy-MM-dd", Locale.CANADA);
-    public SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy", Locale.CANADA);
-    public String todaysDateNumerical = df1.format(date);
-    public String todaysDate = df2.format(date);
+    public SimpleDateFormat year = new SimpleDateFormat("yyyy", Locale.CANADA);
+    public SimpleDateFormat month = new SimpleDateFormat("MMM", Locale.CANADA);
+    public SimpleDateFormat day = new SimpleDateFormat("dd", Locale.CANADA);
+    public SimpleDateFormat fullDate = new SimpleDateFormat("EEE, dd MMM yyyy", Locale.CANADA);
+    public String currentYear = year.format(date);
+    public String currentMonth = month.format(date);
+    public String currentDay = day.format(date);
+    public String todaysDate = fullDate.format(date);
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -36,8 +40,6 @@ public class DialogFragmentHelper extends DialogFragment {
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         firebaseURL = "https://junkapp-43226.firebaseio.com/";
-
-//        Firebase.setAndroidContext(getActivity());
 
     }
 

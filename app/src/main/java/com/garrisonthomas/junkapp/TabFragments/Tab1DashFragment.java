@@ -44,8 +44,8 @@ public class Tab1DashFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.tab1_journal_layout, container, false);
 
-        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        firebaseJournalRef = preferences.getString("firebaseURL", "none");
+        preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+        firebaseJournalRef = preferences.getString("firebaseRef", "none");
 
         openJournal = (Button) v.findViewById(R.id.btn_open_journal);
 
@@ -88,6 +88,15 @@ public class Tab1DashFragment extends Fragment {
         });
 
         return v;
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+        firebaseJournalRef = preferences.getString("firebaseRef", "none");
 
     }
 

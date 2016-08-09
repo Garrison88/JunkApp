@@ -42,7 +42,7 @@ public class ViewJobDialogFragment extends DialogFragmentHelper {
     @Bind(R.id.btn_delete_job)
     ImageButton deleteJobBtn;
     private static int vjSID;
-    public static String firebaseJournalURL;
+    public static String firebaseJournalRef;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,7 +68,7 @@ public class ViewJobDialogFragment extends DialogFragmentHelper {
             @Override
             public void onClick(View v) {
                 DialogFragmentHelper.deleteItem(ViewJobDialogFragment.this,
-                        firebaseJournalURL + "/jobs/" + String.valueOf(vjSID));
+                        firebaseJournalRef + "/jobs/" + String.valueOf(vjSID));
             }
         });
 
@@ -81,7 +81,7 @@ public class ViewJobDialogFragment extends DialogFragmentHelper {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         Bundle vjBundle = getArguments();
         vjSID = vjBundle.getInt("jobSpinnerSID");
-        firebaseJournalURL = vjBundle.getString("firebaseJournalURL");
+        firebaseJournalRef = vjBundle.getString("firebaseJournalRef");
         dialog.setTitle("Job SID: " + String.valueOf(vjSID));
         dialog.setCanceledOnTouchOutside(false);
 
@@ -90,7 +90,7 @@ public class ViewJobDialogFragment extends DialogFragmentHelper {
 
     public void populateJobInfo() {
 
-        Firebase ref = new Firebase(firebaseJournalURL + "/jobs");
+        Firebase ref = new Firebase(firebaseJournalRef + "/jobs");
         Query queryRef = ref.orderByChild("sid").equalTo(vjSID);
         queryRef.addChildEventListener(new ChildEventListener() {
 
@@ -98,8 +98,8 @@ public class ViewJobDialogFragment extends DialogFragmentHelper {
             public void onChildAdded(DataSnapshot snapshot, String previousChildKey) {
 
                 JobObject jobObject = snapshot.getValue(JobObject.class);
-                vjGross.setText(String.valueOf(jobObject.getGrossSale()));
-                vjNet.setText(String.valueOf(jobObject.getNetSale()));
+                vjGross.setText("$" + String.valueOf(jobObject.getGrossSale()));
+                vjNet.setText("$" + String.valueOf(jobObject.getNetSale()));
                 vjPayType.setText(jobObject.getPayType());
                 vjTime.setText(jobObject.getStartTime() + " - " + jobObject.getEndTime());
                 vjReceiptNumber.setText(String.valueOf(jobObject.getReceiptNumber()));

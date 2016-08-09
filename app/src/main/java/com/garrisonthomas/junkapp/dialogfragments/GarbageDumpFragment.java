@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.garrisonthomas.junkapp.R;
-import com.garrisonthomas.junkapp.parseobjects.NewDump;
+import com.garrisonthomas.junkapp.parseobjects.DumpObject;
 
 public class GarbageDumpFragment extends Fragment {
 
@@ -32,16 +32,13 @@ public class GarbageDumpFragment extends Fragment {
     private static int[] dumpRateArray;
     private static int pricePerTonne;
     private static double result, weightInTonnes;
-    private static String dumpNameString, currentJournalId;
+    private static String dumpNameString, firebaseJournalRef;
     private static LinearLayout dumpCostLayout;
     private SharedPreferences preferences;
-    private Firebase fbrDump, firebaseDumpInfoRef;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        firebaseDumpInfoRef = new Firebase("https://junkapp-43226.firebaseio.com/dumpInfo");
 
     }
 
@@ -51,8 +48,8 @@ public class GarbageDumpFragment extends Fragment {
 
         final View v = inflater.inflate(R.layout.add_garbage_dump_layout, container, false);
 
-        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        currentJournalId = preferences.getString("universalJournalId", "none");
+        preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+        firebaseJournalRef = preferences.getString("firebaseRef", "none");
 
         etAddDumpWeight = (EditText) v.findViewById(R.id.et_add_dump_weight);
         etDumpReceiptNumber = (EditText) v.findViewById(R.id.et_dump_receipt_number);
@@ -143,7 +140,7 @@ public class GarbageDumpFragment extends Fragment {
                             break;
                     }
 
-                    String resultString = getString(R.string.dollar_sign) + String.valueOf(result);
+                    String resultString = String.valueOf(result);
 
                     dumpCostLayout.setVisibility(View.VISIBLE);
                     tvGrossCost.setText(resultString);
@@ -165,30 +162,20 @@ public class GarbageDumpFragment extends Fragment {
                 if (!TextUtils.isEmpty(etAddDumpWeight.getText())
                         && (!TextUtils.isEmpty(etDumpReceiptNumber.getText()))) {
 
-                    NewDump newDump = new NewDump();
-                    newDump.setRelatedJournal(currentJournalId);
-                    newDump.setDumpName(dumpNameString);
-                    newDump.setGrossCost(result);
-                    newDump.setTonnage(weightInTonnes);
-                    newDump.setDumpReceiptNumber(Integer.valueOf(etDumpReceiptNumber.getText().toString()));
-                    if (!TextUtils.isEmpty(etPercentPrevious.getText())) {
-                        newDump.setPercentPrevious(Integer.valueOf(etPercentPrevious.getText().toString()));
-                    } else {
-                        newDump.setPercentPrevious(0);
-                    }
-
-                    fbrDump = new Firebase(preferences.getString("firebaseURL", "none") + "/" + "dumps/" + dumpNameString + " (" +
+                    Firebase fbrDump = new Firebase(firebaseJournalRef + "dumps/" + dumpNameString + " (" +
                             String.valueOf(etDumpReceiptNumber.getText()) + ")");
 
-                    fbrDump.child("grossCost").setValue(result);
-                    fbrDump.child("tonnage").setValue(weightInTonnes);
+                    DumpObject dump = new DumpObject();
+
+                    dump.setDumpName(dumpNameString);
+                    dump.setGrossCost(Double.valueOf(tvGrossCost.getText().toString()));
+                    dump.setTonnage(weightInTonnes);
+                    dump.setDumpReceiptNumber(Integer.valueOf(etDumpReceiptNumber.getText().toString()));
                     if (!TextUtils.isEmpty(etPercentPrevious.getText())){
-                        fbrDump.child("percentPrevious").setValue(Integer.valueOf(etPercentPrevious.getText().toString()));
+                        dump.setPercentPrevious(Integer.valueOf(etPercentPrevious.getText().toString()));
                     }
 
-
-                    newDump.pinInBackground();
-                    newDump.saveEventually();
+                    fbrDump.setValue(dump);
 
                     Toast.makeText(getActivity(), "Dump at " + dumpNameString + " saved", Toast.LENGTH_SHORT).show();
 

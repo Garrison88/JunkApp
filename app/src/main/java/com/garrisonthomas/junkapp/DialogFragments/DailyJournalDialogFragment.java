@@ -115,8 +115,9 @@ public class DailyJournalDialogFragment extends DialogFragmentHelper {
                     final String driverST = dStartTime.getText().toString();
                     final String navST = nStartTime.getText().toString();
 
+                    // this is where the days journal is created and saved to sharedPreferences
                     final String firebaseJournalRef = firebaseURL + "journals/" +
-                            todaysDateNumerical + "/T" + truckSelected + "/";
+                            currentYear + "/" + currentMonth + "/" + currentDay + "/T" + truckSelected + "/";
 
                     Firebase fbrJournal = new Firebase(firebaseJournalRef);
 
@@ -144,12 +145,17 @@ public class DailyJournalDialogFragment extends DialogFragmentHelper {
                                 editor.putString("driver", driverString);
                                 editor.putString("navigator", navigatorString);
                                 editor.putString("truck", truckSelected);
-                                editor.putString("firebaseURL", firebaseJournalRef);
+                                editor.putString("firebaseRef", firebaseJournalRef);
                                 editor.putString("todaysDate", todaysDate);
                                 editor.apply();
 
+                                // hamfisted way of clearing info from dailyJournalDialogFragment...
+                                driver.setText("");
+                                navigator.setText("");
+                                truckSpinner.setSelection(0);
+
                                 hideProgressDialog();
-                                getDialog().dismiss();
+                                dismiss();
                                 Intent intent = new Intent(getActivity(), CurrentJournal.class);
                                 startActivity(intent);
 
@@ -171,7 +177,7 @@ public class DailyJournalDialogFragment extends DialogFragmentHelper {
                 driver.setText("");
                 navigator.setText("");
                 truckSpinner.setSelection(0);
-                dismissAllowingStateLoss();
+                dismiss();
             }
         });
 

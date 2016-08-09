@@ -77,7 +77,7 @@ public class CurrentJournal extends BaseActivity {
     @Bind(R.id.fuel_spinner)
     Spinner fuelSpinner;
 
-    String firebaseJournalURL, currentJournalId, spDriver, spNavigator, spDate, dumpSpinnerText, fuelReceiptNumber, spTruck;
+    String firebaseJournalRef, spDriver, spNavigator, spDate, dumpSpinnerText, fuelReceiptNumber, spTruck;
 
     int selectedJobSID, selectedQuoteSID, dumpReceiptNumber;
 
@@ -100,8 +100,7 @@ public class CurrentJournal extends BaseActivity {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        currentJournalId = preferences.getString("universalJournalId", "none");
-        firebaseJournalURL = preferences.getString("firebaseURL", "none");
+        firebaseJournalRef = preferences.getString("firebaseRef", "none");
         spDriver = preferences.getString("driver", "noDriver");
         spNavigator = preferences.getString("navigator", "noNavigator");
         spTruck = preferences.getString("truck", "none");
@@ -124,16 +123,16 @@ public class CurrentJournal extends BaseActivity {
 
         // Populate the various spinners with the available entries
 
-        Utils.populateQuoteSpinner(this, currentJournalId, quotesArray, quotesSpinner);
-        Utils.populateDumpSpinner(this, currentJournalId, dumpsArray, dumpsSpinner);
-        Utils.populateFuelSpinner(this, currentJournalId, fuelArray, fuelSpinner);
+//        Utils.populateQuoteSpinner(this, currentJournalId, quotesArray, quotesSpinner);
+//        Utils.populateDumpSpinner(this, currentJournalId, dumpsArray, dumpsSpinner);
+//        Utils.populateFuelSpinner(this, currentJournalId, fuelArray, fuelSpinner);
 
         String crewString = "Driver: " + spDriver + "\n" + "Nav: " + spNavigator;
         todaysCrew.setText(crewString);
         todaysTruck.setText("Truck #: " + spTruck);
 
 
-        Firebase jobs = new Firebase(firebaseJournalURL + "/jobs");
+        Firebase jobs = new Firebase(firebaseJournalRef + "jobs");
         jobs.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot snapshot, String previousChild) {
@@ -161,6 +160,88 @@ public class CurrentJournal extends BaseActivity {
                         android.R.layout.simple_spinner_item, jobsArray);
                 adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
                 jobsSpinner.setAdapter(adapter);
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+        Firebase fuel = new Firebase(firebaseJournalRef + "fuel");
+        fuel.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot snapshot, String previousChild) {
+
+                fuelArray.add(snapshot.getKey());
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(CurrentJournal.this,
+                        android.R.layout.simple_spinner_item, fuelArray);
+                adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+                fuelSpinner.setAdapter(adapter);
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                fuelArray.remove(dataSnapshot.getKey());
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(CurrentJournal.this,
+                        android.R.layout.simple_spinner_item, fuelArray);
+                adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+                fuelSpinner.setAdapter(adapter);
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+        Firebase dumps = new Firebase(firebaseJournalRef + "dumps");
+        dumps.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot snapshot, String previousChild) {
+
+                dumpsArray.add(snapshot.getKey());
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(CurrentJournal.this,
+                        android.R.layout.simple_spinner_item, dumpsArray);
+                adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+                dumpsSpinner.setAdapter(adapter);
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                dumpsArray.remove(dataSnapshot.getKey());
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(CurrentJournal.this,
+                        android.R.layout.simple_spinner_item, dumpsArray);
+                adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+                dumpsSpinner.setAdapter(adapter);
             }
 
             @Override
@@ -260,7 +341,7 @@ public class CurrentJournal extends BaseActivity {
                     ViewJobDialogFragment vjDialogFragment = new ViewJobDialogFragment();
                     Bundle vjBundle = new Bundle();
                     vjBundle.putInt("jobSpinnerSID", selectedJobSID);
-                    vjBundle.putString("firebaseJournalURL", firebaseJournalURL);
+                    vjBundle.putString("firebaseJournalRef", firebaseJournalRef);
                     vjDialogFragment.setArguments(vjBundle);
                     FragmentManager manager = getSupportFragmentManager();
                     vjDialogFragment.show(manager, "Dialog");
@@ -295,7 +376,7 @@ public class CurrentJournal extends BaseActivity {
                     ViewQuoteDialogFragment vqDialogFragment = new ViewQuoteDialogFragment();
                     Bundle vqBundle = new Bundle();
                     vqBundle.putInt("quoteSpinnerSID", selectedQuoteSID);
-                    vqBundle.putString("relatedJournalId", currentJournalId);
+                    vqBundle.putString("firebaseJournalRef", firebaseJournalRef);
                     vqDialogFragment.setArguments(vqBundle);
                     FragmentManager manager = getSupportFragmentManager();
                     vqDialogFragment.show(manager, "Dialog");
@@ -331,7 +412,7 @@ public class CurrentJournal extends BaseActivity {
                     Bundle vdBundle = new Bundle();
                     vdBundle.putString("dumpName", dumpSpinnerText);
                     vdBundle.putInt("dumpReceiptNumber", dumpReceiptNumber);
-                    vdBundle.putString("relatedJournalId", currentJournalId);
+                    vdBundle.putString("firebaseJournalRef", firebaseJournalRef);
                     vdDialogFragment.setArguments(vdBundle);
                     FragmentManager manager = getSupportFragmentManager();
                     vdDialogFragment.show(manager, "Dialog");
@@ -366,7 +447,7 @@ public class CurrentJournal extends BaseActivity {
                     ViewFuelDialogFragment vfDialogFragment = new ViewFuelDialogFragment();
                     Bundle vfBundle = new Bundle();
                     vfBundle.putString("fuelReceiptNumber", fuelReceiptNumber);
-                    vfBundle.putString("relatedJournalId", currentJournalId);
+                    vfBundle.putString("firebaseJournalRef", firebaseJournalRef);
                     vfDialogFragment.setArguments(vfBundle);
                     FragmentManager manager = getSupportFragmentManager();
                     vfDialogFragment.show(manager, "Dialog");
@@ -440,18 +521,18 @@ public class CurrentJournal extends BaseActivity {
                 .create();
     }
 
-
     private void deleteJournal() {
 
         showProgressDialog("Deleting journal...");
 
-        Firebase firebaseRef = new Firebase(firebaseJournalURL);
+        Firebase firebaseRef = new Firebase(firebaseJournalRef);
         firebaseRef.removeValue(new Firebase.CompletionListener() {
             @Override
             public void onComplete(FirebaseError firebaseError, Firebase firebase) {
 
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("universalJournalId", "none");
+                editor.putString("firebaseRef", "none");
                 editor.putString("driver", "noDriver");
                 editor.putString("navigator", "noNavigator");
                 editor.putString("truck", "noTruck");
@@ -465,118 +546,6 @@ public class CurrentJournal extends BaseActivity {
 
             }
         });
-
-//        ParseQuery<DailyJournal> djQuery = ParseQuery.getQuery(DailyJournal.class);
-//        djQuery.whereEqualTo("objectId", currentJournalId);
-//        djQuery.setLimit(1);
-//        final ParseQuery<NewJob> njQuery = ParseQuery.getQuery(NewJob.class);
-//        njQuery.whereEqualTo("relatedJournal", currentJournalId);
-//        final ParseQuery<NewQuote> nqQuery = ParseQuery.getQuery(NewQuote.class);
-//        nqQuery.whereEqualTo("relatedJournal", currentJournalId);
-//        final ParseQuery<NewDump> ndQuery = ParseQuery.getQuery(NewDump.class);
-//        ndQuery.whereEqualTo("relatedJournal", currentJournalId);
-//        final ParseQuery<NewFuel> nfQuery = ParseQuery.getQuery(NewFuel.class);
-//        nfQuery.whereEqualTo("relatedJournal", currentJournalId);
-//
-//        djQuery.findInBackground(new FindCallback<DailyJournal>() {
-//            @Override
-//            public void done(List<DailyJournal> list, ParseException e) {
-//
-//                if (e == null) {
-//
-//                    for (DailyJournal dj : list) {
-//
-//                        try {
-//                            dj.delete();
-//                        } catch (ParseException e1) {
-//                            e1.printStackTrace();
-//                        }
-//                    }
-//                }
-//
-//                njQuery.findInBackground(new FindCallback<NewJob>() {
-//                    @Override
-//                    public void done(List<NewJob> list, ParseException e) {
-//
-//                        if (e == null) {
-//
-//                            for (NewJob nj : list) {
-//
-//                                try {
-//                                    nj.delete();
-//                                    nj.unpin();
-//                                } catch (ParseException e1) {
-//                                    e1.printStackTrace();
-//                                }
-//                            }
-//                        }
-//                    }
-//                });
-//
-//                nqQuery.findInBackground(new FindCallback<NewQuote>() {
-//                    @Override
-//                    public void done(List<NewQuote> list, ParseException e) {
-//
-//                        if (e == null) {
-//
-//                            for (NewQuote nq : list) {
-//
-//                                try {
-//                                    nq.delete();
-//                                    nq.unpin();
-//                                } catch (ParseException e1) {
-//                                    e1.printStackTrace();
-//                                }
-//                            }
-//                        }
-//                    }
-//                });
-//
-//                ndQuery.findInBackground(new FindCallback<NewDump>() {
-//                    @Override
-//                    public void done(List<NewDump> list, ParseException e) {
-//
-//                        if (e == null) {
-//
-//                            for (NewDump nd : list) {
-//                                try {
-//                                    nd.delete();
-//                                    nd.unpin();
-//                                } catch (ParseException e1) {
-//                                    e1.printStackTrace();
-//                                }
-//                            }
-//                        }
-//                    }
-//                });
-//
-//                nfQuery.findInBackground(new FindCallback<NewFuel>() {
-//                    @Override
-//                    public void done(List<NewFuel> list, ParseException e) {
-//
-//                        if (e == null) {
-//
-//                            for (NewFuel nf : list) {
-//
-//                                try {
-//                                    nf.delete();
-//                                    nf.unpin();
-//                                } catch (ParseException e1) {
-//                                    e1.printStackTrace();
-//                                }
-//                            }
-//                        }
-//                    }
-//                });
-//
-
-//                hideProgressDialog();
-//                Toast.makeText(CurrentJournal.this, "Journal successfully deleted",
-//                        Toast.LENGTH_SHORT).show();
-//                CurrentJournal.this.finish();
-//
-//            }
-//        });
     }
 
 }

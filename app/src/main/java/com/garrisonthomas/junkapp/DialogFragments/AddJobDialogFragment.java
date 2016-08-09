@@ -39,7 +39,7 @@ public class AddJobDialogFragment extends DialogFragmentHelper {
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-        firebaseJournalRef = preferences.getString("firebaseURL", "none");
+        firebaseJournalRef = preferences.getString("firebaseRef", "none");
 
         etSID = (EditText) v.findViewById(R.id.et_sid);
         etGrossSale = (EditText) v.findViewById(R.id.et_gross_sale);

@@ -9,13 +9,14 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
 import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
-import com.garrisonthomas.junkapp.parseobjects.NewFuel;
-import com.parse.FindCallback;
-import com.parse.ParseQuery;
-
-import java.util.List;
+import com.garrisonthomas.junkapp.parseobjects.FuelObject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -33,7 +34,7 @@ public class ViewFuelDialogFragment extends DialogFragmentHelper {
     Button okBtn;
     @Bind(R.id.btn_delete_fuel)
     ImageButton deleteFuelBtn;
-    public static String currentJournalId, thisFuelID, fuelReceiptNumber;
+    public static String firebaseJournalRef, fuelReceiptNumber;
 
 
     @Override
@@ -56,7 +57,8 @@ public class ViewFuelDialogFragment extends DialogFragmentHelper {
         deleteFuelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                deleteItem(ViewFuelDialogFragment.this, currentJournalId, thisFuelID, getActivity(), "NewFuel");
+                DialogFragmentHelper.deleteItem(ViewFuelDialogFragment.this,
+                        firebaseJournalRef + "/fuel/" + String.valueOf(fuelReceiptNumber));
             }
         });
 
@@ -69,7 +71,7 @@ public class ViewFuelDialogFragment extends DialogFragmentHelper {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         Bundle vfBundle = getArguments();
         fuelReceiptNumber = vfBundle.getString("fuelReceiptNumber");
-        currentJournalId = vfBundle.getString("relatedJournalId");
+        firebaseJournalRef = vfBundle.getString("firebaseJournalRef");
         dialog.setTitle(fuelReceiptNumber);
         dialog.setCanceledOnTouchOutside(false);
 
@@ -78,28 +80,38 @@ public class ViewFuelDialogFragment extends DialogFragmentHelper {
 
     public void populateFuelInfo() {
 
-        ParseQuery<NewFuel> query = ParseQuery.getQuery(NewFuel.class);
-        query.setLimit(1);
-        query.whereEqualTo("relatedJournal", currentJournalId);
-        query.whereEqualTo("fuelReceiptNumber", fuelReceiptNumber);
-        query.fromPin();
-        query.findInBackground(new FindCallback<NewFuel>() {
+        Firebase ref = new Firebase(firebaseJournalRef + "/fuel");
+        Query queryRef = ref.orderByChild("fuelReceiptNumber").equalTo(fuelReceiptNumber);
+        queryRef.addChildEventListener(new ChildEventListener() {
+
             @Override
-            public void done(List<NewFuel> list, com.parse.ParseException e) {
+            public void onChildAdded(DataSnapshot snapshot, String previousChildKey) {
 
-                if (e == null) {
+                FuelObject fuelObject = snapshot.getValue(FuelObject.class);
+                vfVendor.setText(String.valueOf(fuelObject.getFuelVendor()));
+                vfCost.setText("$" + String.valueOf(fuelObject.getFuelCost()));
 
-                    for (NewFuel fuel : list) {
-
-                        thisFuelID = fuel.getObjectId();
-
-                        vfVendor.setText(fuel.getFuelVendor());
-                        vfCost.setText("$" + String.valueOf(fuel.getFuelCost()));
-
-                    }
-                }
             }
 
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
         });
 
     }

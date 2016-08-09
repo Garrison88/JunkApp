@@ -9,13 +9,14 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
 import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
-import com.garrisonthomas.junkapp.parseobjects.NewDump;
-import com.parse.FindCallback;
-import com.parse.ParseQuery;
-
-import java.util.List;
+import com.garrisonthomas.junkapp.parseobjects.DumpObject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -29,8 +30,6 @@ public class ViewDumpDialogFragment extends DialogFragmentHelper {
     TextView vdGross;
     @Bind(R.id.tv_view_dump_tonnage)
     TextView vdTonnage;
-//    @Bind(R.id.tv_view_dump_receipt_number)
-//    TextView vdReceiptNumber;
     @Bind(R.id.tv_view_dump_percent_previous)
     TextView vdPercentPrevious;
     @Bind(R.id.v_d_percent_previous_text)
@@ -39,7 +38,7 @@ public class ViewDumpDialogFragment extends DialogFragmentHelper {
     Button okBtn;
     @Bind(R.id.btn_delete_dump)
     ImageButton deleteDumpBtn;
-    public static String currentJournalId, thisDumpID, dumpName;
+    public static String dumpName, firebaseJournalRef;
     public static int dumpReceiptNumber;
 
 
@@ -66,7 +65,8 @@ public class ViewDumpDialogFragment extends DialogFragmentHelper {
         deleteDumpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                deleteItem(ViewDumpDialogFragment.this, currentJournalId, thisDumpID, getActivity(), "NewDump");
+                deleteItem(ViewDumpDialogFragment.this, firebaseJournalRef + "/dumps/" +
+                        dumpName);
             }
         });
 
@@ -80,7 +80,7 @@ public class ViewDumpDialogFragment extends DialogFragmentHelper {
         Bundle vdBundle = getArguments();
         dumpName = vdBundle.getString("dumpName");
         dumpReceiptNumber = vdBundle.getInt("dumpReceiptNumber");
-        currentJournalId = vdBundle.getString("relatedJournalId");
+        firebaseJournalRef = vdBundle.getString("firebaseJournalRef");
         dialog.setTitle(dumpName);
         dialog.setCanceledOnTouchOutside(false);
 
@@ -89,42 +89,44 @@ public class ViewDumpDialogFragment extends DialogFragmentHelper {
 
     public void populateDumpInfo() {
 
-        ParseQuery<NewDump> query = ParseQuery.getQuery(NewDump.class);
-        query.setLimit(1);
-        query.whereEqualTo("relatedJournal", currentJournalId);
-        query.whereEqualTo("dumpReceiptNumber", dumpReceiptNumber);
-        query.fromPin();
-        query.findInBackground(new FindCallback<NewDump>() {
+        Firebase ref = new Firebase(firebaseJournalRef + "/dumps");
+        Query queryRef = ref.orderByChild("dumpReceiptNumber").equalTo(dumpReceiptNumber);
+        queryRef.addChildEventListener(new ChildEventListener() {
+
             @Override
-            public void done(List<NewDump> list, com.parse.ParseException e) {
+            public void onChildAdded(DataSnapshot snapshot, String previousChildKey) {
 
-                if (e == null) {
-
-                    for (NewDump dump : list) {
-
-                            thisDumpID = dump.getObjectId();
-
-                            String grossCostString = getString(R.string.dollar_sign) + String.valueOf(dump.getGrossCost());
-                            String tonnageString = String.valueOf(dump.getTonnage());
-                            vdGross.setText(grossCostString);
-                            vdTonnage.setText(tonnageString);
-//                            vdReceiptNumber.setText(String.valueOf(dump.getDumpReceiptNumber()));
-                            vdPercentPrevious.setText(String.valueOf(dump.getPercentPrevious()) + "%");
-
-
-                            if (!vdPercentPrevious.getText().equals("0%")) {
-
-                                vdPercentPreviousText.setVisibility(View.VISIBLE);
-                                vdPercentPrevious.setVisibility(View.VISIBLE);
-
-                            }
-
-                    }
+                DumpObject dumpObject = snapshot.getValue(DumpObject.class);
+                vdGross.setText(String.valueOf(dumpObject.getGrossCost()));
+                vdTonnage.setText(String.valueOf(dumpObject.getTonnage()));
+                if (!vdPercentPrevious.getText().equals("0%")) {
+                    vdPercentPrevious.setText(String.valueOf(dumpObject.getPercentPrevious()) + "%");
+                    vdPercentPreviousText.setVisibility(View.VISIBLE);
+                    vdPercentPrevious.setVisibility(View.VISIBLE);
                 }
+
             }
 
-        });
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
     }
 
 }

@@ -117,11 +117,5 @@ public class JobObject {
         }
 
     }
-//
-//    public void setRelatedJournal(String relatedJournal) {
-//
-//        put("relatedJournal", relatedJournal);
-//
-//    }
 
 }

@@ -15,24 +15,14 @@ import android.widget.Toast;
 import com.firebase.client.Firebase;
 import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
-import com.garrisonthomas.junkapp.parseobjects.NewFuel;
+import com.garrisonthomas.junkapp.parseobjects.FuelObject;
 
 public class AddFuelDialogFragment extends DialogFragmentHelper {
 
     private EditText etFuelVendor, etFuelCost, etReceiptNumber;
     private static Button saveFuel, cancelFuel;
-    private String currentJournalId;
+    private String firebaseJournalRef;
     private SharedPreferences preferences;
-    private Firebase fbrFuel;
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,7 +33,7 @@ public class AddFuelDialogFragment extends DialogFragmentHelper {
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-        currentJournalId = preferences.getString("universalJournalId", "none");
+        firebaseJournalRef = preferences.getString("firebaseRef", "none");
 
         etFuelVendor = (EditText) v.findViewById(R.id.et_fuel_vendor);
         etFuelCost = (EditText) v.findViewById(R.id.et_fuel_cost);
@@ -51,7 +41,6 @@ public class AddFuelDialogFragment extends DialogFragmentHelper {
 
         saveFuel = (Button) v.findViewById(R.id.btn_save_fuel);
         cancelFuel = (Button) v.findViewById(R.id.btn_cancel_fuel);
-
 
 
         saveFuel.setOnClickListener(new View.OnClickListener() {
@@ -62,23 +51,19 @@ public class AddFuelDialogFragment extends DialogFragmentHelper {
                         && (!TextUtils.isEmpty(etFuelCost.getText()))
                         && (!TextUtils.isEmpty(etReceiptNumber.getText()))) {
 
-                    NewFuel newFuel = new NewFuel();
-                    newFuel.setRelatedJournal(currentJournalId);
-                    newFuel.setFuelVendor(String.valueOf(etFuelVendor.getText()));
-                    newFuel.setFuelCost(Double.valueOf(String.valueOf(etFuelCost.getText())));
-                    newFuel.setFuelReceiptNumber(String.valueOf(etReceiptNumber.getText()));
+                    Firebase fbrFuel = new Firebase(firebaseJournalRef + "fuel/"
+                            + String.valueOf(etReceiptNumber.getText()));
 
-                    fbrFuel = new Firebase(preferences.getString("firebaseURL", "none") + "/" + "fuel/" +
-                            String.valueOf(etFuelVendor.getText()) + " (" + String.valueOf(etReceiptNumber.getText()) + ")");
+                    FuelObject fuel = new FuelObject();
 
-//                    fbrJob.setValue(newFuel);
+                    fuel.setFuelVendor(String.valueOf(etFuelVendor.getText()));
+                    fuel.setFuelCost(Double.valueOf(String.valueOf(etFuelCost.getText())));
+                    fuel.setFuelReceiptNumber(String.valueOf(etReceiptNumber.getText()));
 
-                    fbrFuel.child("cost").setValue(Double.valueOf(etFuelCost.getText().toString()));
+                    fbrFuel.setValue(fuel);
 
-                    newFuel.saveEventually();
-                    newFuel.pinInBackground();
-
-                    Toast.makeText(getActivity(), "Fuel entry saved", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Fuel entry at " + String.valueOf(etFuelVendor.getText()) +
+                            " saved", Toast.LENGTH_SHORT).show();
 
                     dismiss();
 
