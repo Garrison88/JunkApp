@@ -100,11 +100,11 @@ public class CurrentJournal extends BaseActivity {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        firebaseJournalRef = preferences.getString("firebaseRef", "none");
-        spDriver = preferences.getString("driver", "noDriver");
+        firebaseJournalRef = preferences.getString("firebaseRef", null);
+        spDriver = preferences.getString("driver", null);
         spNavigator = preferences.getString("navigator", "noNavigator");
-        spTruck = preferences.getString("truck", "none");
-        spDate = preferences.getString("todaysDate", "noDate");
+        spTruck = preferences.getString("truck", null);
+        spDate = preferences.getString("todaysDate", null);
 
         getSupportActionBar().setTitle(spDate);
 
@@ -129,7 +129,7 @@ public class CurrentJournal extends BaseActivity {
 
         String crewString = "Driver: " + spDriver + "\n" + "Nav: " + spNavigator;
         todaysCrew.setText(crewString);
-        todaysTruck.setText("Truck #: " + spTruck);
+        todaysTruck.setText("Truck #:" + "\n" + spTruck);
 
 
         Firebase jobs = new Firebase(firebaseJournalRef + "jobs");
@@ -531,12 +531,12 @@ public class CurrentJournal extends BaseActivity {
             public void onComplete(FirebaseError firebaseError, Firebase firebase) {
 
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putString("universalJournalId", "none");
-                editor.putString("firebaseRef", "none");
-                editor.putString("driver", "noDriver");
+                editor.putString("universalJournalId", null);
+                editor.putString("firebaseRef", null);
+                editor.putString("driver", null);
                 editor.putString("navigator", "noNavigator");
-                editor.putString("truck", "noTruck");
-                editor.putString("date", "noDate");
+                editor.putString("truck", null);
+                editor.putString("date", null);
                 editor.apply();
 
                 hideProgressDialog();

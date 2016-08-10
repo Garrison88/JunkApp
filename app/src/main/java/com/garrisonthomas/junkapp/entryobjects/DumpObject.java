@@ -1,4 +1,4 @@
-package com.garrisonthomas.junkapp.parseobjects;
+package com.garrisonthomas.junkapp.entryobjects;
 
 /**
  * Created by Garrison on 2016-08-08.

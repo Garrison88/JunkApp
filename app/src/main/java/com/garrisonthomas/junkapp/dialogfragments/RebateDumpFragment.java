@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.garrisonthomas.junkapp.R;
-import com.garrisonthomas.junkapp.parseobjects.NewDump;
 
 /**
  * Created by Garrison on 2016-07-04.
@@ -113,9 +112,9 @@ public class RebateDumpFragment extends Fragment {
                         || (!TextUtils.isEmpty(etRebateAmount.getText())))
                         && (!TextUtils.isEmpty(etRebateReceiptNumber.getText()))) {
 //
-                    NewDump newDump = new NewDump();
-                    newDump.setRelatedJournal(currentJournalId);
-                    newDump.setDumpName(rebateLocationString);
+//                    NewDump newDump = new NewDump();
+//                    newDump.setRelatedJournal(currentJournalId);
+//                    newDump.setDumpName(rebateLocationString);
 //                    newDump.setGrossCost(result);
 //                    newDump.setTonnage(resultWithTax);
 //                    newDump.setDumpReceiptNumber(Integer.valueOf(etDumpReceiptNumber.getText().toString()));

@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.garrisonthomas.junkapp.R;
-import com.garrisonthomas.junkapp.parseobjects.DumpObject;
+import com.garrisonthomas.junkapp.entryobjects.DumpObject;
 
 public class GarbageDumpFragment extends Fragment {
 

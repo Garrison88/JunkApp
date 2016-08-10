@@ -161,11 +161,11 @@ public class EndOfDayDialogFragment extends DialogFragmentHelper {
             @Override
             public void onComplete(FirebaseError firebaseError, Firebase firebase) {
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putString("firebaseRef", "none");
-                editor.putString("driver", "noDriver");
+                editor.putString("firebaseRef", null);
+                editor.putString("driver", null);
                 editor.putString("navigator", "noNavigator");
-                editor.putString("truck", "none");
-                editor.putString("date", "noDate");
+                editor.putString("truck", null);
+                editor.putString("date", null);
                 editor.apply();
                 Toast.makeText(getActivity(), "Journal successfully archived",
                         Toast.LENGTH_SHORT).show();

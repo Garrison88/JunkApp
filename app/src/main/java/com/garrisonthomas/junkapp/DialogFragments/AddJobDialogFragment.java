@@ -19,7 +19,7 @@ import com.firebase.client.Firebase;
 import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
-import com.garrisonthomas.junkapp.parseobjects.JobObject;
+import com.garrisonthomas.junkapp.entryobjects.JobObject;
 
 public class AddJobDialogFragment extends DialogFragmentHelper {
 

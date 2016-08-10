@@ -16,7 +16,7 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
 import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
-import com.garrisonthomas.junkapp.parseobjects.JobObject;
+import com.garrisonthomas.junkapp.entryobjects.JobObject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

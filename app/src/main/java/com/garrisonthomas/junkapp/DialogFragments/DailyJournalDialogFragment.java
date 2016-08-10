@@ -25,7 +25,7 @@ import com.garrisonthomas.junkapp.CurrentJournal;
 import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
-import com.garrisonthomas.junkapp.parseobjects.DailyJournalObject;
+import com.garrisonthomas.junkapp.entryobjects.DailyJournalObject;
 
 public class DailyJournalDialogFragment extends DialogFragmentHelper {
 

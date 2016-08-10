@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.firebase.client.Firebase;
 import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
-import com.garrisonthomas.junkapp.parseobjects.FuelObject;
+import com.garrisonthomas.junkapp.entryobjects.FuelObject;
 
 public class AddFuelDialogFragment extends DialogFragmentHelper {
 

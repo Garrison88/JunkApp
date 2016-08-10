@@ -3,7 +3,6 @@ package com.garrisonthomas.junkapp.dialogfragments;
 import android.app.Dialog;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +12,6 @@ import android.widget.TextView;
 
 import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
-import com.garrisonthomas.junkapp.parseobjects.NewQuote;
-import com.parse.FindCallback;
-import com.parse.ParseQuery;
-
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -43,7 +37,6 @@ public class ViewQuoteDialogFragment extends DialogFragmentHelper {
     ImageButton deleteQuoteBtn;
     private static int vqSID;
     public static String currentJournalId;
-    public static String thisQuoteId;
 
 
     @Override
@@ -95,42 +88,42 @@ public class ViewQuoteDialogFragment extends DialogFragmentHelper {
 
     public void populateQuoteInfo() {
 
-        ParseQuery<NewQuote> query = ParseQuery.getQuery(NewQuote.class);
-        query.setLimit(1);
-        query.whereEqualTo("relatedJournal", currentJournalId);
-        query.whereEqualTo("quoteSID", vqSID);
-        query.fromPin();
-        query.findInBackground(new FindCallback<NewQuote>() {
-            @Override
-            public void done(List<NewQuote> list, com.parse.ParseException e) {
-
-                if (e == null) {
-
-                    for (NewQuote quote : list) {
-
-                        if (isAdded()) {
-
-                            thisQuoteId = quote.getObjectId();
-                            String lowEndString = getString(R.string.dollar_sign) + quote.getLowEnd();
-                            String highEndString = getString(R.string.dollar_sign) + quote.getHighEnd();
-                            String startEndTime = quote.getQuoteStartTime() + " - " + quote.getQuoteEndTime();
-                            vqLowEnd.setText(lowEndString);
-                            vqHighEnd.setText(highEndString);
-                            vqTime.setText(startEndTime);
-                            vqNotes.setText(quote.getQuoteNotes());
-
-                            if (!TextUtils.isEmpty(vqNotes.getText())) {
-
-                                tvQuoteNotesDisplay.setVisibility(View.VISIBLE);
-                                vqNotes.setVisibility(View.VISIBLE);
-
-                            }
-                        }
-                    }
-                }
-            }
-
-        });
+//        ParseQuery<NewQuote> query = ParseQuery.getQuery(NewQuote.class);
+//        query.setLimit(1);
+//        query.whereEqualTo("relatedJournal", currentJournalId);
+//        query.whereEqualTo("quoteSID", vqSID);
+//        query.fromPin();
+//        query.findInBackground(new FindCallback<NewQuote>() {
+//            @Override
+//            public void done(List<NewQuote> list, com.parse.ParseException e) {
+//
+//                if (e == null) {
+//
+//                    for (NewQuote quote : list) {
+//
+//                        if (isAdded()) {
+//
+//                            thisQuoteId = quote.getObjectId();
+//                            String lowEndString = getString(R.string.dollar_sign) + quote.getLowEnd();
+//                            String highEndString = getString(R.string.dollar_sign) + quote.getHighEnd();
+//                            String startEndTime = quote.getQuoteStartTime() + " - " + quote.getQuoteEndTime();
+//                            vqLowEnd.setText(lowEndString);
+//                            vqHighEnd.setText(highEndString);
+//                            vqTime.setText(startEndTime);
+//                            vqNotes.setText(quote.getQuoteNotes());
+//
+//                            if (!TextUtils.isEmpty(vqNotes.getText())) {
+//
+//                                tvQuoteNotesDisplay.setVisibility(View.VISIBLE);
+//                                vqNotes.setVisibility(View.VISIBLE);
+//
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//
+//        });
     }
 
 }
