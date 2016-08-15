@@ -80,7 +80,7 @@ public class AddQuoteDialogFragment extends DialogFragmentHelper {
                         quote.setHighEnd(0);
                     }
                     if (!TextUtils.isEmpty(etQuoteNotes.getText())){
-                        fbrQuote.child("notes").setValue(String.valueOf(etQuoteNotes.getText()));
+                        quote.setQuoteNotes(String.valueOf(etQuoteNotes.getText()));
                     }
 
                     fbrQuote.setValue(quote);

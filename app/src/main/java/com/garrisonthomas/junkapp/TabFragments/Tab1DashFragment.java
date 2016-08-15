@@ -2,10 +2,8 @@ package com.garrisonthomas.junkapp.tabfragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -34,6 +32,12 @@ public class Tab1DashFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        manager = getActivity().getSupportFragmentManager();
+        djFragment = new DailyJournalDialogFragment();
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+        firebaseJournalRef = preferences.getString("firebaseRef", "none");
+
     }
 
     FragmentManager manager;
@@ -42,26 +46,21 @@ public class Tab1DashFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.tab1_journal_layout, container, false);
 
-        preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-        firebaseJournalRef = preferences.getString("firebaseRef", "none");
+        final View v = inflater.inflate(R.layout.tab1_journal_layout, container, false);
 
         openJournal = (Button) v.findViewById(R.id.btn_open_journal);
 
-        manager = getActivity().getSupportFragmentManager();
-        djFragment = new DailyJournalDialogFragment();
-
-        final View coordinatorLayoutView = v.findViewById(R.id.snackbar_create_journal);
+//        final View coordinatorLayoutView = v.findViewById(R.id.snackbar_create_journal);
 
         //handle snackbar clicks for create journal
-        final View.OnClickListener createJournalClickListener = new View.OnClickListener() {
-            public void onClick(View v) {
-
-                djFragment.show(manager, "Dialog");
-
-            }
-        };
+//        final View.OnClickListener createJournalClickListener = new View.OnClickListener() {
+//            public void onClick(View v) {
+//
+//                djFragment.show(manager, "Dialog");
+//
+//            }
+//        };
 
         openJournal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,11 +68,13 @@ public class Tab1DashFragment extends Fragment {
 
                 if (firebaseJournalRef.equals("none") && auth.getCurrentUser() != null) {
 
-                    Snackbar
-                            .make(coordinatorLayoutView, "No journal available", Snackbar.LENGTH_LONG)
-                            .setActionTextColor(Color.CYAN)
-                            .setAction("CREATE", createJournalClickListener)
-                            .show();
+                    djFragment.show(manager, "Dialog");
+
+//                    Snackbar
+//                            .make(coordinatorLayoutView, "No journal available", Snackbar.LENGTH_LONG)
+//                            .setActionTextColor(Color.CYAN)
+//                            .setAction("CREATE", createJournalClickListener)
+//                            .show();
                 } else if (!firebaseJournalRef.equals("none") && auth.getCurrentUser() != null) {
 
                     Intent intent = new Intent(getActivity(), CurrentJournal.class);
@@ -97,6 +98,12 @@ public class Tab1DashFragment extends Fragment {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
         firebaseJournalRef = preferences.getString("firebaseRef", "none");
+
+        if (firebaseJournalRef.equals("none")) {
+            openJournal.setText("Create Journal");
+        } else if (!firebaseJournalRef.equals("none")){
+            openJournal.setText("Open Journal");
+        }
 
     }
 

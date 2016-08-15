@@ -1,7 +1,6 @@
 package com.garrisonthomas.junkapp;
 
 
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -43,25 +42,6 @@ public class DialogFragmentHelper extends DialogFragment {
 
     }
 
-    public ProgressDialog mProgressDialog;
-
-    public void showProgressDialog(String message) {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(getActivity());
-            mProgressDialog.setMessage(message);
-            mProgressDialog.setIndeterminate(true);
-            mProgressDialog.setCancelable(false);
-        }
-
-        mProgressDialog.show();
-    }
-
-    public void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        }
-    }
-
     public static void deleteItem(final DialogFragment df, final String firebaseRef) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(df.getActivity());
@@ -73,7 +53,7 @@ public class DialogFragmentHelper extends DialogFragment {
 
                         Firebase ref = new Firebase(firebaseRef);
                         ref.removeValue();
-                        Toast.makeText(df.getActivity(), "Item deleted", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(df.getActivity(), "Entry deleted", Toast.LENGTH_SHORT).show();
                         df.dismiss();
 
                     }
@@ -87,12 +67,6 @@ public class DialogFragmentHelper extends DialogFragment {
         AlertDialog alert = builder.create();
         alert.show();
 
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        hideProgressDialog();
     }
 
 }

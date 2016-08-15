@@ -1,6 +1,5 @@
 package com.garrisonthomas.junkapp;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -52,29 +51,6 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public ProgressDialog mProgressDialog;
-
-    public void showProgressDialog(String message) {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage(message);
-            mProgressDialog.setIndeterminate(true);
-        }
-
-        mProgressDialog.show();
-    }
-
-    public void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        hideProgressDialog();
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -140,13 +116,13 @@ public class BaseActivity extends AppCompatActivity {
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         public void onComplete(@NonNull Task<Void> task) {
 
-                            // set menu item to "Sign Out"
+                            // set menu item to "Logout"
 
                             MenuItem loginLogout = menu.findItem(R.id.action_login_logout);
 
                             loginLogout.setTitle("Logout");
 
-                            // user is now signed out
+                            // user is now logged out
                             Toast.makeText(BaseActivity.this, "Successfully logged out", Toast.LENGTH_SHORT).show();
                             finish();
                             startActivity(new Intent(BaseActivity.this, TabsViewPagerActivity.class));

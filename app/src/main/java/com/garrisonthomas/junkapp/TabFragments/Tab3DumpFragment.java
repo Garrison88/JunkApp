@@ -25,12 +25,6 @@ import com.garrisonthomas.junkapp.Utils;
 
 public class Tab3DumpFragment extends Fragment {
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
     private static Spinner dumpsSpinner;
     private static Button infoBtn, dirBtn, calcBtn, dumpsClearBtn, addHSTButton;
     private static EditText etWeight;
@@ -39,7 +33,6 @@ public class Tab3DumpFragment extends Fragment {
     private static int selectedDumpRate;
     private static TextView tvDumpCost;
     private static String selectedDumpInfo, withTaxString, selectedDumpName;
-    private static double weightNumber, result, withTax;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
@@ -79,34 +72,34 @@ public class Tab3DumpFragment extends Fragment {
                 dirBtn.setOnClickListener(new View.OnClickListener() {
 
                     public void onClick(View v) {
-                            Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                                    Uri.parse(dir));
-                            startActivity(intent);
+                        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                                Uri.parse(dir));
+                        startActivity(intent);
                     }
                 });
 
                 infoBtn.setOnClickListener(new View.OnClickListener() {
 
                     public void onClick(View v) {
-                            new AlertDialog.Builder(getActivity())
-                                    .setTitle(selectedDumpName)
-                                    .setMessage(selectedDumpInfo)
-                                    .setPositiveButton("Call", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
+                        new AlertDialog.Builder(getActivity())
+                                .setTitle(selectedDumpName)
+                                .setMessage(selectedDumpInfo)
+                                .setPositiveButton("Call", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
 
-                                            Uri number = Uri.parse("tel:"+dumpPhoneNumberArray[position]);
-                                            Intent callIntent = new Intent(Intent.ACTION_DIAL, number);
-                                            startActivity(callIntent);
+                                        Uri number = Uri.parse("tel:" + dumpPhoneNumberArray[position]);
+                                        Intent callIntent = new Intent(Intent.ACTION_DIAL, number);
+                                        startActivity(callIntent);
 
-                                        }
-                                    })
-                                    .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            // close dialog
-                                        }
-                                    })
-                                    .show();
+                                    }
+                                })
+                                .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // close dialog
+                                    }
+                                })
+                                .show();
 
                     }
                 });
@@ -120,22 +113,22 @@ public class Tab3DumpFragment extends Fragment {
                             // close keyboard
                             View view = getActivity().getCurrentFocus();
                             if (view != null) {
-                                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                             }
 
-                                weightNumber = Double.parseDouble(etWeight.getText().toString());
-                                weightNumber = weightNumber / 1000;
+                            float weightInTonnes = Float.valueOf(etWeight.getText().toString());
 
-                                result = Math.round((weightNumber * selectedDumpRate) * 100.00) / 100.00;
-                                withTax = Utils.calculateTax(result);
+                            double result = Utils.calculateDump(selectedDumpRate, weightInTonnes, dumpsSpinner);
 
-                                String resultString = String.valueOf(result);
-                                withTaxString = String.valueOf(withTax);
+                            double withTax = Utils.calculateTax(result);
 
-                                tvDumpCost.setText("$" + resultString);
+                            String resultString = "$" + String.valueOf(result);
+                            withTaxString = String.valueOf(withTax);
 
-                                etWeight.setText("");
+                            tvDumpCost.setText(resultString);
+
+                            etWeight.setText("");
 
                         } else {
 

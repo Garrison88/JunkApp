@@ -2,6 +2,7 @@ package com.garrisonthomas.junkapp.dialogfragments;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,6 +77,12 @@ public class ViewJobDialogFragment extends DialogFragmentHelper {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         Dialog dialog = super.onCreateDialog(savedInstanceState);
@@ -90,7 +97,7 @@ public class ViewJobDialogFragment extends DialogFragmentHelper {
 
     public void populateJobInfo() {
 
-        Firebase ref = new Firebase(firebaseJournalRef + "/jobs");
+        Firebase ref = new Firebase(firebaseJournalRef + "jobs");
         Query queryRef = ref.orderByChild("sid").equalTo(vjSID);
         queryRef.addChildEventListener(new ChildEventListener() {
 

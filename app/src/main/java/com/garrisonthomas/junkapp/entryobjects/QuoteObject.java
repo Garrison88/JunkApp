@@ -54,6 +54,8 @@ public class QuoteObject {
     }
 
     public void setQuoteNotes(String quoteNotes) {
-        this.quoteNotes = quoteNotes;
+        if (!quoteNotes.equals("")) {
+            this.quoteNotes = quoteNotes;
+        }
     }
 }

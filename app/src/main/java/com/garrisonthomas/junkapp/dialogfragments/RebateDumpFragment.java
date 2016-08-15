@@ -28,9 +28,8 @@ public class RebateDumpFragment extends Fragment {
     private static String[] materialTypeArray, rebateLocationArray;
     private static int[] materialRebateArray;
     private static int pricePerTonne;
-    private static String materialNameString, rebateLocationString, currentJournalId;
+    private static String materialNameString, rebateLocationString, firebaseJournalRef;
     private SharedPreferences preferences;
-
 
 
     @Override
@@ -40,7 +39,7 @@ public class RebateDumpFragment extends Fragment {
         final View v = inflater.inflate(R.layout.add_rebate_dump_layout, container, false);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        currentJournalId = preferences.getString("universalJournalId", "none");
+        firebaseJournalRef = preferences.getString("firebaseRef", "none");
 
         etRebateWeight = (EditText) v.findViewById(R.id.et_rebate_weight);
         etRebateAmount = (EditText) v.findViewById(R.id.et_rebate_amount);
@@ -111,30 +110,9 @@ public class RebateDumpFragment extends Fragment {
                 if ((!TextUtils.isEmpty(etRebateWeight.getText())
                         || (!TextUtils.isEmpty(etRebateAmount.getText())))
                         && (!TextUtils.isEmpty(etRebateReceiptNumber.getText()))) {
-//
-//                    NewDump newDump = new NewDump();
-//                    newDump.setRelatedJournal(currentJournalId);
-//                    newDump.setDumpName(rebateLocationString);
-//                    newDump.setGrossCost(result);
-//                    newDump.setTonnage(resultWithTax);
-//                    newDump.setDumpReceiptNumber(Integer.valueOf(etDumpReceiptNumber.getText().toString()));
-//                    if (!TextUtils.isEmpty(etPercentPrevious.getText())) {
-//                        newDump.setPercentPrevious(Integer.valueOf(etPercentPrevious.getText().toString()));
-//                    } else {
-//                        newDump.setPercentPrevious(0);
-//                    }
-//
-//                    newDump.pinInBackground();
-//                    newDump.saveEventually();
-//
-//                    Toast.makeText(getActivity(), "Dump at " + dumpNameString + " saved", Toast.LENGTH_SHORT).show();
-//
+
                     getActivity().finish();
-//
-//                } else {
-//
-//                    Toast.makeText(getActivity(), "Please fill all required fields", Toast.LENGTH_SHORT).show();
-//
+
                 }
             }
         });

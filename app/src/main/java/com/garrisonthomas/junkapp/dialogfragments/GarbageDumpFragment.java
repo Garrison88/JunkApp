@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.garrisonthomas.junkapp.R;
+import com.garrisonthomas.junkapp.Utils;
 import com.garrisonthomas.junkapp.entryobjects.DumpObject;
 
 public class GarbageDumpFragment extends Fragment {
@@ -31,7 +32,7 @@ public class GarbageDumpFragment extends Fragment {
     private static String[] dumpNameArray;
     private static int[] dumpRateArray;
     private static int pricePerTonne;
-    private static double result, weightInTonnes;
+    private static double result;
     private static String dumpNameString, firebaseJournalRef;
     private static LinearLayout dumpCostLayout;
     private SharedPreferences preferences;
@@ -94,55 +95,12 @@ public class GarbageDumpFragment extends Fragment {
 
                 if (!TextUtils.isEmpty(etAddDumpWeight.getText())) {
 
-                    weightInTonnes = Double.parseDouble(String.valueOf(etAddDumpWeight.getText()));
+                    float weightInTonnes = Float.valueOf(etAddDumpWeight.getText().toString());
 
-                    switch (dumpNameSpinner.getSelectedItemPosition()) {
-//                        Cherry
-                        case 1:
-//                        GFL Pickering
-                        case 7:
-//                        GFL Etobicoke
-                        case 8:
-//                        GFL Mississauga
-                        case 9:
-                            if (weightInTonnes <= .48) {
-                                result = 40;
-                            } else {
-                                result = Math.round((GarbageDumpFragment.weightInTonnes * pricePerTonne) * 100.00) / 100.00;
-                            }
-                            break;
-//                        Shorncliffe
-                        case 2:
-                            if (weightInTonnes <= .38) {
-                                result = 25;
-                            } else {
-                                result = Math.round((GarbageDumpFragment.weightInTonnes * pricePerTonne) * 100.00) / 100.00;
-                            }
-                            break;
-//                        Fenmar
-                        case 3:
-                            if (weightInTonnes <= .52) {
-                                result = 40;
-                            } else {
-                                result = Math.round((GarbageDumpFragment.weightInTonnes * pricePerTonne) * 100.00) / 100.00;
-                            }
-                            break;
-//                        Tor-Can
-                        case 14:
-                            if (weightInTonnes <= .82) {
-                                result = 65;
-                            } else {
-                                result = Math.round((GarbageDumpFragment.weightInTonnes * pricePerTonne) * 100.00) / 100.00;
-                            }
-                            break;
-                        default:
-                            result = Math.round((GarbageDumpFragment.weightInTonnes * pricePerTonne) * 100.00) / 100.00;
-                            break;
-                    }
-
-                    String resultString = String.valueOf(result);
+                    result = Utils.calculateDump(pricePerTonne, weightInTonnes, dumpNameSpinner);
 
                     dumpCostLayout.setVisibility(View.VISIBLE);
+                    String resultString = "$" + String.valueOf(result);
                     tvGrossCost.setText(resultString);
 
 
@@ -168,8 +126,8 @@ public class GarbageDumpFragment extends Fragment {
                     DumpObject dump = new DumpObject();
 
                     dump.setDumpName(dumpNameString);
-                    dump.setGrossCost(Double.valueOf(tvGrossCost.getText().toString()));
-                    dump.setTonnage(weightInTonnes);
+                    dump.setGrossCost(result);
+                    dump.setTonnage(Float.valueOf(etAddDumpWeight.getText().toString()));
                     dump.setDumpReceiptNumber(Integer.valueOf(etDumpReceiptNumber.getText().toString()));
                     if (!TextUtils.isEmpty(etPercentPrevious.getText())){
                         dump.setPercentPrevious(Integer.valueOf(etPercentPrevious.getText().toString()));

@@ -1,78 +1,198 @@
 package com.garrisonthomas.junkapp;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+
 import java.util.ArrayList;
 import java.util.Calendar;
-
-//import com.garrisonthomas.junkapp.parseobjects.NewDump;
-//import com.garrisonthomas.junkapp.parseobjects.NewFuel;
-//import com.garrisonthomas.junkapp.parseobjects.NewQuote;
 
 /**
  * Created by GarrisonThomas on 2015-10-08.
  */
 public abstract class Utils {
 
-    public static void populateJobSpinner(final Context context,
-                                          final ArrayList<Integer> jobsArray, final Spinner jobsSpinner) {
+    public static ProgressDialog mProgressDialog;
+
+    public static void populateIntegerSpinner(final Context context, final Firebase firebase,
+                                          final ArrayList<Integer> arrayList, final Spinner spinner) {
+
+        firebase.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot snapshot, String previousChild) {
+
+                arrayList.add(Integer.valueOf(snapshot.getKey()));
+
+                ArrayAdapter<Integer> adapter = new ArrayAdapter<>(context,
+                        android.R.layout.simple_spinner_item, arrayList);
+                adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+                spinner.setAdapter(adapter);
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                arrayList.remove(Integer.valueOf(dataSnapshot.getKey()));
+
+                ArrayAdapter<Integer> adapter = new ArrayAdapter<>(context,
+                        android.R.layout.simple_spinner_item, arrayList);
+                adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+                spinner.setAdapter(adapter);
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
 
     }
 
-//    public static void populateQuoteSpinner(final Context context, String currentJournalId,
-//                                            final ArrayList<Integer> quotesArray, final Spinner quotesSpinner) {
-//
-//        ParseQuery<NewQuote> query = ParseQuery.getQuery(NewQuote.class);
-//        query.whereEqualTo("relatedJournal", currentJournalId);
-//        query.orderByAscending("createdAt");
-//        query.fromPin();
-//        query.findInBackground(new FindCallback<NewQuote>() {
-//            @Override
-//            public void done(List<NewQuote> list, com.parse.ParseException e) {
-//
-//                if (e == null) {
-//
-//                    for (NewQuote quote : list) {
-//
-//                        quotesArray.add(quote.getQuoteSID());
-//
-//                    }
-//
-//                    ArrayAdapter<Integer> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, quotesArray);
-//                    adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-//                    quotesSpinner.setAdapter(adapter);
-//
-//
-//                } else {
-//                    Toast.makeText(context, "Something went wrong: " + e, Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//        });
-//
-//    }
 
-    public static void populateDumpSpinner(final Context context, String currentJournalId,
-                                           final ArrayList<String> dumpsArray, final Spinner dumpsSpinner) {
+    public static void populateStringSpinner(final Context context, final Firebase firebase,
+                                             final ArrayList<String> arrayList, final Spinner spinner) {
 
+        firebase.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot snapshot, String previousChild) {
+
+                arrayList.add(snapshot.getKey());
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(context,
+                        android.R.layout.simple_spinner_item, arrayList);
+                adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+                spinner.setAdapter(adapter);
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                arrayList.remove(dataSnapshot.getKey());
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(context,
+                        android.R.layout.simple_spinner_item, arrayList);
+                adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+                spinner.setAdapter(adapter);
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+    }
+
+    public static void showProgressDialog(Context context, String message) {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(context);
+            mProgressDialog.setMessage(message);
+            mProgressDialog.setIndeterminate(true);
+        }
+
+        if(!((Activity) context).isFinishing())
+        {
+            mProgressDialog.show();
+        }
 
 
     }
 
-    public static void populateFuelSpinner(final Context context, String currentJournalId,
-                                           final ArrayList<String> fuelArray, final Spinner fuelSpinner) {
-
-
-
+    public static void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
     }
 
     public static double calculateTax(double grossSale) {
         return Math.round((grossSale * 1.13) * 100.00) / 100.00;
+    }
+
+    public static double calculateDump (int pricePerTonne,
+                                        float weightInTonnes, Spinner spinner) {
+
+        double result;
+
+        switch (spinner.getSelectedItemPosition()) {
+//                        Cherry
+            case 1:
+//                        GFL Pickering
+            case 7:
+//                        GFL Etobicoke
+            case 8:
+//                        GFL Mississauga
+            case 9:
+                if (weightInTonnes <= .48) {
+                    result = 40;
+                } else {
+                    result = Math.round((weightInTonnes * pricePerTonne) * 100.00) / 100.00;
+                }
+                break;
+//                        Shorncliffe
+            case 2:
+                if (weightInTonnes <= .38) {
+                    result = 25;
+                }
+                else {
+                    result = Math.round((weightInTonnes * pricePerTonne) * 100.00) / 100.00;
+                }
+                break;
+//                        Fenmar
+            case 3:
+                if (weightInTonnes <= .52) {
+                    result = 40;
+                } else {
+                    result = Math.round((weightInTonnes * pricePerTonne) * 100.00) / 100.00;
+                }
+                break;
+//                        Tor-Can
+            case 14:
+                if (weightInTonnes <= .82) {
+                    result = 65;
+                } else {
+                    result = Math.round((weightInTonnes * pricePerTonne) * 100.00) / 100.00;
+                }
+                break;
+            default:
+                result = Math.round((weightInTonnes * pricePerTonne) * 100.00) / 100.00;
+                break;
+        }
+
+        return result;
+
     }
 
     public static void chooseTime(Context context, final Button button) {

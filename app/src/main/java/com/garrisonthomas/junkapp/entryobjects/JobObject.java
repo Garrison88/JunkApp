@@ -8,7 +8,7 @@ public class JobObject {
 
     private int SID, receiptNumber;
     private double grossSale, netSale;
-    private String startTime, endTime, payType, jobNotes, fireBaseReference;
+    private String startTime, endTime, payType, jobNotes;
 
     public JobObject() {
 
@@ -60,12 +60,6 @@ public class JobObject {
     public String getJobNotes() {
 
         return jobNotes;
-
-    }
-
-    public String getFireBaseReference() {
-
-        return fireBaseReference;
 
     }
 

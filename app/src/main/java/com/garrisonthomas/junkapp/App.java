@@ -14,12 +14,5 @@ public class App extends Application {
         Firebase.setAndroidContext(this);
         Firebase.getDefaultConfig().setPersistenceEnabled(true);
 
-//        Parse.initialize(new Parse.Configuration.Builder(this)
-//                .applicationId("gTmFRethcBdeRGLimnNH5pYCdgmxeeMS9EzEdzj3")
-//                .clientKey(null)
-//                .server("http://ridofit.herokuapp.com/parse/") // The trailing slash is important.
-//                .enableLocalDataStore()
-//                .build()
-//        );
     }
 }

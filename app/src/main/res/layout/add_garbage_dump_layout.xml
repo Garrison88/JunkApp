@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:theme="@style/CustomDialog"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:fadeScrollbars="false"
@@ -56,23 +57,21 @@
                 android:visibility="gone">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_gravity="center">
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_horizontal"
-                        android:text="Gross Cost" />
+                        android:layout_height="wrap_content"
+                        android:text="Gross Cost:" />
 
                     <TextView
                         android:id="@+id/tv_dump_gross_cost"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal" />
+                        android:layout_weight="1"/>
 
                 </LinearLayout>
 

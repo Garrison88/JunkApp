@@ -89,7 +89,7 @@ public class ViewDumpDialogFragment extends DialogFragmentHelper {
 
     public void populateDumpInfo() {
 
-        Firebase ref = new Firebase(firebaseJournalRef + "/dumps");
+        Firebase ref = new Firebase(firebaseJournalRef + "dumps");
         Query queryRef = ref.orderByChild("dumpReceiptNumber").equalTo(dumpReceiptNumber);
         queryRef.addChildEventListener(new ChildEventListener() {
 
@@ -97,9 +97,9 @@ public class ViewDumpDialogFragment extends DialogFragmentHelper {
             public void onChildAdded(DataSnapshot snapshot, String previousChildKey) {
 
                 DumpObject dumpObject = snapshot.getValue(DumpObject.class);
-                vdGross.setText(String.valueOf(dumpObject.getGrossCost()));
+                vdGross.setText("$" + String.valueOf(dumpObject.getGrossCost()));
                 vdTonnage.setText(String.valueOf(dumpObject.getTonnage()));
-                if (!vdPercentPrevious.getText().equals("0%")) {
+                if (dumpObject.getPercentPrevious() != 0) {
                     vdPercentPrevious.setText(String.valueOf(dumpObject.getPercentPrevious()) + "%");
                     vdPercentPreviousText.setVisibility(View.VISIBLE);
                     vdPercentPrevious.setVisibility(View.VISIBLE);

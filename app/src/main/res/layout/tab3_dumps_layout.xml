@@ -62,7 +62,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:hint="Enter Weight (kg)"
+                android:hint="Enter Weight (mt)"
                 android:inputType="numberDecimal" />
 
             <Button

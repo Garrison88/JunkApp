@@ -21,7 +21,6 @@ public class TabsViewPagerActivity extends BaseActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    Menu menu;
 
     protected void onCreate(Bundle savedInstanceState) {
 

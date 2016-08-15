@@ -13,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -23,6 +22,7 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
 import com.garrisonthomas.junkapp.dialogfragments.AddFuelDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.AddJobDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.AddQuoteDialogFragment;
@@ -32,6 +32,7 @@ import com.garrisonthomas.junkapp.dialogfragments.ViewDumpDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.ViewFuelDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.ViewJobDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.ViewQuoteDialogFragment;
+import com.garrisonthomas.junkapp.entryobjects.JobObject;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
@@ -42,7 +43,7 @@ import java.util.regex.Pattern;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class CurrentJournal extends BaseActivity {
+public class CurrentJournal extends BaseActivity implements View.OnClickListener {
 
     @Bind(R.id.app_bar)
     Toolbar toolbar;
@@ -76,15 +77,21 @@ public class CurrentJournal extends BaseActivity {
     Spinner dumpsSpinner;
     @Bind(R.id.fuel_spinner)
     Spinner fuelSpinner;
+    @Bind(R.id.tv_total_income)
+    TextView tvTotalIncome;
+    @Bind(R.id.tv_percent_of_goal)
+    TextView tvPercentOfGoal;
 
-    String firebaseJournalRef, spDriver, spNavigator, spDate, dumpSpinnerText, fuelReceiptNumber, spTruck;
+    private String firebaseJournalRef, spDriver, spNavigator, spDate,
+            dumpSpinnerText, fuelReceiptNumber, spTruck;
 
-    int selectedJobSID, selectedQuoteSID, dumpReceiptNumber;
+    private int selectedJobSID, selectedQuoteSID, dumpReceiptNumber,
+            percentOfGoal, totalGrossProfit;
 
-    private ArrayList<Integer> jobsArray;
-    private ArrayList<Integer> quotesArray;
-    private ArrayList<String> dumpsArray;
-    private ArrayList<String> fuelArray;
+    private ArrayList<Integer> jobsArray = new ArrayList<>();
+    private ArrayList<Integer> quotesArray = new ArrayList<>();
+    private ArrayList<String> dumpsArray = new ArrayList<>();
+    private ArrayList<String> fuelArray = new ArrayList<>();
 
     private static SharedPreferences preferences;
 
@@ -106,7 +113,21 @@ public class CurrentJournal extends BaseActivity {
         spTruck = preferences.getString("truck", null);
         spDate = preferences.getString("todaysDate", null);
 
-        getSupportActionBar().setTitle(spDate);
+        viewJob.setOnClickListener(this);
+        viewQuote.setOnClickListener(this);
+        viewDump.setOnClickListener(this);
+        viewFuel.setOnClickListener(this);
+        addJob.setOnClickListener(this);
+        addQuote.setOnClickListener(this);
+        addDump.setOnClickListener(this);
+        addFuel.setOnClickListener(this);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(spDate);
+        }
+        if (user != null) {
+            getSupportActionBar().setSubtitle(user.getEmail());
+        }
 
         toolbar.setNavigationIcon(ContextCompat.getDrawable(this, R.drawable.ic_arrow_back_white_24dp));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -116,116 +137,32 @@ public class CurrentJournal extends BaseActivity {
             }
         });
 
-        jobsArray = new ArrayList<>();
-        quotesArray = new ArrayList<>();
-        dumpsArray = new ArrayList<>();
-        fuelArray = new ArrayList<>();
-
-        // Populate the various spinners with the available entries
-
-//        Utils.populateQuoteSpinner(this, currentJournalId, quotesArray, quotesSpinner);
-//        Utils.populateDumpSpinner(this, currentJournalId, dumpsArray, dumpsSpinner);
-//        Utils.populateFuelSpinner(this, currentJournalId, fuelArray, fuelSpinner);
-
         String crewString = "Driver: " + spDriver + "\n" + "Nav: " + spNavigator;
         todaysCrew.setText(crewString);
-        todaysTruck.setText("Truck #:" + "\n" + spTruck);
+        String truckString = "Truck #:" + "\n" + spTruck;
+        todaysTruck.setText(truckString);
 
-
+        // populate spinners
         Firebase jobs = new Firebase(firebaseJournalRef + "jobs");
-        jobs.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot snapshot, String previousChild) {
-
-                jobsArray.add(Integer.valueOf(snapshot.getKey()));
-
-                ArrayAdapter<Integer> adapter = new ArrayAdapter<>(CurrentJournal.this,
-                        android.R.layout.simple_spinner_item, jobsArray);
-                adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-                jobsSpinner.setAdapter(adapter);
-
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                jobsArray.remove(Integer.valueOf(dataSnapshot.getKey()));
-
-                ArrayAdapter<Integer> adapter = new ArrayAdapter<>(CurrentJournal.this,
-                        android.R.layout.simple_spinner_item, jobsArray);
-                adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-                jobsSpinner.setAdapter(adapter);
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
-
-        Firebase fuel = new Firebase(firebaseJournalRef + "fuel");
-        fuel.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot snapshot, String previousChild) {
-
-                fuelArray.add(snapshot.getKey());
-
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(CurrentJournal.this,
-                        android.R.layout.simple_spinner_item, fuelArray);
-                adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-                fuelSpinner.setAdapter(adapter);
-
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                fuelArray.remove(dataSnapshot.getKey());
-
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(CurrentJournal.this,
-                        android.R.layout.simple_spinner_item, fuelArray);
-                adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-                fuelSpinner.setAdapter(adapter);
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
-
+        Utils.populateIntegerSpinner(this, jobs, jobsArray, jobsSpinner);
+        Firebase quotes = new Firebase(firebaseJournalRef + "quotes");
+        Utils.populateIntegerSpinner(this, quotes, quotesArray, quotesSpinner);
         Firebase dumps = new Firebase(firebaseJournalRef + "dumps");
-        dumps.addChildEventListener(new ChildEventListener() {
+        Utils.populateStringSpinner(this, dumps, dumpsArray, dumpsSpinner);
+        Firebase fuel = new Firebase(firebaseJournalRef + "fuel");
+        Utils.populateStringSpinner(this, fuel, fuelArray, fuelSpinner);
+
+        //query grossSale children of SID nodes to find real-time daily profit
+        Query queryRef = jobs.orderByChild("sid");
+        queryRef.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot snapshot, String previousChild) {
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                dumpsArray.add(snapshot.getKey());
-
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(CurrentJournal.this,
-                        android.R.layout.simple_spinner_item, dumpsArray);
-                adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-                dumpsSpinner.setAdapter(adapter);
-
+                JobObject jobObject = dataSnapshot.getValue(JobObject.class);
+                totalGrossProfit += jobObject.getGrossSale();
+                tvTotalIncome.setText("Income: $" + String.valueOf(totalGrossProfit));
+                percentOfGoal = (int) (100 * (totalGrossProfit / 1400f));
+                tvPercentOfGoal.setText(String.valueOf(percentOfGoal) + "% of goal");
             }
 
             @Override
@@ -236,12 +173,11 @@ public class CurrentJournal extends BaseActivity {
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                dumpsArray.remove(dataSnapshot.getKey());
-
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(CurrentJournal.this,
-                        android.R.layout.simple_spinner_item, dumpsArray);
-                adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-                dumpsSpinner.setAdapter(adapter);
+                JobObject jobObject = dataSnapshot.getValue(JobObject.class);
+                totalGrossProfit -= jobObject.getGrossSale();
+                tvTotalIncome.setText("Income: $" + String.valueOf(totalGrossProfit));
+                percentOfGoal = (int) (100 * (totalGrossProfit / 1400f));
+                tvPercentOfGoal.setText(String.valueOf(percentOfGoal) + "% of goal");
             }
 
             @Override
@@ -320,147 +256,6 @@ public class CurrentJournal extends BaseActivity {
             }
         });
 
-        addJob.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                FragmentManager manager = getSupportFragmentManager();
-                AddJobDialogFragment djFragment = new AddJobDialogFragment();
-                djFragment.show(manager, "Dialog");
-                FAM.close(false);
-
-            }
-        });
-
-        viewJob.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (jobsArray.size() > 0) {
-
-                    ViewJobDialogFragment vjDialogFragment = new ViewJobDialogFragment();
-                    Bundle vjBundle = new Bundle();
-                    vjBundle.putInt("jobSpinnerSID", selectedJobSID);
-                    vjBundle.putString("firebaseJournalRef", firebaseJournalRef);
-                    vjDialogFragment.setArguments(vjBundle);
-                    FragmentManager manager = getSupportFragmentManager();
-                    vjDialogFragment.show(manager, "Dialog");
-
-                } else {
-
-                    Toast.makeText(CurrentJournal.this, "No jobs to display",
-                            Toast.LENGTH_SHORT).show();
-
-                }
-            }
-        });
-
-        addQuote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                FragmentManager manager = getSupportFragmentManager();
-                AddQuoteDialogFragment djFragment = new AddQuoteDialogFragment();
-                djFragment.show(manager, "Dialog");
-                FAM.close(false);
-
-            }
-        });
-
-        viewQuote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (quotesArray.size() > 0) {
-
-                    ViewQuoteDialogFragment vqDialogFragment = new ViewQuoteDialogFragment();
-                    Bundle vqBundle = new Bundle();
-                    vqBundle.putInt("quoteSpinnerSID", selectedQuoteSID);
-                    vqBundle.putString("firebaseJournalRef", firebaseJournalRef);
-                    vqDialogFragment.setArguments(vqBundle);
-                    FragmentManager manager = getSupportFragmentManager();
-                    vqDialogFragment.show(manager, "Dialog");
-
-                } else {
-
-                    Toast.makeText(CurrentJournal.this, "No quotes to display",
-                            Toast.LENGTH_SHORT).show();
-
-                }
-            }
-        });
-
-        addDump.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                FragmentManager manager = getSupportFragmentManager();
-                DumpTabHost djFragment = new DumpTabHost();
-                djFragment.show(manager, "Dialog");
-                FAM.close(false);
-
-            }
-        });
-
-        viewDump.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (dumpsArray.size() > 0) {
-
-                    ViewDumpDialogFragment vdDialogFragment = new ViewDumpDialogFragment();
-                    Bundle vdBundle = new Bundle();
-                    vdBundle.putString("dumpName", dumpSpinnerText);
-                    vdBundle.putInt("dumpReceiptNumber", dumpReceiptNumber);
-                    vdBundle.putString("firebaseJournalRef", firebaseJournalRef);
-                    vdDialogFragment.setArguments(vdBundle);
-                    FragmentManager manager = getSupportFragmentManager();
-                    vdDialogFragment.show(manager, "Dialog");
-
-                } else {
-
-                    Toast.makeText(CurrentJournal.this, "No dumps to display",
-                            Toast.LENGTH_SHORT).show();
-
-                }
-            }
-        });
-
-        addFuel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                FragmentManager manager = getSupportFragmentManager();
-                AddFuelDialogFragment djFragment = new AddFuelDialogFragment();
-                djFragment.show(manager, "Dialog");
-                FAM.close(false);
-
-            }
-        });
-
-        viewFuel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (fuelArray.size() > 0) {
-
-                    ViewFuelDialogFragment vfDialogFragment = new ViewFuelDialogFragment();
-                    Bundle vfBundle = new Bundle();
-                    vfBundle.putString("fuelReceiptNumber", fuelReceiptNumber);
-                    vfBundle.putString("firebaseJournalRef", firebaseJournalRef);
-                    vfDialogFragment.setArguments(vfBundle);
-                    FragmentManager manager = getSupportFragmentManager();
-                    vfDialogFragment.show(manager, "Dialog");
-
-                } else {
-
-                    Toast.makeText(CurrentJournal.this, "No fuel entries to display",
-                            Toast.LENGTH_SHORT).show();
-
-                }
-            }
-        });
-
     }
 
     @Override
@@ -468,7 +263,6 @@ public class CurrentJournal extends BaseActivity {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.action_email_office).setVisible(false);
         menu.findItem(R.id.action_call_office).setVisible(false);
-//        menu.findItem(R.id.action_take_photo).setVisible(false);
         menu.findItem(R.id.action_delete_journal).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -485,6 +279,12 @@ public class CurrentJournal extends BaseActivity {
 
                 FragmentManager manager = getSupportFragmentManager();
                 EndOfDayDialogFragment djFragment = new EndOfDayDialogFragment();
+                Bundle eodBundle = new Bundle();
+                eodBundle.putString("driver", spDriver);
+                eodBundle.putString("navigator", spNavigator);
+                eodBundle.putInt("percentOfGoal", percentOfGoal);
+                eodBundle.putInt("totalGrossProfit", totalGrossProfit);
+                djFragment.setArguments(eodBundle);
                 djFragment.show(manager, "Dialog");
 
                 return false;
@@ -523,7 +323,7 @@ public class CurrentJournal extends BaseActivity {
 
     private void deleteJournal() {
 
-        showProgressDialog("Deleting journal...");
+        Utils.showProgressDialog(this, "Deleting journal...");
 
         Firebase firebaseRef = new Firebase(firebaseJournalRef);
         firebaseRef.removeValue(new Firebase.CompletionListener() {
@@ -531,7 +331,6 @@ public class CurrentJournal extends BaseActivity {
             public void onComplete(FirebaseError firebaseError, Firebase firebase) {
 
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putString("universalJournalId", null);
                 editor.putString("firebaseRef", null);
                 editor.putString("driver", null);
                 editor.putString("navigator", "noNavigator");
@@ -539,7 +338,7 @@ public class CurrentJournal extends BaseActivity {
                 editor.putString("date", null);
                 editor.apply();
 
-                hideProgressDialog();
+                Utils.hideProgressDialog();
                 Toast.makeText(CurrentJournal.this, "Journal successfully deleted",
                         Toast.LENGTH_SHORT).show();
                 CurrentJournal.this.finish();
@@ -548,4 +347,115 @@ public class CurrentJournal extends BaseActivity {
         });
     }
 
+    @Override
+    public void onClick(View view) {
+
+        FragmentManager manager = getSupportFragmentManager();
+
+        switch (view.getId()) {
+
+            case R.id.btn_view_job:
+
+                if (jobsArray.size() > 0) {
+
+                    ViewJobDialogFragment vjDialogFragment = new ViewJobDialogFragment();
+                    Bundle vjBundle = new Bundle();
+                    vjBundle.putInt("jobSpinnerSID", selectedJobSID);
+                    vjBundle.putString("firebaseJournalRef", firebaseJournalRef);
+                    vjDialogFragment.setArguments(vjBundle);
+                    vjDialogFragment.show(manager, "Dialog");
+
+                } else {
+
+                    Toast.makeText(CurrentJournal.this, "No jobs to display",
+                            Toast.LENGTH_SHORT).show();
+
+                }
+                break;
+            case R.id.btn_view_quote:
+
+                if (quotesArray.size() > 0) {
+
+                    ViewQuoteDialogFragment vqDialogFragment = new ViewQuoteDialogFragment();
+                    Bundle vqBundle = new Bundle();
+                    vqBundle.putInt("quoteSpinnerSID", selectedQuoteSID);
+                    vqBundle.putString("firebaseJournalRef", firebaseJournalRef);
+                    vqDialogFragment.setArguments(vqBundle);
+                    vqDialogFragment.show(manager, "Dialog");
+
+                } else {
+
+                    Toast.makeText(CurrentJournal.this, "No quotes to display",
+                            Toast.LENGTH_SHORT).show();
+
+                }
+                break;
+            case R.id.btn_view_dump:
+
+                if (dumpsArray.size() > 0) {
+
+                    ViewDumpDialogFragment vdDialogFragment = new ViewDumpDialogFragment();
+                    Bundle vdBundle = new Bundle();
+                    vdBundle.putString("dumpName", dumpSpinnerText);
+                    vdBundle.putInt("dumpReceiptNumber", dumpReceiptNumber);
+                    vdBundle.putString("firebaseJournalRef", firebaseJournalRef);
+                    vdDialogFragment.setArguments(vdBundle);
+                    vdDialogFragment.show(manager, "Dialog");
+
+                } else {
+
+                    Toast.makeText(CurrentJournal.this, "No dumps to display",
+                            Toast.LENGTH_SHORT).show();
+
+                }
+                break;
+            case R.id.btn_view_fuel:
+
+                if (fuelArray.size() > 0) {
+
+                    ViewFuelDialogFragment vfDialogFragment = new ViewFuelDialogFragment();
+                    Bundle vfBundle = new Bundle();
+                    vfBundle.putString("fuelReceiptNumber", fuelReceiptNumber);
+                    vfBundle.putString("firebaseJournalRef", firebaseJournalRef);
+                    vfDialogFragment.setArguments(vfBundle);
+
+                    vfDialogFragment.show(manager, "Dialog");
+
+                } else {
+
+                    Toast.makeText(CurrentJournal.this, "No fuel entries to display",
+                            Toast.LENGTH_SHORT).show();
+
+                }
+                break;
+            case R.id.btn_add_job:
+
+                AddJobDialogFragment ajFragment = new AddJobDialogFragment();
+                ajFragment.show(manager, "Dialog");
+                FAM.close(false);
+
+                break;
+            case R.id.btn_add_quote:
+
+                AddQuoteDialogFragment aqFragment = new AddQuoteDialogFragment();
+                aqFragment.show(manager, "Dialog");
+                FAM.close(false);
+
+                break;
+            case R.id.btn_add_dump:
+
+                DumpTabHost dthFragment = new DumpTabHost();
+                dthFragment.show(manager, "Dialog");
+                FAM.close(false);
+
+                break;
+            case R.id.btn_add_fuel:
+
+                AddFuelDialogFragment afFragment = new AddFuelDialogFragment();
+                afFragment.show(manager, "Dialog");
+                FAM.close(false);
+
+                break;
+        }
+    }
 }

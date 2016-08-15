@@ -1,7 +1,6 @@
 package com.garrisonthomas.junkapp.dialogfragments;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -19,8 +17,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.garrisonthomas.junkapp.CurrentJournal;
 import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
@@ -101,14 +101,12 @@ public class DailyJournalDialogFragment extends DialogFragmentHelper {
 
                 if (!TextUtils.isEmpty(driver.getText()) && !dStartTime.getText().equals("START TIME")) {
 
-                    //hide keyboard when OK is clicked
-                    View view = getActivity().getCurrentFocus();
-                    if (view != null) {
-                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                    }
-
-                    showProgressDialog("Creating journal...");
+//                    //hide keyboard when OK is clicked
+//                    View view = getActivity().getCurrentFocus();
+//                    if (view != null) {
+//                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+//                    }
 
                     final String driverString = driver.getText().toString();
                     final String navigatorString = navigator.getText().toString();
@@ -119,47 +117,64 @@ public class DailyJournalDialogFragment extends DialogFragmentHelper {
                     final String firebaseJournalRef = firebaseURL + "journals/" +
                             currentYear + "/" + currentMonth + "/" + currentDay + "/T" + truckSelected + "/";
 
-                    Firebase fbrJournal = new Firebase(firebaseJournalRef);
+                    final Firebase fbrJournal = new Firebase(firebaseJournalRef);
 
-                    DailyJournalObject journal = new DailyJournalObject();
+                    Utils.showProgressDialog(getActivity(), "Creating journal...");
 
-                    journal.setDate(todaysDate);
-                    journal.setDriver(driverString);
-                    journal.setDriverStartTime(driverST);
-                    journal.setNavigator(navigatorString);
-                    journal.setNavStartTime(navST);
-                    journal.setTruckNumber(truckSelected);
+                    fbrJournal.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                Utils.hideProgressDialog();
+                                Toast.makeText(getActivity(), "A journal for this truck already exists", Toast.LENGTH_SHORT).show();
+                            } else if (!snapshot.exists()) {
 
-                    fbrJournal.setValue(journal, new Firebase.CompletionListener() {
+                                DailyJournalObject journal = new DailyJournalObject();
+
+                                journal.setDate(todaysDate);
+                                journal.setDriver(driverString);
+                                journal.setDriverStartTime(driverST);
+                                journal.setNavigator(navigatorString);
+                                journal.setNavStartTime(navST);
+                                journal.setTruckNumber(truckSelected);
+
+                                fbrJournal.setValue(journal, new Firebase.CompletionListener() {
+
+                                    @Override
+                                    public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+
+                                        if (firebaseError != null) {
+
+                                            System.out.println("Data could not be saved. " + firebaseError.getMessage());
+
+                                        } else {
+
+                                            SharedPreferences.Editor editor = preferences.edit();
+                                            editor.putString("driver", driverString);
+                                            editor.putString("navigator", navigatorString);
+                                            editor.putString("truck", truckSelected);
+                                            editor.putString("firebaseRef", firebaseJournalRef);
+                                            editor.putString("todaysDate", todaysDate);
+                                            editor.apply();
+
+                                            // hamfisted way of clearing info from dailyJournalDialogFragment...
+                                            driver.setText("");
+                                            navigator.setText("");
+                                            truckSpinner.setSelection(0);
+
+                                            Utils.hideProgressDialog();
+                                            dismiss();
+                                            Intent intent = new Intent(getActivity(), CurrentJournal.class);
+                                            startActivity(intent);
+
+                                        }
+                                    }
+                                });
+                            }
+                        }
 
                         @Override
-                        public void onComplete(FirebaseError firebaseError, Firebase firebase) {
-
-                            if (firebaseError != null) {
-
-                                System.out.println("Data could not be saved. " + firebaseError.getMessage());
-
-                            } else {
-
-                                SharedPreferences.Editor editor = preferences.edit();
-                                editor.putString("driver", driverString);
-                                editor.putString("navigator", navigatorString);
-                                editor.putString("truck", truckSelected);
-                                editor.putString("firebaseRef", firebaseJournalRef);
-                                editor.putString("todaysDate", todaysDate);
-                                editor.apply();
-
-                                // hamfisted way of clearing info from dailyJournalDialogFragment...
-                                driver.setText("");
-                                navigator.setText("");
-                                truckSpinner.setSelection(0);
-
-                                hideProgressDialog();
-                                dismiss();
-                                Intent intent = new Intent(getActivity(), CurrentJournal.class);
-                                startActivity(intent);
-
-                            }
+                        public void onCancelled(FirebaseError firebaseError) {
                         }
                     });
 
