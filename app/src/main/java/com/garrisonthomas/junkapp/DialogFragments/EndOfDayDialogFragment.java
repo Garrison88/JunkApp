@@ -3,6 +3,7 @@ package com.garrisonthomas.junkapp.dialogfragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,7 +13,6 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -30,6 +30,7 @@ public class EndOfDayDialogFragment extends DialogFragmentHelper {
     Button cancel, archive, dEndTime, nEndTime;
     private String firebaseJournalRef, driver, navigator;
     private int percentOfGoal, totalGrossProfit;
+    private ProgressDialog pDialog;
 
     @NonNull
     @Override
@@ -150,7 +151,8 @@ public class EndOfDayDialogFragment extends DialogFragmentHelper {
         final String DET = dEndTime.getText().toString();
         final String NET = nEndTime.getText().toString();
 
-        Utils.showProgressDialog(getContext(), "Archiving Journal...");
+        pDialog = ProgressDialog.show(getActivity(), null,
+                "Archiving journal...", true);
 
         Firebase fbrJournal = new Firebase(firebaseJournalRef);
 
@@ -164,24 +166,14 @@ public class EndOfDayDialogFragment extends DialogFragmentHelper {
             public void onComplete(FirebaseError firebaseError, Firebase firebase) {
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("firebaseRef", null);
-                editor.putString("driver", null);
-                editor.putString("navigator", "noNavigator");
-                editor.putString("truck", null);
-                editor.putString("date", null);
                 editor.apply();
                 Toast.makeText(getActivity(), "Journal successfully archived",
                         Toast.LENGTH_SHORT).show();
 
-               Utils. hideProgressDialog();
+                pDialog.dismiss();
+
                 getActivity().finish();
             }
         });
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        // This helps to always show cancel and save button when keyboard is open
-        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 }

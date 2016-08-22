@@ -1,8 +1,6 @@
 package com.garrisonthomas.junkapp;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.widget.ArrayAdapter;
@@ -23,10 +21,8 @@ import java.util.Calendar;
  */
 public abstract class Utils {
 
-    public static ProgressDialog mProgressDialog;
-
     public static void populateIntegerSpinner(final Context context, final Firebase firebase,
-                                          final ArrayList<Integer> arrayList, final Spinner spinner) {
+                                              final ArrayList<Integer> arrayList, final Spinner spinner) {
 
         firebase.addChildEventListener(new ChildEventListener() {
             @Override
@@ -116,33 +112,12 @@ public abstract class Utils {
 
     }
 
-    public static void showProgressDialog(Context context, String message) {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(context);
-            mProgressDialog.setMessage(message);
-            mProgressDialog.setIndeterminate(true);
-        }
-
-        if(!((Activity) context).isFinishing())
-        {
-            mProgressDialog.show();
-        }
-
-
-    }
-
-    public static void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        }
-    }
-
     public static double calculateTax(double grossSale) {
         return Math.round((grossSale * 1.13) * 100.00) / 100.00;
     }
 
-    public static double calculateDump (int pricePerTonne,
-                                        float weightInTonnes, Spinner spinner) {
+    public static double calculateDump(int pricePerTonne,
+                                       double weightInTonnes, Spinner spinner) {
 
         double result;
 
@@ -165,8 +140,7 @@ public abstract class Utils {
             case 2:
                 if (weightInTonnes <= .38) {
                     result = 25;
-                }
-                else {
+                } else {
                     result = Math.round((weightInTonnes * pricePerTonne) * 100.00) / 100.00;
                 }
                 break;
@@ -202,7 +176,7 @@ public abstract class Utils {
         final int minute = c.get(Calendar.MINUTE);
 
         TimePickerDialog mTimePicker;
-        mTimePicker = new TimePickerDialog(context, AlertDialog.THEME_DEVICE_DEFAULT_DARK, new TimePickerDialog.OnTimeSetListener() {
+        mTimePicker = new TimePickerDialog(context, AlertDialog.BUTTON_POSITIVE, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                 if (selectedMinute == 00) {
@@ -213,7 +187,7 @@ public abstract class Utils {
                     button.setText(selectedHour + ":" + selectedMinute);
                 }
             }
-        }, hour, minute, false);//Yes 24 hour time
+        }, hour, minute, true);//Yes 24 hour time
         mTimePicker.setTitle(null);
         mTimePicker.show();
 

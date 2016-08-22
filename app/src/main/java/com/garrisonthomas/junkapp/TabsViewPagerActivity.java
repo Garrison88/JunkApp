@@ -33,8 +33,8 @@ public class TabsViewPagerActivity extends BaseActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if (user != null) {
-            toolbar.setSubtitle(user.getEmail());
+        if (auth.getCurrentUser() != null) {
+            toolbar.setSubtitle(auth.getCurrentUser().getEmail());
         }
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);

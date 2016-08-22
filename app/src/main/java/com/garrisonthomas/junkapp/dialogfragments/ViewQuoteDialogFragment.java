@@ -1,7 +1,6 @@
 package com.garrisonthomas.junkapp.dialogfragments;
 
 import android.app.Dialog;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -39,13 +38,14 @@ public class ViewQuoteDialogFragment extends DialogFragmentHelper {
     TextView vqNotes;
     @Bind(R.id.tv_view_quote_notes_display)
     TextView tvQuoteNotesDisplay;
+    @Bind(R.id.vq_high_end_display)
+    TextView vqHighEndDisplay;
     @Bind(R.id.btn_view_quote_ok)
     Button okBtn;
     @Bind(R.id.btn_delete_quote)
     ImageButton deleteQuoteBtn;
     private static int vqSID;
     public static String firebaseJournalRef;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,9 +58,9 @@ public class ViewQuoteDialogFragment extends DialogFragmentHelper {
         tvQuoteNotesDisplay.setVisibility(View.GONE);
         vqNotes.setVisibility(View.GONE);
 
-        Typeface custom_font = Typeface.createFromAsset(v.getContext().getApplicationContext().getAssets(), "fonts/WorkSans-Regular.ttf");
-
-        vqNotes.setTypeface(custom_font);
+//        Typeface custom_font = Typeface.createFromAsset(v.getContext().getApplicationContext().getAssets(), "fonts/WorkSans-Regular.ttf");
+//
+//        vqNotes.setTypeface(custom_font);
 
         populateQuoteInfo();
 
@@ -110,16 +110,19 @@ public class ViewQuoteDialogFragment extends DialogFragmentHelper {
             public void onChildAdded(DataSnapshot snapshot, String previousChildKey) {
 
                 QuoteObject quoteObject = snapshot.getValue(QuoteObject.class);
-                String lowEndString = getString(R.string.dollar_sign) + quoteObject.getLowEnd();
-                String highEndString = getString(R.string.dollar_sign) + quoteObject.getHighEnd();
+                if (quoteObject.getHighEnd() != 0) {
+                    String highEndString = "$" + quoteObject.getHighEnd();
+                    vqHighEnd.setVisibility(View.VISIBLE);
+                    vqHighEndDisplay.setVisibility(View.VISIBLE);
+                    vqHighEnd.setText(highEndString);
+                }
+                String lowEndString = "$" + quoteObject.getLowEnd();
                 String startEndTime = quoteObject.getQuoteStartTime() + " - " + quoteObject.getQuoteEndTime();
                 vqLowEnd.setText(lowEndString);
-                vqHighEnd.setText(highEndString);
                 vqTime.setText(startEndTime);
-                vqNotes.setText(quoteObject.getQuoteNotes());
 
-                if (!TextUtils.isEmpty(vqNotes.getText())) {
-
+                if (!TextUtils.isEmpty(quoteObject.getQuoteNotes())) {
+                    vqNotes.setText(quoteObject.getQuoteNotes());
                     tvQuoteNotesDisplay.setVisibility(View.VISIBLE);
                     vqNotes.setVisibility(View.VISIBLE);
 

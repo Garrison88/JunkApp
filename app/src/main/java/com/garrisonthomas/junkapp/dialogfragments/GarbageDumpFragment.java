@@ -95,7 +95,7 @@ public class GarbageDumpFragment extends Fragment {
 
                 if (!TextUtils.isEmpty(etAddDumpWeight.getText())) {
 
-                    float weightInTonnes = Float.valueOf(etAddDumpWeight.getText().toString());
+                    double weightInTonnes = Float.valueOf(etAddDumpWeight.getText().toString());
 
                     result = Utils.calculateDump(pricePerTonne, weightInTonnes, dumpNameSpinner);
 
@@ -127,9 +127,9 @@ public class GarbageDumpFragment extends Fragment {
 
                     dump.setDumpName(dumpNameString);
                     dump.setGrossCost(result);
-                    dump.setTonnage(Float.valueOf(etAddDumpWeight.getText().toString()));
+                    dump.setTonnage(Double.valueOf(etAddDumpWeight.getText().toString()));
                     dump.setDumpReceiptNumber(Integer.valueOf(etDumpReceiptNumber.getText().toString()));
-                    if (!TextUtils.isEmpty(etPercentPrevious.getText())){
+                    if (!TextUtils.isEmpty(etPercentPrevious.getText())) {
                         dump.setPercentPrevious(Integer.valueOf(etPercentPrevious.getText().toString()));
                     }
 

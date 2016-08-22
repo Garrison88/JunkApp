@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
@@ -26,13 +24,13 @@ import com.garrisonthomas.junkapp.Utils;
 public class Tab3DumpFragment extends Fragment {
 
     private static Spinner dumpsSpinner;
-    private static Button infoBtn, dirBtn, calcBtn, dumpsClearBtn, addHSTButton;
-    private static EditText etWeight;
+    private static Button infoBtn, dirBtn, calcBtn, dumpsClearBtn;
     private static String[] dumpNameArray, dumpDirectionsArray, dumpInfoArray, dumpPhoneNumberArray;
     private static int[] dumpRateArray;
     private static int selectedDumpRate;
+    private static EditText etDumpCost;
     private static TextView tvDumpCost;
-    private static String selectedDumpInfo, withTaxString, selectedDumpName;
+    private static String selectedDumpInfo, selectedDumpName;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
@@ -43,13 +41,11 @@ public class Tab3DumpFragment extends Fragment {
         infoBtn = (Button) v.findViewById(R.id.btn_dump_info);
         dirBtn = (Button) v.findViewById(R.id.btn_dump_directions);
         calcBtn = (Button) v.findViewById(R.id.btn_calculate_dump);
-        addHSTButton = (Button) v.findViewById(R.id.btn_dumps_add_hst);
         dumpsClearBtn = (Button) v.findViewById(R.id.dumps_clear);
 
         dumpsSpinner = (Spinner) v.findViewById(R.id.spinner_dumps);
 
-        etWeight = (EditText) v.findViewById(R.id.et_enter_weight);
-
+        etDumpCost = (EditText) v.findViewById(R.id.et_dump_cost);
         tvDumpCost = (TextView) v.findViewById(R.id.tv_dump_cost);
 
         dumpNameArray = v.getResources().getStringArray(R.array.dumps_name);
@@ -64,6 +60,8 @@ public class Tab3DumpFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
 
+//                etDumpCost.setText("");
+//                calcBtn.setClickable(true);
                 final String dir = getString(R.string.google_maps_url) + dumpDirectionsArray[position];
                 selectedDumpInfo = dumpInfoArray[position];
                 selectedDumpRate = dumpRateArray[position];
@@ -108,8 +106,7 @@ public class Tab3DumpFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                        if (!TextUtils.isEmpty(etWeight.getText())) {
-
+                        if (!String.valueOf(etDumpCost.getText()).equals("")) {
                             // close keyboard
                             View view = getActivity().getCurrentFocus();
                             if (view != null) {
@@ -117,49 +114,33 @@ public class Tab3DumpFragment extends Fragment {
                                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                             }
 
-                            float weightInTonnes = Float.valueOf(etWeight.getText().toString());
+                            float weightInTonnes = Float.valueOf(etDumpCost.getText().toString());
 
                             double result = Utils.calculateDump(selectedDumpRate, weightInTonnes, dumpsSpinner);
 
-                            double withTax = Utils.calculateTax(result);
-
                             String resultString = "$" + String.valueOf(result);
-                            withTaxString = String.valueOf(withTax);
 
+                            etDumpCost.setVisibility(View.GONE);
+                            tvDumpCost.setVisibility(View.VISIBLE);
                             tvDumpCost.setText(resultString);
 
-                            etWeight.setText("");
-
-                        } else {
-
-                            Toast.makeText(getActivity(), "Enter weight", Toast.LENGTH_SHORT).show();
-
+                            calcBtn.setClickable(false);
                         }
                     }
 
 
-                });
-
-                addHSTButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        if (!TextUtils.isEmpty(tvDumpCost.getText())) {
-                            tvDumpCost.setText("$" + withTaxString);
-                        }
-                    }
                 });
 
                 dumpsClearBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        if (!TextUtils.isEmpty(tvDumpCost.getText())) {
+                        tvDumpCost.setVisibility(View.GONE);
+                        etDumpCost.setVisibility(View.VISIBLE);
+                        etDumpCost.setText("");
+                        calcBtn.setClickable(true);
 
-                            tvDumpCost.setText("");
-                            withTaxString = "";
 
-                        }
                     }
                 });
 

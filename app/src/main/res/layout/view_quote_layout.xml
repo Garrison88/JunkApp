@@ -23,8 +23,10 @@
                 android:text="Low End" />
 
             <TextView
+                android:id="@+id/vq_high_end_display"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:text="High End" />
 
             <TextView
@@ -49,7 +51,8 @@
             <TextView
                 android:id="@+id/tv_view_quote_high_end"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/tv_view_quote_time"

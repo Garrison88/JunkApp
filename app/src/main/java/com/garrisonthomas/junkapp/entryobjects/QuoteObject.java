@@ -30,7 +30,9 @@ public class QuoteObject {
     }
 
     public void setHighEnd(double highEnd) {
-        this.highEnd = highEnd;
+        if (highEnd != 0.0) {
+            this.highEnd = highEnd;
+        }
     }
 
     public String getQuoteStartTime() {

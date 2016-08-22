@@ -56,20 +56,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/et_enter_weight"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:hint="Enter Weight (mt)"
-                android:inputType="numberDecimal" />
+            <!--<EditText-->
+                <!--android:id="@+id/et_enter_weight"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:layout_weight="1"-->
+                <!--android:hint="Enter Weight (mt)"-->
+                <!--android:inputType="numberDecimal" />-->
 
-            <Button
-                android:id="@+id/btn_calculate_dump"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Calculate Cost" />
+
 
 
         </LinearLayout>
@@ -89,15 +85,26 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <EditText
+                android:id="@+id/et_dump_cost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:hint="0.0 mt"
+                android:inputType="numberDecimal"
+                android:paddingTop="8dp"
+                android:textSize="75sp" />
+
             <TextView
                 android:id="@+id/tv_dump_cost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
-                android:hint="$0.00"
                 android:paddingTop="8dp"
-                android:textSize="75sp" />
+                android:textSize="75sp"
+                android:visibility="gone"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -106,11 +113,12 @@
                 android:weightSum="2">
 
                 <Button
-                    android:id="@+id/btn_dumps_add_hst"
+                    android:id="@+id/btn_calculate_dump"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:layout_weight="1"
-                    android:text="Add HST" />
+                    android:text="Calculate Cost" />
 
                 <Button
                     android:id="@+id/dumps_clear"

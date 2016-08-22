@@ -13,7 +13,6 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,9 +21,10 @@ import java.util.Locale;
 public class BaseActivity extends AppCompatActivity {
 
     public String todaysDate;
+    private static final int RC_SIGN_IN = 9001;
+    FirebaseAuth auth = FirebaseAuth.getInstance();
 
     Menu menu;
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class BaseActivity extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 123) {
+        if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) {
                 // user is signed in!
                 startActivity(new Intent(this, TabsViewPagerActivity.class));
@@ -61,7 +61,7 @@ public class BaseActivity extends AppCompatActivity {
 
         MenuItem loginLogout = menu.findItem(R.id.action_login_logout);
 
-        if (user != null) {
+        if (auth.getCurrentUser() != null) {
             loginLogout.setTitle("Logout");
         } else {
             loginLogout.setTitle("Login");
@@ -110,7 +110,7 @@ public class BaseActivity extends AppCompatActivity {
 
     public void LoginLogout() {
 
-        if (user != null) {
+        if (auth.getCurrentUser() != null) {
             AuthUI.getInstance()
                     .signOut(this)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -132,8 +132,12 @@ public class BaseActivity extends AppCompatActivity {
         } else {
             startActivityForResult(
                     // Get an instance of AuthUI based on the default app
-                    AuthUI.getInstance().createSignInIntentBuilder().build(),
-                    123);
+                    AuthUI
+                            .getInstance()
+                            .createSignInIntentBuilder()
+                            .setTheme(R.style.CustomTheme_NoActionBar)
+                            .build(),
+                    RC_SIGN_IN);
         }
 
     }

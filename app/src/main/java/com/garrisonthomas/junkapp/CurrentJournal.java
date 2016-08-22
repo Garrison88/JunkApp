@@ -1,6 +1,7 @@
 package com.garrisonthomas.junkapp;
 
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
+import com.firebase.client.ValueEventListener;
 import com.garrisonthomas.junkapp.dialogfragments.AddFuelDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.AddJobDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.AddQuoteDialogFragment;
@@ -32,6 +34,7 @@ import com.garrisonthomas.junkapp.dialogfragments.ViewDumpDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.ViewFuelDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.ViewJobDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.ViewQuoteDialogFragment;
+import com.garrisonthomas.junkapp.entryobjects.DailyJournalObject;
 import com.garrisonthomas.junkapp.entryobjects.JobObject;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -82,11 +85,12 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
     @Bind(R.id.tv_percent_of_goal)
     TextView tvPercentOfGoal;
 
-    private String firebaseJournalRef, spDriver, spNavigator, spDate,
-            dumpSpinnerText, fuelReceiptNumber, spTruck;
+    private String firebaseJournalRef, dumpSpinnerText, fuelReceiptNumber;
 
     private int selectedJobSID, selectedQuoteSID, dumpReceiptNumber,
             percentOfGoal, totalGrossProfit;
+
+    private ProgressDialog pDialog;
 
     private ArrayList<Integer> jobsArray = new ArrayList<>();
     private ArrayList<Integer> quotesArray = new ArrayList<>();
@@ -108,10 +112,6 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         firebaseJournalRef = preferences.getString("firebaseRef", null);
-        spDriver = preferences.getString("driver", null);
-        spNavigator = preferences.getString("navigator", "noNavigator");
-        spTruck = preferences.getString("truck", null);
-        spDate = preferences.getString("todaysDate", null);
 
         viewJob.setOnClickListener(this);
         viewQuote.setOnClickListener(this);
@@ -122,13 +122,6 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
         addDump.setOnClickListener(this);
         addFuel.setOnClickListener(this);
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(spDate);
-        }
-        if (user != null) {
-            getSupportActionBar().setSubtitle(user.getEmail());
-        }
-
         toolbar.setNavigationIcon(ContextCompat.getDrawable(this, R.drawable.ic_arrow_back_white_24dp));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,11 +129,6 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
                 CurrentJournal.this.finish();
             }
         });
-
-        String crewString = "Driver: " + spDriver + "\n" + "Nav: " + spNavigator;
-        todaysCrew.setText(crewString);
-        String truckString = "Truck #:" + "\n" + spTruck;
-        todaysTruck.setText(truckString);
 
         // populate spinners
         Firebase jobs = new Firebase(firebaseJournalRef + "jobs");
@@ -160,9 +148,12 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
 
                 JobObject jobObject = dataSnapshot.getValue(JobObject.class);
                 totalGrossProfit += jobObject.getGrossSale();
-                tvTotalIncome.setText("Income: $" + String.valueOf(totalGrossProfit));
                 percentOfGoal = (int) (100 * (totalGrossProfit / 1400f));
-                tvPercentOfGoal.setText(String.valueOf(percentOfGoal) + "% of goal");
+                String totalIncomeString = "Income: $" + String.valueOf(totalGrossProfit);
+                String percentOfGoalString = String.valueOf(percentOfGoal) + "% of goal";
+
+                tvTotalIncome.setText(totalIncomeString);
+                tvPercentOfGoal.setText(percentOfGoalString);
             }
 
             @Override
@@ -175,14 +166,47 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
 
                 JobObject jobObject = dataSnapshot.getValue(JobObject.class);
                 totalGrossProfit -= jobObject.getGrossSale();
-                tvTotalIncome.setText("Income: $" + String.valueOf(totalGrossProfit));
                 percentOfGoal = (int) (100 * (totalGrossProfit / 1400f));
-                tvPercentOfGoal.setText(String.valueOf(percentOfGoal) + "% of goal");
+                String totalIncomeString = "Income: $" + String.valueOf(totalGrossProfit);
+                String percentOfGoalString = String.valueOf(percentOfGoal) + "% of goal";
+
+                tvTotalIncome.setText(totalIncomeString);
+                tvPercentOfGoal.setText(percentOfGoalString);
+
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+        //query database to find driver, nav, and truck number and set them
+        Firebase journalInfo = new Firebase(firebaseJournalRef);
+        journalInfo.addListenerForSingleValueEvent(new ValueEventListener() {
+
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DailyJournalObject djObject = dataSnapshot.getValue(DailyJournalObject.class);
+                String spDriver = djObject.getDriver();
+                String spNavigator = djObject.getNavigator();
+                String truckString = "Truck #:" + "\n" + djObject.getTruckNumber();
+                String crewString = "Driver: " + spDriver + "\n" + "Nav: " + spNavigator;
+                String spDate = djObject.getDate();
+                todaysCrew.setText(crewString);
+                todaysTruck.setText(truckString);
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setTitle(spDate);
+                }
+                if (auth.getCurrentUser() != null) {
+                    getSupportActionBar().setSubtitle(auth.getCurrentUser().getEmail());
+                }
             }
 
             @Override
@@ -280,8 +304,6 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
                 FragmentManager manager = getSupportFragmentManager();
                 EndOfDayDialogFragment djFragment = new EndOfDayDialogFragment();
                 Bundle eodBundle = new Bundle();
-                eodBundle.putString("driver", spDriver);
-                eodBundle.putString("navigator", spNavigator);
                 eodBundle.putInt("percentOfGoal", percentOfGoal);
                 eodBundle.putInt("totalGrossProfit", totalGrossProfit);
                 djFragment.setArguments(eodBundle);
@@ -323,7 +345,8 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
 
     private void deleteJournal() {
 
-        Utils.showProgressDialog(this, "Deleting journal...");
+        pDialog = ProgressDialog.show(this, null,
+                "Deleting journal...", true);
 
         Firebase firebaseRef = new Firebase(firebaseJournalRef);
         firebaseRef.removeValue(new Firebase.CompletionListener() {
@@ -332,13 +355,10 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
 
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("firebaseRef", null);
-                editor.putString("driver", null);
-                editor.putString("navigator", "noNavigator");
-                editor.putString("truck", null);
-                editor.putString("date", null);
+//                editor.putString("date", null);
                 editor.apply();
 
-                Utils.hideProgressDialog();
+                pDialog.dismiss();
                 Toast.makeText(CurrentJournal.this, "Journal successfully deleted",
                         Toast.LENGTH_SHORT).show();
                 CurrentJournal.this.finish();

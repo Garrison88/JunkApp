@@ -6,8 +6,7 @@ package com.garrisonthomas.junkapp.entryobjects;
 public class DumpObject {
 
     private String dumpName;
-    private double grossCost;
-    private float tonnage;
+    private double grossCost, tonnage;
     private int dumpReceiptNumber, percentPrevious;
 
     public String getDumpName() {
@@ -26,11 +25,11 @@ public class DumpObject {
         this.grossCost = grossCost;
     }
 
-    public float getTonnage() {
+    public double getTonnage() {
         return tonnage;
     }
 
-    public void setTonnage(float tonnage) {
+    public void setTonnage(double tonnage) {
         this.tonnage = tonnage;
     }
 

@@ -100,6 +100,12 @@
 
             </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
+            <ImageButton
+                android:id="@+id/btn_select_quote_photos"
+                android:src="@drawable/ic_photo_camera_white_24dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
         </LinearLayout>
 
     </ScrollView>
