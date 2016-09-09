@@ -14,8 +14,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.firebase.client.Firebase;
 import com.garrisonthomas.junkapp.R;
+import com.garrisonthomas.junkapp.entryobjects.RebateObject;
 
 /**
  * Created by Garrison on 2016-07-04.
@@ -28,7 +31,7 @@ public class RebateDumpFragment extends Fragment {
     private static String[] materialTypeArray, rebateLocationArray;
     private static int[] materialRebateArray;
     private static int pricePerTonne;
-    private static String materialNameString, rebateLocationString, firebaseJournalRef;
+    private static String materialTypeString, rebateLocationString, firebaseJournalRef;
     private SharedPreferences preferences;
 
 
@@ -66,7 +69,7 @@ public class RebateDumpFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
 
-                materialNameString = materialTypeArray[position];
+                materialTypeString = materialTypeArray[position];
                 pricePerTonne = materialRebateArray[position];
 
             }
@@ -110,6 +113,25 @@ public class RebateDumpFragment extends Fragment {
                 if ((!TextUtils.isEmpty(etRebateWeight.getText())
                         || (!TextUtils.isEmpty(etRebateAmount.getText())))
                         && (!TextUtils.isEmpty(etRebateReceiptNumber.getText()))) {
+
+                    final double rebateAmount = Double.valueOf(String.valueOf(etRebateAmount.getText()));
+                    final int receiptNumber = Integer.valueOf(String.valueOf(etRebateReceiptNumber.getText()));
+                    final int rebateWeight = Integer.valueOf(String.valueOf(etRebateWeight.getText()));
+
+                    Firebase fbrRebate = new Firebase(firebaseJournalRef + "rebate/" + rebateLocationString + " (" +
+                            String.valueOf(etRebateReceiptNumber.getText()) + ")");
+
+                    RebateObject rebate = new RebateObject();
+
+                    rebate.setRebateLocation(rebateLocationString);
+                    rebate.setRebateAmount(rebateAmount);
+                    rebate.setReceiptNumber(receiptNumber);
+                    rebate.setRebateWeight(rebateWeight);
+                    rebate.setMaterialType(materialTypeString);
+
+                    fbrRebate.setValue(rebate);
+
+                    Toast.makeText(getActivity(), "Rebate from " + rebateLocationString + " saved", Toast.LENGTH_SHORT).show();
 
                     getActivity().finish();
 

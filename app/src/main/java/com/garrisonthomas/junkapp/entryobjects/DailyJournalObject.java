@@ -12,7 +12,7 @@ public class DailyJournalObject {
 
     private String driver, driverStartTime, driverEndTime, navigator, navStartTime, navEndTime,
             endOfDayNotes, date, truckNumber;
-    private int percentOfGoal, percentOnDump, totalGrossProfit;
+    private int percentOfGoal, percentOnDumps, totalGrossProfit;
     private boolean isArchived;
 
     public DailyJournalObject() {
@@ -109,12 +109,12 @@ public class DailyJournalObject {
         this.percentOfGoal = percentOfGoal;
     }
 
-    public int getPercentOnDump() {
-        return percentOnDump;
+    public int getPercentOnDumps() {
+        return percentOnDumps;
     }
 
-    public void setPercentOnDump(int percentOnDump) {
-        this.percentOnDump = percentOnDump;
+    public void setPercentOnDumps(int percentOnDumps) {
+        this.percentOnDumps = percentOnDumps;
     }
 
     public boolean isArchived() {

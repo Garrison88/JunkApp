@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
     <ScrollView
+        android:id="@+id/top_quote_sv"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:fillViewport="true">
 
         <LinearLayout
@@ -101,10 +101,10 @@
             </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
             <ImageButton
-                android:id="@+id/btn_select_quote_photos"
-                android:src="@drawable/ic_photo_camera_white_24dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:id="@+id/btn_select_quote_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_add_a_photo_white_36dp" />
 
         </LinearLayout>
 
@@ -113,7 +113,8 @@
     <LinearLayout
         android:id="@+id/add_quote_button_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/top_quote_sv">
 
         <Button
             android:id="@+id/btn_cancel_quote"
@@ -125,10 +126,11 @@
             android:text="Cancel" />
 
         <View
-            android:layout_height="fill_parent"
             android:layout_width="1dp"
-            android:background="#505154"
-            android:layout_marginBottom="7dp" android:layout_marginTop="7dp"/>
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="7dp"
+            android:layout_marginTop="7dp"
+            android:background="#505154" />
 
         <Button
             android:id="@+id/btn_save_quote"
@@ -141,4 +143,4 @@
 
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

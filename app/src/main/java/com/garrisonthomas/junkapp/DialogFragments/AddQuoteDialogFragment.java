@@ -1,13 +1,23 @@
 package com.garrisonthomas.junkapp.dialogfragments;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,17 +38,21 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.IOException;
+
 public class AddQuoteDialogFragment extends DialogFragmentHelper {
 
     private static EditText etQuoteSID, etLowEnd, etHighEnd, etQuoteNotes;
     private static Button saveQuote, cancelQuote, startTime, endTime;
     private static ImageButton choosePhoto;
-    private static String firebaseJournalRef, imageSource;
+    private static String firebaseJournalRef;
+    private int PICK_IMAGE_REQUEST = 1;
     private SharedPreferences preferences;
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private StorageReference storageRef = storage.getReferenceFromUrl("gs://junkapp-43226.appspot.com");
-    private Uri quotePhotoUri;
+    private Uri quotePhotoUri = null;
     private ProgressDialog pDialog;
+    public static final String TAG = "permissions";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,7 +74,8 @@ public class AddQuoteDialogFragment extends DialogFragmentHelper {
         endTime = (Button) v.findViewById(R.id.quote_end_time);
         saveQuote = (Button) v.findViewById(R.id.btn_save_quote);
         cancelQuote = (Button) v.findViewById(R.id.btn_cancel_quote);
-        choosePhoto = (ImageButton) v.findViewById(R.id.btn_select_quote_photos);
+
+        choosePhoto = (ImageButton) v.findViewById(R.id.btn_select_quote_photo);
 
         startTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,12 +92,21 @@ public class AddQuoteDialogFragment extends DialogFragmentHelper {
         });
 
         choosePhoto.setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(View view) {
-                Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
-                chooseFile.setType("image/*");
-                chooseFile = Intent.createChooser(chooseFile, "Choose a file");
-                startActivityForResult(chooseFile, 123);
+            public void onClick(View v) {
+
+                if (isStoragePermissionGranted()) {
+
+                    Intent intent = new Intent();
+// Show only images, no videos or anything else
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
+// Always show the chooser (if there are multiple options available)
+                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+
+                }
             }
         });
 
@@ -90,57 +114,83 @@ public class AddQuoteDialogFragment extends DialogFragmentHelper {
             @Override
             public void onClick(View v) {
 
-                pDialog = ProgressDialog.show(getActivity(), null,
-                        "Uploading photo...", true);
+//                if (quotePhotoUri != null) {
 
-                // Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
-                StorageReference quoteSIDRef = storageRef.child("quoteImages/" +
-                        String.valueOf(etQuoteSID.getText()) + "/" + quotePhotoUri.getLastPathSegment());
-                UploadTask uploadTask = quoteSIDRef.putFile(quotePhotoUri);
+                    pDialog = ProgressDialog.show(getActivity(), null,
+                            "Uploading photo...", true);
+
+                    StorageReference quoteSIDRef = storageRef.child("quoteImages/" +
+                            String.valueOf(etQuoteSID.getText()) + "/" + String.valueOf(quotePhotoUri.getLastPathSegment()));
+                    UploadTask uploadTask = quoteSIDRef.putFile(quotePhotoUri);
 
 //                 Register observers to listen for when the download is done or if it fails
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                        Toast.makeText(getActivity(), "Upload failed due to " + exception + ". Please try again",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        String downloadUrlString = downloadUrl.toString();
-
-                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                        Firebase fbrQuote = new Firebase(firebaseJournalRef + "quotes/" + String.valueOf(etQuoteSID.getText()));
-
-                        QuoteObject quote = new QuoteObject();
-                        quote.setQuoteSID(Integer.valueOf(etQuoteSID.getText().toString()));
-                        quote.setQuoteStartTime(String.valueOf(startTime.getText()));
-                        quote.setQuoteEndTime(String.valueOf(endTime.getText()));
-                        quote.setLowEnd(Double.valueOf(etLowEnd.getText().toString()));
-                        if (!TextUtils.isEmpty(etHighEnd.getText())) {
-                            quote.setHighEnd(Double.valueOf(etHighEnd.getText().toString()));
-                        } else {
-                            quote.setHighEnd(0);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle unsuccessful uploads
+                            Toast.makeText(getActivity(), "Upload failed due to " + exception + ". Please try again",
+                                    Toast.LENGTH_SHORT).show();
                         }
-                        if (!TextUtils.isEmpty(etQuoteNotes.getText())) {
-                            quote.setQuoteNotes(String.valueOf(etQuoteNotes.getText()));
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                            String downloadUrlString = taskSnapshot.getDownloadUrl().toString();
+
+                            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                            Firebase fbrQuote = new Firebase(firebaseJournalRef + "quotes/" + String.valueOf(etQuoteSID.getText()));
+
+                            QuoteObject quote = new QuoteObject();
+                            quote.setQuoteSID(Integer.valueOf(etQuoteSID.getText().toString()));
+                            quote.setQuoteStartTime(String.valueOf(startTime.getText()));
+                            quote.setQuoteEndTime(String.valueOf(endTime.getText()));
+                            quote.setLowEnd(Double.valueOf(etLowEnd.getText().toString()));
+                            quote.setPhotoDownloadUrl(downloadUrlString);
+                            if (!TextUtils.isEmpty(etHighEnd.getText())) {
+                                quote.setHighEnd(Double.valueOf(etHighEnd.getText().toString()));
+                            } else {
+                                quote.setHighEnd(0);
+                            }
+                            if (!TextUtils.isEmpty(etQuoteNotes.getText())) {
+                                quote.setQuoteNotes(String.valueOf(etQuoteNotes.getText()));
+                            }
+
+                            fbrQuote.setValue(quote);
+
+                            Toast.makeText(getActivity(), "Quote number " + etQuoteSID.getText().toString() + " saved",
+                                    Toast.LENGTH_SHORT).show();
+
+                            pDialog.dismiss();
+                            dismiss();
+
+                            //and you can convert it to string like this:
+
                         }
-
-                        fbrQuote.setValue(quote);
-
-                        Toast.makeText(getActivity(), "Quote number " + etQuoteSID.getText().toString() + " saved",
-                                Toast.LENGTH_SHORT).show();
-
-                        pDialog.dismiss();
-                        dismiss();
-
-                        //and you can convert it to string like this:
-
-                    }
-                });
+                    });
+//                } else {
+//                    Firebase fbrQuote = new Firebase(firebaseJournalRef + "quotes/" + String.valueOf(etQuoteSID.getText()));
+//
+//                    QuoteObject quote = new QuoteObject();
+//                    quote.setQuoteSID(Integer.valueOf(etQuoteSID.getText().toString()));
+//                    quote.setQuoteStartTime(String.valueOf(startTime.getText()));
+//                    quote.setQuoteEndTime(String.valueOf(endTime.getText()));
+//                    quote.setLowEnd(Double.valueOf(etLowEnd.getText().toString()));
+//                    if (!TextUtils.isEmpty(etHighEnd.getText())) {
+//                        quote.setHighEnd(Double.valueOf(etHighEnd.getText().toString()));
+//                    } else {
+//                        quote.setHighEnd(0);
+//                    }
+//                    if (!TextUtils.isEmpty(etQuoteNotes.getText())) {
+//                        quote.setQuoteNotes(String.valueOf(etQuoteNotes.getText()));
+//                    }
+//
+//                    fbrQuote.setValue(quote);
+//
+//                    Toast.makeText(getActivity(), "Quote number " + etQuoteSID.getText().toString() + " saved",
+//                            Toast.LENGTH_SHORT).show();
+//
+//                    dismiss();
+//                }
             }
         });
 
@@ -160,9 +210,70 @@ public class AddQuoteDialogFragment extends DialogFragmentHelper {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        quotePhotoUri = data.getData();
-        imageSource = quotePhotoUri.getPath();
-        choosePhoto.setImageURI(quotePhotoUri);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
 
+            quotePhotoUri = data.getData();
+            Bitmap bitmapThumb;
+            Bitmap bitmap = null;
+
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), quotePhotoUri);
+                // Log.d(TAG, String.valueOf(bitmap));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            bitmapThumb = ThumbnailUtils.extractThumbnail(bitmap,
+                    250, 250);
+//
+            choosePhoto.setImageBitmap(bitmapThumb);
+
+//                Picasso.with(getActivity())
+//                        .load(quotePhotoUri) // thumbnail url goes here
+//                        .into(choosePhoto, new Callback() {
+//                            @Override
+//                            public void onSuccess() {
+//                                Picasso.with(getActivity())
+//                                        .load(quotePhotoUri) // image url goes here
+//                                        .placeholder(choosePhoto.getDrawable())
+//                                        .into(choosePhoto);
+//                            }
+//                            @Override
+//                            public void onError() {
+//
+//                            }
+//                        });
+
+//
+        }
+    }
+
+    public boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == (PackageManager.PERMISSION_GRANTED)) {
+                Log.v(TAG, "Permission is granted");
+                return true;
+            } else {
+
+                Log.v(TAG, "Permission is revoked");
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+        } else { //permission is automatically granted on sdk<23 upon installation
+            Log.v(TAG, "Permission is granted");
+            return true;
+        }
+
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Log.v(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
+            //resume tasks needing this permission
+        }
     }
 }

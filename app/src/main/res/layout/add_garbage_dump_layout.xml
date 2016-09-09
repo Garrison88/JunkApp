@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:theme="@style/CustomDialog"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:fadeScrollbars="false"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:theme="@style/CustomDialog">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -27,8 +27,7 @@
                     android:layout_height="fill_parent"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:dropDownWidth="@dimen/custom_spinner_width"
-                    android:prompt="@string/toast_no_dump_selected" />
+                    android:dropDownWidth="@dimen/custom_spinner_width" />
 
                 <com.wrapp.floatlabelededittext.FloatLabeledEditText
                     android:layout_width="0dp"
@@ -59,8 +58,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_gravity="center_horizontal">
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -71,41 +70,50 @@
                         android:id="@+id/tv_dump_gross_cost"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
-            <com.wrapp.floatlabelededittext.FloatLabeledEditText
-                android:id="@+id/et_dump_receipt_number_wrapper"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/et_dump_receipt_number"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Receipt Number"
-                    android:inputType="number" />
-
-            </com.wrapp.floatlabelededittext.FloatLabeledEditText>
-
-            <com.wrapp.floatlabelededittext.FloatLabeledEditText
-                android:id="@+id/et_percent_previous_wrapper"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/et_dump_receipt_number_wrapper">
+                android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/et_percent_previous"
-                    android:layout_width="fill_parent"
+                <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                    android:id="@+id/et_dump_receipt_number_wrapper"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/et_dump_receipt_number"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Receipt #"
+                        android:inputType="number" />
+
+                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                    android:id="@+id/et_percent_previous_wrapper"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:hint="Percent Previous (optional)"
-                    android:inputType="number"
-                    android:maxLength="3" />
+                    android:layout_below="@id/et_dump_receipt_number_wrapper">
 
-            </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+                    <EditText
+                        android:id="@+id/et_percent_previous"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="% Previous"
+                        android:inputType="number"
+                        android:maxLength="3" />
+
+                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -122,15 +130,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
-            android:textSize="@dimen/abc_text_size_medium_material"
             android:background="?android:attr/selectableItemBackground"
-            android:text="Cancel" />
+            android:text="Cancel"
+            android:textSize="@dimen/abc_text_size_medium_material" />
 
         <View
-            android:layout_height="fill_parent"
             android:layout_width="1dp"
-            android:background="#505154"
-            android:layout_marginBottom="7dp" android:layout_marginTop="7dp"/>
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="7dp"
+            android:layout_marginTop="7dp"
+            android:background="#505154" />
 
         <Button
             android:id="@+id/btn_save_dump"
@@ -138,9 +147,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
-            android:textSize="@dimen/abc_text_size_medium_material"
             android:background="?android:attr/selectableItemBackground"
-            android:text="Save" />
+            android:text="Save"
+            android:textSize="@dimen/abc_text_size_medium_material" />
 
     </LinearLayout>
 

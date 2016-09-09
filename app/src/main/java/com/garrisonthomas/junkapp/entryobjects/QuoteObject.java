@@ -7,7 +7,15 @@ public class QuoteObject {
 
     private int quoteSID;
     private double lowEnd, highEnd;
-    private String quoteStartTime, quoteEndTime, quoteNotes;
+    private String quoteStartTime, quoteEndTime, quoteNotes, photoDownloadUrl;
+
+    public String getPhotoDownloadUrl() {
+        return photoDownloadUrl;
+    }
+
+    public void setPhotoDownloadUrl(String photoDownloadUrl) {
+        this.photoDownloadUrl = photoDownloadUrl;
+    }
 
     public int getQuoteSID() {
         return quoteSID;

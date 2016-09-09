@@ -99,7 +99,7 @@
 
                 <Spinner
                     android:id="@+id/quotes_spinner"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
             </android.support.v7.widget.CardView>
@@ -249,21 +249,42 @@
     </com.github.clans.fab.FloatingActionMenu>
 
     <TextView
-        android:id="@+id/tv_percent_of_goal"
+        android:id="@+id/tv_total_income"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/tv_total_income"
+        android:layout_above="@+id/tv_percent_of_goal"
         android:layout_alignParentStart="true"
         android:paddingLeft="8dp"
         android:textSize="@dimen/abc_text_size_medium_material" />
 
     <TextView
-        android:id="@+id/tv_total_income"
+        android:id="@+id/tv_percent_of_goal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tv_dump_cost"
+        android:layout_alignParentStart="true"
+        android:paddingLeft="8dp"
+        android:textSize="@dimen/abc_text_size_medium_material"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/tv_dump_cost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tv_percent_on_dumps"
+        android:layout_alignParentStart="true"
+        android:paddingLeft="8dp"
+        android:textSize="@dimen/abc_text_size_medium_material" />
+
+    <TextView
+        android:id="@+id/tv_percent_on_dumps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/current_journal_linear_layout"
         android:layout_alignParentStart="true"
-        android:padding="8dp"
-        android:textSize="@dimen/abc_text_size_medium_material" />
+        android:paddingBottom="8dp"
+        android:paddingLeft="8dp"
+        android:textSize="@dimen/abc_text_size_medium_material"
+        android:textStyle="italic" />
 
 </RelativeLayout>

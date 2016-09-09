@@ -23,7 +23,6 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 import com.garrisonthomas.junkapp.dialogfragments.AddFuelDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.AddJobDialogFragment;
@@ -35,6 +34,7 @@ import com.garrisonthomas.junkapp.dialogfragments.ViewFuelDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.ViewJobDialogFragment;
 import com.garrisonthomas.junkapp.dialogfragments.ViewQuoteDialogFragment;
 import com.garrisonthomas.junkapp.entryobjects.DailyJournalObject;
+import com.garrisonthomas.junkapp.entryobjects.DumpObject;
 import com.garrisonthomas.junkapp.entryobjects.JobObject;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -84,11 +84,15 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
     TextView tvTotalIncome;
     @Bind(R.id.tv_percent_of_goal)
     TextView tvPercentOfGoal;
+    @Bind(R.id.tv_percent_on_dumps)
+    TextView tvPercentOnDumps;
+    @Bind(R.id.tv_dump_cost)
+    TextView tvDumpCost;
 
-    private String firebaseJournalRef, dumpSpinnerText, fuelReceiptNumber;
+    private String firebaseJournalRef, dumpSpinnerText, fuelReceiptNumber, spDriver, spNavigator;
 
     private int selectedJobSID, selectedQuoteSID, dumpReceiptNumber,
-            percentOfGoal, totalGrossProfit;
+            percentOfGoal, totalGrossProfit, percentOnDumps, totalDumpCost;
 
     private ProgressDialog pDialog;
 
@@ -141,8 +145,7 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
         Utils.populateStringSpinner(this, fuel, fuelArray, fuelSpinner);
 
         //query grossSale children of SID nodes to find real-time daily profit
-        Query queryRef = jobs.orderByChild("sid");
-        queryRef.addChildEventListener(new ChildEventListener() {
+        jobs.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
@@ -186,6 +189,63 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
             }
         });
 
+        // query dumps and rebate to find percentOnDumps
+        dumps.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                DumpObject dumpObject = dataSnapshot.getValue(DumpObject.class);
+                int percentPrevious = dumpObject.getPercentPrevious();
+                if (percentPrevious != 0) {
+                    totalDumpCost += (dumpObject.getGrossCost() * ((100 - percentPrevious) * 0.01));
+                } else {
+                    totalDumpCost += dumpObject.getGrossCost();
+                }
+
+                percentOnDumps = (int) (100 * (totalDumpCost / Float.valueOf(totalGrossProfit)));
+                String totalDumpCostString = "Dump Cost: $" + String.valueOf(totalDumpCost);
+                String percentOnDumpsString = String.valueOf(percentOnDumps) + "% of profit";
+
+                tvDumpCost.setText(totalDumpCostString);
+                tvPercentOnDumps.setText(percentOnDumpsString);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                DumpObject dumpObject = dataSnapshot.getValue(DumpObject.class);
+                int percentPrevious = dumpObject.getPercentPrevious();
+                if (percentPrevious != 0) {
+                    totalDumpCost -= (dumpObject.getGrossCost() * ((100 - percentPrevious) * 0.01));
+                } else {
+                    totalDumpCost -= dumpObject.getGrossCost();
+                }
+
+                percentOnDumps = (int) (100 * (totalDumpCost / Float.valueOf(totalGrossProfit)));
+                String totalDumpCostString = "Dump Cost: $" + String.valueOf(totalDumpCost);
+                String percentOnDumpsString = String.valueOf(percentOnDumps) + "% of profit";
+
+                tvDumpCost.setText(totalDumpCostString);
+                tvPercentOnDumps.setText(percentOnDumpsString);
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
         //query database to find driver, nav, and truck number and set them
         Firebase journalInfo = new Firebase(firebaseJournalRef);
         journalInfo.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -194,8 +254,8 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 DailyJournalObject djObject = dataSnapshot.getValue(DailyJournalObject.class);
-                String spDriver = djObject.getDriver();
-                String spNavigator = djObject.getNavigator();
+                spDriver = djObject.getDriver();
+                spNavigator = djObject.getNavigator();
                 String truckString = "Truck #:" + "\n" + djObject.getTruckNumber();
                 String crewString = "Driver: " + spDriver + "\n" + "Nav: " + spNavigator;
                 String spDate = djObject.getDate();
@@ -287,6 +347,7 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.action_email_office).setVisible(false);
         menu.findItem(R.id.action_call_office).setVisible(false);
+        menu.findItem(R.id.action_login_logout).setVisible(false);
         menu.findItem(R.id.action_delete_journal).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -306,6 +367,10 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
                 Bundle eodBundle = new Bundle();
                 eodBundle.putInt("percentOfGoal", percentOfGoal);
                 eodBundle.putInt("totalGrossProfit", totalGrossProfit);
+                eodBundle.putInt("percentOnDumps", percentOnDumps);
+                eodBundle.putInt("totalDumpCost", totalDumpCost);
+                eodBundle.putString("driver", spDriver);
+                eodBundle.putString("navigator", spNavigator);
                 djFragment.setArguments(eodBundle);
                 djFragment.show(manager, "Dialog");
 
@@ -355,7 +420,6 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
 
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("firebaseRef", null);
-//                editor.putString("date", null);
                 editor.apply();
 
                 pDialog.dismiss();

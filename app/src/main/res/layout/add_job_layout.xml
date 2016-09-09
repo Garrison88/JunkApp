@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:journal_card_view="http://schemas.android.com/apk/res-auto"
     android:fadeScrollbars="false"
     android:orientation="vertical">
 
@@ -16,7 +17,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.wrapp.floatlabelededittext.FloatLabeledEditText
+            <android.support.design.widget.TextInputLayout
                 android:id="@+id/et_sid_wrapper"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -29,14 +30,15 @@
                     android:inputType="number"
                     android:maxLength="6" />
 
-            </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+            </android.support.design.widget.TextInputLayout>
+
 
             <LinearLayout
                 android:id="@+id/sales_linear_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                <android.support.design.widget.TextInputLayout
                     android:id="@+id/et_gross_sale_wrapper"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -45,13 +47,13 @@
                     <EditText
                         android:id="@+id/et_gross_sale"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:hint="Gross Sale"
                         android:inputType="numberDecimal" />
 
-                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+                </android.support.design.widget.TextInputLayout>
 
-                <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                <android.support.design.widget.TextInputLayout
                     android:id="@+id/et_net_sale_wrapper"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -60,11 +62,11 @@
                     <EditText
                         android:id="@+id/et_net_sale"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:hint="Net Sale"
                         android:inputType="numberDecimal" />
 
-                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+                </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
 
@@ -95,14 +97,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <Spinner
-                    android:id="@+id/spinner_pay_type"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:dropDownWidth="@dimen/custom_spinner_width"
-                    android:gravity="bottom" />
-
+                    <Spinner
+                        android:id="@+id/spinner_pay_type"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:dropDownWidth="@dimen/custom_spinner_width" />
                 <com.wrapp.floatlabelededittext.FloatLabeledEditText
                     android:id="@+id/et_receipt_number_wrapper"
                     android:layout_width="0dp"
@@ -122,6 +122,31 @@
 
             </LinearLayout>
 
+                <info.hoang8f.android.segmented.SegmentedGroup
+                    xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/segmented2"
+                    android:gravity="center_horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="vertical"
+                    segmentedgroup:sc_border_width="2dp"
+                    segmentedgroup:sc_corner_radius="2dp">
+
+                    <RadioButton
+                        android:id="@+id/switch_residential"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Residential" />
+
+                    <RadioButton
+                        android:id="@+id/switch_commercial"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Commercial"/>
+
+                </info.hoang8f.android.segmented.SegmentedGroup>
+
             <com.wrapp.floatlabelededittext.FloatLabeledEditText
                 android:id="@+id/et_job_notes_wrapper"
                 android:layout_width="match_parent"
@@ -131,7 +156,7 @@
                     android:id="@+id/et_job_notes"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Notes (optional)"
+                    android:hint="Notes"
                     android:inputType="textAutoCorrect|textCapSentences|textMultiLine"
                     android:maxLines="4" />
 

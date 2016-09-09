@@ -29,7 +29,7 @@ public class EndOfDayDialogFragment extends DialogFragmentHelper {
     EditText endOfDayNotes;
     Button cancel, archive, dEndTime, nEndTime;
     private String firebaseJournalRef, driver, navigator;
-    private int percentOfGoal, totalGrossProfit;
+    private int percentOfGoal, totalGrossProfit, percentOnDumps, totalDumpCost;
     private ProgressDialog pDialog;
 
     @NonNull
@@ -41,7 +41,9 @@ public class EndOfDayDialogFragment extends DialogFragmentHelper {
         Bundle eodBundle = getArguments();
         percentOfGoal = eodBundle.getInt("percentOfGoal");
         totalGrossProfit = eodBundle.getInt("totalGrossProfit");
-        firebaseJournalRef = eodBundle.getString("firebaseJournalRef");
+        percentOnDumps = eodBundle.getInt("percentOnDumps");
+        totalDumpCost = eodBundle.getInt("totalDumpCost");
+
         driver = eodBundle.getString("driver");
         navigator = eodBundle.getString("navigator");
         dialog.setCanceledOnTouchOutside(false);
@@ -99,7 +101,7 @@ public class EndOfDayDialogFragment extends DialogFragmentHelper {
                 final String DET = dEndTime.getText().toString();
                 final String NET = nEndTime.getText().toString();
 
-                if (!DET.equals("Driver Out") && !NET.equals("Nav Out")) {
+                if (!DET.equals(driver) && !NET.equals(navigator)) {
                     AlertDialog diaBox = confirmJournalArchive();
                     diaBox.show();
                 } else {
@@ -160,6 +162,8 @@ public class EndOfDayDialogFragment extends DialogFragmentHelper {
         fbrJournal.child("navEndTime").setValue(NET);
         fbrJournal.child("percentOfGoal").setValue(percentOfGoal);
         fbrJournal.child("totalGrossProfit").setValue(totalGrossProfit);
+        fbrJournal.child("percentOnDumps").setValue(percentOnDumps);
+        fbrJournal.child("totalDumpCost").setValue(totalDumpCost);
         fbrJournal.child("endOfDayNotes").setValue(endOfDayNotes.getText().toString());
         fbrJournal.child("archived").setValue(true, new Firebase.CompletionListener() {
             @Override

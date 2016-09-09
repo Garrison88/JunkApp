@@ -158,7 +158,7 @@
     <integer-array name="dumps_rate">
         <item>82</item>
         <item>85</item>
-        <item>65</item>
+        <item>70</item>
         <item>77</item>
         <item>90</item>
         <item>67</item>
@@ -186,6 +186,8 @@
         <item>Triple M East</item>
         <item>CMI Fenmar</item>
         <item>Tepermans</item>
+        <item>Cascades</item>
+        <item>Other</item>
     </string-array>
 
     <integer-array name="material_rebate">

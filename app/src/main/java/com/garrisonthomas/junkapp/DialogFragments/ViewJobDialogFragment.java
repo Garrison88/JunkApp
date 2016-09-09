@@ -30,6 +30,8 @@ public class ViewJobDialogFragment extends DialogFragmentHelper {
     TextView vjNet;
     @Bind(R.id.tv_view_pay_type)
     TextView vjPayType;
+    @Bind(R.id.tv_view_job_type)
+    TextView vjJobType;
     @Bind(R.id.tv_view_job_time)
     TextView vjTime;
     @Bind(R.id.tv_view_job_receipt_number)
@@ -108,6 +110,7 @@ public class ViewJobDialogFragment extends DialogFragmentHelper {
                 vjGross.setText("$" + String.valueOf(jobObject.getGrossSale()));
                 vjNet.setText("$" + String.valueOf(jobObject.getNetSale()));
                 vjPayType.setText(jobObject.getPayType());
+                vjJobType.setText(jobObject.getJobType());
                 vjTime.setText(jobObject.getStartTime() + " - " + jobObject.getEndTime());
                 vjReceiptNumber.setText(String.valueOf(jobObject.getReceiptNumber()));
                 // if there are no notes, do not display them

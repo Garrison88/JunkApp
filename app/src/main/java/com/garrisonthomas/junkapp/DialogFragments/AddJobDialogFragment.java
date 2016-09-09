@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ public class AddJobDialogFragment extends DialogFragmentHelper {
     private EditText etSID, etGrossSale, etNetSale, etReceiptNumber, etJobNotes;
     private static Button startTime, endTime, saveJob, cancelJob;
     private static Spinner payTypeSpinner;
+    private static RadioButton commButton, resButton;
     private static String[] payTypeArray;
     private String payTypeString, firebaseJournalRef;
     private SharedPreferences preferences;
@@ -46,6 +48,9 @@ public class AddJobDialogFragment extends DialogFragmentHelper {
         etNetSale = (EditText) v.findViewById(R.id.et_net_sale);
         etReceiptNumber = (EditText) v.findViewById(R.id.et_receipt_number);
         etJobNotes = (EditText) v.findViewById(R.id.et_job_notes);
+
+        resButton = (RadioButton) v.findViewById(R.id.switch_residential);
+        commButton = (RadioButton) v.findViewById(R.id.switch_commercial);
 
         payTypeArray = getResources().getStringArray(R.array.job_pay_type);
 
@@ -124,6 +129,11 @@ public class AddJobDialogFragment extends DialogFragmentHelper {
                     job.setPayType(payTypeString);
                     job.setReceiptNumber(Integer.valueOf(etReceiptNumber.getText().toString()));
                     job.setJobNotes(String.valueOf(etJobNotes.getText()));
+                    if (resButton.isChecked()) {
+                        job.setJobType("Residential");
+                    } else if (commButton.isChecked()) {
+                        job.setJobType("Commercial");
+                    }
 
                     fbrJob.setValue(job);
 
