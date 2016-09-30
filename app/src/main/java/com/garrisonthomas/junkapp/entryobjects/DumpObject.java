@@ -3,7 +3,8 @@ package com.garrisonthomas.junkapp.entryobjects;
 /**
  * Created by Garrison on 2016-08-08.
  */
-public class DumpObject {
+
+public class DumpObject extends EntryItem {
 
     private String dumpName;
     private double grossCost, tonnage;

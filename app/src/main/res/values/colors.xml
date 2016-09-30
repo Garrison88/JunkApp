@@ -12,6 +12,7 @@
     <color name="darkAccent">#727272</color>
     <color name="dialogFragmentBackground">#424242</color>
     <color name="snackbarActionColor">#03A9F4</color>
+    <color name="etErrorColor">#E040FB</color>
 
     <!--<color name="material_green_50">#E8F5E9</color>-->
     <!--<color name="material_green_500">#4CAF50</color>-->

@@ -24,42 +24,43 @@
                 <Spinner
                     android:id="@+id/spinner_dump_dialog"
                     android:layout_width="0dp"
-                    android:layout_height="fill_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:dropDownWidth="@dimen/custom_spinner_width" />
 
-                <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/enter_weight_wrapper"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-                    <EditText
+                    <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_add_dump_weight"
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:hint="Weight (mt)"
                         android:inputType="numberDecimal"
                         android:maxLength="4" />
 
-
-                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
-
+                </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/dump_cost_layout"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:baselineAligned="false"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:layout_gravity="center_horizontal">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:orientation="horizontal">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center_horizontal"-->
+                    <!--android:orientation="horizontal">-->
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -72,7 +73,22 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
 
-                </LinearLayout>
+                    <EditText
+                        android:id="@+id/et_edit_dump_cost"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:visibility="gone"
+                        android:inputType="numberDecimal"/>
+
+                    <ImageButton
+                        android:src="@drawable/ic_edit_white_24dp"
+                        android:id="@+id/btn_edit_dump_cost"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="?android:selectableItemBackground"/>
+
+                <!--</LinearLayout>-->
 
             </LinearLayout>
 
@@ -81,37 +97,36 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <com.wrapp.floatlabelededittext.FloatLabeledEditText
-                    android:id="@+id/et_dump_receipt_number_wrapper"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/enter_receipt_number_wrapper"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
 
-                    <EditText
+                    <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_dump_receipt_number"
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Receipt #"
                         android:inputType="number" />
 
-                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+                </android.support.design.widget.TextInputLayout>
 
-                <com.wrapp.floatlabelededittext.FloatLabeledEditText
-                    android:id="@+id/et_percent_previous_wrapper"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/enter_percent_previous_wrapper"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/et_dump_receipt_number_wrapper">
+                    android:layout_weight="1">
 
-                    <EditText
+                    <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_percent_previous"
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="% Previous"
                         android:inputType="number"
                         android:maxLength="3" />
 
-                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+                </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
 

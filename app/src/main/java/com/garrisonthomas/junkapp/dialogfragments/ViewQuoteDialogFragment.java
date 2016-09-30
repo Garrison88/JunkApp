@@ -19,6 +19,7 @@ import com.firebase.client.Query;
 import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.entryobjects.QuoteObject;
+import com.garrisonthomas.junkapp.interfaces.ViewItem;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -26,7 +27,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Garrison on 2016-06-16.
  */
-public class ViewQuoteDialogFragment extends DialogFragmentHelper {
+public class ViewQuoteDialogFragment extends DialogFragmentHelper implements ViewItem {
 
     @Bind(R.id.tv_view_quote_low_end)
     TextView vqLowEnd;
@@ -62,7 +63,7 @@ public class ViewQuoteDialogFragment extends DialogFragmentHelper {
 //
 //        vqNotes.setTypeface(custom_font);
 
-        populateQuoteInfo();
+        populateItemInfo();
 
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,7 +101,7 @@ public class ViewQuoteDialogFragment extends DialogFragmentHelper {
         return dialog;
     }
 
-    public void populateQuoteInfo() {
+    public void populateItemInfo() {
 
         Firebase ref = new Firebase(firebaseJournalRef + "quotes");
         Query queryRef = ref.orderByChild("quoteSID").equalTo(vqSID);

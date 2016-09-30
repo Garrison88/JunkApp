@@ -3,13 +3,16 @@ package com.garrisonthomas.junkapp.dialogfragments;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.InputFilter;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
@@ -32,16 +35,23 @@ public class AddFuelDialogFragment extends DialogFragmentHelper {
 
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        int screenWidth = (int) (metrics.widthPixels * 0.90);
+
+        getDialog().setContentView(R.layout.add_fuel_layout);
+
+        getDialog().getWindow().setLayout(screenWidth, LinearLayout.LayoutParams.WRAP_CONTENT); //set below the setContentview
+
         preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
         firebaseJournalRef = preferences.getString("firebaseRef", "none");
 
         etFuelVendor = (EditText) v.findViewById(R.id.et_fuel_vendor);
         etFuelCost = (EditText) v.findViewById(R.id.et_fuel_cost);
         etReceiptNumber = (EditText) v.findViewById(R.id.et_fuel_receipt_number);
+        etReceiptNumber.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
 
         saveFuel = (Button) v.findViewById(R.id.btn_save_fuel);
         cancelFuel = (Button) v.findViewById(R.id.btn_cancel_fuel);
-
 
         saveFuel.setOnClickListener(new View.OnClickListener() {
             @Override

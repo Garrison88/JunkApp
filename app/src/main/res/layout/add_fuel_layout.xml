@@ -44,7 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/et_fuel_cost"
-            android:inputType="textNoSuggestions|textCapCharacters"
+            android:inputType="textNoSuggestions|textVisiblePassword"
             android:hint="Receipt Number"/>
 
     </com.wrapp.floatlabelededittext.FloatLabeledEditText>

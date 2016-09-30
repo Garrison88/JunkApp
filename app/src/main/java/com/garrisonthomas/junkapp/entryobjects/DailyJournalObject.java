@@ -12,13 +12,21 @@ public class DailyJournalObject {
 
     private String driver, driverStartTime, driverEndTime, navigator, navStartTime, navEndTime,
             endOfDayNotes, date, truckNumber;
-    private int percentOfGoal, percentOnDumps, totalGrossProfit;
+    private int percentOfGoal, percentOnDumps, totalGrossProfit, totalDumpCost;
     private boolean isArchived;
 
     public DailyJournalObject() {
 
         // empty default constructor, necessary for Firebase to be able to deserialize
 
+    }
+
+    public int getTotalDumpCost() {
+        return totalDumpCost;
+    }
+
+    public void setTotalDumpCost(int totalDumpCost) {
+        this.totalDumpCost = totalDumpCost;
     }
 
     public int getTotalGrossProfit() {

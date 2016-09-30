@@ -4,13 +4,10 @@ package com.garrisonthomas.junkapp.entryobjects;
  * Created by Garrison on 2016-08-24.
  */
 
-//@JsonIgnoreProperties(ignoreUnknown = true)
-
 public class TransferStation {
 
-    private String address, info, name;
+    private String address, info, name, phoneNumber;
     private int minimum, rate;
-    private long phoneNumber;
 
     public TransferStation() {
 
@@ -42,11 +39,11 @@ public class TransferStation {
         this.info = info;
     }
 
-    public long getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(long phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

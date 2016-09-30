@@ -67,7 +67,7 @@ public class DailyJournalDialogFragment extends DialogFragmentHelper {
         etNavigator = (EditText) v.findViewById(R.id.et_navigator);
 
         truckSpinner.setAdapter(new ArrayAdapter<>(this.getActivity(),
-                android.R.layout.simple_dropdown_item_1line, truckArray));
+                android.R.layout.simple_spinner_item, truckArray));
         truckSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
@@ -99,7 +99,6 @@ public class DailyJournalDialogFragment extends DialogFragmentHelper {
         });
 
 
-
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,35 +113,40 @@ public class DailyJournalDialogFragment extends DialogFragmentHelper {
             @Override
             public void onClick(View v) {
 
-                pDialog = ProgressDialog.show(getActivity(), null,
-                        "Creating journal...", true);
+                if (truckSpinner.getSelectedItemPosition() != 0) {
 
-                final String firebaseJournalRef = firebaseURL + "journals/" +
-                        currentYear + "/" + currentMonth + "/" + currentDay + "/T" + truckSelected + "/";
+                    pDialog = ProgressDialog.show(getActivity(), null,
+                            "Creating journal...", true);
 
-                final Firebase fbrJournal = new Firebase(firebaseJournalRef);
+                    final String firebaseJournalRef = firebaseURL + "journals/" +
+                            currentYear + "/" + currentMonth + "/" + currentDay + "/T" + truckSelected + "/";
 
-                fbrJournal.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
+                    final Firebase fbrJournal = new Firebase(firebaseJournalRef);
 
-                            pDialog.dismiss();
-                            Toast.makeText(getActivity(), "A journal for this truck already exists",
-                                    Toast.LENGTH_SHORT).show();
+                    fbrJournal.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
 
-                        } else if (!snapshot.exists()) {
+                                pDialog.dismiss();
+                                Toast.makeText(getActivity(), "A journal for this truck already exists",
+                                        Toast.LENGTH_SHORT).show();
 
-                            createJournal(fbrJournal, firebaseJournalRef);
+                            } else if (!snapshot.exists()) {
 
+                                createJournal(fbrJournal, firebaseJournalRef);
+
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-                    }
-                });
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
+                        }
+                    });
 
+                } else {
+                    Toast.makeText(getActivity(), "Please select a truck", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

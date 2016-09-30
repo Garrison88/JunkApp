@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.garrisonthomas.junkapp.BaseActivity;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
 
@@ -25,8 +26,8 @@ public class Tab3DumpFragment extends Fragment {
 
     private static Spinner dumpsSpinner;
     private static Button infoBtn, dirBtn, calcBtn, dumpsClearBtn;
-    private static String[] dumpNameArray, dumpDirectionsArray, dumpInfoArray, dumpPhoneNumberArray;
-    private static int[] dumpRateArray;
+    private static String[] dumpNameArray, dumpAddressArray, dumpInfoArray, dumpPhoneNumberArray;
+    private static Integer[] dumpRateArray;
     private static int selectedDumpRate;
     private static EditText etDumpCost;
     private static TextView tvDumpCost;
@@ -48,11 +49,11 @@ public class Tab3DumpFragment extends Fragment {
         etDumpCost = (EditText) v.findViewById(R.id.et_dump_cost);
         tvDumpCost = (TextView) v.findViewById(R.id.tv_dump_cost);
 
-        dumpNameArray = v.getResources().getStringArray(R.array.dumps_name);
-        dumpDirectionsArray = v.getResources().getStringArray(R.array.dumps_address);
-        dumpInfoArray = v.getResources().getStringArray(R.array.dumps_info);
-        dumpRateArray = v.getResources().getIntArray(R.array.dumps_rate);
-        dumpPhoneNumberArray = v.getResources().getStringArray(R.array.dumps_phone_number);
+        dumpNameArray = BaseActivity.dumpNameArray;
+        dumpAddressArray = BaseActivity.dumpAddressArray;
+        dumpInfoArray = BaseActivity.dumpInfoArray;
+        dumpRateArray = BaseActivity.dumpRateArray;
+        dumpPhoneNumberArray = BaseActivity.dumpPhoneNumberArray;
 
         dumpsSpinner.setAdapter(new DumpsAdapter(getActivity(), R.layout.custom_spinner_layout, dumpNameArray));
         dumpsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -60,9 +61,7 @@ public class Tab3DumpFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
 
-//                etDumpCost.setText("");
-//                calcBtn.setClickable(true);
-                final String dir = getString(R.string.google_maps_url) + dumpDirectionsArray[position];
+                final String dir = getString(R.string.google_maps_url) + dumpAddressArray[position];
                 selectedDumpInfo = dumpInfoArray[position];
                 selectedDumpRate = dumpRateArray[position];
                 selectedDumpName = dumpNameArray[position];

@@ -8,7 +8,7 @@
         android:title="Call Office"
         android:orderInCategory="1"
         android:icon="@drawable/ic_call_white_24dp"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/action_email_office"
@@ -37,14 +37,16 @@
 
     <item
         android:id="@+id/action_publish_journal"
-        android:title="Publish Journal"
+        android:title="Archive Journal"
         android:icon="@drawable/ic_archive_white_24dp"
-        app:showAsAction="ifRoom"/>
+        android:orderInCategory="2"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_delete_journal"
         android:title="Delete Journal"
         android:icon="@drawable/ic_delete_white_24px"
+        android:orderInCategory="3"
         app:showAsAction="never"/>
 
 

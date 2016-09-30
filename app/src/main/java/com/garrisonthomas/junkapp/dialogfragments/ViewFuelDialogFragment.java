@@ -17,6 +17,7 @@ import com.firebase.client.Query;
 import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.entryobjects.FuelObject;
+import com.garrisonthomas.junkapp.interfaces.ViewItem;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -24,7 +25,7 @@ import butterknife.ButterKnife;
 /**
  * Created by GarrisonThomas on 2015-10-22.
  */
-public class ViewFuelDialogFragment extends DialogFragmentHelper {
+public class ViewFuelDialogFragment extends DialogFragmentHelper implements ViewItem {
 
     @Bind(R.id.tv_view_fuel_vendor)
     TextView vfVendor;
@@ -45,7 +46,7 @@ public class ViewFuelDialogFragment extends DialogFragmentHelper {
 
         ButterKnife.bind(this, v);
 
-        populateFuelInfo();
+        populateItemInfo();
 
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +79,7 @@ public class ViewFuelDialogFragment extends DialogFragmentHelper {
         return dialog;
     }
 
-    public void populateFuelInfo() {
+    public void populateItemInfo() {
 
         Firebase ref = new Firebase(firebaseJournalRef + "/fuel");
         Query queryRef = ref.orderByChild("fuelReceiptNumber").equalTo(fuelReceiptNumber);

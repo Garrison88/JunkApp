@@ -59,10 +59,10 @@ public class RebateDumpFragment extends Fragment {
         rebateLocationSpinner = (Spinner) v.findViewById(R.id.spinner_rebate_location);
 
         materialTypeSpinner.setAdapter(new ArrayAdapter<>(this.getActivity(),
-                android.R.layout.simple_dropdown_item_1line, materialTypeArray));
+                android.R.layout.simple_spinner_item, materialTypeArray));
 
         rebateLocationSpinner.setAdapter(new ArrayAdapter<>(this.getActivity(),
-                android.R.layout.simple_dropdown_item_1line, rebateLocationArray));
+                android.R.layout.simple_spinner_item, rebateLocationArray));
 
         materialTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 

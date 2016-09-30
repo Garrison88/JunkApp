@@ -18,11 +18,12 @@ import com.firebase.client.Query;
 import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.entryobjects.JobObject;
+import com.garrisonthomas.junkapp.interfaces.ViewItem;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ViewJobDialogFragment extends DialogFragmentHelper {
+public class ViewJobDialogFragment extends DialogFragmentHelper implements ViewItem {
 
     @Bind(R.id.tv_view_job_gross)
     TextView vjGross;
@@ -32,6 +33,8 @@ public class ViewJobDialogFragment extends DialogFragmentHelper {
     TextView vjPayType;
     @Bind(R.id.tv_view_job_type)
     TextView vjJobType;
+    @Bind(R.id.tv_job_type_display)
+    TextView tvJobTypeDisplay;
     @Bind(R.id.tv_view_job_time)
     TextView vjTime;
     @Bind(R.id.tv_view_job_receipt_number)
@@ -55,10 +58,13 @@ public class ViewJobDialogFragment extends DialogFragmentHelper {
 
         ButterKnife.bind(this, v);
 
+        //Hide these optional fields by default
+        tvJobTypeDisplay.setVisibility(View.GONE);
+        vjJobType.setVisibility(View.GONE);
         tvNotesDisplay.setVisibility(View.GONE);
         vjNotes.setVisibility(View.GONE);
 
-        populateJobInfo();
+        populateItemInfo();
 
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +103,7 @@ public class ViewJobDialogFragment extends DialogFragmentHelper {
         return dialog;
     }
 
-    public void populateJobInfo() {
+    public void populateItemInfo() {
 
         Firebase ref = new Firebase(firebaseJournalRef + "jobs");
         Query queryRef = ref.orderByChild("sid").equalTo(vjSID);
@@ -110,6 +116,11 @@ public class ViewJobDialogFragment extends DialogFragmentHelper {
                 vjGross.setText("$" + String.valueOf(jobObject.getGrossSale()));
                 vjNet.setText("$" + String.valueOf(jobObject.getNetSale()));
                 vjPayType.setText(jobObject.getPayType());
+                if (jobObject.getJobType() != null) {
+                    tvJobTypeDisplay.setVisibility(View.VISIBLE);
+                    vjJobType.setVisibility(View.VISIBLE);
+                    vjJobType.setText(jobObject.getJobType());
+                }
                 vjJobType.setText(jobObject.getJobType());
                 vjTime.setText(jobObject.getStartTime() + " - " + jobObject.getEndTime());
                 vjReceiptNumber.setText(String.valueOf(jobObject.getReceiptNumber()));

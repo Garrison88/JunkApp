@@ -1,15 +1,20 @@
 package com.garrisonthomas.junkapp.tabfragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -65,15 +70,41 @@ public class Tab2CalcFragment extends Fragment {
 
                 vSpinner.setSelection(0);
                 vPrice = volumePrice[position];
-                if (position != 0 && position != 12 && position != 15) {
+                if (position != 0 && position != 12 && position != 16) {
                     if (!TextUtils.isEmpty(tvVolumeSize.getText())) {
                         tvVolumeSize.append("\n" + "+" + "\n");
-
                     }
-                    if (position >= 16) {
+                    if (position >= 17) {
                         tvVolumeSize.append(volumeSize[position]);
                         discount = vPrice * .010;
                         calcCost();
+                    } else if (position == 15) {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                        final EditText edittext = new EditText(getActivity());
+
+                        edittext.setGravity(Gravity.CENTER_HORIZONTAL);
+
+                        edittext.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        alert.setTitle("Enter a value");
+
+                        alert.setView(edittext);
+
+                        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+
+                                tvVolumeSize.append("$" + edittext.getText().toString());
+                                priceArray.add(Integer.valueOf(edittext.getText().toString()));
+                                calcCost();
+                            }
+                        });
+
+                        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+
+                            }
+                        });
+
+                        alert.show();
                     } else {
                         tvVolumeSize.append(volumeSize[position] + " ($" + volumePrice[position] + ")");
                         priceArray.add(vPrice);
@@ -145,7 +176,7 @@ public class Tab2CalcFragment extends Fragment {
                         totalText = Double.toString(Utils.calculateTax(beforeTax));
                         tvTotal.setText("$" + totalText);
 
-                        addHST.setText("Display Tax");
+                        addHST.setText("Display HST");
                     }
                 } else {
                     showHST();
@@ -165,7 +196,7 @@ public class Tab2CalcFragment extends Fragment {
                 sum += i;
             }
 
-            if (discount!=0.0) {
+            if (discount != 0.0) {
                 sum *= discount;
             }
             String sumString = getString(R.string.dollar_sign) + (Math.round(sum * 100.00) / 100.00);
@@ -209,8 +240,10 @@ public class Tab2CalcFragment extends Fragment {
 
             TextView subSpinner = (TextView) mySpinner.findViewById(R.id.tv_custom_spinner_second);
 
-            if (position == 0 || position == 12 || position >= 15) {
+            if (position == 0 || position == 12 || position >= 16) {
                 subSpinner.setVisibility(View.GONE);
+            } else if (position == 15) {
+                subSpinner.setText("???");
             } else {
                 subSpinner.setText("$" + volumePrice[position]);
             }

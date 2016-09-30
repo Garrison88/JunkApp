@@ -34,6 +34,7 @@
                 android:text="Pay Type" />
 
             <TextView
+                android:id="@+id/tv_job_type_display"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Job Type" />

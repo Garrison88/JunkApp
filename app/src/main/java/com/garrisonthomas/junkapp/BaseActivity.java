@@ -9,18 +9,34 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.firebase.ui.auth.AuthUI;
+import com.garrisonthomas.junkapp.entryobjects.TransferStation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class BaseActivity extends AppCompatActivity {
 
-    public String todaysDate;
+    public List<String> dumpAddressArrayList = new ArrayList<>();
+    public List<String> dumpInfoArrayList = new ArrayList<>();
+    public List<String> dumpNameArrayList = new ArrayList<>();
+    public List<Integer> dumpMinimumArrayList = new ArrayList<>();
+    public List<Integer> dumpRateArrayList = new ArrayList<>();
+    public List<String> dumpPhoneNumberArrayList = new ArrayList<>();
+
+    public static String[] dumpAddressArray, dumpInfoArray, dumpNameArray, dumpPhoneNumberArray;
+    public static Integer[] dumpMinimumArray,dumpRateArray;
+    public static String todaysDate;
     private static final int RC_SIGN_IN = 9001;
     FirebaseAuth auth = FirebaseAuth.getInstance();
 
@@ -33,6 +49,8 @@ public class BaseActivity extends AppCompatActivity {
         Date date = new Date();
         SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy", Locale.CANADA);
         todaysDate = df2.format(date);
+
+        populateRateArrayList();
 
     }
 
@@ -139,6 +157,43 @@ public class BaseActivity extends AppCompatActivity {
                             .build(),
                     RC_SIGN_IN);
         }
+
+    }
+
+    public void populateRateArrayList() {
+
+        Firebase dumpInfoRef = new Firebase("https://junkapp-43226.firebaseio.com/dumpInfo");
+        dumpInfoRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                TransferStation tStation;
+                for (DataSnapshot dumpChild : dataSnapshot.getChildren()) {
+
+                    tStation = dumpChild.getValue(TransferStation.class);
+
+                    dumpAddressArrayList.add(tStation.getAddress());
+                    dumpInfoArrayList.add(tStation.getInfo());
+                    dumpMinimumArrayList.add(tStation.getMinimum());
+                    dumpNameArrayList.add(tStation.getName());
+                    dumpPhoneNumberArrayList.add(tStation.getPhoneNumber());
+                    dumpRateArrayList.add(tStation.getRate());
+
+                }
+
+                dumpAddressArray = dumpAddressArrayList.toArray(new String[dumpAddressArrayList.size()]);
+                dumpInfoArray = dumpInfoArrayList.toArray(new String[dumpInfoArrayList.size()]);
+                dumpMinimumArray = dumpMinimumArrayList.toArray(new Integer[dumpMinimumArrayList.size()]);
+                dumpNameArray = dumpNameArrayList.toArray(new String[dumpNameArrayList.size()]);
+                dumpPhoneNumberArray = dumpPhoneNumberArrayList.toArray(new String[dumpPhoneNumberArrayList.size()]);
+                dumpRateArray = dumpRateArrayList.toArray(new Integer[dumpRateArrayList.size()]);
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
 
     }
 

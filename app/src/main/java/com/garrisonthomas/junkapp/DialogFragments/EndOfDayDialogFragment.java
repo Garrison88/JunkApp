@@ -13,8 +13,11 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
@@ -28,9 +31,11 @@ public class EndOfDayDialogFragment extends DialogFragmentHelper {
     SharedPreferences preferences;
     EditText endOfDayNotes;
     Button cancel, archive, dEndTime, nEndTime;
-    private String firebaseJournalRef, driver, navigator;
+    private String firebaseJournalRef, driver, navigator, loadString, fuelString;
+    private String[] endLoadArray, endFuelArray;
     private int percentOfGoal, totalGrossProfit, percentOnDumps, totalDumpCost;
     private ProgressDialog pDialog;
+    private Spinner endLoad, endFuel;
 
     @NonNull
     @Override
@@ -57,8 +62,9 @@ public class EndOfDayDialogFragment extends DialogFragmentHelper {
 
         final View v = inflater.inflate(R.layout.end_of_day_layout, container, false);
 
-
         preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+
+        firebaseJournalRef = preferences.getString("firebaseRef", null);
 
         endOfDayNotes = (EditText) v.findViewById(R.id.end_day_notes);
 
@@ -71,7 +77,45 @@ public class EndOfDayDialogFragment extends DialogFragmentHelper {
         nEndTime.setText(navigator);
         nEndTime.setTransformationMethod(null);
 
-        firebaseJournalRef = preferences.getString("firebaseRef", null);
+        endLoadArray = v.getResources().getStringArray(R.array.end_day_load);
+        endFuelArray = v.getResources().getStringArray(R.array.end_day_fuel);
+
+        endLoad = (Spinner) v.findViewById(R.id.end_day_load);
+        endFuel = (Spinner) v.findViewById(R.id.end_day_fuel);
+
+        endLoad.setAdapter(new ArrayAdapter<>(this.getActivity(),
+                android.R.layout.simple_spinner_item, endLoadArray));
+        endLoad.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
+
+                loadString = endLoadArray[position];
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        endFuel.setAdapter(new ArrayAdapter<>(this.getActivity(),
+                android.R.layout.simple_spinner_item, endFuelArray));
+        endFuel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
+
+                fuelString = endFuelArray[position];
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         dEndTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,7 +208,8 @@ public class EndOfDayDialogFragment extends DialogFragmentHelper {
         fbrJournal.child("totalGrossProfit").setValue(totalGrossProfit);
         fbrJournal.child("percentOnDumps").setValue(percentOnDumps);
         fbrJournal.child("totalDumpCost").setValue(totalDumpCost);
-        fbrJournal.child("endOfDayNotes").setValue(endOfDayNotes.getText().toString());
+        fbrJournal.child("endOfDayNotes").setValue("Load: " + loadString + ". Fuel: " + fuelString +
+                ". Notes: " + endOfDayNotes.getText().toString());
         fbrJournal.child("archived").setValue(true, new Firebase.CompletionListener() {
             @Override
             public void onComplete(FirebaseError firebaseError, Firebase firebase) {

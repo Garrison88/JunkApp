@@ -6,10 +6,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.LinearLayout;
 
 import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
@@ -35,6 +37,13 @@ public class DumpTabHost extends DialogFragmentHelper {
         // tab slider
         sectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
 
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        int screenWidth = (int) (metrics.widthPixels * 0.90);
+
+        getDialog().setContentView(R.layout.dump_tab_host);
+
+        getDialog().getWindow().setLayout(screenWidth, LinearLayout.LayoutParams.WRAP_CONTENT); //set below the setContentview
+
         // Set up the ViewPager with the sections adapter.
         viewPager = (ViewPager)view.findViewById(R.id.pager);
         viewPager.setAdapter(sectionsPagerAdapter);
@@ -55,11 +64,16 @@ public class DumpTabHost extends DialogFragmentHelper {
         public Fragment getItem(int position) {
             if (position == 0) {
                 // find first fragment...
+
                 GarbageDumpFragment GDF = new GarbageDumpFragment();
+//                Bundle GDFBundle = new Bundle();
+//                GDFBundle.p("jobSpinnerSID", selectedJobSID);
+//                GDF.setArguments(GDFBundle);
                 return GDF;
             }
             if (position == 1) {
-                // find first fragment...
+                // find second fragment...
+
                 RebateDumpFragment RDF = new RebateDumpFragment();
                 return RDF;
             }

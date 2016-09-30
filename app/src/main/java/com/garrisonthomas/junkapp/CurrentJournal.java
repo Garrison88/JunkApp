@@ -155,6 +155,8 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
                 String totalIncomeString = "Income: $" + String.valueOf(totalGrossProfit);
                 String percentOfGoalString = String.valueOf(percentOfGoal) + "% of goal";
 
+//                calculateDumpNumbers();
+
                 tvTotalIncome.setText(totalIncomeString);
                 tvPercentOfGoal.setText(percentOfGoalString);
             }
@@ -202,7 +204,7 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
                     totalDumpCost += dumpObject.getGrossCost();
                 }
 
-                percentOnDumps = (int) (100 * (totalDumpCost / Float.valueOf(totalGrossProfit)));
+                percentOnDumps = (int) (100 * (totalDumpCost / (float) totalGrossProfit));
                 String totalDumpCostString = "Dump Cost: $" + String.valueOf(totalDumpCost);
                 String percentOnDumpsString = String.valueOf(percentOnDumps) + "% of profit";
 
@@ -226,7 +228,7 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
                     totalDumpCost -= dumpObject.getGrossCost();
                 }
 
-                percentOnDumps = (int) (100 * (totalDumpCost / Float.valueOf(totalGrossProfit)));
+                percentOnDumps = (int) (100 * (totalDumpCost / (float) totalGrossProfit));
                 String totalDumpCostString = "Dump Cost: $" + String.valueOf(totalDumpCost);
                 String percentOnDumpsString = String.valueOf(percentOnDumps) + "% of profit";
 
@@ -248,8 +250,7 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
 
         //query database to find driver, nav, and truck number and set them
         Firebase journalInfo = new Firebase(firebaseJournalRef);
-        journalInfo.addListenerForSingleValueEvent(new ValueEventListener() {
-
+        journalInfo.addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -346,7 +347,6 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.action_email_office).setVisible(false);
-        menu.findItem(R.id.action_call_office).setVisible(false);
         menu.findItem(R.id.action_login_logout).setVisible(false);
         menu.findItem(R.id.action_delete_journal).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -377,6 +377,7 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
                 return false;
             }
         });
+        menu.findItem(R.id.action_call_office).setVisible(true);
         return true;
     }
 
@@ -430,6 +431,68 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
             }
         });
     }
+
+//    private void calculateDumpNumbers() {
+//
+//        // query dumps and rebate to find percentOnDumps
+//        Firebase dumps = new Firebase(firebaseJournalRef + "dumps");
+//        dumps.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//
+//                DumpObject dumpObject = dataSnapshot.getValue(DumpObject.class);
+//                int percentPrevious = dumpObject.getPercentPrevious();
+//                if (percentPrevious != 0) {
+//                    totalDumpCost += (dumpObject.getGrossCost() * ((100 - percentPrevious) * 0.01));
+//                } else {
+//                    totalDumpCost += dumpObject.getGrossCost();
+//                }
+//
+//                percentOnDumps = (int) (100 * (totalDumpCost / (float) totalGrossProfit));
+//                String totalDumpCostString = "Dump Cost: $" + String.valueOf(totalDumpCost);
+//                String percentOnDumpsString = String.valueOf(percentOnDumps) + "% of profit";
+//
+//                tvDumpCost.setText(totalDumpCostString);
+//                tvPercentOnDumps.setText(percentOnDumpsString);
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//                DumpObject dumpObject = dataSnapshot.getValue(DumpObject.class);
+//                int percentPrevious = dumpObject.getPercentPrevious();
+//                if (percentPrevious != 0) {
+//                    totalDumpCost -= (dumpObject.getGrossCost() * ((100 - percentPrevious) * 0.01));
+//                } else {
+//                    totalDumpCost -= dumpObject.getGrossCost();
+//                }
+//
+//                percentOnDumps = (int) (100 * (totalDumpCost / (float) totalGrossProfit));
+//                String totalDumpCostString = "Dump Cost: $" + String.valueOf(totalDumpCost);
+//                String percentOnDumpsString = String.valueOf(percentOnDumps) + "% of profit";
+//
+//                tvDumpCost.setText(totalDumpCostString);
+//                tvPercentOnDumps.setText(percentOnDumpsString);
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(FirebaseError firebaseError) {
+//
+//            }
+//        });
+//
+//    }
 
     @Override
     public void onClick(View view) {

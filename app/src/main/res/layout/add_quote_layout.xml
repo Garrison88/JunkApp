@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <ScrollView
-        android:id="@+id/top_quote_sv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:fillViewport="true">
 
         <LinearLayout
@@ -15,52 +15,52 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.wrapp.floatlabelededittext.FloatLabeledEditText
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/enter_quote_sid_wrapper"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/et_quote_sid"
+                <android.support.design.widget.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="SID"
                     android:inputType="number"
                     android:maxLength="6" />
 
-            </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+            </android.support.design.widget.TextInputLayout>
 
             <LinearLayout
                 android:id="@+id/sales_linear_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/enter_low_end_wrapper"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-                    <EditText
-                        android:id="@+id/et_low_end"
+                    <android.support.design.widget.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:hint="Low End"
                         android:inputType="numberDecimal" />
 
-                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+                </android.support.design.widget.TextInputLayout>
 
-                <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/enter_high_end_wrapper"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-                    <EditText
-                        android:id="@+id/et_high_end"
+                    <android.support.design.widget.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:hint="High End (optional)"
+                        android:hint="High End"
                         android:inputType="numberDecimal" />
 
-                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+                </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
 
@@ -86,19 +86,19 @@
 
             </LinearLayout>
 
-            <com.wrapp.floatlabelededittext.FloatLabeledEditText
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/enter_quote_notes_wrapper"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/et_quote_notes"
+                <android.support.design.widget.TextInputEditText
                     android:layout_width="fill_parent"
                     android:layout_height="match_parent"
-                    android:hint="Details (optional)"
+                    android:hint="Notes"
                     android:inputType="textAutoCorrect|textCapSentences|textMultiLine"
                     android:maxLines="4" />
 
-            </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+            </android.support.design.widget.TextInputLayout>
 
             <ImageButton
                 android:id="@+id/btn_select_quote_photo"
@@ -113,8 +113,7 @@
     <LinearLayout
         android:id="@+id/add_quote_button_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/top_quote_sv">
+        android:layout_height="wrap_content">
 
         <Button
             android:id="@+id/btn_cancel_quote"
@@ -127,7 +126,7 @@
 
         <View
             android:layout_width="1dp"
-            android:layout_height="fill_parent"
+            android:layout_height="match_parent"
             android:layout_marginBottom="7dp"
             android:layout_marginTop="7dp"
             android:background="#505154" />
@@ -143,4 +142,4 @@
 
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

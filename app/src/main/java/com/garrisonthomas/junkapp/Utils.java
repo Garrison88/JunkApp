@@ -16,12 +16,9 @@ import com.firebase.client.FirebaseError;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-/**
- * Created by GarrisonThomas on 2015-10-08.
- */
-public abstract class Utils {
+public class Utils {
 
-    public static void populateIntegerSpinner(final Context context, final Firebase firebase,
+    static void populateIntegerSpinner(final Context context, final Firebase firebase,
                                               final ArrayList<Integer> arrayList, final Spinner spinner) {
 
         firebase.addChildEventListener(new ChildEventListener() {
@@ -67,7 +64,7 @@ public abstract class Utils {
     }
 
 
-    public static void populateStringSpinner(final Context context, final Firebase firebase,
+    static void populateStringSpinner(final Context context, final Firebase firebase,
                                              final ArrayList<String> arrayList, final Spinner spinner) {
 
         firebase.addChildEventListener(new ChildEventListener() {
@@ -120,49 +117,13 @@ public abstract class Utils {
                                        double weightInTonnes, Spinner spinner) {
 
         double result;
+        int position = spinner.getSelectedItemPosition();
+        int minimum = BaseActivity.dumpMinimumArray[position];
 
-        switch (spinner.getSelectedItemPosition()) {
-//                        Cherry
-            case 1:
-//                        GFL Pickering
-            case 7:
-//                        GFL Etobicoke
-            case 8:
-//                        GFL Mississauga
-            case 9:
-                if (weightInTonnes <= .48) {
-                    result = 40;
-                } else {
-                    result = Math.round((weightInTonnes * pricePerTonne) * 100.00) / 100.00;
-                }
-                break;
-//                        Shorncliffe
-            case 2:
-                if (weightInTonnes <= .38) {
-                    result = 25;
-                } else {
-                    result = Math.round((weightInTonnes * pricePerTonne) * 100.00) / 100.00;
-                }
-                break;
-//                        Fenmar
-            case 3:
-                if (weightInTonnes <= .52) {
-                    result = 40;
-                } else {
-                    result = Math.round((weightInTonnes * pricePerTonne) * 100.00) / 100.00;
-                }
-                break;
-//                        Tor-Can
-            case 14:
-                if (weightInTonnes <= .82) {
-                    result = 65;
-                } else {
-                    result = Math.round((weightInTonnes * pricePerTonne) * 100.00) / 100.00;
-                }
-                break;
-            default:
-                result = Math.round((weightInTonnes * pricePerTonne) * 100.00) / 100.00;
-                break;
+        if (Math.round((weightInTonnes * pricePerTonne) * 100.00) / 100.00 < minimum) {
+            result = minimum;
+        } else {
+            result = Math.round((weightInTonnes * pricePerTonne) * 100.00) / 100.00;
         }
 
         return result;

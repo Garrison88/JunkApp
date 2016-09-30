@@ -5,7 +5,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
@@ -18,7 +20,7 @@ import java.util.Locale;
 /**
  * Created by Garrison on 2016-06-11.
  */
-public class DialogFragmentHelper extends DialogFragment {
+public abstract class DialogFragmentHelper extends DialogFragment {
 
     public String firebaseURL;
     public FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -45,9 +47,9 @@ public class DialogFragmentHelper extends DialogFragment {
     public static void deleteItem(final DialogFragment df, final String firebaseRef) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(df.getActivity());
-        builder.setMessage("Delete this entry?")
+        builder.setTitle("Delete this entry?")
                 .setCancelable(false)
-                .setIcon(R.drawable.ic_delete_black_24px)
+                .setIcon(R.drawable.ic_warning_white_24dp)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, int id) {
 
@@ -67,6 +69,13 @@ public class DialogFragmentHelper extends DialogFragment {
         AlertDialog alert = builder.create();
         alert.show();
 
+    }
+
+    public boolean validateEditTextLength(EditText et, int minLength, int maxLength) {
+
+        return (String.valueOf(et.getText()).length() >= minLength
+                && String.valueOf(et.getText()).length() <= maxLength
+                && !TextUtils.isEmpty(et.getText()));
     }
 
 }

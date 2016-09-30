@@ -15,6 +15,7 @@
         <item name="android:spinnerStyle">@style/CustomSpinnerStyle</item>
         <item name="android:dialogTheme">@style/CustomDialog</item>
         <item name="android:fontFamily">work-sans</item>
+        <item name="textColorError">@color/etErrorColor</item>
     </style>
 
     <style name="CustomEditTextStyle" parent="android:Widget.Material.EditText">
@@ -29,7 +30,7 @@
         <item name="android:fontFamily">work-sans</item>
     </style>
 
-    <style name="CustomSpinnerStyle" parent="android:Widget.Material.Spinner">
+    <style name="CustomSpinnerStyle" parent="android:Widget.Holo.Spinner">
         <item name="android:fontFamily">work-sans</item>
     </style>
 
@@ -39,6 +40,7 @@
         <item name="android:textViewStyle">@style/CustomTextViewStyle</item>
         <item name="android:editTextStyle">@style/CustomEditTextStyle</item>
         <item name="android:buttonStyle">@style/CustomButtonStyle</item>
+        <item name="android:spinnerStyle">@style/CustomSpinnerStyle</item>
         <item name="android:padding">5dp</item>
         <item name="android:colorBackground">@color/dialogFragmentBackground</item>
     </style>

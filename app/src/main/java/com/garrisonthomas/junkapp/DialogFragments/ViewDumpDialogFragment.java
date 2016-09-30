@@ -17,6 +17,7 @@ import com.firebase.client.Query;
 import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.entryobjects.DumpObject;
+import com.garrisonthomas.junkapp.interfaces.ViewItem;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -24,7 +25,7 @@ import butterknife.ButterKnife;
 /**
  * Created by GarrisonThomas on 2015-10-22.
  */
-public class ViewDumpDialogFragment extends DialogFragmentHelper {
+public class ViewDumpDialogFragment extends DialogFragmentHelper implements ViewItem {
 
     @Bind(R.id.tv_view_dump_gross_cost)
     TextView vdGross;
@@ -53,7 +54,7 @@ public class ViewDumpDialogFragment extends DialogFragmentHelper {
         vdPercentPreviousText.setVisibility(View.GONE);
         vdPercentPrevious.setVisibility(View.GONE);
 
-        populateDumpInfo();
+        populateItemInfo();
 
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +88,7 @@ public class ViewDumpDialogFragment extends DialogFragmentHelper {
         return dialog;
     }
 
-    public void populateDumpInfo() {
+    public void populateItemInfo() {
 
         Firebase ref = new Firebase(firebaseJournalRef + "dumps");
         Query queryRef = ref.orderByChild("dumpReceiptNumber").equalTo(dumpReceiptNumber);
@@ -97,10 +98,15 @@ public class ViewDumpDialogFragment extends DialogFragmentHelper {
             public void onChildAdded(DataSnapshot snapshot, String previousChildKey) {
 
                 DumpObject dumpObject = snapshot.getValue(DumpObject.class);
+
                 vdGross.setText("$" + String.valueOf(dumpObject.getGrossCost()));
                 vdTonnage.setText(String.valueOf(dumpObject.getTonnage()));
                 if (dumpObject.getPercentPrevious() != 0) {
-                    vdPercentPrevious.setText(String.valueOf(dumpObject.getPercentPrevious()) + "%");
+                    //TODO: figure this out
+                    double previousAmount = Math.round(dumpObject.getGrossCost() * (dumpObject.getPercentPrevious() * .01) * 100.00) / 100.00;
+                    String previousAmountString = String.valueOf(previousAmount);
+                    vdPercentPrevious.setText(String.valueOf(dumpObject.getPercentPrevious()) + "%"
+                            + " ($" + previousAmountString + ")");
                     vdPercentPreviousText.setVisibility(View.VISIBLE);
                     vdPercentPrevious.setVisibility(View.VISIBLE);
                 }

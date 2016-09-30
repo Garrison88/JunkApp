@@ -1,80 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="dumps_name">
-        <item>Laird</item>
-        <item>Cherry</item>
-        <item>Shorncliffe</item>
-        <item>Fenmar</item>
-        <item>Miller</item>
-        <item>Medulla West</item>
-        <item>Medulla East</item>
-        <item>GFL Pickering</item>
-        <item>GFL Etobicoke</item>
-        <item>GFL Mississauga</item>
-        <item>WM Etobicoke</item>
-        <item>WM St Catherines</item>
-        <item>WM Hamilton</item>
-        <item>Mountain Transfer</item>
-        <item>Tor-Can</item>
-        <item>Tuff Recycling Inc</item>
-    </string-array>
-
-    <!--this is the shortened Google Maps URL that follows https://goo.gl/maps/-->
-    <string-array name="dumps_address">
-        <!--Laird-->
-        <item>chdEuWRNCvk</item>
-        <!--Cherry-->
-        <item>k9YybVBD7sP2</item>
-        <!--Shorncliffe-->
-        <item>iokV72f1kqs</item>
-        <!--Fenmar-->
-        <item>Yj2ZaQx8hi92</item>
-        <!--Miller-->
-        <item>XmboWmDyZHK2</item>
-        <!--Medulla West-->
-        <item>L5JrwkPeH9z</item>
-        <!--Medulla East-->
-        <item>uth6xb1UntM2</item>
-        <!--GFL Pickering-->
-        <item>vEaHEorrRtp</item>
-        <!--GFL Etobicoke-->
-        <item>aXRTAE9EnY12</item>
-        <!--GFL Mississauga-->
-        <item>pR2MAnHYbjy</item>
-        <!--WM Etobicoke-->
-        <item>VwSddASj28m</item>
-        <!--WM St Catherines-->
-        <item>8RhgJwRJkPC2</item>
-        <!--WM Hamilton-->
-        <item>JrrVP4GSyWQ2</item>
-        <!--Mountain Transfer-->
-        <item>VvK2ZeZMXPN2</item>
-        <!--Tor-Can-->
-        <item>Bis8RuzouZG2</item>
-        <!--Tuff Recycling Inc-->
-        <item>11YUh7iN9hz</item>
-    </string-array>
-
-    <string-array name="dumps_phone_number">
-        <item>4164236396</item>
-        <item>4164062040</item>
-        <item>4162392009</item>
-        <item>4167433220</item>
-        <item>9054756660</item>
-        <item>4162399300</item>
-        <item>4162978697</item>
-        <item>9054282755</item>
-        <item>4167449535</item>
-        <item>9056151116</item>
-        <item>4162017175</item>
-        <item>9056879605</item>
-        <item>18006651898</item>
-        <item>18006651898</item>
-        <item>9058563900</item>
-        <item>9054553800</item>
-    </string-array>
-
     <string-array name="dumps_info">
         <!--Laird-->
         <item>Location: Laird and Eglington
@@ -155,25 +81,6 @@
             \nClosed Sunday</item>
     </string-array>
 
-    <integer-array name="dumps_rate">
-        <item>82</item>
-        <item>85</item>
-        <item>70</item>
-        <item>77</item>
-        <item>90</item>
-        <item>67</item>
-        <item>67</item>
-        <item>85</item>
-        <item>85</item>
-        <item>85</item>
-        <item>82</item>
-        <item>82</item>
-        <item>117</item>
-        <item>117</item>
-        <item>79</item>
-        <item>65</item>
-    </integer-array>
-
     <string-array name="material">
         <item>Metal</item>
         <item>Paper</item>
@@ -212,11 +119,38 @@
         <item>EXTRAS</item>
         <item>1 Hr Labour</item>
         <item>1 Tire</item>
+        <item>Custom</item>
         <item>DISCOUNTS</item>
         <item>5% discount</item>
         <item>10% discount</item>
         <item>15% discount</item>
         <item>20% discount</item>
+    </string-array>
+
+    <string-array name="end_day_load">
+        <item>Load</item>
+        <item>Empty</item>
+        <item>1/8</item>
+        <item>1/6</item>
+        <item>1/4</item>
+        <item>1/3</item>
+        <item>3/8</item>
+        <item>1/2</item>
+        <item>5/8</item>
+        <item>2/3</item>
+        <item>3/4</item>
+        <item>7/8</item>
+        <item>Full</item>
+    </string-array>
+
+    <string-array name="end_day_fuel">
+        <item>Fuel</item>
+        <item>Empty</item>
+        <item>1/8</item>
+        <item>1/4</item>
+        <item>1/2</item>
+        <item>3/4</item>
+        <item>Full</item>
     </string-array>
 
     <integer-array name="string_volume_price">
@@ -235,6 +169,7 @@
         <item>0</item>
         <item>99</item>
         <item>15</item>
+        <item>0</item>
         <item>0</item>
         <item>95</item>
         <item>90</item>
@@ -283,17 +218,20 @@
     </string-array>
 
     <string-array name="truck_number">
+        <item>Truck Number</item>
         <item>4</item>
         <item>5</item>
         <item>6</item>
     </string-array>
 
     <string-array name="job_pay_type">
+        <item>Pay Type</item>
         <item>Cash</item>
         <item>Cheque</item>
         <item>MasterCard</item>
         <item>Visa</item>
         <item>Invoice</item>
+        <item>Gift Card</item>
         <item>Other</item>
     </string-array>
 

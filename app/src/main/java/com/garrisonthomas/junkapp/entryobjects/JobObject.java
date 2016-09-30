@@ -8,10 +8,7 @@ public class JobObject {
 
     private int SID, receiptNumber;
     private double grossSale, netSale;
-    private String startTime;
-    private String endTime;
-    private String payType;
-    private String jobNotes;
+    private String startTime, endTime, payType, jobNotes, jobType;
 
     public String getJobType() {
         return jobType;
@@ -20,8 +17,6 @@ public class JobObject {
     public void setJobType(String jobType) {
         this.jobType = jobType;
     }
-
-    private String jobType;
 
     public JobObject() {
 
