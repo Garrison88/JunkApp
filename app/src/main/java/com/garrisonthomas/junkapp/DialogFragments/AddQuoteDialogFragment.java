@@ -19,7 +19,6 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,13 +26,11 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
-import com.garrisonthomas.junkapp.Utils;
 import com.garrisonthomas.junkapp.entryobjects.QuoteObject;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -67,13 +64,6 @@ public class AddQuoteDialogFragment extends DialogFragmentHelper {
 
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
-        int screenWidth = (int) (metrics.widthPixels * 0.90);
-
-        getDialog().setContentView(R.layout.add_quote_layout);
-
-        getDialog().getWindow().setLayout(screenWidth, LinearLayout.LayoutParams.WRAP_CONTENT); //set below the setContentview
-
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         firebaseJournalRef = preferences.getString("firebaseRef", "none");
 
@@ -99,14 +89,14 @@ public class AddQuoteDialogFragment extends DialogFragmentHelper {
         startTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.chooseTime(getActivity(), startTime);
+                openTimePickerDialog(getActivity(), startTime);
             }
         });
 
         endTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.chooseTime(getActivity(), endTime);
+                openTimePickerDialog(getActivity(), endTime);
             }
         });
 

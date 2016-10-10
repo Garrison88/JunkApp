@@ -4,11 +4,17 @@ package com.garrisonthomas.junkapp.entryobjects;
  * Created by Garrison on 2016-08-08.
  */
 
-public class DumpObject extends EntryItem {
+//@JsonIgnoreProperties(ignoreUnknown = true)
+
+public class DumpObject {
 
     private String dumpName;
     private double grossCost, tonnage;
     private int dumpReceiptNumber, percentPrevious;
+
+    public DumpObject () {
+
+    }
 
     public String getDumpName() {
         return dumpName;

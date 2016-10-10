@@ -25,7 +25,6 @@ import com.firebase.client.ValueEventListener;
 import com.garrisonthomas.junkapp.CurrentJournal;
 import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
-import com.garrisonthomas.junkapp.Utils;
 import com.garrisonthomas.junkapp.entryobjects.DailyJournalObject;
 
 public class DailyJournalDialogFragment extends DialogFragmentHelper {
@@ -87,14 +86,14 @@ public class DailyJournalDialogFragment extends DialogFragmentHelper {
         dStartTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.chooseTime(getActivity(), dStartTime);
+                openTimePickerDialog(getActivity(), dStartTime);
             }
         });
 
         nStartTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.chooseTime(getActivity(), nStartTime);
+                openTimePickerDialog(getActivity(), nStartTime);
             }
         });
 

@@ -20,7 +20,8 @@ import android.widget.TextView;
 
 import com.garrisonthomas.junkapp.BaseActivity;
 import com.garrisonthomas.junkapp.R;
-import com.garrisonthomas.junkapp.Utils;
+
+import static com.garrisonthomas.junkapp.DialogFragmentHelper.calculateDump;
 
 public class Tab3DumpFragment extends Fragment {
 
@@ -115,7 +116,9 @@ public class Tab3DumpFragment extends Fragment {
 
                             float weightInTonnes = Float.valueOf(etDumpCost.getText().toString());
 
-                            double result = Utils.calculateDump(selectedDumpRate, weightInTonnes, dumpsSpinner);
+                            int minimum = BaseActivity.dumpMinimumArray[dumpsSpinner.getSelectedItemPosition()];
+
+                            double result = calculateDump(selectedDumpRate, weightInTonnes, minimum);
 
                             String resultString = "$" + String.valueOf(result);
 

@@ -6,12 +6,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.LinearLayout;
 
 import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
@@ -20,10 +18,11 @@ public class DumpTabHost extends DialogFragmentHelper {
 
     private SectionsPagerAdapter sectionsPagerAdapter;
     private ViewPager viewPager;
+//    private FragmentTransaction fragmentTransaction;
+//    private View view;
 
     @Override
-    public Dialog onCreateDialog(final Bundle savedInstanceState)
-    {
+    public Dialog onCreateDialog(final Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -37,15 +36,8 @@ public class DumpTabHost extends DialogFragmentHelper {
         // tab slider
         sectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
 
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
-        int screenWidth = (int) (metrics.widthPixels * 0.90);
-
-        getDialog().setContentView(R.layout.dump_tab_host);
-
-        getDialog().getWindow().setLayout(screenWidth, LinearLayout.LayoutParams.WRAP_CONTENT); //set below the setContentview
-
         // Set up the ViewPager with the sections adapter.
-        viewPager = (ViewPager)view.findViewById(R.id.pager);
+        viewPager = (ViewPager) view.findViewById(R.id.pager);
         viewPager.setAdapter(sectionsPagerAdapter);
 
         return view;
@@ -56,7 +48,7 @@ public class DumpTabHost extends DialogFragmentHelper {
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
@@ -65,17 +57,19 @@ public class DumpTabHost extends DialogFragmentHelper {
             if (position == 0) {
                 // find first fragment...
 
-                GarbageDumpFragment GDF = new GarbageDumpFragment();
-//                Bundle GDFBundle = new Bundle();
-//                GDFBundle.p("jobSpinnerSID", selectedJobSID);
-//                GDF.setArguments(GDFBundle);
-                return GDF;
+//                fragmentTransaction = getFragmentManager().beginTransaction();
+//                fragmentTransaction.add(view.getId(), new GarbageDumpFragment(), "lpt2");
+//                fragmentTransaction.commit();
+
+                ////                Bundle GDFBundle = new Bundle();
+////                GDFBundle.p("jobSpinnerSID", selectedJobSID);
+////                GDF.setArguments(GDFBundle);
+                return new GarbageDumpFragment();
             }
             if (position == 1) {
                 // find second fragment...
 
-                RebateDumpFragment RDF = new RebateDumpFragment();
-                return RDF;
+                return new RebateDumpFragment();
             }
 //            } else if (position == 2) {
 //                // find first fragment...

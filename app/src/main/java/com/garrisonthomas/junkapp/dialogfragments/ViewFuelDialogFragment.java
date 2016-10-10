@@ -35,7 +35,7 @@ public class ViewFuelDialogFragment extends DialogFragmentHelper implements View
     Button okBtn;
     @Bind(R.id.btn_delete_fuel)
     ImageButton deleteFuelBtn;
-    public static String firebaseJournalRef, fuelReceiptNumber;
+    public String firebaseJournalRef, fuelReceiptNumber;
 
 
     @Override

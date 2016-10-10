@@ -34,12 +34,6 @@ public class Tab2CalcFragment extends Fragment {
     private double beforeTax, sum, discount;
     private static String doubleValue, totalText;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
     ArrayList<Integer> priceArray = new ArrayList<>();
 
     @Override
@@ -68,49 +62,75 @@ public class Tab2CalcFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
 
-                vSpinner.setSelection(0);
                 vPrice = volumePrice[position];
-                if (position != 0 && position != 12 && position != 16) {
-                    if (!TextUtils.isEmpty(tvVolumeSize.getText())) {
-                        tvVolumeSize.append("\n" + "+" + "\n");
-                    }
-                    if (position >= 17) {
-                        tvVolumeSize.append(volumeSize[position]);
-                        discount = vPrice * .010;
-                        calcCost();
-                    } else if (position == 15) {
-                        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                        final EditText edittext = new EditText(getActivity());
 
-                        edittext.setGravity(Gravity.CENTER_HORIZONTAL);
+                switch (position) {
+                    case 0:
+                        break;
+                    // User selected a volume price
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                    case 6:
+                    case 7:
+                    case 8:
+                    case 9:
+                    case 10:
+                    case 11:
+                    case 13:
+                    case 14:
 
-                        edittext.setInputType(InputType.TYPE_CLASS_NUMBER);
-                        alert.setTitle("Enter a value");
+                        if (!TextUtils.isEmpty(tvVolumeSize.getText())) {
+                            tvVolumeSize.append("\n" + "+" + "\n");
+                        }
 
-                        alert.setView(edittext);
-
-                        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-
-                                tvVolumeSize.append("$" + edittext.getText().toString());
-                                priceArray.add(Integer.valueOf(edittext.getText().toString()));
-                                calcCost();
-                            }
-                        });
-
-                        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-
-                            }
-                        });
-
-                        alert.show();
-                    } else {
                         tvVolumeSize.append(volumeSize[position] + " ($" + volumePrice[position] + ")");
                         priceArray.add(vPrice);
-                        calcCost();
-                    }
+
+                        break;
+
+                    // User selected a custom price
+                    case 15:
+
+                        showCustomPriceAlertDialog();
+
+                        break;
+
+                    // User selected a percentage discount
+                    case 17:
+                    case 18:
+                    case 19:
+                    case 20:
+
+                        if (!TextUtils.isEmpty(tvVolumeSize.getText())) {
+                            tvVolumeSize.append("\n" + "+" + "\n");
+                        }
+
+                        tvVolumeSize.append(volumeSize[position]);
+                        discount = vPrice * .010;
+
+                        break;
+
+                    // User selected a dollar value discount
+                    case 21:
+
+                        if (!TextUtils.isEmpty(tvVolumeSize.getText())) {
+                            tvVolumeSize.append("\n" + "+" + "\n");
+                        }
+
+                        tvVolumeSize.append(volumeSize[position]);
+                        priceArray.add(-vPrice);
+
+                        break;
+
                 }
+
+                calcCost();
+
+                vSpinner.setSelection(0);
+
             }
 
             @Override
@@ -179,7 +199,7 @@ public class Tab2CalcFragment extends Fragment {
                         addHST.setText("Display HST");
                     }
                 } else {
-                    showHST();
+                    tvTotal.setText(showHST());
                     addHST.setClickable(false);
                 }
             }
@@ -203,13 +223,48 @@ public class Tab2CalcFragment extends Fragment {
             tvTotal.setText(sumString);
 
         }
+
     }
 
-    public void showHST() {
+    public void showCustomPriceAlertDialog() {
 
-        double tax = Double.parseDouble(totalText) - sum;
-        String taxString = getString(R.string.dollar_sign) + (Math.round(tax * 100.00) / 100.00);
-        tvTotal.setText(taxString);
+        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+        final EditText edittext = new EditText(getActivity());
+
+        edittext.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        edittext.setInputType(InputType.TYPE_CLASS_NUMBER);
+        alert.setTitle("Enter a value");
+
+        alert.setView(edittext);
+
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+
+                if (!TextUtils.isEmpty(tvVolumeSize.getText())) {
+                    tvVolumeSize.append("\n" + "+" + "\n");
+                }
+
+                tvVolumeSize.append("$" + edittext.getText().toString());
+                priceArray.add(Integer.valueOf(edittext.getText().toString()));
+                calcCost();
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+
+            }
+        });
+
+        alert.show();
+
+    }
+
+    public String showHST() {
+
+        return getString(R.string.dollar_sign) + (Math.round((Double.parseDouble(totalText) - sum) * 100.00) / 100.00);
+
 
     }
 

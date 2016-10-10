@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "342384205482-f79v5em4cqpt9nn9li7meoaeeccib1h9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.garrisonthomas.junkapp",
+            "certificate_hash": "C4B7303798A7B91267AEF18F7D17EF8FF0BCEDA5"
+          }
+        },
+        {
           "client_id": "342384205482-5dgk5701gkg29ko0lf4a5hpppivmf3a9.apps.googleusercontent.com",
           "client_type": 3
         }

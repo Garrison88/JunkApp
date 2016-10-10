@@ -6,7 +6,6 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -26,6 +24,7 @@ import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
 import com.garrisonthomas.junkapp.entryobjects.JobObject;
+import com.google.android.gms.auth.api.Auth;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
 
@@ -40,6 +39,7 @@ public class AddJobDialogFragment extends DialogFragmentHelper {
     private String[] payTypeArray;
     private String payTypeString, firebaseJournalRef;
     private SharedPreferences preferences;
+    private Auth auth;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,13 +48,6 @@ public class AddJobDialogFragment extends DialogFragmentHelper {
         final View v = inflater.inflate(R.layout.add_job_layout, container, false);
 
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
-        int screenWidth = (int) (metrics.widthPixels * 0.90);
-
-        getDialog().setContentView(R.layout.add_job_layout);
-
-        getDialog().getWindow().setLayout(screenWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
         firebaseJournalRef = preferences.getString("firebaseRef", "none");
@@ -144,14 +137,14 @@ public class AddJobDialogFragment extends DialogFragmentHelper {
         startTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.chooseTime(getActivity(), startTime);
+                openTimePickerDialog(getActivity(), startTime);
             }
         });
 
         endTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.chooseTime(getActivity(), endTime);
+                openTimePickerDialog(getActivity(), endTime);
             }
         });
 
@@ -160,7 +153,6 @@ public class AddJobDialogFragment extends DialogFragmentHelper {
             public void onClick(View v) {
 
                 if (validateEditTextLength(etSID, 4, 6)
-                        //TODO: fix SID entry length
                         && (!TextUtils.isEmpty(etGrossSale.getText()) || !etGrossSale.isEnabled())
                         && (!TextUtils.isEmpty(etNetSale.getText()) || !etNetSale.isEnabled())
                         && (validateEditTextLength(etReceiptNumber, 5, 5) || !etReceiptNumber.isEnabled())
@@ -230,8 +222,6 @@ public class AddJobDialogFragment extends DialogFragmentHelper {
                     if (payTypeSpinner.getSelectedItemPosition() == 0) {
                         TextView errorText = (TextView) payTypeSpinner.getSelectedView();
                         errorText.setError("");
-//                        errorText.setHintTextColor(ContextCompat.getColor(getActivity(), R.color.etErrorColor));//just to highlight that this is an error
-//                        errorText.setText("Please select a pay type");//changes the selected item text to this
                     }
 
                 }

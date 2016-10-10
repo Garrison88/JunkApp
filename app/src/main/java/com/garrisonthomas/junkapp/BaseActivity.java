@@ -50,7 +50,7 @@ public class BaseActivity extends AppCompatActivity {
         SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy", Locale.CANADA);
         todaysDate = df2.format(date);
 
-        populateRateArrayList();
+        populateDumpInfoArrayLists();
 
     }
 
@@ -62,10 +62,11 @@ public class BaseActivity extends AppCompatActivity {
                 startActivity(new Intent(this, TabsViewPagerActivity.class));
                 Toast.makeText(BaseActivity.this, "Welcome!", Toast.LENGTH_LONG).show();
                 finish();
-            } else {
-                // user is not signed in. Maybe just wait for the user to press
-                // "sign in" again, or show a message
             }
+//            else {
+//                // user is not signed in. Maybe just wait for the user to press
+//                // "sign in" again, or show a message
+//            }
         }
     }
 
@@ -84,6 +85,8 @@ public class BaseActivity extends AppCompatActivity {
         } else {
             loginLogout.setTitle("Login");
         }
+
+//        (auth.getCurrentUser() != null) ? loginLogout.setTitle("Logout") : loginLogout.setTitle("Login");
 
         return true;
     }
@@ -156,11 +159,12 @@ public class BaseActivity extends AppCompatActivity {
                             .setTheme(R.style.CustomTheme_NoActionBar)
                             .build(),
                     RC_SIGN_IN);
+
         }
 
     }
 
-    public void populateRateArrayList() {
+    public void populateDumpInfoArrayLists() {
 
         Firebase dumpInfoRef = new Firebase("https://junkapp-43226.firebaseio.com/dumpInfo");
         dumpInfoRef.addValueEventListener(new ValueEventListener() {

@@ -24,7 +24,6 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
-import com.garrisonthomas.junkapp.Utils;
 
 public class EndOfDayDialogFragment extends DialogFragmentHelper {
 
@@ -35,7 +34,6 @@ public class EndOfDayDialogFragment extends DialogFragmentHelper {
     private String[] endLoadArray, endFuelArray;
     private int percentOfGoal, totalGrossProfit, percentOnDumps, totalDumpCost;
     private ProgressDialog pDialog;
-    private Spinner endLoad, endFuel;
 
     @NonNull
     @Override
@@ -51,6 +49,7 @@ public class EndOfDayDialogFragment extends DialogFragmentHelper {
 
         driver = eodBundle.getString("driver");
         navigator = eodBundle.getString("navigator");
+
         dialog.setCanceledOnTouchOutside(false);
 
         return dialog;
@@ -80,8 +79,8 @@ public class EndOfDayDialogFragment extends DialogFragmentHelper {
         endLoadArray = v.getResources().getStringArray(R.array.end_day_load);
         endFuelArray = v.getResources().getStringArray(R.array.end_day_fuel);
 
-        endLoad = (Spinner) v.findViewById(R.id.end_day_load);
-        endFuel = (Spinner) v.findViewById(R.id.end_day_fuel);
+        Spinner endLoad = (Spinner) v.findViewById(R.id.end_day_load);
+        Spinner endFuel = (Spinner) v.findViewById(R.id.end_day_fuel);
 
         endLoad.setAdapter(new ArrayAdapter<>(this.getActivity(),
                 android.R.layout.simple_spinner_item, endLoadArray));
@@ -120,14 +119,14 @@ public class EndOfDayDialogFragment extends DialogFragmentHelper {
         dEndTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.chooseTime(getActivity(), dEndTime);
+                openTimePickerDialog(getActivity(), dEndTime);
             }
         });
 
         nEndTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.chooseTime(getActivity(), nEndTime);
+                openTimePickerDialog(getActivity(), nEndTime);
             }
         });
 

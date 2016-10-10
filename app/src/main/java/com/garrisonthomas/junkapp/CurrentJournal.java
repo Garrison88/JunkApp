@@ -82,10 +82,6 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
     Spinner fuelSpinner;
     @Bind(R.id.tv_total_income)
     TextView tvTotalIncome;
-    @Bind(R.id.tv_percent_of_goal)
-    TextView tvPercentOfGoal;
-    @Bind(R.id.tv_percent_on_dumps)
-    TextView tvPercentOnDumps;
     @Bind(R.id.tv_dump_cost)
     TextView tvDumpCost;
 
@@ -101,7 +97,7 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
     private ArrayList<String> dumpsArray = new ArrayList<>();
     private ArrayList<String> fuelArray = new ArrayList<>();
 
-    private static SharedPreferences preferences;
+    private SharedPreferences preferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -149,16 +145,7 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                JobObject jobObject = dataSnapshot.getValue(JobObject.class);
-                totalGrossProfit += jobObject.getGrossSale();
-                percentOfGoal = (int) (100 * (totalGrossProfit / 1400f));
-                String totalIncomeString = "Income: $" + String.valueOf(totalGrossProfit);
-                String percentOfGoalString = String.valueOf(percentOfGoal) + "% of goal";
-
-//                calculateDumpNumbers();
-
-                tvTotalIncome.setText(totalIncomeString);
-                tvPercentOfGoal.setText(percentOfGoalString);
+                calculateJobValues(dataSnapshot, true);
             }
 
             @Override
@@ -169,14 +156,7 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                JobObject jobObject = dataSnapshot.getValue(JobObject.class);
-                totalGrossProfit -= jobObject.getGrossSale();
-                percentOfGoal = (int) (100 * (totalGrossProfit / 1400f));
-                String totalIncomeString = "Income: $" + String.valueOf(totalGrossProfit);
-                String percentOfGoalString = String.valueOf(percentOfGoal) + "% of goal";
-
-                tvTotalIncome.setText(totalIncomeString);
-                tvPercentOfGoal.setText(percentOfGoalString);
+                calculateJobValues(dataSnapshot, false);
 
             }
 
@@ -196,20 +176,7 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                DumpObject dumpObject = dataSnapshot.getValue(DumpObject.class);
-                int percentPrevious = dumpObject.getPercentPrevious();
-                if (percentPrevious != 0) {
-                    totalDumpCost += (dumpObject.getGrossCost() * ((100 - percentPrevious) * 0.01));
-                } else {
-                    totalDumpCost += dumpObject.getGrossCost();
-                }
-
-                percentOnDumps = (int) (100 * (totalDumpCost / (float) totalGrossProfit));
-                String totalDumpCostString = "Dump Cost: $" + String.valueOf(totalDumpCost);
-                String percentOnDumpsString = String.valueOf(percentOnDumps) + "% of profit";
-
-                tvDumpCost.setText(totalDumpCostString);
-                tvPercentOnDumps.setText(percentOnDumpsString);
+                calculateDumpValues(dataSnapshot, true);
             }
 
             @Override
@@ -220,20 +187,7 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                DumpObject dumpObject = dataSnapshot.getValue(DumpObject.class);
-                int percentPrevious = dumpObject.getPercentPrevious();
-                if (percentPrevious != 0) {
-                    totalDumpCost -= (dumpObject.getGrossCost() * ((100 - percentPrevious) * 0.01));
-                } else {
-                    totalDumpCost -= dumpObject.getGrossCost();
-                }
-
-                percentOnDumps = (int) (100 * (totalDumpCost / (float) totalGrossProfit));
-                String totalDumpCostString = "Dump Cost: $" + String.valueOf(totalDumpCost);
-                String percentOnDumpsString = String.valueOf(percentOnDumps) + "% of profit";
-
-                tvDumpCost.setText(totalDumpCostString);
-                tvPercentOnDumps.setText(percentOnDumpsString);
+                calculateDumpValues(dataSnapshot, false);
 
             }
 
@@ -250,7 +204,7 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
 
         //query database to find driver, nav, and truck number and set them
         Firebase journalInfo = new Firebase(firebaseJournalRef);
-        journalInfo.addValueEventListener(new ValueEventListener() {
+        journalInfo.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -432,67 +386,78 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
         });
     }
 
-//    private void calculateDumpNumbers() {
-//
-//        // query dumps and rebate to find percentOnDumps
-//        Firebase dumps = new Firebase(firebaseJournalRef + "dumps");
-//        dumps.addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//
-//                DumpObject dumpObject = dataSnapshot.getValue(DumpObject.class);
-//                int percentPrevious = dumpObject.getPercentPrevious();
-//                if (percentPrevious != 0) {
-//                    totalDumpCost += (dumpObject.getGrossCost() * ((100 - percentPrevious) * 0.01));
-//                } else {
-//                    totalDumpCost += dumpObject.getGrossCost();
-//                }
-//
-//                percentOnDumps = (int) (100 * (totalDumpCost / (float) totalGrossProfit));
-//                String totalDumpCostString = "Dump Cost: $" + String.valueOf(totalDumpCost);
-//                String percentOnDumpsString = String.valueOf(percentOnDumps) + "% of profit";
-//
-//                tvDumpCost.setText(totalDumpCostString);
-//                tvPercentOnDumps.setText(percentOnDumpsString);
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//                DumpObject dumpObject = dataSnapshot.getValue(DumpObject.class);
-//                int percentPrevious = dumpObject.getPercentPrevious();
-//                if (percentPrevious != 0) {
-//                    totalDumpCost -= (dumpObject.getGrossCost() * ((100 - percentPrevious) * 0.01));
-//                } else {
-//                    totalDumpCost -= dumpObject.getGrossCost();
-//                }
-//
-//                percentOnDumps = (int) (100 * (totalDumpCost / (float) totalGrossProfit));
-//                String totalDumpCostString = "Dump Cost: $" + String.valueOf(totalDumpCost);
-//                String percentOnDumpsString = String.valueOf(percentOnDumps) + "% of profit";
-//
-//                tvDumpCost.setText(totalDumpCostString);
-//                tvPercentOnDumps.setText(percentOnDumpsString);
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(FirebaseError firebaseError) {
-//
-//            }
-//        });
-//
-//    }
+    public void calculateJobValues(DataSnapshot dSnap, boolean childAdded) {
+
+        JobObject jobObject = dSnap.getValue(JobObject.class);
+
+
+        if (childAdded) {
+
+            totalGrossProfit += Math.round(jobObject.getGrossSale());
+
+        } else {
+
+            totalGrossProfit -= Math.round(jobObject.getGrossSale());
+
+        }
+
+        percentOfGoal = Math.round(100 * (totalGrossProfit / 1400f));
+
+        updateUI();
+
+    }
+
+    public void calculateDumpValues(DataSnapshot dSnap, boolean childAdded) {
+
+        DumpObject dumpObject = dSnap.getValue(DumpObject.class);
+        int percentPrevious = dumpObject.getPercentPrevious();
+
+        if (childAdded) {
+
+            if (percentPrevious != 0) {
+                totalDumpCost += Math.round(dumpObject.getGrossCost() * ((100 - percentPrevious) * 0.01));
+            } else {
+                totalDumpCost += Math.round(dumpObject.getGrossCost());
+            }
+
+        } else {
+
+            if (percentPrevious != 0) {
+                totalDumpCost -= Math.round(dumpObject.getGrossCost() * ((100 - percentPrevious) * 0.01));
+            } else {
+                totalDumpCost -= Math.round(dumpObject.getGrossCost());
+            }
+
+        }
+
+        updateUI();
+
+    }
+
+    public void updateUI() {
+
+        String grossProfitString, percentOfGoalString, totalDumpCostString, percentOnDumpsString;
+
+        percentOfGoalString = (totalGrossProfit > 1) ? (" (" + String.valueOf(percentOfGoal) + "%)") : ("");
+
+        grossProfitString = "Gross Profit: $" + String.valueOf(totalGrossProfit) + percentOfGoalString;
+
+        if (totalDumpCost > 1 && totalGrossProfit > 1) {
+            percentOnDumps = Math.round((100 * (totalDumpCost / (float) totalGrossProfit)));
+            percentOnDumpsString = " (" + String.valueOf(percentOnDumps) + "%)";
+        } else {
+            percentOnDumpsString = "";
+        }
+
+        totalDumpCostString = "Dump Cost: $" + String.valueOf(totalDumpCost) + percentOnDumpsString;
+
+
+
+        tvTotalIncome.setText(grossProfitString);
+
+        tvDumpCost.setText(totalDumpCostString);
+
+    }
 
     @Override
     public void onClick(View view) {

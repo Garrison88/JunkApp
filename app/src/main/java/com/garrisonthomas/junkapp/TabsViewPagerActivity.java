@@ -18,9 +18,7 @@ import java.util.List;
 
 public class TabsViewPagerActivity extends BaseActivity {
 
-    private Toolbar toolbar;
     private TabLayout tabLayout;
-    private ViewPager viewPager;
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -28,10 +26,10 @@ public class TabsViewPagerActivity extends BaseActivity {
 
         setContentView(R.layout.tabs_viewpager_layout);
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (auth.getCurrentUser() != null) {
             toolbar.setSubtitle(auth.getCurrentUser().getEmail());

@@ -24,16 +24,15 @@ import android.widget.Toast;
 import com.firebase.client.Firebase;
 import com.garrisonthomas.junkapp.BaseActivity;
 import com.garrisonthomas.junkapp.R;
-import com.garrisonthomas.junkapp.Utils;
 import com.garrisonthomas.junkapp.entryobjects.DumpObject;
+
+import static com.garrisonthomas.junkapp.DialogFragmentHelper.calculateDump;
 
 public class GarbageDumpFragment extends Fragment {
 
     private TextInputEditText etAddDumpWeight, etDumpReceiptNumber, etPercentPrevious;
     private EditText etEditCost;
-    private TextInputLayout enterWeightWrapper, enterReceiptNumberWrapper, enterPercentPreviousWrapper;
     private TextView tvGrossCost;
-    private Button saveDump, cancelDump;
     private ImageButton btnEditCost;
     private Spinner dumpNameSpinner;
     private int pricePerTonne;
@@ -52,19 +51,19 @@ public class GarbageDumpFragment extends Fragment {
         preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
         firebaseJournalRef = preferences.getString("firebaseRef", "none");
 
-        enterWeightWrapper = (TextInputLayout) v.findViewById(R.id.enter_weight_wrapper);
+        TextInputLayout enterWeightWrapper = (TextInputLayout) v.findViewById(R.id.enter_weight_wrapper);
         etAddDumpWeight = (TextInputEditText) enterWeightWrapper.getEditText();
-        enterReceiptNumberWrapper = (TextInputLayout) v.findViewById(R.id.enter_receipt_number_wrapper);
+        TextInputLayout enterReceiptNumberWrapper = (TextInputLayout) v.findViewById(R.id.enter_receipt_number_wrapper);
         etDumpReceiptNumber = (TextInputEditText) enterReceiptNumberWrapper.getEditText();
-        enterPercentPreviousWrapper = (TextInputLayout) v.findViewById(R.id.enter_percent_previous_wrapper);
+        TextInputLayout enterPercentPreviousWrapper = (TextInputLayout) v.findViewById(R.id.enter_percent_previous_wrapper);
         etPercentPrevious = (TextInputEditText) enterPercentPreviousWrapper.getEditText();
 
         etEditCost = (EditText) v.findViewById(R.id.et_edit_dump_cost);
 
         tvGrossCost = (TextView) v.findViewById(R.id.tv_dump_gross_cost);
 
-        saveDump = (Button) v.findViewById(R.id.btn_save_dump);
-        cancelDump = (Button) v.findViewById(R.id.btn_cancel_dump);
+        Button saveDump = (Button) v.findViewById(R.id.btn_save_dump);
+        Button cancelDump = (Button) v.findViewById(R.id.btn_cancel_dump);
 
         btnEditCost = (ImageButton) v.findViewById(R.id.btn_edit_dump_cost);
 
@@ -100,7 +99,9 @@ public class GarbageDumpFragment extends Fragment {
 
                     double weightInTonnes = Double.valueOf(etAddDumpWeight.getText().toString());
 
-                    result = Utils.calculateDump(pricePerTonne, weightInTonnes, dumpNameSpinner);
+                    int minimum = BaseActivity.dumpMinimumArray[dumpNameSpinner.getSelectedItemPosition()];
+
+                    result = calculateDump(pricePerTonne, weightInTonnes, minimum);
 
                     dumpCostLayout.setVisibility(View.VISIBLE);
                     String resultString = "$" + String.valueOf(result);
@@ -147,6 +148,7 @@ public class GarbageDumpFragment extends Fragment {
                     Toast.makeText(getActivity(), "Dump at " + dumpNameString + " saved", Toast.LENGTH_SHORT).show();
 
                     getActivity().finish();
+
                 } else {
 
                     Toast.makeText(getActivity(), "Please fill all required fields", Toast.LENGTH_SHORT).show();
