@@ -25,13 +25,13 @@ import com.garrisonthomas.junkapp.entryobjects.RebateObject;
  */
 public class RebateDumpFragment extends Fragment {
 
-    private static EditText etRebateWeight, etRebateAmount, etRebateReceiptNumber;
-    private static Button saveRebate, cancelRebate;
-    private static Spinner materialTypeSpinner, rebateLocationSpinner;
-    private static String[] materialTypeArray, rebateLocationArray;
-    private static int[] materialRebateArray;
-    private static int pricePerTonne;
-    private static String materialTypeString, rebateLocationString, firebaseJournalRef;
+    private EditText etRebateWeight, etRebateAmount, etRebateReceiptNumber;
+    private Button saveRebate, cancelRebate;
+    private Spinner materialTypeSpinner, rebateLocationSpinner;
+    private String[] materialTypeArray, rebateLocationArray;
+    private int[] materialRebateArray;
+    private int pricePerTonne;
+    private String materialTypeString, rebateLocationString, firebaseJournalRef;
     private SharedPreferences preferences;
 
 
@@ -42,7 +42,7 @@ public class RebateDumpFragment extends Fragment {
         final View v = inflater.inflate(R.layout.add_rebate_dump_layout, container, false);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        firebaseJournalRef = preferences.getString("firebaseRef", "none");
+        firebaseJournalRef = preferences.getString("currentJournalRef", null);
 
         etRebateWeight = (EditText) v.findViewById(R.id.et_rebate_weight);
         etRebateAmount = (EditText) v.findViewById(R.id.et_rebate_amount);

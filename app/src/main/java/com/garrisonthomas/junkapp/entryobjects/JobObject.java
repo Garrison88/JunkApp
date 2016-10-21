@@ -1,12 +1,40 @@
 package com.garrisonthomas.junkapp.entryobjects;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Created by Garrison on 2016-08-06.
  */
 
+@JsonIgnoreProperties(ignoreUnknown = true)
+
 public class JobObject {
 
-    private int SID, receiptNumber;
+    private int SID;
+    private int receiptNumber;
+    private Integer ccExpDate;
+
+    public Integer getCcExpDate() {
+        return ccExpDate;
+    }
+
+    public void setCcExpDate(Integer ccExpDate) {
+
+            this.ccExpDate = ccExpDate;
+
+    }
+
+    public Long getCcNumber() {
+        return ccNumber;
+    }
+
+    public void setCcNumber(Long ccNumber) {
+
+            this.ccNumber = ccNumber;
+
+    }
+
+    private Long ccNumber;
     private double grossSale, netSale;
     private String startTime, endTime, payType, jobNotes, jobType;
 

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,24 +22,27 @@ import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.garrisonthomas.junkapp.BaseActivity;
+import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.entryobjects.DumpObject;
 
-import static com.garrisonthomas.junkapp.DialogFragmentHelper.calculateDump;
+import java.text.NumberFormat;
 
-public class GarbageDumpFragment extends Fragment {
+public class GarbageDumpFragment extends DumpTabHost {
 
     private TextInputEditText etAddDumpWeight, etDumpReceiptNumber, etPercentPrevious;
     private EditText etEditCost;
     private TextView tvGrossCost;
     private ImageButton btnEditCost;
     private Spinner dumpNameSpinner;
-    private int pricePerTonne;
+    private double pricePerTonne;
     private double result;
-    private String dumpNameString, firebaseJournalRef;
-    private boolean costIsEditable = true;
+    private String dumpNameString, currentJournalRef;
+    private boolean costIsEditable;
     private LinearLayout dumpCostLayout;
     private SharedPreferences preferences;
+
+    private NumberFormat currencyFormat;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,7 +51,7 @@ public class GarbageDumpFragment extends Fragment {
         final View v = inflater.inflate(R.layout.add_garbage_dump_layout, container, false);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-        firebaseJournalRef = preferences.getString("firebaseRef", "none");
+        currentJournalRef = preferences.getString("currentJournalRef", null);
 
         TextInputLayout enterWeightWrapper = (TextInputLayout) v.findViewById(R.id.enter_weight_wrapper);
         etAddDumpWeight = (TextInputEditText) enterWeightWrapper.getEditText();
@@ -57,6 +59,8 @@ public class GarbageDumpFragment extends Fragment {
         etDumpReceiptNumber = (TextInputEditText) enterReceiptNumberWrapper.getEditText();
         TextInputLayout enterPercentPreviousWrapper = (TextInputLayout) v.findViewById(R.id.enter_percent_previous_wrapper);
         etPercentPrevious = (TextInputEditText) enterPercentPreviousWrapper.getEditText();
+
+        currencyFormat = NumberFormat.getCurrencyInstance();
 
         etEditCost = (EditText) v.findViewById(R.id.et_edit_dump_cost);
 
@@ -101,10 +105,10 @@ public class GarbageDumpFragment extends Fragment {
 
                     int minimum = BaseActivity.dumpMinimumArray[dumpNameSpinner.getSelectedItemPosition()];
 
-                    result = calculateDump(pricePerTonne, weightInTonnes, minimum);
+                    result = DialogFragmentHelper.calculateDump(pricePerTonne, weightInTonnes, minimum);
 
                     dumpCostLayout.setVisibility(View.VISIBLE);
-                    String resultString = "$" + String.valueOf(result);
+                    String resultString = currencyFormat.format(result);
                     tvGrossCost.setText(resultString);
 
 
@@ -124,7 +128,7 @@ public class GarbageDumpFragment extends Fragment {
                 if (!TextUtils.isEmpty(etAddDumpWeight.getText())
                         && (!TextUtils.isEmpty(etDumpReceiptNumber.getText()))) {
 
-                    Firebase fbrDump = new Firebase(firebaseJournalRef + "dumps/" + dumpNameString + " (" +
+                    Firebase fbrDump = new Firebase(currentJournalRef + "dumps/" + dumpNameString + " (" +
                             String.valueOf(etDumpReceiptNumber.getText()) + ")");
 
                     DumpObject dump = new DumpObject();
@@ -167,17 +171,20 @@ public class GarbageDumpFragment extends Fragment {
         btnEditCost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (costIsEditable) {
+                if (!costIsEditable) {
+                    etEditCost.setText("");
                     tvGrossCost.setVisibility(View.GONE);
                     etEditCost.setVisibility(View.VISIBLE);
+                    etEditCost.setHint(tvGrossCost.getText().toString());
                     etEditCost.requestFocus();
                     btnEditCost.setImageResource(R.drawable.ic_close_white_24dp);
-                    costIsEditable = false;
+                    costIsEditable = true;
                 } else {
+                    etEditCost.setText("");
                     tvGrossCost.setVisibility(View.VISIBLE);
                     etEditCost.setVisibility(View.GONE);
                     btnEditCost.setImageResource(R.drawable.ic_edit_white_24dp);
-                    costIsEditable = true;
+                    costIsEditable = false;
                 }
             }
         });

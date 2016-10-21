@@ -39,8 +39,8 @@ public class ViewDumpDialogFragment extends DialogFragmentHelper implements View
     Button okBtn;
     @Bind(R.id.btn_delete_dump)
     ImageButton deleteDumpBtn;
-    public static String dumpName, firebaseJournalRef;
-    public static int dumpReceiptNumber;
+    private String dumpName, currentJournalRef;
+    private int dumpReceiptNumber;
 
 
     @Override
@@ -66,8 +66,8 @@ public class ViewDumpDialogFragment extends DialogFragmentHelper implements View
         deleteDumpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteItem(ViewDumpDialogFragment.this, firebaseJournalRef + "/dumps/" +
-                        dumpName);
+                deleteItem(ViewDumpDialogFragment.this, currentJournalRef + "dumps/" +
+                        dumpName).show();
             }
         });
 
@@ -81,7 +81,7 @@ public class ViewDumpDialogFragment extends DialogFragmentHelper implements View
         Bundle vdBundle = getArguments();
         dumpName = vdBundle.getString("dumpName");
         dumpReceiptNumber = vdBundle.getInt("dumpReceiptNumber");
-        firebaseJournalRef = vdBundle.getString("firebaseJournalRef");
+        currentJournalRef = vdBundle.getString("currentJournalRef");
         dialog.setTitle(dumpName);
         dialog.setCanceledOnTouchOutside(false);
 
@@ -90,7 +90,7 @@ public class ViewDumpDialogFragment extends DialogFragmentHelper implements View
 
     public void populateItemInfo() {
 
-        Firebase ref = new Firebase(firebaseJournalRef + "dumps");
+        Firebase ref = new Firebase(currentJournalRef + "dumps");
         Query queryRef = ref.orderByChild("dumpReceiptNumber").equalTo(dumpReceiptNumber);
         queryRef.addChildEventListener(new ChildEventListener() {
 
@@ -99,12 +99,16 @@ public class ViewDumpDialogFragment extends DialogFragmentHelper implements View
 
                 DumpObject dumpObject = snapshot.getValue(DumpObject.class);
 
-                vdGross.setText("$" + String.valueOf(dumpObject.getGrossCost()));
+                double previousAmount;
+                String previousAmountString;
+
+                String gross = currencyFormat.format(dumpObject.getGrossCost());
+
+                vdGross.setText(gross);
                 vdTonnage.setText(String.valueOf(dumpObject.getTonnage()));
                 if (dumpObject.getPercentPrevious() != 0) {
-                    //TODO: figure this out
-                    double previousAmount = Math.round(dumpObject.getGrossCost() * (dumpObject.getPercentPrevious() * .01) * 100.00) / 100.00;
-                    String previousAmountString = String.valueOf(previousAmount);
+                    previousAmount = Math.round(dumpObject.getGrossCost() * (dumpObject.getPercentPrevious() * .01) * 100.00) / 100.00;
+                    previousAmountString = currencyFormat.format(previousAmount);
                     vdPercentPrevious.setText(String.valueOf(dumpObject.getPercentPrevious()) + "%"
                             + " ($" + previousAmountString + ")");
                     vdPercentPreviousText.setVisibility(View.VISIBLE);

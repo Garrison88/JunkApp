@@ -105,7 +105,9 @@ public class Utils {
     }
 
     public static double calculateTax(double grossSale) {
+
         return Math.round((grossSale * 1.13) * 100.00) / 100.00;
+
     }
 
 

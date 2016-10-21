@@ -7,7 +7,8 @@ package com.garrisonthomas.junkapp.entryobjects;
 public class TransferStation {
 
     private String address, info, name, phoneNumber;
-    private int minimum, rate;
+    private int minimum;
+    private double rate;
 
     public TransferStation() {
 
@@ -47,11 +48,11 @@ public class TransferStation {
         this.phoneNumber = phoneNumber;
     }
 
-    public int getRate() {
+    public double getRate() {
         return rate;
     }
 
-    public void setRate(int rate) {
+    public void setRate(double rate) {
         this.rate = rate;
     }
 

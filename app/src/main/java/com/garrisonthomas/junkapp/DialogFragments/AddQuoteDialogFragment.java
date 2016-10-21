@@ -47,14 +47,14 @@ public class AddQuoteDialogFragment extends DialogFragmentHelper {
             enterQuoteNotesWrapper;
     private TextInputEditText etQuoteSID, etLowEnd, etHighEnd, etQuoteNotes;
     private ImageButton choosePhoto;
-    private String firebaseJournalRef;
     private int PICK_IMAGE_REQUEST = 1;
-    private SharedPreferences preferences;
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private StorageReference storageRef = storage.getReferenceFromUrl("gs://junkapp-43226.appspot.com");
     private Uri quotePhotoUri = null;
     private ProgressDialog pDialog;
     public static final String TAG = "permissions";
+    private String currentJournalRef;
+    private SharedPreferences preferences;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,8 +64,8 @@ public class AddQuoteDialogFragment extends DialogFragmentHelper {
 
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        firebaseJournalRef = preferences.getString("firebaseRef", "none");
+        preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+        currentJournalRef = preferences.getString("currentJournalRef", null);
 
         enterQuoteSIDWrapper = (TextInputLayout) v.findViewById(R.id.enter_quote_sid_wrapper);
         etQuoteSID = (TextInputEditText) enterQuoteSIDWrapper.getEditText();
@@ -89,14 +89,14 @@ public class AddQuoteDialogFragment extends DialogFragmentHelper {
         startTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openTimePickerDialog(getActivity(), startTime);
+                createTimePickerDialog(getActivity(), startTime, "Start").show();
             }
         });
 
         endTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openTimePickerDialog(getActivity(), endTime);
+                createTimePickerDialog(getActivity(), endTime, "End").show();
             }
         });
 
@@ -151,7 +151,7 @@ public class AddQuoteDialogFragment extends DialogFragmentHelper {
                                 String downloadUrlString = taskSnapshot.getDownloadUrl().toString();
 
                                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                                Firebase fbrQuote = new Firebase(firebaseJournalRef + "quotes/" + String.valueOf(etQuoteSID.getText()));
+                                Firebase fbrQuote = new Firebase(currentJournalRef + "quotes/" + String.valueOf(etQuoteSID.getText()));
 
                                 QuoteObject quote = new QuoteObject();
                                 quote.setQuoteSID(Integer.valueOf(etQuoteSID.getText().toString()));
@@ -181,7 +181,7 @@ public class AddQuoteDialogFragment extends DialogFragmentHelper {
                             }
                         });
                     } else {
-                        Firebase fbrQuote = new Firebase(firebaseJournalRef + "quotes/" + String.valueOf(etQuoteSID.getText()));
+                        Firebase fbrQuote = new Firebase(currentJournalRef + "quotes/" + String.valueOf(etQuoteSID.getText()));
 
                         QuoteObject quote = new QuoteObject();
                         quote.setQuoteSID(Integer.valueOf(etQuoteSID.getText().toString()));

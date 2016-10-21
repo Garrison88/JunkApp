@@ -39,6 +39,7 @@ import com.garrisonthomas.junkapp.entryobjects.JobObject;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -85,7 +86,8 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
     @Bind(R.id.tv_dump_cost)
     TextView tvDumpCost;
 
-    private String firebaseJournalRef, dumpSpinnerText, fuelReceiptNumber, spDriver, spNavigator;
+    public String currentJournalRef;
+    private String dumpSpinnerText, fuelReceiptNumber, spDriver, spNavigator;
 
     private int selectedJobSID, selectedQuoteSID, dumpReceiptNumber,
             percentOfGoal, totalGrossProfit, percentOnDumps, totalDumpCost;
@@ -99,6 +101,8 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
 
     private SharedPreferences preferences;
 
+    private NumberFormat currencyFormat;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,7 +115,10 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        firebaseJournalRef = preferences.getString("firebaseRef", null);
+        currentJournalRef = preferences.getString("currentJournalRef", null);
+
+        currencyFormat = NumberFormat.getCurrencyInstance();
+        currencyFormat.setMinimumFractionDigits(0);
 
         viewJob.setOnClickListener(this);
         viewQuote.setOnClickListener(this);
@@ -131,13 +138,13 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
         });
 
         // populate spinners
-        Firebase jobs = new Firebase(firebaseJournalRef + "jobs");
+        Firebase jobs = new Firebase(currentJournalRef + "jobs");
         Utils.populateIntegerSpinner(this, jobs, jobsArray, jobsSpinner);
-        Firebase quotes = new Firebase(firebaseJournalRef + "quotes");
+        Firebase quotes = new Firebase(currentJournalRef + "quotes");
         Utils.populateIntegerSpinner(this, quotes, quotesArray, quotesSpinner);
-        Firebase dumps = new Firebase(firebaseJournalRef + "dumps");
+        Firebase dumps = new Firebase(currentJournalRef + "dumps");
         Utils.populateStringSpinner(this, dumps, dumpsArray, dumpsSpinner);
-        Firebase fuel = new Firebase(firebaseJournalRef + "fuel");
+        Firebase fuel = new Firebase(currentJournalRef + "fuel");
         Utils.populateStringSpinner(this, fuel, fuelArray, fuelSpinner);
 
         //query grossSale children of SID nodes to find real-time daily profit
@@ -145,7 +152,8 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                calculateJobValues(dataSnapshot, true);
+                percentOfGoal = calculateJobValues(dataSnapshot, true);
+                updateUI();
             }
 
             @Override
@@ -156,7 +164,8 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                calculateJobValues(dataSnapshot, false);
+                percentOfGoal = calculateJobValues(dataSnapshot, false);
+                updateUI();
 
             }
 
@@ -203,7 +212,7 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
         });
 
         //query database to find driver, nav, and truck number and set them
-        Firebase journalInfo = new Firebase(firebaseJournalRef);
+        Firebase journalInfo = new Firebase(currentJournalRef);
         journalInfo.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
@@ -368,13 +377,13 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
         pDialog = ProgressDialog.show(this, null,
                 "Deleting journal...", true);
 
-        Firebase firebaseRef = new Firebase(firebaseJournalRef);
+        Firebase firebaseRef = new Firebase(currentJournalRef);
         firebaseRef.removeValue(new Firebase.CompletionListener() {
             @Override
             public void onComplete(FirebaseError firebaseError, Firebase firebase) {
 
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putString("firebaseRef", null);
+                editor.putString("currentJournalRef", null);
                 editor.apply();
 
                 pDialog.dismiss();
@@ -386,10 +395,9 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
         });
     }
 
-    public void calculateJobValues(DataSnapshot dSnap, boolean childAdded) {
+    public int calculateJobValues(DataSnapshot dSnap, boolean childAdded) {
 
         JobObject jobObject = dSnap.getValue(JobObject.class);
-
 
         if (childAdded) {
 
@@ -401,9 +409,7 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
 
         }
 
-        percentOfGoal = Math.round(100 * (totalGrossProfit / 1400f));
-
-        updateUI();
+        return Math.round(100 * (totalGrossProfit / 1400f));
 
     }
 
@@ -440,7 +446,7 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
 
         percentOfGoalString = (totalGrossProfit > 1) ? (" (" + String.valueOf(percentOfGoal) + "%)") : ("");
 
-        grossProfitString = "Gross Profit: $" + String.valueOf(totalGrossProfit) + percentOfGoalString;
+        grossProfitString = "Gross Profit: " + currencyFormat.format(totalGrossProfit) + percentOfGoalString;
 
         if (totalDumpCost > 1 && totalGrossProfit > 1) {
             percentOnDumps = Math.round((100 * (totalDumpCost / (float) totalGrossProfit)));
@@ -449,9 +455,7 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
             percentOnDumpsString = "";
         }
 
-        totalDumpCostString = "Dump Cost: $" + String.valueOf(totalDumpCost) + percentOnDumpsString;
-
-
+        totalDumpCostString = "Dump Cost: " + currencyFormat.format(totalDumpCost) + percentOnDumpsString;
 
         tvTotalIncome.setText(grossProfitString);
 
@@ -473,17 +477,14 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
                     ViewJobDialogFragment vjDialogFragment = new ViewJobDialogFragment();
                     Bundle vjBundle = new Bundle();
                     vjBundle.putInt("jobSpinnerSID", selectedJobSID);
-                    vjBundle.putString("firebaseJournalRef", firebaseJournalRef);
+                    vjBundle.putString("currentJournalRef", currentJournalRef);
                     vjDialogFragment.setArguments(vjBundle);
                     vjDialogFragment.show(manager, "Dialog");
 
-                } else {
-
-                    Toast.makeText(CurrentJournal.this, "No jobs to display",
-                            Toast.LENGTH_SHORT).show();
-
                 }
+
                 break;
+
             case R.id.btn_view_quote:
 
                 if (quotesArray.size() > 0) {
@@ -491,17 +492,14 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
                     ViewQuoteDialogFragment vqDialogFragment = new ViewQuoteDialogFragment();
                     Bundle vqBundle = new Bundle();
                     vqBundle.putInt("quoteSpinnerSID", selectedQuoteSID);
-                    vqBundle.putString("firebaseJournalRef", firebaseJournalRef);
+                    vqBundle.putString("currentJournalRef", currentJournalRef);
                     vqDialogFragment.setArguments(vqBundle);
                     vqDialogFragment.show(manager, "Dialog");
 
-                } else {
-
-                    Toast.makeText(CurrentJournal.this, "No quotes to display",
-                            Toast.LENGTH_SHORT).show();
-
                 }
+
                 break;
+
             case R.id.btn_view_dump:
 
                 if (dumpsArray.size() > 0) {
@@ -510,17 +508,14 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
                     Bundle vdBundle = new Bundle();
                     vdBundle.putString("dumpName", dumpSpinnerText);
                     vdBundle.putInt("dumpReceiptNumber", dumpReceiptNumber);
-                    vdBundle.putString("firebaseJournalRef", firebaseJournalRef);
+                    vdBundle.putString("currentJournalRef", currentJournalRef);
                     vdDialogFragment.setArguments(vdBundle);
                     vdDialogFragment.show(manager, "Dialog");
 
-                } else {
-
-                    Toast.makeText(CurrentJournal.this, "No dumps to display",
-                            Toast.LENGTH_SHORT).show();
-
                 }
+
                 break;
+
             case R.id.btn_view_fuel:
 
                 if (fuelArray.size() > 0) {
@@ -528,18 +523,15 @@ public class CurrentJournal extends BaseActivity implements View.OnClickListener
                     ViewFuelDialogFragment vfDialogFragment = new ViewFuelDialogFragment();
                     Bundle vfBundle = new Bundle();
                     vfBundle.putString("fuelReceiptNumber", fuelReceiptNumber);
-                    vfBundle.putString("firebaseJournalRef", firebaseJournalRef);
+                    vfBundle.putString("currentJournalRef", currentJournalRef);
                     vfDialogFragment.setArguments(vfBundle);
 
                     vfDialogFragment.show(manager, "Dialog");
 
-                } else {
-
-                    Toast.makeText(CurrentJournal.this, "No fuel entries to display",
-                            Toast.LENGTH_SHORT).show();
-
                 }
+
                 break;
+
             case R.id.btn_add_job:
 
                 AddJobDialogFragment ajFragment = new AddJobDialogFragment();

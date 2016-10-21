@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,18 +22,20 @@ import android.widget.TextView;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 public class Tab2CalcFragment extends Fragment {
 
-    private static Spinner vSpinner, bSpinner;
-    private static Button clearCost, addHST;
-    private static TextView tvVolumeSize, tvBedloadSize, tvTotal;
-    private static int[] volumePrice, bedloadPrice;
-    private static String[] volumeSize, bedloadSize;
-    private static int vPrice, bPrice;
-    private double beforeTax, sum, discount;
-    private static String doubleValue, totalText;
+    private Spinner vSpinner, bSpinner;
+    private Button clearCost, addHST;
+    private TextView tvVolumeSize, tvBedloadSize, tvTotal;
+    private int[] volumePrice, bedloadPrice;
+    private String[] volumeSize, bedloadSize;
+    private int vPrice, bPrice;
+    private double sum, discount;
+
+    private NumberFormat currencyFormat;
 
     ArrayList<Integer> priceArray = new ArrayList<>();
 
@@ -55,6 +58,8 @@ public class Tab2CalcFragment extends Fragment {
         bedloadPrice = v.getResources().getIntArray(R.array.string_bedload_price);
         volumeSize = v.getResources().getStringArray(R.array.string_volume_name);
         bedloadSize = v.getResources().getStringArray(R.array.string_bedload_name);
+
+        currencyFormat = NumberFormat.getCurrencyInstance();
 
         vSpinner.setAdapter(new CustomVolumeSpinnerAdapter(getActivity(), R.layout.custom_spinner_layout, volumeSize));
         vSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -94,7 +99,7 @@ public class Tab2CalcFragment extends Fragment {
                     // User selected a custom price
                     case 15:
 
-                        showCustomPriceAlertDialog();
+                        customPriceAlertDialog().show();
 
                         break;
 
@@ -190,22 +195,24 @@ public class Tab2CalcFragment extends Fragment {
                 if (addHST.getText().equals("Add HST")) {
                     if (!TextUtils.isEmpty(tvTotal.getText())) {
 
-                        doubleValue = tvTotal.getText().toString();
-                        beforeTax = Double.parseDouble(doubleValue.substring(1));
-
-                        totalText = Double.toString(Utils.calculateTax(beforeTax));
-                        tvTotal.setText("$" + totalText);
+                        tvTotal.setText(currencyFormat.format(Utils.calculateTax(sum)));
 
                         addHST.setText("Display HST");
                     }
                 } else {
-                    tvTotal.setText(showHST());
+                    tvTotal.setText(currencyFormat.format(priceWithHST(sum)));
                     addHST.setClickable(false);
                 }
             }
         });
 
         return v;
+    }
+
+    public double priceWithHST(double preTaxAmount) {
+
+        return Utils.calculateTax(preTaxAmount) - preTaxAmount;
+
     }
 
     public void calcCost() {
@@ -219,14 +226,14 @@ public class Tab2CalcFragment extends Fragment {
             if (discount != 0.0) {
                 sum *= discount;
             }
-            String sumString = getString(R.string.dollar_sign) + (Math.round(sum * 100.00) / 100.00);
+            String sumString = currencyFormat.format(sum);
             tvTotal.setText(sumString);
 
         }
 
     }
 
-    public void showCustomPriceAlertDialog() {
+    public AlertDialog customPriceAlertDialog() {
 
         AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
         final EditText edittext = new EditText(getActivity());
@@ -257,16 +264,14 @@ public class Tab2CalcFragment extends Fragment {
             }
         });
 
-        alert.show();
+        AlertDialog AD = alert.create();
+        AD.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+        return AD;
 
     }
 
-    public String showHST() {
 
-        return getString(R.string.dollar_sign) + (Math.round((Double.parseDouble(totalText) - sum) * 100.00) / 100.00);
-
-
-    }
 
     public class CustomVolumeSpinnerAdapter extends ArrayAdapter<String> {
 

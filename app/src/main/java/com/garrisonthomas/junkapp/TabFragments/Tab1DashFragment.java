@@ -19,8 +19,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class Tab1DashFragment extends Fragment {
 
-    private static Button openJournal;
-    private String firebaseJournalRef;
+    private Button openJournal;
+    private String currentJournalRef;
     private SharedPreferences preferences;
     private FirebaseAuth auth = FirebaseAuth.getInstance();
 
@@ -36,7 +36,7 @@ public class Tab1DashFragment extends Fragment {
         djFragment = new DailyJournalDialogFragment();
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-        firebaseJournalRef = preferences.getString("firebaseRef", "none");
+        currentJournalRef = preferences.getString("currentJournalRef", null);
 
     }
 
@@ -66,7 +66,7 @@ public class Tab1DashFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if (firebaseJournalRef.equals("none") && auth.getCurrentUser() != null) {
+                if (currentJournalRef == null && auth.getCurrentUser() != null) {
 
                     djFragment.show(manager, "Dialog");
 
@@ -75,7 +75,7 @@ public class Tab1DashFragment extends Fragment {
 //                            .setActionTextColor(Color.CYAN)
 //                            .setAction("CREATE", createJournalClickListener)
 //                            .show();
-                } else if (!firebaseJournalRef.equals("none") && auth.getCurrentUser() != null) {
+                } else if (currentJournalRef != null && auth.getCurrentUser() != null) {
 
                     Intent intent = new Intent(getActivity(), CurrentJournal.class);
                     startActivity(intent);
@@ -97,11 +97,11 @@ public class Tab1DashFragment extends Fragment {
         super.onResume();
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-        firebaseJournalRef = preferences.getString("firebaseRef", "none");
+        currentJournalRef = preferences.getString("currentJournalRef", null);
 
-        if (firebaseJournalRef.equals("none")) {
+        if (currentJournalRef == null) {
             openJournal.setText("Create Journal");
-        } else if (!firebaseJournalRef.equals("none")){
+        } else {
             openJournal.setText("Open Journal");
         }
 

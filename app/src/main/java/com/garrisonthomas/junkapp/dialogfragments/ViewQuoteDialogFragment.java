@@ -46,7 +46,7 @@ public class ViewQuoteDialogFragment extends DialogFragmentHelper implements Vie
     @Bind(R.id.btn_delete_quote)
     ImageButton deleteQuoteBtn;
     private static int vqSID;
-    public static String firebaseJournalRef;
+    private String firebaseJournalRef;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,8 +75,8 @@ public class ViewQuoteDialogFragment extends DialogFragmentHelper implements Vie
         deleteQuoteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragmentHelper.deleteItem(ViewQuoteDialogFragment.this,
-                        firebaseJournalRef + "/quotes/" + String.valueOf(vqSID));
+                deleteItem(ViewQuoteDialogFragment.this,
+                        firebaseJournalRef + "quotes/" + String.valueOf(vqSID)).show();
             }
         });
 
@@ -94,7 +94,7 @@ public class ViewQuoteDialogFragment extends DialogFragmentHelper implements Vie
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         Bundle vqBundle = getArguments();
         vqSID = vqBundle.getInt("quoteSpinnerSID");
-        firebaseJournalRef = vqBundle.getString("firebaseJournalRef");
+        firebaseJournalRef = vqBundle.getString("currentJournalRef");
         dialog.setTitle("Quote SID: " + String.valueOf(vqSID));
         dialog.setCanceledOnTouchOutside(false);
 
@@ -111,13 +111,15 @@ public class ViewQuoteDialogFragment extends DialogFragmentHelper implements Vie
             public void onChildAdded(DataSnapshot snapshot, String previousChildKey) {
 
                 QuoteObject quoteObject = snapshot.getValue(QuoteObject.class);
+
+                String highEndString = currencyFormat.format(quoteObject.getHighEnd());
+                String lowEndString = currencyFormat.format(quoteObject.getLowEnd());
+
                 if (quoteObject.getHighEnd() != 0) {
-                    String highEndString = "$" + quoteObject.getHighEnd();
                     vqHighEnd.setVisibility(View.VISIBLE);
                     vqHighEndDisplay.setVisibility(View.VISIBLE);
                     vqHighEnd.setText(highEndString);
                 }
-                String lowEndString = "$" + quoteObject.getLowEnd();
                 String startEndTime = quoteObject.getQuoteStartTime() + " - " + quoteObject.getQuoteEndTime();
                 vqLowEnd.setText(lowEndString);
                 vqTime.setText(startEndTime);

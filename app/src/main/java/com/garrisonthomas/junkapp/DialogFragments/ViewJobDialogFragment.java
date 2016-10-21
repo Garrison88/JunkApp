@@ -76,8 +76,8 @@ public class ViewJobDialogFragment extends DialogFragmentHelper implements ViewI
         deleteJobBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragmentHelper.deleteItem(ViewJobDialogFragment.this,
-                        firebaseJournalRef + "/jobs/" + String.valueOf(vjSID));
+                deleteItem(ViewJobDialogFragment.this,
+                        firebaseJournalRef + "/jobs/" + String.valueOf(vjSID)).show();
             }
         });
 
@@ -96,7 +96,7 @@ public class ViewJobDialogFragment extends DialogFragmentHelper implements ViewI
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         Bundle vjBundle = getArguments();
         vjSID = vjBundle.getInt("jobSpinnerSID");
-        firebaseJournalRef = vjBundle.getString("firebaseJournalRef");
+        firebaseJournalRef = vjBundle.getString("currentJournalRef");
         dialog.setTitle("Job SID: " + String.valueOf(vjSID));
         dialog.setCanceledOnTouchOutside(false);
 
@@ -113,8 +113,13 @@ public class ViewJobDialogFragment extends DialogFragmentHelper implements ViewI
             public void onChildAdded(DataSnapshot snapshot, String previousChildKey) {
 
                 JobObject jobObject = snapshot.getValue(JobObject.class);
-                vjGross.setText("$" + String.valueOf(jobObject.getGrossSale()));
-                vjNet.setText("$" + String.valueOf(jobObject.getNetSale()));
+
+                String gross = currencyFormat.format(jobObject.getGrossSale());
+                String net = currencyFormat.format(jobObject.getNetSale());
+
+                vjGross.setText(gross);
+                vjNet.setText(net);
+
                 vjPayType.setText(jobObject.getPayType());
                 if (jobObject.getJobType() != null) {
                     tvJobTypeDisplay.setVisibility(View.VISIBLE);

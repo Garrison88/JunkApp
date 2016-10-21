@@ -21,18 +21,22 @@ import android.widget.TextView;
 import com.garrisonthomas.junkapp.BaseActivity;
 import com.garrisonthomas.junkapp.R;
 
+import java.text.NumberFormat;
+
 import static com.garrisonthomas.junkapp.DialogFragmentHelper.calculateDump;
 
 public class Tab3DumpFragment extends Fragment {
 
-    private static Spinner dumpsSpinner;
-    private static Button infoBtn, dirBtn, calcBtn, dumpsClearBtn;
-    private static String[] dumpNameArray, dumpAddressArray, dumpInfoArray, dumpPhoneNumberArray;
-    private static Integer[] dumpRateArray;
-    private static int selectedDumpRate;
-    private static EditText etDumpCost;
-    private static TextView tvDumpCost;
-    private static String selectedDumpInfo, selectedDumpName;
+    private Spinner dumpsSpinner;
+    private Button infoBtn, dirBtn, calcBtn, dumpsClearBtn;
+    private String[] dumpNameArray, dumpAddressArray, dumpInfoArray, dumpPhoneNumberArray;
+    private Double[] dumpRateArray;
+    private double selectedDumpRate;
+    private EditText etDumpCost;
+    private TextView tvDumpCost;
+    private String selectedDumpInfo, selectedDumpName;
+
+    private NumberFormat currencyFormat;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
@@ -55,6 +59,8 @@ public class Tab3DumpFragment extends Fragment {
         dumpInfoArray = BaseActivity.dumpInfoArray;
         dumpRateArray = BaseActivity.dumpRateArray;
         dumpPhoneNumberArray = BaseActivity.dumpPhoneNumberArray;
+
+        currencyFormat = NumberFormat.getCurrencyInstance();
 
         dumpsSpinner.setAdapter(new DumpsAdapter(getActivity(), R.layout.custom_spinner_layout, dumpNameArray));
         dumpsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -118,9 +124,7 @@ public class Tab3DumpFragment extends Fragment {
 
                             int minimum = BaseActivity.dumpMinimumArray[dumpsSpinner.getSelectedItemPosition()];
 
-                            double result = calculateDump(selectedDumpRate, weightInTonnes, minimum);
-
-                            String resultString = "$" + String.valueOf(result);
+                            String resultString = currencyFormat.format(calculateDump(selectedDumpRate, weightInTonnes, minimum));
 
                             etDumpCost.setVisibility(View.GONE);
                             tvDumpCost.setVisibility(View.VISIBLE);
@@ -185,7 +189,14 @@ public class Tab3DumpFragment extends Fragment {
             mainText.setText(dumpNameArray[position]);
 
             TextView subText = (TextView) mySpinner.findViewById(R.id.spinner_text_dump_rate);
-            subText.setText("$" + dumpRateArray[position] + "/MT");
+            if (dumpRateArray[position] % 1 != 0) {
+
+                subText.setText(currencyFormat.format(dumpRateArray[position]) + "/MT");
+            } else {
+                currencyFormat.setMinimumFractionDigits(0);
+                subText.setText(currencyFormat.format(dumpRateArray[position]) + "/MT");
+            }
+
 
             return mySpinner;
         }

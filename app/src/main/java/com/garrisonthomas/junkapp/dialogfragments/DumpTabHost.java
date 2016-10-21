@@ -18,8 +18,7 @@ public class DumpTabHost extends DialogFragmentHelper {
 
     private SectionsPagerAdapter sectionsPagerAdapter;
     private ViewPager viewPager;
-//    private FragmentTransaction fragmentTransaction;
-//    private View view;
+
 
     @Override
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
@@ -57,13 +56,6 @@ public class DumpTabHost extends DialogFragmentHelper {
             if (position == 0) {
                 // find first fragment...
 
-//                fragmentTransaction = getFragmentManager().beginTransaction();
-//                fragmentTransaction.add(view.getId(), new GarbageDumpFragment(), "lpt2");
-//                fragmentTransaction.commit();
-
-                ////                Bundle GDFBundle = new Bundle();
-////                GDFBundle.p("jobSpinnerSID", selectedJobSID);
-////                GDF.setArguments(GDFBundle);
                 return new GarbageDumpFragment();
             }
             if (position == 1) {
@@ -99,4 +91,5 @@ public class DumpTabHost extends DialogFragmentHelper {
             return null;
         }
     }
+
 }

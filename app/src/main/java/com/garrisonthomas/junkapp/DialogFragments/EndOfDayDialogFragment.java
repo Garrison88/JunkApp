@@ -30,7 +30,7 @@ public class EndOfDayDialogFragment extends DialogFragmentHelper {
     SharedPreferences preferences;
     EditText endOfDayNotes;
     Button cancel, archive, dEndTime, nEndTime;
-    private String firebaseJournalRef, driver, navigator, loadString, fuelString;
+    private String currentJournalRef, driver, navigator, loadString, fuelString;
     private String[] endLoadArray, endFuelArray;
     private int percentOfGoal, totalGrossProfit, percentOnDumps, totalDumpCost;
     private ProgressDialog pDialog;
@@ -63,7 +63,7 @@ public class EndOfDayDialogFragment extends DialogFragmentHelper {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
 
-        firebaseJournalRef = preferences.getString("firebaseRef", null);
+        currentJournalRef = preferences.getString("currentJournalRef", null);
 
         endOfDayNotes = (EditText) v.findViewById(R.id.end_day_notes);
 
@@ -119,14 +119,14 @@ public class EndOfDayDialogFragment extends DialogFragmentHelper {
         dEndTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openTimePickerDialog(getActivity(), dEndTime);
+                createTimePickerDialog(getActivity(), dEndTime, driver + " Out").show();
             }
         });
 
         nEndTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openTimePickerDialog(getActivity(), nEndTime);
+                createTimePickerDialog(getActivity(), nEndTime, navigator + " Out").show();
             }
         });
 
@@ -199,7 +199,7 @@ public class EndOfDayDialogFragment extends DialogFragmentHelper {
         pDialog = ProgressDialog.show(getActivity(), null,
                 "Archiving journal...", true);
 
-        Firebase fbrJournal = new Firebase(firebaseJournalRef);
+        Firebase fbrJournal = new Firebase(currentJournalRef);
 
         fbrJournal.child("driverEndTime").setValue(DET);
         fbrJournal.child("navEndTime").setValue(NET);
@@ -213,7 +213,7 @@ public class EndOfDayDialogFragment extends DialogFragmentHelper {
             @Override
             public void onComplete(FirebaseError firebaseError, Firebase firebase) {
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putString("firebaseRef", null);
+                editor.putString("currentJournalRef", null);
                 editor.apply();
                 Toast.makeText(getActivity(), "Journal successfully archived",
                         Toast.LENGTH_SHORT).show();

@@ -21,8 +21,8 @@ import com.garrisonthomas.junkapp.entryobjects.FuelObject;
 public class AddFuelDialogFragment extends DialogFragmentHelper {
 
     private EditText etFuelVendor, etFuelCost, etReceiptNumber;
-    private static Button saveFuel, cancelFuel;
-    private String firebaseJournalRef;
+    private Button saveFuel, cancelFuel;
+    private String currentJournalRef;
     private SharedPreferences preferences;
 
     @Override
@@ -34,7 +34,7 @@ public class AddFuelDialogFragment extends DialogFragmentHelper {
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-        firebaseJournalRef = preferences.getString("firebaseRef", "none");
+        currentJournalRef = preferences.getString("currentJournalRef", null);
 
         etFuelVendor = (EditText) v.findViewById(R.id.et_fuel_vendor);
         etFuelCost = (EditText) v.findViewById(R.id.et_fuel_cost);
@@ -52,7 +52,7 @@ public class AddFuelDialogFragment extends DialogFragmentHelper {
                         && (!TextUtils.isEmpty(etFuelCost.getText()))
                         && (!TextUtils.isEmpty(etReceiptNumber.getText()))) {
 
-                    Firebase fbrFuel = new Firebase(firebaseJournalRef + "fuel/"
+                    Firebase fbrFuel = new Firebase(currentJournalRef + "fuel/"
                             + String.valueOf(etReceiptNumber.getText()));
 
                     FuelObject fuel = new FuelObject();

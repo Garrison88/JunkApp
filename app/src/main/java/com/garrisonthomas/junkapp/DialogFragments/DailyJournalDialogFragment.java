@@ -22,6 +22,7 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.garrisonthomas.junkapp.App;
 import com.garrisonthomas.junkapp.CurrentJournal;
 import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
@@ -31,7 +32,7 @@ public class DailyJournalDialogFragment extends DialogFragmentHelper {
 
     private Spinner truckSpinner;
     private String[] truckArray;
-    private static Button cancel, createJournal, dStartTime, nStartTime;
+    private Button cancel, createJournal, dStartTime, nStartTime;
     private EditText etDriver, etNavigator;
     private String truckSelected;
     private SharedPreferences preferences;
@@ -86,14 +87,14 @@ public class DailyJournalDialogFragment extends DialogFragmentHelper {
         dStartTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openTimePickerDialog(getActivity(), dStartTime);
+                createTimePickerDialog(getActivity(), dStartTime, "Driver In").show();
             }
         });
 
         nStartTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openTimePickerDialog(getActivity(), nStartTime);
+                createTimePickerDialog(getActivity(), nStartTime, "Navigator In").show();
             }
         });
 
@@ -117,10 +118,10 @@ public class DailyJournalDialogFragment extends DialogFragmentHelper {
                     pDialog = ProgressDialog.show(getActivity(), null,
                             "Creating journal...", true);
 
-                    final String firebaseJournalRef = firebaseURL + "journals/" +
+                    final String currentJournalRef = App.FIREBASE_URL + "journals/" +
                             currentYear + "/" + currentMonth + "/" + currentDay + "/T" + truckSelected + "/";
 
-                    final Firebase fbrJournal = new Firebase(firebaseJournalRef);
+                    final Firebase fbrJournal = new Firebase(currentJournalRef);
 
                     fbrJournal.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -133,7 +134,7 @@ public class DailyJournalDialogFragment extends DialogFragmentHelper {
 
                             } else if (!snapshot.exists()) {
 
-                                createJournal(fbrJournal, firebaseJournalRef);
+                                createJournal(fbrJournal, currentJournalRef);
 
                             }
                         }
@@ -154,7 +155,7 @@ public class DailyJournalDialogFragment extends DialogFragmentHelper {
 
     }
 
-    private void createJournal(Firebase firebaseRef, final String firebaseJournalRef) {
+    private void createJournal(Firebase firebaseRef, final String currentJournalRef) {
 
         if (!TextUtils.isEmpty(etDriver.getText()) &&
                 !dStartTime.getText().equals("Start")) {
@@ -187,7 +188,7 @@ public class DailyJournalDialogFragment extends DialogFragmentHelper {
                     } else {
 
                         SharedPreferences.Editor editor = preferences.edit();
-                        editor.putString("firebaseRef", firebaseJournalRef);
+                        editor.putString("currentJournalRef", currentJournalRef);
                         editor.apply();
 
                         // hamfisted way of clearing info from dailyJournalDialogFragment...

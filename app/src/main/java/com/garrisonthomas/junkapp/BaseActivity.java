@@ -31,12 +31,12 @@ public class BaseActivity extends AppCompatActivity {
     public List<String> dumpInfoArrayList = new ArrayList<>();
     public List<String> dumpNameArrayList = new ArrayList<>();
     public List<Integer> dumpMinimumArrayList = new ArrayList<>();
-    public List<Integer> dumpRateArrayList = new ArrayList<>();
+    public List<Double> dumpRateArrayList = new ArrayList<>();
     public List<String> dumpPhoneNumberArrayList = new ArrayList<>();
-
     public static String[] dumpAddressArray, dumpInfoArray, dumpNameArray, dumpPhoneNumberArray;
-    public static Integer[] dumpMinimumArray,dumpRateArray;
-    public static String todaysDate;
+    public static Integer[] dumpMinimumArray;
+    public static Double[] dumpRateArray;
+    public String todaysDate;
     private static final int RC_SIGN_IN = 9001;
     FirebaseAuth auth = FirebaseAuth.getInstance();
 
@@ -166,7 +166,7 @@ public class BaseActivity extends AppCompatActivity {
 
     public void populateDumpInfoArrayLists() {
 
-        Firebase dumpInfoRef = new Firebase("https://junkapp-43226.firebaseio.com/dumpInfo");
+        Firebase dumpInfoRef = new Firebase(App.FIREBASE_URL + "dumpInfo");
         dumpInfoRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -189,7 +189,7 @@ public class BaseActivity extends AppCompatActivity {
                 dumpMinimumArray = dumpMinimumArrayList.toArray(new Integer[dumpMinimumArrayList.size()]);
                 dumpNameArray = dumpNameArrayList.toArray(new String[dumpNameArrayList.size()]);
                 dumpPhoneNumberArray = dumpPhoneNumberArrayList.toArray(new String[dumpPhoneNumberArrayList.size()]);
-                dumpRateArray = dumpRateArrayList.toArray(new Integer[dumpRateArrayList.size()]);
+                dumpRateArray = dumpRateArrayList.toArray(new Double[dumpRateArrayList.size()]);
 
             }
 

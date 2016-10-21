@@ -58,8 +58,8 @@ public class ViewFuelDialogFragment extends DialogFragmentHelper implements View
         deleteFuelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragmentHelper.deleteItem(ViewFuelDialogFragment.this,
-                        firebaseJournalRef + "/fuel/" + String.valueOf(fuelReceiptNumber));
+                deleteItem(ViewFuelDialogFragment.this,
+                        firebaseJournalRef + "/fuel/" + String.valueOf(fuelReceiptNumber)).show();
             }
         });
 
@@ -72,7 +72,7 @@ public class ViewFuelDialogFragment extends DialogFragmentHelper implements View
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         Bundle vfBundle = getArguments();
         fuelReceiptNumber = vfBundle.getString("fuelReceiptNumber");
-        firebaseJournalRef = vfBundle.getString("firebaseJournalRef");
+        firebaseJournalRef = vfBundle.getString("currentJournalRef");
         dialog.setTitle(fuelReceiptNumber);
         dialog.setCanceledOnTouchOutside(false);
 
@@ -89,8 +89,11 @@ public class ViewFuelDialogFragment extends DialogFragmentHelper implements View
             public void onChildAdded(DataSnapshot snapshot, String previousChildKey) {
 
                 FuelObject fuelObject = snapshot.getValue(FuelObject.class);
+
+                String cost = currencyFormat.format(fuelObject.getFuelCost());
+
                 vfVendor.setText(String.valueOf(fuelObject.getFuelVendor()));
-                vfCost.setText("$" + String.valueOf(fuelObject.getFuelCost()));
+                vfCost.setText(cost);
 
             }
 
