@@ -92,16 +92,10 @@
         <item>Triple M West</item>
         <item>Triple M East</item>
         <item>CMI Fenmar</item>
-        <item>Tepermans</item>
+        <item>Teperman</item>
         <item>Cascades</item>
         <item>Other</item>
     </string-array>
-
-    <integer-array name="material_rebate">
-        <item>90</item>
-        <item>10</item>
-        <item>0</item>
-    </integer-array>
 
     <string-array name="string_volume_name">
         <item>Add Volume</item>
@@ -223,7 +217,6 @@
     </string-array>
 
     <string-array name="truck_number">
-        <item>Truck Number</item>
         <item>4</item>
         <item>5</item>
         <item>6</item>
@@ -233,8 +226,8 @@
         <item>Pay Type</item>
         <item>Cash</item>
         <item>Cheque</item>
-        <item>MasterCard...</item>
-        <item>Visa...</item>
+        <item>MasterCard</item>
+        <item>Visa</item>
         <item>Invoice</item>
         <item>Gift Card</item>
         <item>Other</item>

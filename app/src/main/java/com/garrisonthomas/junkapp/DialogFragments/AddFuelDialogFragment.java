@@ -39,10 +39,11 @@ public class AddFuelDialogFragment extends DialogFragmentHelper {
         etFuelVendor = (EditText) v.findViewById(R.id.et_fuel_vendor);
         etFuelCost = (EditText) v.findViewById(R.id.et_fuel_cost);
         etReceiptNumber = (EditText) v.findViewById(R.id.et_fuel_receipt_number);
-        etReceiptNumber.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
+        etReceiptNumber.setFilters(new InputFilter[]{new InputFilter.AllCaps()});
 
-        saveFuel = (Button) v.findViewById(R.id.btn_save_fuel);
-        cancelFuel = (Button) v.findViewById(R.id.btn_cancel_fuel);
+        View cancelSaveLayout = v.findViewById(R.id.fuel_cancel_save_button_bar);
+        saveFuel = (Button) cancelSaveLayout.findViewById(R.id.btn_save);
+        cancelFuel = (Button) cancelSaveLayout.findViewById(R.id.btn_cancel);
 
         saveFuel.setOnClickListener(new View.OnClickListener() {
             @Override

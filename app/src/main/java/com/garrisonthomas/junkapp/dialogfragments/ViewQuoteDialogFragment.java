@@ -45,7 +45,7 @@ public class ViewQuoteDialogFragment extends DialogFragmentHelper implements Vie
     Button okBtn;
     @Bind(R.id.btn_delete_quote)
     ImageButton deleteQuoteBtn;
-    private static int vqSID;
+    private int vqSID;
     private String firebaseJournalRef;
 
     @Override
@@ -120,7 +120,7 @@ public class ViewQuoteDialogFragment extends DialogFragmentHelper implements Vie
                     vqHighEndDisplay.setVisibility(View.VISIBLE);
                     vqHighEnd.setText(highEndString);
                 }
-                String startEndTime = quoteObject.getQuoteStartTime() + " - " + quoteObject.getQuoteEndTime();
+                String startEndTime = quoteObject.getQuoteTime();
                 vqLowEnd.setText(lowEndString);
                 vqTime.setText(startEndTime);
 

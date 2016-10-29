@@ -5,49 +5,48 @@
 
     <item
         android:id="@+id/action_call_office"
-        android:title="Call Office"
-        android:orderInCategory="1"
         android:icon="@drawable/ic_call_white_24dp"
+        android:orderInCategory="1"
+        android:title="Call Office"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_email_office"
-        android:title="Email Office"
-        android:orderInCategory="2"
         android:icon="@drawable/ic_email_white_24dp"
+        android:orderInCategory="2"
+        android:title="Email Office"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_login_logout"
-        android:title="Login"
         android:orderInCategory="3"
+        android:title="Login"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_archive_journal"
+        android:icon="@drawable/ic_archive_white_24dp"
+        android:orderInCategory="4"
+        android:title="Archive Journal"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_delete_journal"
+        android:icon="@drawable/ic_delete_white_24px"
+        android:orderInCategory="5"
+        android:title="Delete Journal"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_settings"
+        android:orderInCategory="6"
         android:title="@string/action_settings"
-        android:orderInCategory="4"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_about_developer"
+        android:orderInCategory="7"
         android:title="@string/menu_text_developer_website"
-        android:orderInCategory="5"
-        app:showAsAction="never"/>
-
-    <item
-        android:id="@+id/action_publish_journal"
-        android:title="Archive Journal"
-        android:icon="@drawable/ic_archive_white_24dp"
-        android:orderInCategory="2"
-        app:showAsAction="never"/>
-
-    <item
-        android:id="@+id/action_delete_journal"
-        android:title="Delete Journal"
-        android:icon="@drawable/ic_delete_white_24px"
-        android:orderInCategory="3"
-        app:showAsAction="never"/>
-
+        app:showAsAction="never" />
 
 </menu>

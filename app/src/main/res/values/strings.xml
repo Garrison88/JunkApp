@@ -18,4 +18,5 @@
     <string name="end">End</string>
     <string name="auth_failed">Authentication Failed</string>
     <string name="empty_et_error_message">Cannot be empty</string>
+    <string name="sp_current_journal_ref">currentJournalRef</string>
 </resources>

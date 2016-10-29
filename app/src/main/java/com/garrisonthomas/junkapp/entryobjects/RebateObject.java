@@ -6,8 +6,18 @@ package com.garrisonthomas.junkapp.entryobjects;
 public class RebateObject {
 
     private String rebateLocation, materialType;
-    private int rebateWeight, receiptNumber;
-    private double rebateAmount;
+    private int receiptNumber;
+    private int rebateAmount;
+    private int percentPrevious;
+    private double rebateTonnage;
+
+    public int getPercentPrevious() {
+        return percentPrevious;
+    }
+
+    public void setPercentPrevious(int percentPrevious) {
+        this.percentPrevious = percentPrevious;
+    }
 
     public RebateObject() {
 
@@ -30,19 +40,19 @@ public class RebateObject {
         this.materialType = materialType;
     }
 
-    public int getRebateWeight() {
-        return rebateWeight;
+    public double getRebateTonnage() {
+        return rebateTonnage;
     }
 
-    public void setRebateWeight(int rebateWeight) {
-        this.rebateWeight = rebateWeight;
+    public void setRebateTonnage(double rebateTonnage) {
+        this.rebateTonnage = rebateTonnage;
     }
 
-    public double getRebateAmount() {
+    public int getRebateAmount() {
         return rebateAmount;
     }
 
-    public void setRebateAmount(double rebateAmount) {
+    public void setRebateAmount(int rebateAmount) {
         this.rebateAmount = rebateAmount;
     }
 

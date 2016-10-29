@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:journal_card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:journal_card_view="http://schemas.android.com/apk/res-auto"
     android:fadeScrollbars="false"
     android:orientation="vertical">
 
@@ -19,7 +19,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:baselineAligned="false">
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/enter_sid_wrapper"
@@ -28,7 +29,6 @@
                     android:layout_weight="1">
 
                     <android.support.design.widget.TextInputEditText
-                        android:id="@+id/et_sid"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:hint="SID"
@@ -44,7 +44,6 @@
                     android:layout_weight="1">
 
                     <android.support.design.widget.TextInputEditText
-                        android:id="@+id/et_receipt_number"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Receipt #"
@@ -58,7 +57,8 @@
             <LinearLayout
                 android:id="@+id/sales_linear_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:baselineAligned="false">
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/enter_gross_sale_wrapper"
@@ -67,7 +67,6 @@
                     android:layout_weight="1">
 
                     <android.support.design.widget.TextInputEditText
-                        android:id="@+id/et_gross_sale"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Gross Sale"
@@ -82,7 +81,6 @@
                     android:layout_weight="1">
 
                     <android.support.design.widget.TextInputEditText
-                        android:id="@+id/et_net_sale"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Net Sale"
@@ -131,8 +129,7 @@
 
             </android.support.v7.widget.CardView>
 
-            <info.hoang8f.android.segmented.SegmentedGroup
-                xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+            <info.hoang8f.android.segmented.SegmentedGroup xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/job_type_segmented_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -140,7 +137,8 @@
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
                 segmentedgroup:sc_border_width="2dp"
-                segmentedgroup:sc_corner_radius="2dp">
+                segmentedgroup:sc_corner_radius="2dp"
+                segmentedgroup:sc_tint_color="@color/darkAccent">
 
                 <RadioButton
                     android:id="@+id/switch_residential"
@@ -168,7 +166,6 @@
                 android:layout_height="wrap_content">
 
                 <android.support.design.widget.TextInputEditText
-                    android:id="@+id/et_job_notes"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="Notes"
@@ -181,36 +178,8 @@
 
     </ScrollView>
 
-    <LinearLayout
-        android:id="@+id/add_job_button_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/btn_cancel_job"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
-            android:text="Cancel" />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="7dp"
-            android:layout_marginTop="7dp"
-            android:background="#505154" />
-
-        <Button
-            android:id="@+id/btn_save_job"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
-            android:text="Save" />
-
-    </LinearLayout>
+    <include
+        android:id="@+id/job_cancel_save_button_bar"
+        layout="@layout/cancel_save_button_bar_layout" />
 
 </LinearLayout>

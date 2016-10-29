@@ -110,36 +110,40 @@
 
     </ScrollView>
 
-    <LinearLayout
-        android:id="@+id/add_quote_button_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <include
+        android:id="@+id/quote_cancel_save_button_bar"
+        layout="@layout/cancel_save_button_bar_layout" />
 
-        <Button
-            android:id="@+id/btn_cancel_quote"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
-            android:text="Cancel" />
+    <!--<LinearLayout-->
+        <!--android:id="@+id/add_quote_button_layout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="7dp"
-            android:layout_marginTop="7dp"
-            android:background="#505154" />
+        <!--<Button-->
+            <!--android:id="@+id/btn_cancel_quote"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:layout_weight="1"-->
+            <!--android:background="?android:attr/selectableItemBackground"-->
+            <!--android:text="Cancel" />-->
 
-        <Button
-            android:id="@+id/btn_save_quote"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
-            android:text="Save" />
+        <!--<View-->
+            <!--android:layout_width="1dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_marginBottom="7dp"-->
+            <!--android:layout_marginTop="7dp"-->
+            <!--android:background="#505154" />-->
 
-    </LinearLayout>
+        <!--<Button-->
+            <!--android:id="@+id/btn_save_quote"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:layout_weight="1"-->
+            <!--android:background="?android:attr/selectableItemBackground"-->
+            <!--android:text="Save" />-->
+
+    <!--</LinearLayout>-->
 
 </LinearLayout>

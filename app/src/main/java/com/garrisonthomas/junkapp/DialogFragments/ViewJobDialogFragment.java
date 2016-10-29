@@ -127,7 +127,7 @@ public class ViewJobDialogFragment extends DialogFragmentHelper implements ViewI
                     vjJobType.setText(jobObject.getJobType());
                 }
                 vjJobType.setText(jobObject.getJobType());
-                vjTime.setText(jobObject.getStartTime() + " - " + jobObject.getEndTime());
+                vjTime.setText(jobObject.getTime());
                 vjReceiptNumber.setText(String.valueOf(jobObject.getReceiptNumber()));
                 // if there are no notes, do not display them
                 if (jobObject.getJobNotes() != null) {

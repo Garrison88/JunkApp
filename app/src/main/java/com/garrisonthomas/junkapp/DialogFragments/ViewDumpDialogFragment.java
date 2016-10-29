@@ -110,7 +110,7 @@ public class ViewDumpDialogFragment extends DialogFragmentHelper implements View
                     previousAmount = Math.round(dumpObject.getGrossCost() * (dumpObject.getPercentPrevious() * .01) * 100.00) / 100.00;
                     previousAmountString = currencyFormat.format(previousAmount);
                     vdPercentPrevious.setText(String.valueOf(dumpObject.getPercentPrevious()) + "%"
-                            + " ($" + previousAmountString + ")");
+                            + "\n" + "(" + previousAmountString + ")");
                     vdPercentPreviousText.setVisibility(View.VISIBLE);
                     vdPercentPrevious.setVisibility(View.VISIBLE);
                 }

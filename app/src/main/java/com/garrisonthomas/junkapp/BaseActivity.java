@@ -1,5 +1,6 @@
 package com.garrisonthomas.junkapp;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.firebase.ui.auth.AuthUI;
+import com.garrisonthomas.junkapp.dialogfragments.ArchiveJournalDialogFragment;
 import com.garrisonthomas.junkapp.entryobjects.TransferStation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -25,7 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     public List<String> dumpAddressArrayList = new ArrayList<>();
     public List<String> dumpInfoArrayList = new ArrayList<>();
@@ -39,8 +41,9 @@ public class BaseActivity extends AppCompatActivity {
     public String todaysDate;
     private static final int RC_SIGN_IN = 9001;
     FirebaseAuth auth = FirebaseAuth.getInstance();
+    private ProgressDialog progressDialog;
 
-    Menu menu;
+    public Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,8 @@ public class BaseActivity extends AppCompatActivity {
         todaysDate = df2.format(date);
 
         populateDumpInfoArrayLists();
+
+//        preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
     }
 
@@ -71,62 +76,76 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//
+//
+//
+//        this.menu = menu;
+//
 
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        this.menu = menu;
-
-        MenuItem loginLogout = menu.findItem(R.id.action_login_logout);
-
-        if (auth.getCurrentUser() != null) {
-            loginLogout.setTitle("Logout");
-        } else {
-            loginLogout.setTitle("Login");
-        }
-
-//        (auth.getCurrentUser() != null) ? loginLogout.setTitle("Logout") : loginLogout.setTitle("Login");
-
-        return true;
-    }
+//
+//        return true;
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        int id = item.getItemId();
+        switch (item.getItemId()) {
+            case R.id.action_call_office:
+                Uri number = Uri.parse(getString(R.string.office_phone_number_uri));
+                Intent callIntent = new Intent(Intent.ACTION_DIAL, number);
+                startActivity(callIntent);
+                break;
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_call_office) {
+            case R.id.action_about_developer:
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.developer_website)));
+                startActivity(browserIntent);
+                break;
 
-            Uri number = Uri.parse(getString(R.string.office_phone_number_uri));
-            Intent callIntent = new Intent(Intent.ACTION_DIAL, number);
-            startActivity(callIntent);
+            case R.id.action_settings:
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingsIntent);
+                break;
 
-        } else if (id == R.id.action_about_developer) {
+            case R.id.action_login_logout:
+                LoginLogout();
+                break;
 
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.developer_website)));
-            startActivity(browserIntent);
+            case R.id.action_email_office:
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "rcrawford@ridofittoronto.com", null));
+                if (emailIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(Intent.createChooser(emailIntent, "Choose an Email client:"));
+                }
+                break;
 
-        } else if (id == R.id.action_settings) {
-
-            Intent settingsIntent = new Intent(this, SettingsActivity.class);
-            startActivity(settingsIntent);
-
-        } else if (id == R.id.action_login_logout) {
-
-            LoginLogout();
-
-        } else if (id == R.id.action_email_office) {
-
-            Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "rcrawford@ridofittoronto.com", null));
-            if (emailIntent.resolveActivity(getPackageManager()) != null) {
-                startActivity(Intent.createChooser(emailIntent, "Choose an Email client:"));
-            }
+            case R.id.action_archive_journal:
+//                FragmentManager manager = getSupportFragmentManager();
+                ArchiveJournalDialogFragment djFragment = new ArchiveJournalDialogFragment();
+//                Bundle eodBundle = new Bundle();
+//                eodBundle.putString("driver", spDriver);
+//                eodBundle.putString("navigator", spNavigator);
+//                djFragment.setArguments(eodBundle);
+                djFragment.show(getSupportFragmentManager(), "Dialog");
+                break;
 
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void showProgress(String message) {
+        if (progressDialog != null && progressDialog.isShowing())
+            dismissProgress();
+
+        progressDialog = ProgressDialog.show(this, null, message);
+    }
+
+    protected void dismissProgress() {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
     }
 
     public void LoginLogout() {

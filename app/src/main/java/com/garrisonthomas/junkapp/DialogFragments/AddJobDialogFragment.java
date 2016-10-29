@@ -1,18 +1,27 @@
 package com.garrisonthomas.junkapp.dialogfragments;
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextUtils;
+import android.text.method.DigitsKeyListener;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -21,10 +30,11 @@ import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.garrisonthomas.junkapp.DialogFragmentHelper;
+import com.garrisonthomas.junkapp.inputFilters.ExpDateFormatWatcher;
+import com.garrisonthomas.junkapp.inputFilters.FourDigitCardFormatWatcher;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.Utils;
 import com.garrisonthomas.junkapp.entryobjects.JobObject;
-import com.google.android.gms.auth.api.Auth;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
 
@@ -32,14 +42,15 @@ public class AddJobDialogFragment extends DialogFragmentHelper {
 
     private TextInputEditText etSID, etGrossSale, etNetSale, etReceiptNumber, etJobNotes;
     private TextInputLayout enterSIDWrapper, enterGrossSaleWrapper, enterNetSaleWrapper,
-            enterReceiptNumberWrapper;
+            enterReceiptNumberWrapper, enterJobNotesWrapper;
     private Button startTime, endTime, saveJob, cancelJob;
     private Spinner payTypeSpinner;
     private RadioButton commButton, resButton, cancellationButton;
     private String[] payTypeArray;
-    private String payTypeString, firebaseJournalRef;
-    private SharedPreferences preferences;
-    private Auth auth;
+    private String payTypeString;
+    private String currentJournalRef;
+    private Long creditCardNumber;
+    private Integer creditCardExpDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,8 +60,8 @@ public class AddJobDialogFragment extends DialogFragmentHelper {
 
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-        firebaseJournalRef = preferences.getString("firebaseRef", "none");
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+        currentJournalRef = preferences.getString("currentJournalRef", null);
 
         enterSIDWrapper = (TextInputLayout) v.findViewById(R.id.enter_sid_wrapper);
         etSID = (TextInputEditText) enterSIDWrapper.getEditText();
@@ -64,7 +75,8 @@ public class AddJobDialogFragment extends DialogFragmentHelper {
         enterReceiptNumberWrapper = (TextInputLayout) v.findViewById(R.id.enter_receipt_number_wrapper);
         etReceiptNumber = (TextInputEditText) enterReceiptNumberWrapper.getEditText();
 
-        etJobNotes = (TextInputEditText) v.findViewById(R.id.et_job_notes);
+        enterJobNotesWrapper = (TextInputLayout) v.findViewById(R.id.enter_job_notes_wrapper);
+        etJobNotes = (TextInputEditText) enterJobNotesWrapper.getEditText();
 
         resButton = (RadioButton) v.findViewById(R.id.switch_residential);
         commButton = (RadioButton) v.findViewById(R.id.switch_commercial);
@@ -76,8 +88,10 @@ public class AddJobDialogFragment extends DialogFragmentHelper {
 
         startTime = (Button) v.findViewById(R.id.job_start_time);
         endTime = (Button) v.findViewById(R.id.job_end_time);
-        saveJob = (Button) v.findViewById(R.id.btn_save_job);
-        cancelJob = (Button) v.findViewById(R.id.btn_cancel_job);
+
+        View cancelSaveLayout = v.findViewById(R.id.job_cancel_save_button_bar);
+        saveJob = (Button) cancelSaveLayout.findViewById(R.id.btn_save);
+        cancelJob = (Button) cancelSaveLayout.findViewById(R.id.btn_cancel);
 
         // handle setting of jobType to "Cancellation" by auto-filling receiptNumber, gross, and net sale
         // and setting payType to "Cancellation"
@@ -111,6 +125,10 @@ public class AddJobDialogFragment extends DialogFragmentHelper {
 
                 payTypeString = payTypeArray[position];
 
+                if (position == 3 || position == 4) {
+                    showCreditCardAlertDialog(payTypeString);
+                }
+
             }
 
             @Override
@@ -137,14 +155,14 @@ public class AddJobDialogFragment extends DialogFragmentHelper {
         startTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openTimePickerDialog(getActivity(), startTime);
+                createTimePickerDialog(getActivity(), startTime, "Start").show();
             }
         });
 
         endTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openTimePickerDialog(getActivity(), endTime);
+                createTimePickerDialog(getActivity(), endTime, "End").show();
             }
         });
 
@@ -158,9 +176,11 @@ public class AddJobDialogFragment extends DialogFragmentHelper {
                         && (validateEditTextLength(etReceiptNumber, 5, 5) || !etReceiptNumber.isEnabled())
                         && (payTypeSpinner.getSelectedItemPosition() != 0) || !payTypeSpinner.isEnabled()) {
 
-                    Firebase fbrJob = new Firebase(firebaseJournalRef + "jobs/" + String.valueOf(etSID.getText()));
+                    Firebase fbrJob = new Firebase(currentJournalRef + "jobs/" + String.valueOf(etSID.getText()));
 
                     JobObject job = new JobObject();
+
+                    String timeString = String.valueOf(startTime.getText()) + "-" + String.valueOf(endTime.getText());
 
                     if (cancellationButton.isChecked()) {
                         job.setJobType(String.valueOf(cancellationButton.getText()));
@@ -182,10 +202,16 @@ public class AddJobDialogFragment extends DialogFragmentHelper {
                     }
 
                     job.setSID(Integer.valueOf(String.valueOf(etSID.getText())));
-                    job.setStartTime(String.valueOf(startTime.getText()));
-                    job.setEndTime(String.valueOf(endTime.getText()));
+                    job.setTime(timeString);
                     job.setJobNotes(String.valueOf(etJobNotes.getText()));
 
+                    if (creditCardNumber == null && creditCardExpDate == null) {
+                        job.setCcNumber(null);
+                        job.setCcExpDate(null);
+                    } else {
+                        job.setCcNumber(creditCardNumber);
+                        job.setCcExpDate(creditCardExpDate);
+                    }
 
                     fbrJob.setValue(job);
 
@@ -240,4 +266,73 @@ public class AddJobDialogFragment extends DialogFragmentHelper {
 
     }
 
+    public void showCreditCardAlertDialog(String title) {
+
+        LinearLayout layout = new LinearLayout(getActivity());
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        final EditText creditCard = new EditText(getActivity());
+        creditCard.setHint("XXXX-XXXX-XXXX-XXXX");
+        creditCard.setGravity(Gravity.CENTER_HORIZONTAL);
+        creditCard.setFilters(new InputFilter[]{new InputFilter.LengthFilter(19)});
+        creditCard.setKeyListener(DigitsKeyListener.getInstance("0123456789-"));
+        creditCard.addTextChangedListener(new FourDigitCardFormatWatcher());
+        layout.addView(creditCard);
+
+        final EditText expDate = new EditText(getActivity());
+        expDate.setHint("XX/XX");
+        expDate.setGravity(Gravity.CENTER_HORIZONTAL);
+        expDate.setInputType(InputType.TYPE_CLASS_PHONE);
+        expDate.setFilters(new InputFilter[]{new InputFilter.LengthFilter(5)});
+        expDate.setKeyListener(DigitsKeyListener.getInstance("0123456789/"));
+        expDate.addTextChangedListener(new ExpDateFormatWatcher());
+        layout.addView(expDate);
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+
+        final AlertDialog AD = alert.setTitle(title)
+                .setPositiveButton("OK", null) //Set to null. We override the onclick
+                .setNegativeButton("Cancel", null)
+                .setView(layout)
+                .setCancelable(false)
+                .create();
+
+        AD.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+        AD.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(DialogInterface dialog) {
+
+                Button b = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                b.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+
+                        String CC = creditCard.getText().toString();
+                        String ED = expDate.getText().toString();
+
+                        if (validateEditTextLength(creditCard, 19, 19)
+                                && validateEditTextLength(expDate, 5, 5)) {
+
+                            CC = CC.replaceAll("[-]", "");
+                            ED = ED.replaceAll("[/]", "");
+
+                            creditCardNumber = Long.parseLong(CC);
+                            creditCardExpDate = Integer.parseInt(ED);
+
+                            AD.dismiss();
+
+                        } else {
+                            Toast.makeText(getActivity(), "Fields must contain only numbers", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
+        });
+
+        AD.show();
+
+    }
 }

@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.Fragment;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,10 +27,11 @@ import com.garrisonthomas.junkapp.BaseActivity;
 import com.garrisonthomas.junkapp.DialogFragmentHelper;
 import com.garrisonthomas.junkapp.R;
 import com.garrisonthomas.junkapp.entryobjects.DumpObject;
+import com.garrisonthomas.junkapp.inputFilters.InputFilterMinMax;
 
 import java.text.NumberFormat;
 
-public class GarbageDumpFragment extends DumpTabHost {
+public class GarbageDumpFragment extends Fragment {
 
     private TextInputEditText etAddDumpWeight, etDumpReceiptNumber, etPercentPrevious;
     private EditText etEditCost;
@@ -44,6 +47,19 @@ public class GarbageDumpFragment extends DumpTabHost {
 
     private NumberFormat currencyFormat;
 
+    private int mPage;
+
+    public static final String ARG_PAGE = "ARG_PAGE";
+
+    public static GarbageDumpFragment newInstance(int page) {
+//        Bundle args = new Bundle();
+//        args.putInt(ARG_PAGE, page);
+        GarbageDumpFragment fragment = new GarbageDumpFragment();
+//        fragment.setArguments(args);
+        return fragment;
+//        return args.getView(page).constructFragment();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -53,12 +69,15 @@ public class GarbageDumpFragment extends DumpTabHost {
         preferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
         currentJournalRef = preferences.getString("currentJournalRef", null);
 
+//        mPage = getArguments().getInt(ARG_PAGE);
+
         TextInputLayout enterWeightWrapper = (TextInputLayout) v.findViewById(R.id.enter_weight_wrapper);
         etAddDumpWeight = (TextInputEditText) enterWeightWrapper.getEditText();
         TextInputLayout enterReceiptNumberWrapper = (TextInputLayout) v.findViewById(R.id.enter_receipt_number_wrapper);
         etDumpReceiptNumber = (TextInputEditText) enterReceiptNumberWrapper.getEditText();
         TextInputLayout enterPercentPreviousWrapper = (TextInputLayout) v.findViewById(R.id.enter_percent_previous_wrapper);
         etPercentPrevious = (TextInputEditText) enterPercentPreviousWrapper.getEditText();
+        etPercentPrevious.setFilters(new InputFilter[]{new InputFilterMinMax("1", "100")});
 
         currencyFormat = NumberFormat.getCurrencyInstance();
 
@@ -66,8 +85,9 @@ public class GarbageDumpFragment extends DumpTabHost {
 
         tvGrossCost = (TextView) v.findViewById(R.id.tv_dump_gross_cost);
 
-        Button saveDump = (Button) v.findViewById(R.id.btn_save_dump);
-        Button cancelDump = (Button) v.findViewById(R.id.btn_cancel_dump);
+        View cancelSaveLayout = v.findViewById(R.id.garbage_cancel_save_button_bar);
+        Button saveDump = (Button) cancelSaveLayout.findViewById(R.id.btn_save);
+        Button cancelDump = (Button) cancelSaveLayout.findViewById(R.id.btn_cancel);
 
         btnEditCost = (ImageButton) v.findViewById(R.id.btn_edit_dump_cost);
 
@@ -164,7 +184,7 @@ public class GarbageDumpFragment extends DumpTabHost {
         cancelDump.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().finish();
+                getActivity().getFragmentManager().popBackStack();
             }
         });
 

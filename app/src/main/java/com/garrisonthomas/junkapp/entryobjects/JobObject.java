@@ -36,7 +36,7 @@ public class JobObject {
 
     private Long ccNumber;
     private double grossSale, netSale;
-    private String startTime, endTime, payType, jobNotes, jobType;
+    private String time, payType, jobNotes, jobType;
 
     public String getJobType() {
         return jobType;
@@ -69,15 +69,9 @@ public class JobObject {
 
     }
 
-    public String getStartTime() {
+    public String getTime() {
 
-        return startTime;
-
-    }
-
-    public String getEndTime() {
-
-        return endTime;
+        return time;
 
     }
 
@@ -116,15 +110,9 @@ public class JobObject {
 
     }
 
-    public void setStartTime(String startTime) {
+    public void setTime(String time) {
 
-        this.startTime = startTime;
-
-    }
-
-    public void setEndTime(String endTime) {
-
-        this.endTime = endTime;
+        this.time = time;
 
     }
 

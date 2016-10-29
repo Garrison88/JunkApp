@@ -33,15 +33,15 @@ public abstract class DialogFragmentHelper extends DialogFragment {
 
 //    private String firebaseJournalRef;
     public FirebaseAuth auth = FirebaseAuth.getInstance();
-    public static Date date = new Date();
+    public Date date = new Date();
     public SimpleDateFormat year = new SimpleDateFormat("yyyy", Locale.CANADA);
     public SimpleDateFormat month = new SimpleDateFormat("MMM", Locale.CANADA);
     public SimpleDateFormat day = new SimpleDateFormat("dd", Locale.CANADA);
-    public static SimpleDateFormat fullDate = new SimpleDateFormat("EEE, dd MMM yyyy", Locale.CANADA);
+    public SimpleDateFormat fullDate = new SimpleDateFormat("EEE, dd MMM yyyy", Locale.CANADA);
     public String currentYear = year.format(date);
     public String currentMonth = month.format(date);
     public String currentDay = day.format(date);
-    public static String todaysDate = fullDate.format(date);
+    public String todaysDate = fullDate.format(date);
 //    public NumberFormat formatter = new DecimalFormat("#0.00");
     public NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
 
@@ -99,9 +99,9 @@ public abstract class DialogFragmentHelper extends DialogFragment {
 
     public static boolean validateEditTextLength(EditText et, int minLength, int maxLength) {
 
-        return (String.valueOf(et.getText()).length() >= minLength
+        return (!TextUtils.isEmpty(et.getText())
                 && String.valueOf(et.getText()).length() <= maxLength
-                && !TextUtils.isEmpty(et.getText()));
+                && String.valueOf(et.getText()).length() >= minLength);
     }
 
     public static TimePickerDialog createTimePickerDialog(Context context, final Button button, String title) {

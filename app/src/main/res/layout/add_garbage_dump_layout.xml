@@ -52,43 +52,43 @@
                 android:id="@+id/dump_cost_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:baselineAligned="false"
-                android:visibility="gone"
-                android:layout_gravity="center_horizontal">
+                android:visibility="gone">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Gross Cost:" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Gross Cost:" />
 
-                    <TextView
-                        android:id="@+id/tv_dump_gross_cost"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
+                <TextView
+                    android:id="@+id/tv_dump_gross_cost"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
 
-                    <EditText
-                        android:id="@+id/et_edit_dump_cost"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:visibility="gone"
-                        android:inputType="numberDecimal"/>
+                <EditText
+                    android:id="@+id/et_edit_dump_cost"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:inputType="numberDecimal"
+                    android:visibility="gone" />
 
-                    <ImageButton
-                        android:src="@drawable/ic_edit_white_24dp"
-                        android:id="@+id/btn_edit_dump_cost"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:background="?android:selectableItemBackground"/>
+                <ImageButton
+                    android:id="@+id/btn_edit_dump_cost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="?android:selectableItemBackground"
+                    android:src="@drawable/ic_edit_white_24dp" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:baselineAligned="false">
+                android:baselineAligned="false"
+                android:orientation="horizontal">
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/enter_receipt_number_wrapper"
@@ -127,38 +127,8 @@
 
     </ScrollView>
 
-    <LinearLayout
-        android:id="@+id/add_garbage_button_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/btn_cancel_dump"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
-            android:text="Cancel"
-            android:textSize="@dimen/abc_text_size_medium_material" />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="fill_parent"
-            android:layout_marginBottom="7dp"
-            android:layout_marginTop="7dp"
-            android:background="#505154" />
-
-        <Button
-            android:id="@+id/btn_save_dump"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
-            android:text="Save"
-            android:textSize="@dimen/abc_text_size_medium_material" />
-
-    </LinearLayout>
+    <include
+        android:id="@+id/garbage_cancel_save_button_bar"
+        layout="@layout/cancel_save_button_bar_layout" />
 
 </LinearLayout>

@@ -81,8 +81,10 @@ public class AddQuoteDialogFragment extends DialogFragmentHelper {
 
         startTime = (Button) v.findViewById(R.id.quote_start_time);
         endTime = (Button) v.findViewById(R.id.quote_end_time);
-        saveQuote = (Button) v.findViewById(R.id.btn_save_quote);
-        cancelQuote = (Button) v.findViewById(R.id.btn_cancel_quote);
+
+        View cancelSaveLayout = v.findViewById(R.id.quote_cancel_save_button_bar);
+        saveQuote = (Button) cancelSaveLayout.findViewById(R.id.btn_save);
+        cancelQuote = (Button) cancelSaveLayout.findViewById(R.id.btn_cancel);
 
         choosePhoto = (ImageButton) v.findViewById(R.id.btn_select_quote_photo);
 
@@ -127,6 +129,9 @@ public class AddQuoteDialogFragment extends DialogFragmentHelper {
                 if ((validateEditTextLength(etQuoteSID, 4, 6))
                         && (!TextUtils.isEmpty(etLowEnd.getText()))) {
 
+                    final String quoteTime = (String.valueOf(startTime.getText()))
+                            + "-" + (String.valueOf(endTime.getText()));
+
                     if (quotePhotoUri != null) {
 
                         pDialog = ProgressDialog.show(getActivity(), null,
@@ -154,9 +159,9 @@ public class AddQuoteDialogFragment extends DialogFragmentHelper {
                                 Firebase fbrQuote = new Firebase(currentJournalRef + "quotes/" + String.valueOf(etQuoteSID.getText()));
 
                                 QuoteObject quote = new QuoteObject();
+
                                 quote.setQuoteSID(Integer.valueOf(etQuoteSID.getText().toString()));
-                                quote.setQuoteStartTime(String.valueOf(startTime.getText()));
-                                quote.setQuoteEndTime(String.valueOf(endTime.getText()));
+                                quote.setQuoteTime(quoteTime);
                                 quote.setLowEnd(Double.valueOf(etLowEnd.getText().toString()));
                                 quote.setPhotoDownloadUrl(downloadUrlString);
                                 if (!TextUtils.isEmpty(etHighEnd.getText())) {
@@ -185,8 +190,7 @@ public class AddQuoteDialogFragment extends DialogFragmentHelper {
 
                         QuoteObject quote = new QuoteObject();
                         quote.setQuoteSID(Integer.valueOf(etQuoteSID.getText().toString()));
-                        quote.setQuoteStartTime(String.valueOf(startTime.getText()));
-                        quote.setQuoteEndTime(String.valueOf(endTime.getText()));
+                        quote.setQuoteTime(quoteTime);
                         quote.setLowEnd(Double.valueOf(etLowEnd.getText().toString()));
                         if (!TextUtils.isEmpty(etHighEnd.getText())) {
                             quote.setHighEnd(Double.valueOf(etHighEnd.getText().toString()));

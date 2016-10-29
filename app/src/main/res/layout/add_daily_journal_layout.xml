@@ -42,7 +42,7 @@
                     android:layout_gravity="bottom"
                     android:layout_weight="1"
                     android:drawableStart="@drawable/ic_access_time_white_24dp"
-                    android:hint="@string/start" />
+                    android:text="@string/start" />
 
             </LinearLayout>
 
@@ -73,50 +73,37 @@
                     android:layout_gravity="bottom"
                     android:layout_weight="1"
                     android:drawableStart="@drawable/ic_access_time_white_24dp"
-                    android:hint="@string/start" />
+                    android:text="@string/start" />
 
             </LinearLayout>
 
-            <Spinner
-                android:id="@+id/truck_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:text="Truck #:" />
+
+                <Spinner
+                    android:id="@+id/truck_spinner"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:gravity="center" />
+            </LinearLayout>
+
 
         </LinearLayout>
 
     </ScrollView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal">
-
-        <Button
-            android:id="@+id/btn_cancel_journal"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
-            android:text="Cancel" />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="fill_parent"
-            android:layout_marginBottom="7dp"
-            android:layout_marginTop="7dp"
-            android:background="#505154" />
-
-        <Button
-            android:id="@+id/btn_create_journal"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
-            android:text="Create" />
-
-    </LinearLayout>
+    <include
+        android:id="@+id/journal_cancel_save_button_bar"
+        layout="@layout/cancel_save_button_bar_layout" />
 
 </LinearLayout>
